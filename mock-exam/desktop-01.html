@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=1280, initial-scale=1.0, shrink-to-fit=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>청각장애인 요양보호사 자격시험 대비: 1회 모의고사</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -39,6 +39,13 @@
     body {
       font-family: 'Noto Sans KR', -apple-system, sans-serif;
       background: var(--bg); color: var(--text-primary); min-height: 100vh; overflow: hidden;
+    }
+    #scale-wrapper {
+      width: 1280px;
+      transform-origin: top left;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
     #start-page {
       display: none;
@@ -230,6 +237,7 @@
   </style>
 </head>
 <body>
+  <div id="scale-wrapper">
   <!-- 숨겨진 입력값 (URL 파라미터용) -->
   <input type="hidden" id="user-id" />
   <input type="hidden" id="user-name" />
@@ -267,6 +275,8 @@
     </div>
     <button id="result-return-btn">다시 풀기</button>
   </div>
+  </div><!-- /scale-wrapper -->
+
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
   <script>
@@ -379,6 +389,7 @@
           scoreSpan.textContent=`총점: ${data.result.total}점 ( 필기: ${data.result.필기}점 / 실기: ${data.result.실기}점 )`;
           if(data.result.answers)userAnswers=data.result.answers;
           document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
+          setTimeout(autoScale,100);
         }else if(data&&data.progress){
           currentQuestionIndex=data.progress.currentQuestion||0;
           userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
@@ -389,6 +400,7 @@
       startPage.style.display="none";quizPage.style.display="flex";
       document.getElementById("quick-nav-container").style.display="block";
       createQuickNavButtons();updateQuestion(currentQuestionIndex);
+      setTimeout(autoScale,100);
     }
     function saveQuizProgress(){
       if(!currentUserId)return;
@@ -424,6 +436,7 @@
       nextBtn.textContent=currentQuestionIndex===TOTAL_QUESTIONS-1?"제출하기":"다음 →";
       if(currentQuestionIndex===TOTAL_QUESTIONS-1)nextBtn.classList.add("submit-mode");
       else nextBtn.classList.remove("submit-mode");
+      setTimeout(autoScale,50);
     }
     function createQuickNavButtons(){
       quickNavGrid.innerHTML="";
@@ -452,6 +465,7 @@
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
+      setTimeout(autoScale,100);
       const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSdpxneZyV9yTdMvI-jaaIdkE50RdNuIHP161SFVk2m5rX8fQA/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
@@ -480,6 +494,31 @@
         grid.appendChild(div);
       });
     }
+
+    /* ========== 자동 스케일링 ========== */
+    function autoScale() {
+      var w = document.getElementById('scale-wrapper');
+      if (!w) return;
+      var baseW = 1280;
+      var scaleX = window.innerWidth / baseW;
+      var scaleY = window.innerHeight / w.scrollHeight;
+      var s = Math.min(scaleX, scaleY, 1);
+      w.style.transform = 'scale(' + s + ')';
+      document.body.style.width = (baseW * s) + 'px';
+      document.body.style.height = (w.scrollHeight * s) + 'px';
+      if (window.innerWidth > baseW * s) {
+        w.style.left = ((window.innerWidth - baseW * s) / 2) + 'px';
+      } else {
+        w.style.left = '0px';
+      }
+    }
+    window.addEventListener('resize', autoScale);
+    window.addEventListener('load', autoScale);
+    window.addEventListener('orientationchange', autoScale);
+    autoScale();
+    setTimeout(autoScale, 300);
+    setTimeout(autoScale, 1000);
+
     // URL 파라미터로 자동 시작
     (function(){
       const params = new URLSearchParams(window.location.search);
