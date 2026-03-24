@@ -35,10 +35,10 @@
     }
     input { user-select: text; -webkit-user-select: text; }
     img, iframe, a { -webkit-user-drag: none; pointer-events: auto; }
-    html, body { overflow: hidden !important; height: 100% !important; max-height: 100vh !important; }
+    html, body { overflow-x: hidden !important; overflow-y: auto !important; height: 100% !important; }
     body {
       font-family: 'Noto Sans KR', -apple-system, sans-serif;
-      background: var(--bg); color: var(--text-primary); min-height: 100vh; overflow: hidden;
+      background: var(--bg); color: var(--text-primary); min-height: 100vh;
     }
     #scale-wrapper {
       width: 1280px;
@@ -503,8 +503,9 @@
       var scaleX = window.innerWidth / baseW;
       var s = Math.min(scaleX, 1);
       w.style.transform = 'scale(' + s + ')';
-      document.body.style.width = (baseW * s) + 'px';
+      // 스케일 후 body 높이 보정 (스크롤 영역 확보)
       document.body.style.height = (w.scrollHeight * s) + 'px';
+      // 화면이 1280보다 넓으면 중앙 정렬
       if (window.innerWidth > baseW * s) {
         w.style.left = ((window.innerWidth - baseW * s) / 2) + 'px';
       } else {
