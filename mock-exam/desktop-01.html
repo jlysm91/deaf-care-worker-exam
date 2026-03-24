@@ -501,8 +501,7 @@
       if (!w) return;
       var baseW = 1280;
       var scaleX = window.innerWidth / baseW;
-      var scaleY = window.innerHeight / w.scrollHeight;
-      var s = Math.min(scaleX, scaleY, 1);
+      var s = Math.min(scaleX, 1);
       w.style.transform = 'scale(' + s + ')';
       document.body.style.width = (baseW * s) + 'px';
       document.body.style.height = (w.scrollHeight * s) + 'px';
