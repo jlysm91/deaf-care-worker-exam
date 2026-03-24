@@ -230,20 +230,12 @@
   </style>
 </head>
 <body>
-  <div id="start-page">
-    <div class="start-wrapper">
-      <div class="start-inner">
-        <div class="start-card">
-          <span class="start-badge">1회 모의고사</span>
-          <h2>청각장애인 요양보호사<br>자격시험 대비</h2>
-          <p class="start-subtitle">시작하기 전에 아이디와 이름을 입력해 주세요</p>
-          <div class="input-group"><input type="text" id="user-id" placeholder="아이디" required /></div>
-          <div class="input-group"><input type="text" id="user-name" placeholder="이름" required /></div>
-          <button id="start-quiz-btn">모의고사 시작하기 →</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- 숨겨진 입력값 (URL 파라미터용) -->
+  <input type="hidden" id="user-id" />
+  <input type="hidden" id="user-name" />
+  <button id="start-quiz-btn" style="display:none"></button>
+  <div id="start-page" style="display:none"></div>
+
   <div id="quiz-page">
     <div class="quiz-top">
       <div id="video-container"><div class="video-wrapper"></div></div>
@@ -488,19 +480,15 @@
         grid.appendChild(div);
       });
     }
-    // URL 파라미터로 자동 시작 - 시작 페이지 즉시 숨김
+    // URL 파라미터로 자동 시작
     (function(){
       const params = new URLSearchParams(window.location.search);
-      const uid = params.get('uid');
-      const name = params.get('name');
+      const uid = params.get('uid') || '';
+      const name = params.get('name') || '';
+      userIdInput.value = uid;
+      userNameInput.value = name;
       if(uid && name){
-        startPage.style.display = "none";
-        userIdInput.value = uid;
-        userNameInput.value = name;
         startQuiz(uid, name);
-      } else {
-        // 파라미터 없으면 시작 페이지 표시
-        startPage.style.display = "flex";
       }
     })();
 
