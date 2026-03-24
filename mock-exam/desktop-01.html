@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>청각장애인 요양보호사 자격시험 대비: 1회 모의고사</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -35,17 +35,10 @@
     }
     input { user-select: text; -webkit-user-select: text; }
     img, iframe, a { -webkit-user-drag: none; pointer-events: auto; }
-    html, body { overflow-x: hidden !important; overflow-y: auto !important; height: 100% !important; }
+    html, body { overflow: hidden !important; height: 100% !important; max-height: 100vh !important; }
     body {
       font-family: 'Noto Sans KR', -apple-system, sans-serif;
-      background: var(--bg); color: var(--text-primary); min-height: 100vh;
-    }
-    #scale-wrapper {
-      width: 1280px;
-      transform-origin: top left;
-      position: absolute;
-      top: 0;
-      left: 0;
+      background: var(--bg); color: var(--text-primary); min-height: 100vh; overflow: hidden;
     }
     #start-page {
       display: none;
@@ -234,11 +227,38 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    /* --- 노트북 환경(가로 1280px 이하) 반응형 추가 --- */
+    @media screen and (max-width: 1280px) {
+      #quiz-page {
+        padding: 10px; /* 전체 여백 축소 */
+      }
+      .quiz-top {
+        gap: 10px; /* 영상과 문제 영역 사이 간격 축소 */
+      }
+      #video-container {
+        flex: 0 0 55%; /* 화면이 좁을 땐 영상 비율을 약간 줄여 문제 영역 확보 */
+      }
+      #quiz-container {
+        padding: 15px; /* 문제 영역 내부 여백 축소 */
+      }
+      #quiz-content h3 {
+        font-size: 13px; /* 문제 글자 크기 미세 축소 */
+        min-height: 3em;
+      }
+      #options label {
+        font-size: 12px; /* 보기 글자 크기 미세 축소 */
+        padding: 8px 12px;
+        min-height: 2.8em;
+      }
+      #navigation-buttons button {
+        padding: 8px 16px;
+        min-width: 80px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div id="scale-wrapper">
-  <!-- 숨겨진 입력값 (URL 파라미터용) -->
   <input type="hidden" id="user-id" />
   <input type="hidden" id="user-name" />
   <button id="start-quiz-btn" style="display:none"></button>
@@ -275,8 +295,6 @@
     </div>
     <button id="result-return-btn">다시 풀기</button>
   </div>
-  </div><!-- /scale-wrapper -->
-
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
   <script>
@@ -346,7 +364,7 @@
       { number:"모0149", question:"유치도뇨관을 사용하고 있는 대상자의 소변주머니를 비우는 순서는?", options:["가 - 나 - 다 - 라","가 - 다 - 라 - 나","나 - 가 - 다 - 라","다 - 라 - 가 - 나","라 - 가 - 다 - 나"], correctAnswer:2, videoId:"1113807044" },
       { number:"모0150", question:"우측편마비 대상자가 통 목욕을 할 때 돕는 방법은?", options:["욕실로 이동할 때는 왼쪽을 지지한다.","회음부 - 몸통 - 팔 - 다리 - 발 순서로 씻는다.","욕조 안에 미끄럼방지 매트를 깔아준다.","우측 발부터 욕조에 들어가도록 한다.","욕조에 30분 정도 담그게 한다."], correctAnswer:3, videoId:"1113807124" },
       { number:"모0151", question:"대상자가 침상 목욕을 할 때 돕는 방법으로 옳은 것은?", options:["얼굴은 이마 - 눈 - 코 - 입 순서로 닦는다.","상지는 손목 쪽에서 팔 쪽으로 닦는다","하지는 허벅지에서 발끝 쪽으로 닦는다.","유방은 위에서 아래로 닦는다.","복부는 배꼽을 중심으로 시계반대 방향으로 닦는다."], correctAnswer:2, videoId:"1113807253" },
-      { number:"모0152", question:"대상자의 옷 갈아입히기를 도울 때 주의사항으로 옳은 것은?", options:["상의와 하의가 통으로 된 옷을 입힌다.","신축성이 없는 옷을 선택한다.","옷의 색상, 개인의 생활 리듬을 고려한다.","불편한 쪽의 소매를 먼저 벗긴다.","허리나 소매는 조여 주는 것을 선택한다."], correctAnswer:3, videoId:"1113807336" },
+      { number:"모0152", question:"대상자의 옷 갈아입히기를 도울 때 주의사항으로 옳은 복장은?", options:["상의와 하의가 통으로 된 옷을 입힌다.","신축성이 없는 옷을 선택한다.","옷의 색상, 개인의 생활 리듬을 고려한다.","불편한 쪽의 소매를 먼저 벗긴다.","허리나 소매는 조여 주는 것을 선택한다."], correctAnswer:3, videoId:"1113807336" },
       { number:"모0153", question:"오른쪽 편마비 대상자가 왼쪽 팔에 수액을 맞고 있을 때 단추가 있는 옷을 입히는 순서는?", options:["오른쪽 팔 → 수액 주머니 → 왼쪽 팔","왼쪽 팔 → 수액 주머니 → 오른쪽 팔","수액 주머니 → 오른쪽 팔 → 왼쪽 팔","수액 주머니 → 왼쪽 팔 → 오른쪽 팔","오른쪽 팔 → 왼쪽 팔 → 수액 주머니"], correctAnswer:1, videoId:"1113807386" },
       { number:"모0154", question:"대상자를 침대에 걸터앉히고자 할 때 돕는 방법으로 옳은 것은?", options:["앉히고자는 반대쪽에서 대상자를 향하여 선다.","한 손으로 대상자의 허리 부위를 잡는다.","다른 한 손으로는 대상자의 엉덩이를 잡는다.","다리를 침대 아래로 내리면서 어깨를 들어 올린다.","대상자의 양발이 바닥에 닿지 않도록 한다."], correctAnswer:4, videoId:"1113807507" },
       { number:"모0155", question:"오른쪽 편마비 대상자를 휠체어에서 방바닥으로 이동할 때 돕는 방법은?", options:["[이미지] 그림1","[이미지] 그림2","[이미지] 그림3","[이미지] 그림4","[이미지] 그림5"], correctAnswer:5, videoId:"1113807597" },
@@ -389,7 +407,6 @@
           scoreSpan.textContent=`총점: ${data.result.total}점 ( 필기: ${data.result.필기}점 / 실기: ${data.result.실기}점 )`;
           if(data.result.answers)userAnswers=data.result.answers;
           document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
-          setTimeout(autoScale,100);
         }else if(data&&data.progress){
           currentQuestionIndex=data.progress.currentQuestion||0;
           userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
@@ -400,7 +417,6 @@
       startPage.style.display="none";quizPage.style.display="flex";
       document.getElementById("quick-nav-container").style.display="block";
       createQuickNavButtons();updateQuestion(currentQuestionIndex);
-      setTimeout(autoScale,100);
     }
     function saveQuizProgress(){
       if(!currentUserId)return;
@@ -436,7 +452,6 @@
       nextBtn.textContent=currentQuestionIndex===TOTAL_QUESTIONS-1?"제출하기":"다음 →";
       if(currentQuestionIndex===TOTAL_QUESTIONS-1)nextBtn.classList.add("submit-mode");
       else nextBtn.classList.remove("submit-mode");
-      setTimeout(autoScale,50);
     }
     function createQuickNavButtons(){
       quickNavGrid.innerHTML="";
@@ -465,7 +480,6 @@
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
-      setTimeout(autoScale,100);
       const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSdpxneZyV9yTdMvI-jaaIdkE50RdNuIHP161SFVk2m5rX8fQA/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
@@ -494,31 +508,6 @@
         grid.appendChild(div);
       });
     }
-
-    /* ========== 자동 스케일링 ========== */
-    function autoScale() {
-      var w = document.getElementById('scale-wrapper');
-      if (!w) return;
-      var baseW = 1280;
-      var scaleX = window.innerWidth / baseW;
-      var s = Math.min(scaleX, 1);
-      w.style.transform = 'scale(' + s + ')';
-      // 스케일 후 body 높이 보정 (스크롤 영역 확보)
-      document.body.style.height = (w.scrollHeight * s) + 'px';
-      // 화면이 1280보다 넓으면 중앙 정렬
-      if (window.innerWidth > baseW * s) {
-        w.style.left = ((window.innerWidth - baseW * s) / 2) + 'px';
-      } else {
-        w.style.left = '0px';
-      }
-    }
-    window.addEventListener('resize', autoScale);
-    window.addEventListener('load', autoScale);
-    window.addEventListener('orientationchange', autoScale);
-    autoScale();
-    setTimeout(autoScale, 300);
-    setTimeout(autoScale, 1000);
-
     // URL 파라미터로 자동 시작
     (function(){
       const params = new URLSearchParams(window.location.search);
