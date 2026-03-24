@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=1280, initial-scale=1.0, shrink-to-fit=yes" />
   <title>청각장애인 요양보호사 자격시험 대비: 1회 모의고사</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -10,19 +10,6 @@
     if(new URLSearchParams(location.search).get('uid')){
       document.write('<style>#start-page{display:none!important}</style>');
     }
-  </script>
-  <script>
-    // 화면 크기에 맞게 자동 스케일링 (기준: 1280px)
-    function autoScale() {
-      var base = 1280;
-      var scale = window.innerWidth / base;
-      if (scale > 1) scale = 1; // 큰 화면은 그대로
-      document.body.style.transform = 'scale(' + scale + ')';
-      document.body.style.transformOrigin = 'top left';
-      document.body.style.width = (100 / scale) + '%';
-    }
-    window.addEventListener('load', autoScale);
-    window.addEventListener('resize', autoScale);
   </script>
   <style>
     :root {
