@@ -206,7 +206,7 @@
 
     /* 지문 */
     #quiz-content h3 {
-      font-size: clamp(16px, 1.7vw, 22px);
+      font-size: clamp(18px, 1.9vw, 24px);
       font-weight: 700; color: var(--text-primary);
       line-height: 1.7;
       margin-bottom: clamp(10px, 1.2vh, 14px);
@@ -224,7 +224,7 @@
       padding: clamp(9px, 1.1vh, 13px) clamp(12px, 1.3vw, 16px);
       background: var(--surface); border: 1.5px solid var(--border);
       border-radius: 10px; cursor: pointer;
-      font-size: clamp(14px, 1.25vw, 17px); font-weight: 400; line-height: 1.5;
+      font-size: clamp(13px, 1.15vw, 16px); font-weight: 400; line-height: 1.5;
       transition: all 0.15s;
       word-break: keep-all; white-space: normal;
     }
@@ -290,7 +290,7 @@
     /* ━━━━━━ 빠른 이동 네비게이션 ━━━━━━ */
     #quick-nav-container {
       display: none; background: var(--surface); border-radius: 14px;
-      padding: clamp(12px, 1.6vh, 18px) clamp(14px, 1.5vw, 20px) clamp(12px, 1.6vh, 18px);
+      padding: clamp(14px, 2vh, 22px) clamp(14px, 1.5vw, 20px);
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
       flex: 1 1 auto;
       min-height: 0;
@@ -764,7 +764,7 @@
       const gaps     = 8 * 3;
 
       const remaining = pageH - topH - barH - marginT - padV - headerH - gaps;
-      const btnH = Math.max(24, Math.min(42, Math.floor((remaining - 4 * 7) / 8)));
+      const btnH = Math.max(28, Math.min(52, Math.floor((remaining - 4 * 7) / 8)));
       document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
     }
 
