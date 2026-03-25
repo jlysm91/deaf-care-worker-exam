@@ -206,7 +206,7 @@
 
     /* 지문 */
     #quiz-content h3 {
-      font-size: clamp(18px, 1.9vw, 24px);
+      font-size: clamp(20px, 2.1vw, 26px);
       font-weight: 700; color: var(--text-primary);
       line-height: 1.7;
       margin-bottom: clamp(10px, 1.2vh, 14px);
@@ -224,7 +224,7 @@
       padding: clamp(9px, 1.1vh, 13px) clamp(12px, 1.3vw, 16px);
       background: var(--surface); border: 1.5px solid var(--border);
       border-radius: 10px; cursor: pointer;
-      font-size: clamp(13px, 1.15vw, 16px); font-weight: 400; line-height: 1.5;
+      font-size: clamp(14px, 1.3vw, 18px); font-weight: 400; line-height: 1.5;
       transition: all 0.15s;
       word-break: keep-all; white-space: normal;
     }
@@ -764,7 +764,7 @@
       const gaps     = 8 * 3;
 
       const remaining = pageH - topH - barH - marginT - padV - headerH - gaps;
-      const btnH = Math.max(28, Math.min(52, Math.floor((remaining - 4 * 7) / 8)));
+      const btnH = Math.max(28, Math.min(63, Math.floor((remaining - 4 * 7) / 8)));
       document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
     }
 
