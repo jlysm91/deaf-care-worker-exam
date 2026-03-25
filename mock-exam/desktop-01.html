@@ -204,12 +204,11 @@
       font-weight: 700; padding: 5px 16px; border-radius: 50px;
     }
 
-    /* 지문: 2.5줄 고정 높이 */
+    /* 지문: JS가 실시간으로 폰트 크기 조정 - 고정 높이 없음 */
     #quiz-content h3 {
-      font-size: clamp(16px, 1.5vw, 20px);
+      font-size: clamp(14px, 1.5vw, 20px);
       font-weight: 600; color: var(--text-primary);
       line-height: 1.75;
-      height: calc(1.75em * 2.5);
       overflow: hidden;
       margin-bottom: clamp(10px, 1.2vh, 14px);
       padding-bottom: clamp(8px, 1vh, 12px);
@@ -616,7 +615,8 @@
       createQuickNavButtons();updateQuestion(currentQuestionIndex);
       requestAnimationFrame(()=>{
         applyResponsiveLayout();
-        initNavGridHeight();
+        autoToggleNavGrid();
+        fitQuestionText();
       });
     }
 
@@ -634,6 +634,8 @@
       questionTextSpan.textContent=question.question;
       currentQuestionSpan.textContent=currentQuestionIndex+1;
       totalQuestionsSpan.textContent=TOTAL_QUESTIONS;
+      // 지문 텍스트 세팅 후 폰트 자동 조정
+      requestAnimationFrame(fitQuestionText);
       optionsDiv.innerHTML="";
       question.options.forEach((option,i)=>{
         const label=document.createElement("label");
@@ -771,13 +773,45 @@
         navToggleBtn.textContent = "펼치기 ▼";
       }
     });
-    // 초기 그리드 높이 설정
-    function initNavGridHeight(){
-      if(navGridWrap && !navGridWrap.classList.contains("collapsed")){
-        navGridWrap.style.maxHeight = navGridWrap.scrollHeight + "px";
+    // ── 화면 높이 기준 그리드 자동 접기/펼치기 ──
+    // 800px 이상이면 펼침, 미만이면 접힘
+    const NAV_EXPAND_THRESHOLD = 800;
+    function autoToggleNavGrid(){
+      const wrap = document.getElementById("quick-nav-grid-wrap");
+      const btn  = document.getElementById("nav-toggle-btn");
+      if(!wrap || !btn) return;
+      if(window.innerHeight >= NAV_EXPAND_THRESHOLD){
+        wrap.style.maxHeight = wrap.scrollHeight + "px";
+        wrap.classList.remove("collapsed");
+        btn.textContent = "접기 ▲";
+      } else {
+        wrap.style.maxHeight = "0px";
+        wrap.classList.add("collapsed");
+        btn.textContent = "펼치기 ▼";
       }
     }
-    window.addEventListener("resize", initNavGridHeight);
+
+    // ── 지문 텍스트 폰트 자동 축소 ──
+    // 컨테이너 너비에 맞게 최대 20px에서 시작해 12px까지 줄임
+    function fitQuestionText(){
+      const h3 = document.querySelector("#quiz-content h3");
+      const container = document.getElementById("quiz-container");
+      if(!h3 || !container) return;
+      const maxSize = Math.min(20, Math.max(14, container.clientWidth * 0.018));
+      let size = maxSize;
+      h3.style.fontSize = size + "px";
+      // 2줄 초과하면 폰트 줄임 (line-height 1.75 기준 2줄 = size * 1.75 * 2)
+      const maxHeight = size * 1.75 * 2.5;
+      while(h3.scrollHeight > maxHeight + 2 && size > 12){
+        size -= 0.5;
+        h3.style.fontSize = size + "px";
+      }
+    }
+
+    window.addEventListener("resize", ()=>{
+      autoToggleNavGrid();
+      fitQuestionText();
+    });
 
     document.addEventListener("dragstart",e=>e.preventDefault());
     document.addEventListener("selectstart",e=>e.preventDefault());
