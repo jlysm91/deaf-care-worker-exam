@@ -96,8 +96,9 @@
     .video-section {
       flex-shrink: 0;
       width: 100%;
+      /* ✅ padding-top 트릭 대신 aspect-ratio 사용 */
+      aspect-ratio: 16 / 9;
       position: relative;
-      padding-top: 56.25%;
       background: #000;
     }
     .video-section iframe {
@@ -348,23 +349,19 @@
       .header-badge { font-size: 14px; padding: 6px 18px; }
       .header-counter { font-size: 18px; }
 
-      /* 비디오 + 문제 좌우 분리 */
+      /* ✅ 비디오 + 문제 좌우 분리
+         quiz-body를 row로 전환하고 비디오는 aspect-ratio 해제 후 height:100% 채움 */
       .quiz-body {
-        flex-direction: row !important;
-        align-items: stretch;
+        flex-direction: row;
       }
-
-      /* ✅ !important로 기본 width:100%, padding-top:56.25% 강제 덮어쓰기 */
       .video-section {
-        flex: 0 0 55% !important;
-        width: 55% !important;
-        padding-top: 0 !important;
-        height: 100%;
-        align-self: stretch;
+        flex: 0 0 55%;
+        width: 55%;
+        aspect-ratio: unset;   /* aspect-ratio 해제 */
+        align-self: stretch;   /* quiz-body 높이 전체 채움 */
       }
-
       .quiz-scroll {
-        flex: 1 !important;
+        flex: 1;
         padding: 20px 22px 0;
         gap: 12px;
       }
@@ -386,15 +383,14 @@
 
       /* Bottom Sheet 가운데 정렬 */
       .bottom-sheet {
-        left: 50% !important;
-        right: auto !important;
-        width: min(640px, 100vw) !important;
-        transform: translateX(-50%) translateY(100%) !important;
-        border-radius: 20px 20px 0 0;
+        left: 50%;
+        right: auto;
+        width: min(640px, 100vw);
+        transform: translateX(-50%) translateY(100%);
       }
-      .bottom-sheet.visible { transform: translateX(-50%) translateY(0) !important; }
+      .bottom-sheet.visible { transform: translateX(-50%) translateY(0); }
 
-      /* Sheet 내 버튼 크게 */
+      /* Sheet 버튼 */
       .sheet-nav-btn { height: 52px; }
       .sheet-nav-btn .sn-num { font-size: 14px; }
       .sheet-nav-btn .sn-ans { font-size: 11px; }
