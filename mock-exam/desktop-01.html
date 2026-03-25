@@ -206,7 +206,7 @@
 
     /* 지문 */
     #quiz-content h3 {
-      font-size: clamp(20px, 2.1vw, 26px);
+      font-size: clamp(22px, 2.3vw, 28px);
       font-weight: 700; color: var(--text-primary);
       line-height: 1.7;
       margin-bottom: clamp(10px, 1.2vh, 14px);
@@ -224,7 +224,7 @@
       padding: clamp(9px, 1.1vh, 13px) clamp(12px, 1.3vw, 16px);
       background: var(--surface); border: 1.5px solid var(--border);
       border-radius: 10px; cursor: pointer;
-      font-size: clamp(14px, 1.3vw, 18px); font-weight: 400; line-height: 1.5;
+      font-size: clamp(16px, 1.5vw, 20px); font-weight: 400; line-height: 1.5;
       transition: all 0.15s;
       word-break: keep-all; white-space: normal;
     }
@@ -296,6 +296,8 @@
       min-height: 0;
       overflow: hidden;
       margin-top: clamp(5px, 0.6vh, 8px);
+      flex-direction: column;
+      justify-content: center;
     }
     .nav-header {
       display: flex; align-items: center; justify-content: center;
@@ -600,7 +602,7 @@
 
     function showQuizPage(){
       startPage.style.display="none";quizPage.style.display="flex";
-      document.getElementById("quick-nav-container").style.display="block";
+      document.getElementById("quick-nav-container").style.display="flex";
       createQuickNavButtons();updateQuestion(currentQuestionIndex);
       requestAnimationFrame(()=>{
         applyResponsiveLayout();
