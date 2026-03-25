@@ -177,14 +177,24 @@
 
     #quiz-container {
       flex: 1; background: var(--surface); border-radius: 14px;
-      /* ✅ 변경 11: padding clamp */
       padding: clamp(12px, 1.5vh, 20px) clamp(14px, 1.6vw, 22px);
-      display: flex; flex-direction: column; justify-content: space-between;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow-y: auto;
+      display: flex; flex-direction: column;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      /* 컨테이너 자체는 overflow hidden → 내부에서만 스크롤 */
+      overflow: hidden;
       min-height: 0;
     }
 
-    #quiz-content { flex-grow: 1; }
+    /* 문제+보기 영역만 내부 스크롤 */
+    #quiz-content {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      /* 스크롤바 안 보이게 (기능은 유지) */
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+      padding-right: 4px;
+    }
 
     .question-meta {
       display: flex; align-items: center; gap: 8px;
@@ -230,6 +240,8 @@
     #navigation-buttons {
       display: flex; align-items: center; justify-content: space-between;
       gap: 10px;
+      /* 항상 하단 고정 - 절대 밀리지 않음 */
+      flex-shrink: 0;
       margin-top: clamp(10px, 1.2vh, 18px);
       padding-top: clamp(8px, 1vh, 14px);
       border-top: 1px solid var(--border);
