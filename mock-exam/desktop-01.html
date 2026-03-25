@@ -142,8 +142,9 @@
     .quiz-top {
       display: flex; gap: clamp(10px, 1.2vw, 20px);
       align-items: stretch;
-      /* ✅ 고정 65vh → 동적값: 어떤 화면에서도 하단 nav에 최소 350px 확보 */
-      flex: 0 0 min(65vh, calc(100vh - 350px));
+      /* ✅ flex-basis 58vh + max-height로 nav 영역 최소 확보 (min() 호환성 문제 우회) */
+      flex: 0 0 58vh;
+      max-height: calc(100vh - 300px);
       min-height: 0;
       margin-bottom: clamp(5px, 0.6vh, 8px);
     }
@@ -762,20 +763,24 @@
       const grid     = document.getElementById("quick-nav-grid");
       if(!quizPage || !quizTop || !navCont || !grid) return;
 
-      const pageH   = quizPage.clientHeight;
-      const topH    = quizTop.offsetHeight;
-      const marginT = parseInt(getComputedStyle(navCont).marginTop) || 8;
-      const padV    = (parseInt(getComputedStyle(navCont).paddingTop) || 14)
-                    + (parseInt(getComputedStyle(navCont).paddingBottom) || 14);
-      const headerH = (document.querySelector(".nav-header") || {}).offsetHeight || 40;
-      // ✅ 실제 grid gap 값 계산 (7개 행간 gap)
-      const gridGap = parseFloat(getComputedStyle(grid).gap) || 5;
-      const rowGaps = 7 * gridGap;
+      // ✅ quiz-page 상하 패딩 직접 읽어서 차감
+      const style    = getComputedStyle(quizPage);
+      const pagePadV = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+      const pageH    = quizPage.clientHeight - pagePadV;
 
-      // ✅ navBar 이중차감 제거: navBar는 topH 내부에 이미 포함됨
-      const containerH = pageH - topH - marginT;
+      const topH     = quizTop.offsetHeight;
+      // quiz-top margin-bottom + nav-cont margin-top 합산
+      const gapBetween = (parseFloat(getComputedStyle(quizTop).marginBottom) || 8)
+                       + (parseFloat(getComputedStyle(navCont).marginTop) || 0);
+      const padV     = (parseFloat(getComputedStyle(navCont).paddingTop) || 14)
+                     + (parseFloat(getComputedStyle(navCont).paddingBottom) || 14);
+      const headerH  = (document.querySelector(".nav-header") || {}).offsetHeight || 40;
+      const gridGap  = parseFloat(getComputedStyle(grid).rowGap || getComputedStyle(grid).gap) || 5;
+      const rowGaps  = 7 * gridGap;
+
+      const containerH = pageH - topH - gapBetween;
       const gridH      = containerH - padV - headerH;
-      const btnH       = Math.max(26, Math.min(63, Math.floor((gridH - rowGaps) / 8)));
+      const btnH       = Math.max(22, Math.min(63, Math.floor((gridH - rowGaps) / 8)));
       document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
     }
 
