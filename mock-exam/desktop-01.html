@@ -142,8 +142,8 @@
     .quiz-top {
       display: flex; gap: clamp(10px, 1.2vw, 20px);
       align-items: stretch;
-      /* 비율 축소: 1 → 0.72 */
-      flex: 0 0 72vh;
+      /* 좌/우 칸 높이 축소 */
+      flex: 0 0 60vh;
       min-height: 0;
       margin-bottom: clamp(5px, 0.6vh, 8px);
     }
@@ -291,9 +291,8 @@
     /* ━━━━━━ 빠른 이동 네비게이션 ━━━━━━ */
     #quick-nav-container {
       display: none; background: var(--surface); border-radius: 14px;
-      padding: clamp(8px, 1vh, 12px) clamp(14px, 1.5vw, 20px) clamp(8px, 1vh, 12px);
+      padding: clamp(12px, 1.6vh, 18px) clamp(14px, 1.5vw, 20px) clamp(12px, 1.6vh, 18px);
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      /* 남은 공간을 모두 차지 */
       flex: 1 1 auto;
       min-height: 0;
       overflow: hidden;
