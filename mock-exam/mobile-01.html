@@ -256,43 +256,42 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
+    }
+    /* 제목 + 답변현황을 하나의 중앙 블록으로 */
+    .sheet-title-block {
+      flex: 1;
+      text-align: center;
+      min-width: 0;
     }
     .sheet-title {
       font-size: 12px;
       font-weight: 700;
       color: var(--text-muted);
       letter-spacing: 1.5px;
-      flex: 1;
-      text-align: center;
+      display: inline;
     }
-    .sheet-close-btn {
-      flex-shrink: 0;
-      background: var(--surface-2);
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 700;
-      font-family: inherit;
-      padding: 6px 14px;
-      cursor: pointer;
-      line-height: 1;
-    }
-    .sheet-title-spacer {
-      flex-shrink: 0;
-      width: 58px; /* 닫기 버튼과 대칭 맞춤 */
-    }
-    .sheet-progress {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 8px;
+    .sheet-progress-inline {
+      display: inline;
       font-size: 12px;
       color: var(--text-secondary);
       font-weight: 500;
+      margin-left: 8px;
     }
-    .sheet-progress .prog-answered { color: var(--success); font-weight: 700; }
-    .sheet-progress .prog-unanswered { color: var(--text-muted); }
+    .sheet-progress-inline .prog-answered { color: var(--success); font-weight: 700; }
+    .sheet-progress-inline .prog-unanswered { color: var(--text-muted); }
+    .sheet-close-btn {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      font-weight: 400;
+      font-family: inherit;
+      padding: 4px 8px;
+      cursor: pointer;
+      line-height: 1;
+    }
 
     .sheet-grid {
       display: grid;
@@ -473,13 +472,13 @@
   <div class="sheet-overlay" id="sheet-overlay"></div>
   <div class="bottom-sheet" id="bottom-sheet">
     <div class="sheet-sticky-top">
-      <div class="sheet-title-spacer"></div>
-      <div class="sheet-title">빠른 문항 이동</div>
-      <button class="sheet-close-btn" id="sheet-close-btn">닫기</button>
-    </div>
-    <div class="sheet-progress">
-      <span>답변: <span class="prog-answered" id="prog-answered">0</span>문항</span>
-      <span>미답: <span class="prog-unanswered" id="prog-unanswered">80</span>문항</span>
+      <div class="sheet-title-block">
+        <span class="sheet-title">빠른 문항 이동</span>
+        <span class="sheet-progress-inline">
+          &nbsp;·&nbsp; 답변 <span class="prog-answered" id="prog-answered">0</span> / 미답 <span class="prog-unanswered" id="prog-unanswered">80</span>
+        </span>
+      </div>
+      <button class="sheet-close-btn" id="sheet-close-btn">✕</button>
     </div>
     <div class="sheet-grid" id="sheet-grid"></div>
   </div>
