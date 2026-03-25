@@ -131,10 +131,12 @@
 
     /* ━━━━━━ 퀴즈 페이지 ━━━━━━ */
     #quiz-page {
-      display: none; flex-direction: column;
+      display: none;
+      /* ✅ flex 대신 grid: 브라우저가 직접 행 높이 배분 */
+      grid-template-rows: 1fr auto;
       height: 100vh;
-      /* 상하 동일 패딩 */
       padding: clamp(10px, 1.2vh, 16px) clamp(12px, 1.5vw, 20px);
+      gap: 8px;
       background: var(--bg);
       overflow: hidden;
     }
@@ -142,10 +144,9 @@
     .quiz-top {
       display: flex; gap: clamp(10px, 1.2vw, 20px);
       align-items: stretch;
-      /* ✅ height는 JS가 inline style로 직접 지정 */
-      flex: none;
+      /* ✅ grid 1fr 행 안에서 100% 채움 */
       min-height: 0;
-      margin-bottom: 8px;
+      overflow: hidden;
     }
 
     #video-container {
@@ -282,12 +283,10 @@
     /* ━━━━━━ 빠른 이동 네비게이션 ━━━━━━ */
     #quick-nav-container {
       display: none; background: var(--surface); border-radius: 14px;
-      padding: clamp(14px, 2vh, 22px) clamp(14px, 1.5vw, 20px);
+      padding: clamp(10px, 1.5vh, 16px) clamp(14px, 1.5vw, 20px);
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      flex: 1 1 auto;
-      min-height: 0;
+      /* ✅ grid auto 행: 내용 높이만큼만 차지 */
       overflow: hidden;
-      margin-top: clamp(5px, 0.6vh, 8px);
       flex-direction: column;
       justify-content: center;
     }
@@ -593,7 +592,7 @@
     }
 
     function showQuizPage(){
-      startPage.style.display="none";quizPage.style.display="flex";
+      startPage.style.display="none";quizPage.style.display="grid";
       document.getElementById("quick-nav-container").style.display="flex";
       createQuickNavButtons();updateQuestion(currentQuestionIndex);
       // ✅ 3중 rAF: 렌더링이 완전히 정착된 후 레이아웃 계산
@@ -760,37 +759,20 @@
 
     // ── 그리드 버튼 높이 자동 계산 ──
     function autoResizeNavGrid(){
-      const quizPage = document.getElementById("quiz-page");
-      const quizTop  = document.querySelector(".quiz-top");
-      const navCont  = document.getElementById("quick-nav-container");
-      const grid     = document.getElementById("quick-nav-grid");
-      if(!quizPage || !quizTop || !navCont || !grid) return;
+      const navCont = document.getElementById("quick-nav-container");
+      const grid    = document.getElementById("quick-nav-grid");
+      if(!navCont || !grid) return;
 
-      // ── 1. quiz-page 실제 콘텐츠 높이 ──
-      const cs       = getComputedStyle(quizPage);
-      const pageH    = quizPage.clientHeight
-                     - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
-
-      // ── 2. nav 필요 최소 높이 (display:none이어도 구조상 고정값으로 계산) ──
-      const GAP_BETWEEN = 8;   // quiz-top margin-bottom (CSS에서 8px 고정)
-      const NAV_PAD     = 28;  // nav-container 상하 패딩 합계 (clamp 14px×2)
-      const HEADER_H    = 42;  // .nav-header 높이
-      const GRID_GAP    = parseFloat(getComputedStyle(grid).gap) || 5;
-      const ROW_GAPS    = 7 * GRID_GAP;
-      const MIN_BTN_H   = 28;  // 버튼 최소 높이
-      const MIN_NAV_H   = NAV_PAD + HEADER_H + ROW_GAPS + (MIN_BTN_H * 8);
-      // ≈ 28 + 42 + 35 + 224 = 329px
-
-      // ── 3. quiz-top 높이 = 전체 - 간격 - nav최소높이 ──
-      const quizTopH = Math.max(180, pageH - GAP_BETWEEN - MIN_NAV_H);
-      quizTop.style.height    = quizTopH + "px";
-      quizTop.style.flexBasis = quizTopH + "px";
-      quizTop.style.maxHeight = quizTopH + "px";
-
-      // ── 4. 실제 남은 공간으로 버튼 높이 확정 ──
-      const navH  = pageH - quizTopH - GAP_BETWEEN;
-      const gridH = navH - NAV_PAD - HEADER_H;
-      const btnH  = Math.max(MIN_BTN_H, Math.min(63, Math.floor((gridH - ROW_GAPS) / 8)));
+      // ✅ CSS Grid가 quiz-top/nav 높이를 배분한 뒤
+      //    nav-container 실제 높이로 버튼 높이만 계산
+      const navH    = navCont.clientHeight;
+      const cs      = getComputedStyle(navCont);
+      const padV    = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+      const headerH = (document.querySelector(".nav-header")||{}).offsetHeight || 0;
+      const gridGap = parseFloat(getComputedStyle(grid).gap) || 5;
+      const rowGaps = 7 * gridGap;
+      const gridH   = navH - padV - headerH;
+      const btnH    = Math.max(24, Math.min(63, Math.floor((gridH - rowGaps) / 8)));
       document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
     }
 
