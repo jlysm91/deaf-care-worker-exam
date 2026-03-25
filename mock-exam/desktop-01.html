@@ -188,9 +188,13 @@
       flex: 1 1 auto;
       min-height: 0;
       overflow-y: auto;
+      overflow-x: hidden;
       scrollbar-width: thin;
       scrollbar-color: var(--border) transparent;
       padding-right: 2px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
 
     .question-meta {
@@ -205,20 +209,20 @@
     }
 
 
-    /* 지문: JS가 폰트 자동 조정 */
+    /* 지문 */
     #quiz-content h3 {
       font-size: clamp(14px, 1.5vw, 20px);
       font-weight: 700; color: var(--text-primary);
       line-height: 1.7;
-      overflow: hidden;
       margin-bottom: clamp(10px, 1.2vh, 14px);
       padding: clamp(10px, 1.2vh, 14px);
       background: var(--primary-subtle);
       border-left: 4px solid var(--primary);
       border-radius: 8px;
+      flex-shrink: 0;
     }
 
-    #options { display: flex; flex-direction: column; gap: clamp(5px, 0.7vh, 8px); }
+    #options { display: flex; flex-direction: column; gap: clamp(5px, 0.7vh, 8px); flex-shrink: 0; }
 
     #options label {
       display: flex; align-items: center; gap: 12px;
@@ -239,8 +243,7 @@
       flex-shrink: 0; accent-color: var(--primary); width: 16px; height: 16px;
     }
     #options label:has(input:checked) {
-      background: var(--primary);
-      border-color: var(--primary);
+      background: var(--primary); border-color: var(--primary);
     }
     #options label:has(input:checked) span { color: #fff; font-weight: 600; }
 
@@ -289,46 +292,6 @@
       font-weight: 600; color: var(--text-secondary);
     }
     #total-questions { color: var(--primary); }
-
-    /* 지문: JS가 폰트 자동 조정 */
-    #quiz-content h3 {
-      font-size: clamp(14px, 1.5vw, 20px);
-      font-weight: 700;
-      color: var(--text-primary);
-      line-height: 1.7;
-      overflow: hidden;
-      margin-bottom: clamp(10px, 1.2vh, 14px);
-      padding: clamp(10px, 1.2vh, 14px);
-      background: var(--primary-subtle);
-      border-left: 4px solid var(--primary);
-      border-radius: 8px;
-    }
-
-    #options { display: flex; flex-direction: column; gap: clamp(5px, 0.7vh, 8px); }
-
-    #options label {
-      display: flex; align-items: center; gap: 12px;
-      min-height: 48px;
-      padding: clamp(9px, 1.1vh, 13px) clamp(12px, 1.3vw, 16px);
-      background: var(--surface); border: 1.5px solid var(--border);
-      border-radius: 10px; cursor: pointer;
-      font-size: clamp(13px, 1.1vw, 15px); font-weight: 400; line-height: 1.5;
-      transition: all 0.15s;
-      word-break: keep-all; white-space: normal;
-    }
-    #options label:hover {
-      background: var(--primary-subtle);
-      border-color: var(--primary-light);
-      transform: translateX(2px);
-    }
-    #options input[type="radio"] {
-      flex-shrink: 0; accent-color: var(--primary); width: 16px; height: 16px;
-    }
-    #options label:has(input:checked) {
-      background: var(--primary);
-      border-color: var(--primary);
-    }
-    #options label:has(input:checked) span { color: #fff; font-weight: 600; }
 
     /* ━━━━━━ 빠른 이동 네비게이션 ━━━━━━ */
     #quick-nav-container {
