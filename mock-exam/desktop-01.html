@@ -190,11 +190,13 @@
       scrollbar-width: thin;
       scrollbar-color: var(--border) transparent;
       padding-right: 2px;
+      display: flex;
+      flex-direction: column;
     }
 
     .question-meta {
       display: flex; align-items: center; gap: 8px;
-      /* 배지 아래 여백 확대 */
+      flex-shrink: 0;
       margin-bottom: clamp(10px, 1.4vh, 16px);
     }
     .q-num-badge {
@@ -206,9 +208,10 @@
 
     /* 지문 */
     #quiz-content h3 {
-      font-size: clamp(32px, 3.5vw, 42px);
+      font-size: clamp(16px, 1.7vw, 22px);
       font-weight: 700; color: var(--text-primary);
       line-height: 1.7;
+      flex-shrink: 0;
       margin-bottom: clamp(10px, 1.2vh, 14px);
       padding: clamp(10px, 1.2vh, 14px);
       background: var(--primary-subtle);
@@ -219,11 +222,12 @@
     #options {
       display: flex; flex-direction: column;
       gap: clamp(5px, 0.7vh, 8px);
+      flex: 1 1 auto;
     }
 
     #options label {
       display: flex; align-items: center; gap: 12px;
-      min-height: 48px;
+      flex: 1;
       padding: clamp(9px, 1.1vh, 13px) clamp(12px, 1.3vw, 16px);
       background: var(--surface); border: 1.5px solid var(--border);
       border-radius: 10px; cursor: pointer;
