@@ -45,7 +45,8 @@
 
     body {
       font-family: 'Noto Sans KR', -apple-system, sans-serif;
-      background: #E2E8F0; color: var(--text-primary); min-height: 100vh;
+      background: var(--surface);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06); color: var(--text-primary); min-height: 100vh;
     }
 
     /* ━━━━━━ 시작 페이지 ━━━━━━ */
@@ -55,7 +56,8 @@
       justify-content: center;
       min-height: 100vh;
       padding: 32px;
-      background: #E2E8F0;
+      background: var(--surface);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     }
     .start-wrapper { width: 100%; max-width: min(1100px, 90vw); position: relative; }
     .start-wrapper::before { content: ''; display: block; padding-top: 56.25%; }
@@ -113,7 +115,8 @@
       width: 100%; padding: 16px; margin-top: 8px;
       font-size: clamp(13px, 1.2vw, 16px);
       font-weight: 700; font-family: inherit; border: none; border-radius: 12px;
-      background: #E2E8F0; color: var(--primary); cursor: pointer;
+      background: var(--surface);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06); color: var(--primary); cursor: pointer;
       letter-spacing: -0.3px; transition: all 0.2s;
     }
     #start-quiz-btn:hover {
@@ -128,7 +131,8 @@
       height: 100vh;
       padding: clamp(10px, 1.2vh, 16px) clamp(12px, 1.5vw, 20px);
       gap: 8px;
-      background: #E2E8F0;
+      background: var(--surface);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
       overflow: hidden;
     }
 
@@ -145,7 +149,8 @@
       align-self: stretch;
       display: flex; flex-direction: column;
       /* ✅ 수정: #FFFFFF → var(--bg) 로 변경하여 페이지 배경과 자연스럽게 동화 */
-      background: #E2E8F0;
+      background: var(--surface);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     }
 
     .video-wrapper {
@@ -250,7 +255,8 @@
       border-radius: 8px; cursor: pointer; transition: all 0.15s; min-width: 90px;
     }
     #prev-btn { background: var(--surface-2); color: var(--text-secondary); border: 1.5px solid var(--border); }
-    #prev-btn:hover:not(:disabled) { background: #E2E8F0; color: var(--text-primary); }
+    #prev-btn:hover:not(:disabled) { background: var(--surface);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06); color: var(--text-primary); }
     #prev-btn:disabled { opacity: 0.35; cursor: not-allowed; }
     #next-btn { background: var(--primary); color: white; border: none; }
     #next-btn:hover { background: var(--primary-hover); }
@@ -305,7 +311,8 @@
     /* ━━━━━━ 결과 페이지 ━━━━━━ */
     #result-page {
       display: none; flex-direction: column; align-items: center;
-      min-height: 100vh; padding: 56px 32px; background: #E2E8F0;
+      min-height: 100vh; padding: 56px 32px; background: var(--surface);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     }
     .result-emoji { font-size: 48px; line-height: 1; margin-bottom: 16px; display: block; text-align: center; }
     #result-page h2 {
