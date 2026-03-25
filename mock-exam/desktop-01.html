@@ -132,10 +132,9 @@
     /* ━━━━━━ 퀴즈 페이지 ━━━━━━ */
     #quiz-page {
       display: none; flex-direction: column;
-      /* ✅ 변경 6: fit-content → 100vh (뷰포트 전체 사용) */
       height: 100vh;
-      /* ✅ 변경 7: 고정 padding → clamp */
-      padding: clamp(6px, 0.7vh, 10px) clamp(12px, 1.5vw, 20px) clamp(6px, 0.7vh, 10px);
+      /* 상하 동일 패딩 */
+      padding: clamp(10px, 1.2vh, 16px) clamp(12px, 1.5vw, 20px);
       background: var(--bg);
       overflow: hidden;
     }
@@ -143,11 +142,10 @@
     .quiz-top {
       display: flex; gap: clamp(10px, 1.2vw, 20px);
       align-items: stretch;
-      /* ✅ 변경 8: flex-grow 추가 - 남은 높이 자동 채움 */
       flex: 1 1 auto;
       min-height: 0;
       margin-bottom: clamp(5px, 0.6vh, 8px);
-      margin-top: clamp(6px, 0.8vh, 11px);
+      /* margin-top 제거 → quiz-page padding으로 통일 */
     }
 
     #video-container {
