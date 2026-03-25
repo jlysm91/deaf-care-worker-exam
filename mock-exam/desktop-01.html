@@ -188,13 +188,9 @@
       flex: 1 1 auto;
       min-height: 0;
       overflow-y: auto;
-      overflow-x: hidden;
       scrollbar-width: thin;
       scrollbar-color: var(--border) transparent;
       padding-right: 2px;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
     }
 
     .question-meta {
@@ -219,10 +215,9 @@
       background: var(--primary-subtle);
       border-left: 4px solid var(--primary);
       border-radius: 8px;
-      flex-shrink: 0;
     }
 
-    #options { display: flex; flex-direction: column; gap: clamp(5px, 0.7vh, 8px); flex-shrink: 0; }
+    #options { display: flex; flex-direction: column; gap: clamp(5px, 0.7vh, 8px); }
 
     #options label {
       display: flex; align-items: center; gap: 12px;
