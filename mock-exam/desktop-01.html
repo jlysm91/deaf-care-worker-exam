@@ -149,9 +149,8 @@
     }
 
     #video-container {
-      flex: 0 0 62%; border-radius: 14px; overflow: hidden;
+      flex: 0 0 56%; border-radius: 14px; overflow: hidden;
       box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      /* ✅ 변경 9: 높이를 부모에 맞춤 */
       align-self: stretch;
       display: flex; flex-direction: column;
     }
@@ -194,44 +193,75 @@
 
     .question-meta {
       display: flex; align-items: center; gap: 8px;
-      margin-bottom: clamp(8px, 1vh, 12px);
+      /* 배지 아래 여백 확대 */
+      margin-bottom: clamp(10px, 1.4vh, 16px);
     }
     .q-num-badge {
       background: var(--primary); color: #fff;
-      /* ✅ */
-      font-size: clamp(10px, 0.85vw, 12px);
-      font-weight: 700; padding: 4px 14px; border-radius: 50px;
+      font-size: clamp(11px, 0.9vw, 13px);
+      font-weight: 700; padding: 5px 16px; border-radius: 50px;
     }
 
+    /* 지문: 항상 2줄 고정 높이 */
     #quiz-content h3 {
-      /* ✅ */
-      font-size: clamp(12px, 1.05vw, 14px);
-      font-weight: 500; color: var(--text-primary);
-      line-height: 1.75; margin-bottom: clamp(10px, 1.2vh, 16px);
-      padding-bottom: clamp(8px, 1vh, 14px);
+      font-size: clamp(13px, 1.15vw, 15px);
+      font-weight: 600; color: var(--text-primary);
+      line-height: 1.75;
+      /* 2줄 고정 */
+      height: calc(1.75em * 2);
+      overflow: hidden;
+      margin-bottom: clamp(10px, 1.2vh, 14px);
+      padding-bottom: clamp(8px, 1vh, 12px);
       border-bottom: 1px solid var(--border);
-      min-height: 3em;
     }
 
-    #options { display: flex; flex-direction: column; gap: clamp(4px, 0.6vh, 7px); }
+    #options { display: flex; flex-direction: column; gap: clamp(5px, 0.7vh, 8px); }
 
     #options label {
-      display: flex; align-items: flex-start; gap: 10px;
-      padding: clamp(7px, 0.9vh, 11px) clamp(10px, 1.1vw, 14px);
-      background: var(--surface-2); border: 1.5px solid var(--border); border-radius: 8px;
+      display: flex; align-items: center; gap: 10px;
+      padding: clamp(8px, 1vh, 12px) clamp(10px, 1.1vw, 14px);
+      background: var(--surface-2); border: 1.5px solid var(--border); border-radius: 10px;
       cursor: pointer;
-      /* ✅ */
-      font-size: clamp(11px, 0.95vw, 13px);
+      font-size: clamp(12px, 1.05vw, 14px);
+      font-weight: 400;
       line-height: 1.55;
-      transition: background 0.15s, border-color 0.15s;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
       word-break: keep-all; white-space: normal;
+      /* 좌측 컬러 바를 위한 relative */
+      position: relative;
+      padding-left: clamp(12px, 1.3vw, 18px);
+      border-left: 3px solid transparent;
     }
-    #options label:hover { background: var(--primary-subtle); border-color: #BFDBFE; }
+    #options label:hover {
+      background: var(--primary-subtle); border-color: #BFDBFE;
+      border-left-color: #93C5FD;
+    }
     #options input[type="radio"] {
-      flex-shrink: 0; accent-color: var(--primary); width: 15px; height: 15px; margin-top: 2px;
+      flex-shrink: 0; accent-color: var(--primary); width: 16px; height: 16px;
     }
-    #options label:has(input:checked) { background: var(--primary-subtle); border-color: var(--primary-light); }
-    #options label:has(input:checked) span { color: var(--primary); font-weight: 600; }
+    /* 선택 시: 좌측 파란 바 + 배경 + 텍스트 강조 */
+    #options label:has(input:checked) {
+      background: var(--primary-subtle);
+      border-color: var(--primary-light);
+      border-left-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(29,78,216,0.10);
+    }
+    #options label:has(input:checked) span { color: var(--primary); font-weight: 700; }
+
+    /* ━━━━━━ 프로그레스 바 ━━━━━━ */
+    #progress-bar-wrap {
+      width: 100%; height: 4px;
+      background: var(--border); border-radius: 99px;
+      margin-bottom: clamp(8px, 1vh, 12px);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    #progress-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 99px;
+      transition: width 0.3s ease;
+    }
 
     /* ━━━━━━ 네비게이션 버튼: 문제 박스 하단 고정 ━━━━━━ */
     #navigation-buttons {
@@ -267,20 +297,36 @@
     /* ━━━━━━ 빠른 이동 네비게이션 ━━━━━━ */
     #quick-nav-container {
       display: none; background: var(--surface); border-radius: 14px;
-      padding: clamp(10px, 1.2vh, 16px) clamp(14px, 1.5vw, 20px) clamp(12px, 1.5vh, 20px);
+      padding: clamp(8px, 1vh, 12px) clamp(14px, 1.5vw, 20px) clamp(10px, 1.2vh, 16px);
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
       flex-shrink: 0;
       margin-top: clamp(5px, 0.6vh, 8px);
     }
 
+    /* 빠른 이동 헤더: 라벨 + 토글 버튼 */
+    .nav-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: clamp(6px, 0.8vh, 10px);
+    }
     .nav-section-label {
       display: inline-block; background: var(--primary); color: #fff;
-      /* ✅ */
       font-size: clamp(10px, 0.85vw, 12px);
       font-weight: 700; letter-spacing: 0.5px;
       padding: 3px 12px; border-radius: 50px;
-      margin-bottom: clamp(6px, 0.8vh, 10px);
+      margin-bottom: 0;
     }
+    #nav-toggle-btn {
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 3px 10px;
+      font-size: clamp(10px, 0.85vw, 12px); font-weight: 600;
+      font-family: inherit; color: var(--text-secondary);
+      cursor: pointer; transition: all 0.15s;
+    }
+    #nav-toggle-btn:hover { background: #E2E8F0; color: var(--text-primary); }
+
+    /* 그리드 접기/펼치기 */
+    #quick-nav-grid-wrap { overflow: hidden; transition: max-height 0.25s ease; }
+    #quick-nav-grid-wrap.collapsed { max-height: 0 !important; }
 
     #quick-nav-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: clamp(3px, 0.4vw, 6px); }
 
@@ -364,7 +410,8 @@
           <h3><span id="question-text"></span></h3>
           <div id="options"></div>
         </div>
-        <!-- 버튼: 문제 박스 안 하단 -->
+        <!-- 프로그레스 바 + 버튼 -->
+        <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
         <div id="navigation-buttons">
           <button id="prev-btn">← 이전</button>
           <span id="question-counter"><span id="current-question">1</span> / <span id="total-questions">80</span></span>
@@ -373,8 +420,13 @@
       </div>
     </div>
     <div id="quick-nav-container">
-      <p class="nav-section-label">빠른 문항 이동</p>
-      <div id="quick-nav-grid"></div>
+      <div class="nav-header">
+        <p class="nav-section-label">빠른 문항 이동</p>
+        <button id="nav-toggle-btn">접기 ▲</button>
+      </div>
+      <div id="quick-nav-grid-wrap">
+        <div id="quick-nav-grid"></div>
+      </div>
     </div>
   </div>
 
@@ -400,12 +452,11 @@
     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
     function applyResponsiveLayout() {
       const vw = window.innerWidth;
-      const vh = window.innerHeight;
 
-      // 비디오 컨테이너 너비 계산 (gap 고려)
+      // 비디오 컨테이너 너비 계산 (56%로 변경)
       const gapPx = Math.max(10, Math.min(20, vw * 0.012));
       const paddingX = Math.max(12, Math.min(20, vw * 0.015)) * 2;
-      const videoWidth = (vw - paddingX - gapPx) * 0.62;
+      const videoWidth = (vw - paddingX - gapPx) * 0.56;
 
       // Vimeo 16:9 비율 높이
       const videoHeight = videoWidth * 0.5625;
@@ -557,8 +608,10 @@
       startPage.style.display="none";quizPage.style.display="flex";
       document.getElementById("quick-nav-container").style.display="block";
       createQuickNavButtons();updateQuestion(currentQuestionIndex);
-      // ✅ 변경 15: 퀴즈 페이지 표시 후 레이아웃 즉시 적용
-      requestAnimationFrame(applyResponsiveLayout);
+      requestAnimationFrame(()=>{
+        applyResponsiveLayout();
+        initNavGridHeight();
+      });
     }
 
     function saveQuizProgress(){
@@ -570,7 +623,6 @@
       currentQuestionIndex=index;
       const question=quizData[currentQuestionIndex];
       videoWrapper.innerHTML=question.videoEmbed;
-      // ✅ 변경 16: 문제 변경 시마다 레이아웃 재적용 (새 iframe 크기 보정)
       requestAnimationFrame(applyResponsiveLayout);
       questionNumberSpan.textContent=currentQuestionIndex+1;
       questionTextSpan.textContent=question.question;
@@ -598,6 +650,10 @@
       nextBtn.textContent=currentQuestionIndex===TOTAL_QUESTIONS-1?"제출하기":"다음 →";
       if(currentQuestionIndex===TOTAL_QUESTIONS-1)nextBtn.classList.add("submit-mode");
       else nextBtn.classList.remove("submit-mode");
+      // 프로그레스 바 업데이트
+      const pct = ((currentQuestionIndex + 1) / TOTAL_QUESTIONS) * 100;
+      const bar = document.getElementById("progress-bar");
+      if(bar) bar.style.width = pct + "%";
     }
 
     function createQuickNavButtons(){
@@ -691,6 +747,32 @@
       if(btn){btn.textContent=`${currentQuestionIndex+1}(${ans})`;btn.classList.add("answered");}
     });
     document.getElementById("result-return-btn").addEventListener("click",resetQuiz);
+
+    // 빠른 이동 그리드 토글
+    const navToggleBtn = document.getElementById("nav-toggle-btn");
+    const navGridWrap = document.getElementById("quick-nav-grid-wrap");
+    navToggleBtn.addEventListener("click", () => {
+      const isCollapsed = navGridWrap.classList.contains("collapsed");
+      if(isCollapsed){
+        navGridWrap.style.maxHeight = navGridWrap.scrollHeight + "px";
+        navGridWrap.classList.remove("collapsed");
+        navToggleBtn.textContent = "접기 ▲";
+      } else {
+        navGridWrap.style.maxHeight = navGridWrap.scrollHeight + "px";
+        requestAnimationFrame(() => {
+          navGridWrap.classList.add("collapsed");
+        });
+        navToggleBtn.textContent = "펼치기 ▼";
+      }
+    });
+    // 초기 그리드 높이 설정
+    function initNavGridHeight(){
+      if(navGridWrap && !navGridWrap.classList.contains("collapsed")){
+        navGridWrap.style.maxHeight = navGridWrap.scrollHeight + "px";
+      }
+    }
+    window.addEventListener("resize", initNavGridHeight);
+
     document.addEventListener("dragstart",e=>e.preventDefault());
     document.addEventListener("selectstart",e=>e.preventDefault());
     document.addEventListener("contextmenu",e=>e.preventDefault());
