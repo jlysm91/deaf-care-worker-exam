@@ -142,10 +142,10 @@
     .quiz-top {
       display: flex; gap: clamp(10px, 1.2vw, 20px);
       align-items: stretch;
-      /* ✅ 높이는 JS(applyQuizLayout)가 실시간으로 직접 지정 - CSS 추정값 없음 */
-      flex: 0 0 auto;
+      /* ✅ height는 JS가 inline style로 직접 지정 */
+      flex: none;
       min-height: 0;
-      margin-bottom: clamp(5px, 0.6vh, 8px);
+      margin-bottom: 8px;
     }
 
     #video-container {
@@ -596,11 +596,15 @@
       startPage.style.display="none";quizPage.style.display="flex";
       document.getElementById("quick-nav-container").style.display="flex";
       createQuickNavButtons();updateQuestion(currentQuestionIndex);
+      // ✅ 3중 rAF: 렌더링이 완전히 정착된 후 레이아웃 계산
       requestAnimationFrame(()=>{
         applyResponsiveLayout();
         fitQuestionText();
-        // 두 번째 frame에서 실행 - 레이아웃이 완전히 정착된 후
-        requestAnimationFrame(autoResizeNavGrid);
+        requestAnimationFrame(()=>{
+          autoResizeNavGrid();
+          // 한 번 더: 비디오 로드 등으로 레이아웃이 바뀔 수 있어 재실행
+          requestAnimationFrame(autoResizeNavGrid);
+        });
       });
     }
 
@@ -762,30 +766,31 @@
       const grid     = document.getElementById("quick-nav-grid");
       if(!quizPage || !quizTop || !navCont || !grid) return;
 
-      // ✅ 1단계: quiz-page 실제 내부 높이 측정
-      const pageStyle = getComputedStyle(quizPage);
-      const pagePadV  = parseFloat(pageStyle.paddingTop) + parseFloat(pageStyle.paddingBottom);
-      const pageH     = quizPage.clientHeight - pagePadV;
+      // ── 1. quiz-page 실제 콘텐츠 높이 ──
+      const cs       = getComputedStyle(quizPage);
+      const pageH    = quizPage.clientHeight
+                     - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
 
-      // ✅ 2단계: nav 영역에 필요한 최소 높이 계산
-      const marginBetween = parseFloat(getComputedStyle(quizTop).marginBottom) || 8;
-      const navPadV    = parseFloat(getComputedStyle(navCont).paddingTop || 14)
-                       + parseFloat(getComputedStyle(navCont).paddingBottom || 14);
-      const headerH    = (document.querySelector(".nav-header") || {}).offsetHeight || 40;
-      const gridGap    = parseFloat(getComputedStyle(grid).gap) || 5;
-      const rowGaps    = 7 * gridGap;
-      const minBtnH    = 28; // 버튼 최소 높이
-      const minNavH    = navPadV + headerH + rowGaps + (minBtnH * 8);
+      // ── 2. nav 필요 최소 높이 (display:none이어도 구조상 고정값으로 계산) ──
+      const GAP_BETWEEN = 8;   // quiz-top margin-bottom (CSS에서 8px 고정)
+      const NAV_PAD     = 28;  // nav-container 상하 패딩 합계 (clamp 14px×2)
+      const HEADER_H    = 42;  // .nav-header 높이
+      const GRID_GAP    = parseFloat(getComputedStyle(grid).gap) || 5;
+      const ROW_GAPS    = 7 * GRID_GAP;
+      const MIN_BTN_H   = 28;  // 버튼 최소 높이
+      const MIN_NAV_H   = NAV_PAD + HEADER_H + ROW_GAPS + (MIN_BTN_H * 8);
+      // ≈ 28 + 42 + 35 + 224 = 329px
 
-      // ✅ 3단계: quiz-top 높이를 역산하여 직접 px로 지정
-      const quizTopH = Math.max(200, pageH - marginBetween - minNavH);
+      // ── 3. quiz-top 높이 = 전체 - 간격 - nav최소높이 ──
+      const quizTopH = Math.max(180, pageH - GAP_BETWEEN - MIN_NAV_H);
+      quizTop.style.height    = quizTopH + "px";
       quizTop.style.flexBasis = quizTopH + "px";
       quizTop.style.maxHeight = quizTopH + "px";
 
-      // ✅ 4단계: nav에 실제로 남은 공간으로 버튼 높이 재계산
-      const actualNavH = pageH - quizTopH - marginBetween;
-      const gridH      = actualNavH - navPadV - headerH;
-      const btnH       = Math.max(minBtnH, Math.min(63, Math.floor((gridH - rowGaps) / 8)));
+      // ── 4. 실제 남은 공간으로 버튼 높이 확정 ──
+      const navH  = pageH - quizTopH - GAP_BETWEEN;
+      const gridH = navH - NAV_PAD - HEADER_H;
+      const btnH  = Math.max(MIN_BTN_H, Math.min(63, Math.floor((gridH - ROW_GAPS) / 8)));
       document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
     }
 
