@@ -209,8 +209,6 @@
       background: var(--surface-2);
       color: var(--text-secondary);
       border: 1.5px solid var(--border);
-      font-size: 13px;
-      line-height: 1;
       text-align: center;
       white-space: nowrap;
     }
@@ -290,7 +288,13 @@
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 8px 2px;
+      height: 44px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
       font-size: 11px;
       font-weight: 600;
       color: var(--text-secondary);
@@ -310,8 +314,8 @@
       color: #fff;
       border-color: var(--primary);
     }
-    .sheet-nav-btn .sn-num { font-size: 12px; font-weight: 700; }
-    .sheet-nav-btn .sn-ans { font-size: 9px; opacity: 0.85; margin-top: 2px; }
+    .sheet-nav-btn .sn-num { font-size: 12px; font-weight: 700; line-height: 1; }
+    .sheet-nav-btn .sn-ans { font-size: 9px; opacity: 0.85; line-height: 1; }
 
     /* ━━━━━━ 결과 페이지 ━━━━━━ */
     #result-page {
@@ -884,6 +888,42 @@
 
     navSheetBtn.addEventListener("click", openSheet);
     sheetOverlay.addEventListener("click", closeSheet);
+
+    /* ✅ Bottom Sheet 스와이프 다운으로 닫기 */
+    (function() {
+      let touchStartY = 0;
+      let touchStartScrollTop = 0;
+      const sheet = document.getElementById("bottom-sheet");
+      const stickyTop = sheet.querySelector(".sheet-sticky-top");
+
+      // 핸들 영역(sticky-top)에서 터치 시작
+      stickyTop.addEventListener("touchstart", function(e) {
+        touchStartY = e.touches[0].clientY;
+        touchStartScrollTop = sheet.scrollTop;
+      }, { passive: true });
+
+      stickyTop.addEventListener("touchmove", function(e) {
+        const dy = e.touches[0].clientY - touchStartY;
+        // 아래로 50px 이상 드래그 → 닫기
+        if (dy > 50 && sheet.scrollTop <= 0) {
+          closeSheet();
+        }
+      }, { passive: true });
+
+      // 시트 본문 스크롤이 최상단일 때만 스와이프 감지
+      sheet.addEventListener("touchstart", function(e) {
+        touchStartY = e.touches[0].clientY;
+        touchStartScrollTop = sheet.scrollTop;
+      }, { passive: true });
+
+      sheet.addEventListener("touchmove", function(e) {
+        const dy = e.touches[0].clientY - touchStartY;
+        // 스크롤이 최상단이고 아래로 70px 이상 드래그
+        if (dy > 70 && touchStartScrollTop <= 0) {
+          closeSheet();
+        }
+      }, { passive: true });
+    })();
 
     /* ━━━ 이벤트 방어 ━━━ */
     document.addEventListener("dragstart", e => e.preventDefault());
