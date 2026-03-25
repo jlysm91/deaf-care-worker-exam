@@ -381,12 +381,14 @@
       .bottom-nav { padding: 12px 24px; gap: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
       .bottom-nav button { padding: 16px 8px; font-size: 16px; border-radius: 12px; }
 
-      /* Bottom Sheet 가운데 정렬 */
+      /* Bottom Sheet 가운데 정렬 + 80문항 전체 표시 */
       .bottom-sheet {
         left: 50%;
         right: auto;
         width: min(640px, 100vw);
         transform: translateX(-50%) translateY(100%);
+        max-height: 85vh;    /* 8행 전체가 들어갈 충분한 높이 */
+        overflow-y: hidden;  /* 내부 스크롤 제거 */
       }
       .bottom-sheet.visible { transform: translateX(-50%) translateY(0); }
 
