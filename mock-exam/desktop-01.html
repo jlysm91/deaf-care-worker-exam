@@ -142,8 +142,7 @@
     .quiz-top {
       display: flex; gap: clamp(10px, 1.2vw, 20px);
       align-items: stretch;
-      /* 좌/우 칸 높이 축소 */
-      flex: 0 0 60vh;
+      flex: 0 0 65vh;
       min-height: 0;
       margin-bottom: clamp(5px, 0.6vh, 8px);
     }
@@ -299,7 +298,7 @@
       margin-top: clamp(5px, 0.6vh, 8px);
     }
     .nav-header {
-      display: flex; align-items: center;
+      display: flex; align-items: center; justify-content: center;
       margin-bottom: clamp(6px, 0.8vh, 8px);
     }
     .nav-section-label {
@@ -307,6 +306,7 @@
       font-size: clamp(10px, 0.85vw, 12px);
       font-weight: 700; letter-spacing: 0.5px;
       padding: 3px 12px; border-radius: 50px;
+      text-align: center;
     }
     /* 그리드 래퍼: 남은 공간 채움 */
     #quick-nav-grid-wrap { overflow: hidden; }
@@ -317,8 +317,8 @@
       font-size: clamp(10px, 0.9vw, 13px);
       font-weight: 600; font-family: inherit; text-align: center;
       cursor: pointer; transition: all 0.12s; color: var(--text-secondary);
-      height: var(--nav-btn-height, 28px);
-      line-height: var(--nav-btn-height, 28px);
+      height: var(--nav-btn-height, 34px);
+      line-height: var(--nav-btn-height, 34px);
       padding: 0; overflow: hidden; white-space: nowrap;
       user-select: none; -webkit-user-select: none;
     }
@@ -764,7 +764,7 @@
       const gaps     = 8 * 3;
 
       const remaining = pageH - topH - barH - marginT - padV - headerH - gaps;
-      const btnH = Math.max(20, Math.min(32, Math.floor((remaining - 4 * 7) / 8)));
+      const btnH = Math.max(24, Math.min(42, Math.floor((remaining - 4 * 7) / 8)));
       document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
     }
 
