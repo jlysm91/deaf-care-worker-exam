@@ -190,6 +190,8 @@
       scrollbar-width: thin;
       scrollbar-color: var(--border) transparent;
       padding-right: 2px;
+      display: flex;
+      flex-direction: column;
     }
 
     .question-meta {
@@ -216,11 +218,15 @@
       border-radius: 8px;
     }
 
-    #options { display: flex; flex-direction: column; gap: clamp(5px, 0.7vh, 8px); }
+    #options {
+      display: flex; flex-direction: column;
+      gap: clamp(5px, 0.7vh, 8px);
+      flex: 1 1 auto;
+    }
 
     #options label {
       display: flex; align-items: center; gap: 12px;
-      min-height: 48px;
+      flex: 1;
       padding: clamp(9px, 1.1vh, 13px) clamp(12px, 1.3vw, 16px);
       background: var(--surface); border: 1.5px solid var(--border);
       border-radius: 10px; cursor: pointer;
@@ -481,16 +487,16 @@
       return `<div style="position:relative;width:100%;height:100%;"><iframe src="https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="${title}"></iframe></div>`;
     }
 
-    // 지문 폰트 자동 축소: 컨테이너 너비 기준 최대~12px까지
+    // 지문 폰트 자동 축소
     function fitQuestionText(){
       const h3 = document.querySelector("#quiz-content h3");
       const container = document.getElementById("quiz-container");
       if(!h3 || !container) return;
-      const maxSize = Math.min(20, Math.max(14, container.clientWidth * 0.018));
+      const maxSize = Math.min(42, Math.max(20, container.clientWidth * 0.035));
       let size = maxSize;
       h3.style.fontSize = size + "px";
-      const maxH = size * 1.7 * 3; // 3줄 기준
-      while(h3.scrollHeight > maxH + 2 && size > 12){
+      const maxH = size * 1.7 * 3;
+      while(h3.scrollHeight > maxH + 2 && size > 20){
         size -= 0.5;
         h3.style.fontSize = size + "px";
       }
