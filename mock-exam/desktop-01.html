@@ -184,7 +184,7 @@
       min-height: 0;
     }
 
-    /* 문제+보기 영역: 컨테이너 꽉 채움, 내부 스크롤 없음 */
+    /* 문제+보기 영역: 버튼 아래 남은 공간 채움 */
     #quiz-content {
       flex: 1 1 auto;
       min-height: 0;
@@ -232,16 +232,14 @@
     #options label:has(input:checked) { background: var(--primary-subtle); border-color: var(--primary-light); }
     #options label:has(input:checked) span { color: var(--primary); font-weight: 600; }
 
-    /* ━━━━━━ 독립 네비게이션 바 (quiz-top 아래, quick-nav 위) ━━━━━━ */
+    /* ━━━━━━ 네비게이션 버튼: 문제 박스 상단 ━━━━━━ */
     #navigation-buttons {
       display: flex; align-items: center; justify-content: space-between;
       gap: 10px;
       flex-shrink: 0;
-      background: var(--surface);
-      border-radius: 12px;
-      padding: clamp(8px, 1vh, 12px) clamp(14px, 1.6vw, 22px);
-      margin-top: clamp(5px, 0.6vh, 8px);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding-bottom: clamp(8px, 1vh, 12px);
+      margin-bottom: clamp(8px, 1vh, 12px);
+      border-bottom: 1px solid var(--border);
     }
     #navigation-buttons button {
       padding: clamp(7px, 0.9vh, 10px) clamp(14px, 1.6vw, 22px);
@@ -360,18 +358,18 @@
     <div class="quiz-top">
       <div id="video-container"><div class="video-wrapper"></div></div>
       <div id="quiz-container">
+        <!-- ✅ 이전/다음 버튼: 문제 번호+내용 위로 이동 -->
+        <div id="navigation-buttons">
+          <button id="prev-btn">← 이전</button>
+          <span id="question-counter"><span id="current-question">1</span> / <span id="total-questions">80</span></span>
+          <button id="next-btn">다음 →</button>
+        </div>
         <div id="quiz-content">
           <div class="question-meta"><span class="q-num-badge">문제 <span id="question-number">1</span></span></div>
           <h3><span id="question-text"></span></h3>
           <div id="options"></div>
         </div>
       </div>
-    </div>
-    <!-- ✅ 이전/다음 버튼: quiz-top 바깥 독립 행으로 이동 -->
-    <div id="navigation-buttons">
-      <button id="prev-btn">← 이전</button>
-      <span id="question-counter"><span id="current-question">1</span> / <span id="total-questions">80</span></span>
-      <button id="next-btn">다음 →</button>
     </div>
     <div id="quick-nav-container">
       <p class="nav-section-label">빠른 문항 이동</p>
