@@ -210,8 +210,9 @@
       color: var(--text-secondary);
       border: 1.5px solid var(--border);
       font-size: 13px;
-      line-height: 1.4;
+      line-height: 1;
       text-align: center;
+      white-space: nowrap;
     }
     #next-btn {
       flex: 1;
@@ -444,7 +445,7 @@
 
     <div class="bottom-nav">
       <button id="prev-btn">← 이전</button>
-      <button id="nav-sheet-btn">문항<br>이동</button>
+      <button id="nav-sheet-btn">문항 이동</button>
       <button id="next-btn">다음 →</button>
     </div>
   </div>
@@ -644,7 +645,9 @@
           });
         } else if (data && data.progress) {
           currentIndex = data.progress.currentQuestion || 0;
-          userAnswers = data.progress.answers || new Array(TOTAL).fill(null);
+          // ✅ Firebase 배열의 undefined 슬롯을 null로 정규화
+          const raw = data.progress.answers || [];
+          userAnswers = Array.from({length: TOTAL}, (_, i) => (raw[i] != null) ? raw[i] : null);
           showQuizPage();
         } else {
           currentIndex = 0;
@@ -656,9 +659,11 @@
 
     function saveProgress() {
       if (!currentUserId) return;
+      // ✅ undefined 값을 null로 정규화하여 Firebase에 저장
+      const normalized = userAnswers.map(a => (a != null) ? a : null);
       database.ref(`exams/${EXAM_ID}/users/${currentUserId}/progress`).set({
         currentQuestion: currentIndex,
-        answers: userAnswers
+        answers: normalized
       });
     }
 
@@ -833,21 +838,30 @@
     function updateSheetGrid() {
       const btns = sheetGrid.querySelectorAll(".sheet-nav-btn");
       btns.forEach((btn, i) => {
+        // ✅ 클래스 초기화
         btn.classList.remove("answered", "active-q");
-        const ans = userAnswers[i];
+        const ans = (userAnswers[i] != null) ? userAnswers[i] : null; // undefined·null 모두 null 처리
         const ansEl = btn.querySelector(".sn-ans");
+
         if (ans !== null) {
+          // 답변 있음 → 초록
           btn.classList.add("answered");
-          ansEl.textContent = ans;
+          ansEl.textContent = "(" + ans + ")";
         } else {
+          // 답변 없음 → 명시적으로 흰색 기본 스타일 강제
+          btn.style.background = "";
+          btn.style.color = "";
+          btn.style.borderColor = "";
           ansEl.textContent = "";
         }
+
+        // 현재 문항 → 파란색 (answered보다 우선)
         if (i === currentIndex) btn.classList.add("active-q");
       });
     }
 
     function updateSheetProgress() {
-      const answered = userAnswers.filter(a => a !== null).length;
+      const answered = userAnswers.filter(a => a != null).length; // undefined·null 모두 미답으로 처리
       progAnswered.textContent = answered;
       progUnanswered.textContent = TOTAL - answered;
     }
