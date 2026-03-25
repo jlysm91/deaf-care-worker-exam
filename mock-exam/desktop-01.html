@@ -677,6 +677,24 @@
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
       fetch(googleFormURL,{method:"POST",body:fd,mode:"no-cors"}).catch(console.error);
+
+      // ✅ 올리사이트로 결과 전송 후 탭 닫기
+      const resultData = {
+        type: "examResult",
+        total: 총점,
+        필기: 필기,
+        실기: 실기,
+        answers: userAnswers,
+        correctAnswers: quizData.map(q => q.correctAnswer),
+        name: userNameInput.value.trim()
+      };
+      try {
+        if(window.opener && !window.opener.closed){
+          window.opener.postMessage(resultData, "*");
+        }
+      } catch(e){ console.error(e); }
+      // 3초 후 탭 자동 닫기 (결과 전송 완료 후)
+      setTimeout(()=>{ try{ window.close(); }catch(e){} }, 3000);
     }
 
     function resetQuiz(){
