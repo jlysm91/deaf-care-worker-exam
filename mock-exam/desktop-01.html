@@ -299,50 +299,79 @@
     }
     #total-questions { color: var(--primary); }
 
+    /* 지문: JS가 폰트 자동 조정 */
+    #quiz-content h3 {
+      font-size: clamp(14px, 1.5vw, 20px);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.7;
+      overflow: hidden;
+      margin-bottom: clamp(10px, 1.2vh, 14px);
+      padding: clamp(10px, 1.2vh, 14px);
+      background: var(--primary-subtle);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+    }
+
+    #options { display: flex; flex-direction: column; gap: clamp(5px, 0.7vh, 8px); }
+
+    #options label {
+      display: flex; align-items: center; gap: 12px;
+      height: calc(1.5em * 2 + clamp(9px, 1.1vh, 13px) * 2);
+      padding: clamp(9px, 1.1vh, 13px) clamp(12px, 1.3vw, 16px);
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 10px; cursor: pointer;
+      font-size: clamp(13px, 1.1vw, 15px); font-weight: 400; line-height: 1.5;
+      transition: all 0.15s;
+      word-break: keep-all; white-space: normal;
+    }
+    #options label:hover {
+      background: var(--primary-subtle);
+      border-color: var(--primary-light);
+      transform: translateX(2px);
+    }
+    #options input[type="radio"] {
+      flex-shrink: 0; accent-color: var(--primary); width: 16px; height: 16px;
+    }
+    #options label:has(input:checked) {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    #options label:has(input:checked) span { color: #fff; font-weight: 600; }
+    #options label:has(input:checked) input[type="radio"] { accent-color: #fff; }
+
     /* ━━━━━━ 빠른 이동 네비게이션 ━━━━━━ */
     #quick-nav-container {
       display: none; background: var(--surface); border-radius: 14px;
-      padding: clamp(8px, 1vh, 12px) clamp(14px, 1.5vw, 20px) clamp(10px, 1.2vh, 16px);
+      padding: clamp(8px, 1vh, 12px) clamp(14px, 1.5vw, 20px) clamp(8px, 1vh, 12px);
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      flex-shrink: 0;
+      /* flex-shrink: 1 → 공간 부족 시 자동으로 줄어듦 */
+      flex-shrink: 1;
+      min-height: 0;
+      overflow: hidden;
       margin-top: clamp(5px, 0.6vh, 8px);
     }
-
-    /* 빠른 이동 헤더: 라벨 + 토글 버튼 */
     .nav-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: clamp(6px, 0.8vh, 10px);
+      display: flex; align-items: center;
+      margin-bottom: clamp(6px, 0.8vh, 8px);
     }
     .nav-section-label {
       display: inline-block; background: var(--primary); color: #fff;
       font-size: clamp(10px, 0.85vw, 12px);
       font-weight: 700; letter-spacing: 0.5px;
       padding: 3px 12px; border-radius: 50px;
-      margin-bottom: 0;
     }
-    #nav-toggle-btn {
-      background: var(--surface-2); border: 1px solid var(--border);
-      border-radius: 6px; padding: 3px 10px;
-      font-size: clamp(10px, 0.85vw, 12px); font-weight: 600;
-      font-family: inherit; color: var(--text-secondary);
-      cursor: pointer; transition: all 0.15s;
-    }
-    #nav-toggle-btn:hover { background: #E2E8F0; color: var(--text-primary); }
-
-    /* 그리드 접기/펼치기 */
-    #quick-nav-grid-wrap { overflow: hidden; transition: max-height 0.25s ease; }
-    #quick-nav-grid-wrap.collapsed { max-height: 0 !important; }
-
-    #quick-nav-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: clamp(3px, 0.4vw, 6px); }
+    /* 그리드 래퍼: 남은 공간 채움 */
+    #quick-nav-grid-wrap { overflow: hidden; }
+    #quick-nav-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: clamp(3px, 0.4vw, 5px); }
 
     .nav-btn {
       background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px;
-      /* ✅ */
       font-size: clamp(10px, 0.9vw, 13px);
       font-weight: 600; font-family: inherit; text-align: center;
       cursor: pointer; transition: all 0.12s; color: var(--text-secondary);
-      height: clamp(26px, 3vh, 32px);
-      line-height: clamp(26px, 3vh, 32px);
+      height: var(--nav-btn-height, 28px);
+      line-height: var(--nav-btn-height, 28px);
       padding: 0; overflow: hidden; white-space: nowrap;
       user-select: none; -webkit-user-select: none;
     }
@@ -427,7 +456,6 @@
     <div id="quick-nav-container">
       <div class="nav-header">
         <p class="nav-section-label">빠른 문항 이동</p>
-        <button id="nav-toggle-btn">접기 ▲</button>
       </div>
       <div id="quick-nav-grid-wrap">
         <div id="quick-nav-grid"></div>
@@ -615,8 +643,8 @@
       createQuickNavButtons();updateQuestion(currentQuestionIndex);
       requestAnimationFrame(()=>{
         applyResponsiveLayout();
-        autoToggleNavGrid();
         fitQuestionText();
+        autoResizeNavGrid();
       });
     }
 
@@ -756,61 +784,38 @@
     });
     document.getElementById("result-return-btn").addEventListener("click",resetQuiz);
 
-    // 빠른 이동 그리드 토글
-    const navToggleBtn = document.getElementById("nav-toggle-btn");
-    const navGridWrap = document.getElementById("quick-nav-grid-wrap");
-    navToggleBtn.addEventListener("click", () => {
-      const isCollapsed = navGridWrap.classList.contains("collapsed");
-      if(isCollapsed){
-        navGridWrap.style.maxHeight = navGridWrap.scrollHeight + "px";
-        navGridWrap.classList.remove("collapsed");
-        navToggleBtn.textContent = "접기 ▲";
-      } else {
-        navGridWrap.style.maxHeight = navGridWrap.scrollHeight + "px";
-        requestAnimationFrame(() => {
-          navGridWrap.classList.add("collapsed");
-        });
-        navToggleBtn.textContent = "펼치기 ▼";
-      }
-    });
-    // ── 화면 높이 기준 그리드 자동 접기/펼치기 ──
-    // 800px 이상이면 펼침, 미만이면 접힘
-    const NAV_EXPAND_THRESHOLD = 800;
-    function autoToggleNavGrid(){
-      const wrap = document.getElementById("quick-nav-grid-wrap");
-      const btn  = document.getElementById("nav-toggle-btn");
-      if(!wrap || !btn) return;
-      if(window.innerHeight >= NAV_EXPAND_THRESHOLD){
-        wrap.style.maxHeight = wrap.scrollHeight + "px";
-        wrap.classList.remove("collapsed");
-        btn.textContent = "접기 ▲";
-      } else {
-        wrap.style.maxHeight = "0px";
-        wrap.classList.add("collapsed");
-        btn.textContent = "펼치기 ▼";
-      }
-    }
+    // ── 그리드 버튼 높이 자동 계산 ──
+    // 전체 높이에서 quiz-top, 버튼, 여백을 빼고 남은 공간으로 8행 버튼 높이 결정
+    function autoResizeNavGrid(){
+      const quizPageEl = document.getElementById("quiz-page");
+      const quizTopEl  = document.querySelector(".quiz-top");
+      const navBtnEl   = document.getElementById("navigation-buttons");
+      const navContEl  = document.getElementById("quick-nav-container");
+      const navHeader  = document.querySelector(".nav-header");
+      if(!quizPageEl || !quizTopEl || !navBtnEl || !navContEl || !navHeader) return;
 
-    // ── 지문 텍스트 폰트 자동 축소 ──
-    // 컨테이너 너비에 맞게 최대 20px에서 시작해 12px까지 줄임
-    function fitQuestionText(){
-      const h3 = document.querySelector("#quiz-content h3");
-      const container = document.getElementById("quiz-container");
-      if(!h3 || !container) return;
-      const maxSize = Math.min(20, Math.max(14, container.clientWidth * 0.018));
-      let size = maxSize;
-      h3.style.fontSize = size + "px";
-      // 2줄 초과하면 폰트 줄임 (line-height 1.75 기준 2줄 = size * 1.75 * 2)
-      const maxHeight = size * 1.75 * 2.5;
-      while(h3.scrollHeight > maxHeight + 2 && size > 12){
-        size -= 0.5;
-        h3.style.fontSize = size + "px";
-      }
+      const totalH    = quizPageEl.clientHeight;
+      const topH      = quizTopEl.offsetHeight;
+      const btnH      = navBtnEl.offsetHeight;
+      const paddingV  = parseFloat(getComputedStyle(quizPageEl).paddingTop) * 2;
+      const gapV      = parseFloat(getComputedStyle(quizPageEl).gap) || 8;
+      const navPadV   = 20; // nav-container 상하 패딩 합산
+      const headerH   = navHeader.offsetHeight + 8; // 헤더 + margin-bottom
+      const gridGap   = Math.max(3, Math.min(5, window.innerWidth * 0.0004));
+
+      // 남은 높이 = 전체 - 상단영역 - 버튼 - 여백들 - nav패딩 - 헤더
+      const remaining = totalH - topH - btnH - paddingV - gapV * 2 - navPadV - headerH;
+      // 8행 기준 버튼 높이 계산 (gap * 7 제외)
+      const btnHeight = Math.max(20, Math.min(32, Math.floor((remaining - gridGap * 7) / 8)));
+
+      document.documentElement.style.setProperty("--nav-btn-height", btnHeight + "px");
+      document.documentElement.style.setProperty("--nav-btn-line-height", btnHeight + "px");
     }
 
     window.addEventListener("resize", ()=>{
-      autoToggleNavGrid();
+      applyResponsiveLayout();
       fitQuestionText();
+      autoResizeNavGrid();
     });
 
     document.addEventListener("dragstart",e=>e.preventDefault());
