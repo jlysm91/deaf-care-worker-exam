@@ -772,7 +772,7 @@
       const gridGap = parseFloat(getComputedStyle(grid).gap) || 5;
       const rowGaps = 7 * gridGap;
       const gridH   = navH - padV - headerH;
-      const btnH    = Math.max(24, Math.min(63, Math.floor((gridH - rowGaps) / 8)));
+      const btnH    = Math.max(20, Math.min(50, Math.floor((gridH - rowGaps) / 8)));
       document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
     }
 
