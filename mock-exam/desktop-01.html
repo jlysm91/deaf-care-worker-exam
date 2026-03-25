@@ -232,16 +232,14 @@
     #options label:has(input:checked) { background: var(--primary-subtle); border-color: var(--primary-light); }
     #options label:has(input:checked) span { color: var(--primary); font-weight: 600; }
 
-    /* ━━━━━━ 네비게이션 바: quiz-top 아래 독립 행 ━━━━━━ */
+    /* ━━━━━━ 네비게이션 버튼: 문제 박스 하단 고정 ━━━━━━ */
     #navigation-buttons {
       display: flex; align-items: center; justify-content: space-between;
       gap: 10px;
       flex-shrink: 0;
-      background: var(--surface);
-      border-radius: 12px;
-      padding: clamp(8px, 1vh, 12px) clamp(14px, 1.6vw, 22px);
-      margin-top: clamp(5px, 0.6vh, 8px);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding-top: clamp(8px, 1vh, 12px);
+      margin-top: clamp(8px, 1vh, 12px);
+      border-top: 1px solid var(--border);
     }
     #navigation-buttons button {
       padding: clamp(7px, 0.9vh, 10px) clamp(14px, 1.6vw, 22px);
@@ -365,13 +363,13 @@
           <h3><span id="question-text"></span></h3>
           <div id="options"></div>
         </div>
+        <!-- 버튼: 문제 박스 안 하단 -->
+        <div id="navigation-buttons">
+          <button id="prev-btn">← 이전</button>
+          <span id="question-counter"><span id="current-question">1</span> / <span id="total-questions">80</span></span>
+          <button id="next-btn">다음 →</button>
+        </div>
       </div>
-    </div>
-    <!-- 이전/다음 버튼: quiz-top 아래 독립 행 -->
-    <div id="navigation-buttons">
-      <button id="prev-btn">← 이전</button>
-      <span id="question-counter"><span id="current-question">1</span> / <span id="total-questions">80</span></span>
-      <button id="next-btn">다음 →</button>
     </div>
     <div id="quick-nav-container">
       <p class="nav-section-label">빠른 문항 이동</p>
