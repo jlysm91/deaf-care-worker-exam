@@ -142,12 +142,15 @@
     .quiz-top {
       display: flex; gap: clamp(10px, 1.2vw, 20px);
       align-items: stretch;
-      /* ✅ flex-basis 58vh + max-height로 nav 영역 최소 확보 (min() 호환성 문제 우회) */
-      flex: 0 0 58vh;
-      max-height: calc(100vh - 300px);
+      /* 기본: 큰 화면 65vh */
+      flex: 0 0 65vh;
       min-height: 0;
       margin-bottom: clamp(5px, 0.6vh, 8px);
     }
+    /* ✅ 높이가 낮은 노트북 화면 대응: 뷰포트 높이 기준 단계별 축소 */
+    @media (max-height: 750px) { .quiz-top { flex-basis: 50vh; } }
+    @media (max-height: 700px) { .quiz-top { flex-basis: 47vh; } }
+    @media (max-height: 650px) { .quiz-top { flex-basis: 44vh; } }
 
     #video-container {
       flex: 0 0 56%; border-radius: 14px; overflow: hidden;
