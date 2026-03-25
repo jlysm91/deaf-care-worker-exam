@@ -349,16 +349,22 @@
       .header-counter { font-size: 18px; }
 
       /* 비디오 + 문제 좌우 분리 */
-      .quiz-body { flex-direction: row; }
+      .quiz-body {
+        flex-direction: row !important;
+        align-items: stretch;
+      }
 
+      /* ✅ !important로 기본 width:100%, padding-top:56.25% 강제 덮어쓰기 */
       .video-section {
-        flex: 0 0 55%;
-        padding-top: 0;      /* 16:9 padding-top 해제 */
-        height: 100%;        /* 좌측 패널 전체 높이 채움 */
+        flex: 0 0 55% !important;
+        width: 55% !important;
+        padding-top: 0 !important;
+        height: 100%;
+        align-self: stretch;
       }
 
       .quiz-scroll {
-        flex: 1;
+        flex: 1 !important;
         padding: 20px 22px 0;
         gap: 12px;
       }
@@ -380,13 +386,13 @@
 
       /* Bottom Sheet 가운데 정렬 */
       .bottom-sheet {
-        left: 50%;
-        right: auto;
-        width: min(640px, 100vw);
-        transform: translateX(-50%) translateY(100%);
+        left: 50% !important;
+        right: auto !important;
+        width: min(640px, 100vw) !important;
+        transform: translateX(-50%) translateY(100%) !important;
         border-radius: 20px 20px 0 0;
       }
-      .bottom-sheet.visible { transform: translateX(-50%) translateY(0); }
+      .bottom-sheet.visible { transform: translateX(-50%) translateY(0) !important; }
 
       /* Sheet 내 버튼 크게 */
       .sheet-nav-btn { height: 52px; }
