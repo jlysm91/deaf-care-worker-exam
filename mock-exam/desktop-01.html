@@ -204,54 +204,6 @@
       font-weight: 700; padding: 5px 16px; border-radius: 50px;
     }
 
-    /* 지문: JS가 실시간으로 폰트 크기 조정 - 고정 높이 없음 */
-    #quiz-content h3 {
-      font-size: clamp(14px, 1.5vw, 20px);
-      font-weight: 600; color: var(--text-primary);
-      line-height: 1.75;
-      overflow: hidden;
-      margin-bottom: clamp(10px, 1.2vh, 14px);
-      padding-bottom: clamp(8px, 1vh, 12px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    #options {
-      display: flex; flex-direction: column;
-      gap: clamp(6px, 0.8vh, 10px);
-    }
-
-    #options label {
-      display: flex; align-items: center; gap: 10px;
-      /* 2줄 고정 높이 */
-      height: calc(1.55em * 2 + clamp(9px, 1.1vh, 13px) * 2);
-      padding: clamp(9px, 1.1vh, 13px) clamp(10px, 1.1vw, 14px);
-      background: var(--surface-2); border: 1.5px solid var(--border); border-radius: 10px;
-      cursor: pointer;
-      font-size: clamp(13px, 1.1vw, 15px);
-      font-weight: 400;
-      line-height: 1.55;
-      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
-      word-break: keep-all; white-space: normal;
-      /* 좌측 컬러 바를 위한 relative */
-      position: relative;
-      padding-left: clamp(12px, 1.3vw, 18px);
-      border-left: 3px solid transparent;
-    }
-    #options label:hover {
-      background: var(--primary-subtle); border-color: #BFDBFE;
-      border-left-color: #93C5FD;
-    }
-    #options input[type="radio"] {
-      flex-shrink: 0; accent-color: var(--primary); width: 16px; height: 16px;
-    }
-    /* 선택 시: 좌측 파란 바 + 배경 + 텍스트 강조 */
-    #options label:has(input:checked) {
-      background: var(--primary-subtle);
-      border-color: var(--primary-light);
-      border-left-color: var(--primary);
-      box-shadow: 0 2px 8px rgba(29,78,216,0.10);
-    }
-    #options label:has(input:checked) span { color: var(--primary); font-weight: 700; }
 
     /* ━━━━━━ 프로그레스 바 ━━━━━━ */
     #progress-bar-wrap {
@@ -317,7 +269,7 @@
 
     #options label {
       display: flex; align-items: center; gap: 12px;
-      height: calc(1.5em * 2 + clamp(9px, 1.1vh, 13px) * 2);
+      min-height: 48px;
       padding: clamp(9px, 1.1vh, 13px) clamp(12px, 1.3vw, 16px);
       background: var(--surface); border: 1.5px solid var(--border);
       border-radius: 10px; cursor: pointer;
@@ -338,7 +290,6 @@
       border-color: var(--primary);
     }
     #options label:has(input:checked) span { color: #fff; font-weight: 600; }
-    #options label:has(input:checked) input[type="radio"] { accent-color: #fff; }
 
     /* ━━━━━━ 빠른 이동 네비게이션 ━━━━━━ */
     #quick-nav-container {
@@ -644,7 +595,8 @@
       requestAnimationFrame(()=>{
         applyResponsiveLayout();
         fitQuestionText();
-        autoResizeNavGrid();
+        // 두 번째 frame에서 실행 - 레이아웃이 완전히 정착된 후
+        requestAnimationFrame(autoResizeNavGrid);
       });
     }
 
@@ -785,37 +737,31 @@
     document.getElementById("result-return-btn").addEventListener("click",resetQuiz);
 
     // ── 그리드 버튼 높이 자동 계산 ──
-    // 전체 높이에서 quiz-top, 버튼, 여백을 빼고 남은 공간으로 8행 버튼 높이 결정
     function autoResizeNavGrid(){
-      const quizPageEl = document.getElementById("quiz-page");
-      const quizTopEl  = document.querySelector(".quiz-top");
-      const navBtnEl   = document.getElementById("navigation-buttons");
-      const navContEl  = document.getElementById("quick-nav-container");
-      const navHeader  = document.querySelector(".nav-header");
-      if(!quizPageEl || !quizTopEl || !navBtnEl || !navContEl || !navHeader) return;
+      const quizPage = document.getElementById("quiz-page");
+      const quizTop  = document.querySelector(".quiz-top");
+      const navBar   = document.getElementById("navigation-buttons");
+      const navCont  = document.getElementById("quick-nav-container");
+      if(!quizPage || !quizTop || !navBar || !navCont) return;
 
-      const totalH    = quizPageEl.clientHeight;
-      const topH      = quizTopEl.offsetHeight;
-      const btnH      = navBtnEl.offsetHeight;
-      const paddingV  = parseFloat(getComputedStyle(quizPageEl).paddingTop) * 2;
-      const gapV      = parseFloat(getComputedStyle(quizPageEl).gap) || 8;
-      const navPadV   = 20; // nav-container 상하 패딩 합산
-      const headerH   = navHeader.offsetHeight + 8; // 헤더 + margin-bottom
-      const gridGap   = Math.max(3, Math.min(5, window.innerWidth * 0.0004));
+      const pageH    = quizPage.clientHeight;
+      const topH     = quizTop.offsetHeight;
+      const barH     = navBar.offsetHeight;
+      const marginT  = parseInt(getComputedStyle(navCont).marginTop) || 8;
+      const padV     = (parseInt(getComputedStyle(navCont).paddingTop) || 10)
+                     + (parseInt(getComputedStyle(navCont).paddingBottom) || 10);
+      const headerH  = (document.querySelector(".nav-header") || {}).offsetHeight || 28;
+      const gaps     = 8 * 3;
 
-      // 남은 높이 = 전체 - 상단영역 - 버튼 - 여백들 - nav패딩 - 헤더
-      const remaining = totalH - topH - btnH - paddingV - gapV * 2 - navPadV - headerH;
-      // 8행 기준 버튼 높이 계산 (gap * 7 제외)
-      const btnHeight = Math.max(20, Math.min(32, Math.floor((remaining - gridGap * 7) / 8)));
-
-      document.documentElement.style.setProperty("--nav-btn-height", btnHeight + "px");
-      document.documentElement.style.setProperty("--nav-btn-line-height", btnHeight + "px");
+      const remaining = pageH - topH - barH - marginT - padV - headerH - gaps;
+      const btnH = Math.max(20, Math.min(32, Math.floor((remaining - 4 * 7) / 8)));
+      document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
     }
 
     window.addEventListener("resize", ()=>{
       applyResponsiveLayout();
       fitQuestionText();
-      autoResizeNavGrid();
+      requestAnimationFrame(autoResizeNavGrid);
     });
 
     document.addEventListener("dragstart",e=>e.preventDefault());
