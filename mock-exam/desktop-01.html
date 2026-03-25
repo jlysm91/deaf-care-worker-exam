@@ -153,6 +153,8 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.15);
       align-self: stretch;
       display: flex; flex-direction: column;
+      /* 위아래 빈 공간 흰색 배경 */
+      background: #FFFFFF;
     }
 
     .video-wrapper {
@@ -204,7 +206,7 @@
 
     /* 지문: 항상 2줄 고정 높이 */
     #quiz-content h3 {
-      font-size: clamp(13px, 1.15vw, 15px);
+      font-size: clamp(15px, 1.35vw, 18px);
       font-weight: 600; color: var(--text-primary);
       line-height: 1.75;
       /* 2줄 고정 */
@@ -219,10 +221,10 @@
 
     #options label {
       display: flex; align-items: center; gap: 10px;
-      padding: clamp(8px, 1vh, 12px) clamp(10px, 1.1vw, 14px);
+      padding: clamp(9px, 1.1vh, 13px) clamp(10px, 1.1vw, 14px);
       background: var(--surface-2); border: 1.5px solid var(--border); border-radius: 10px;
       cursor: pointer;
-      font-size: clamp(12px, 1.05vw, 14px);
+      font-size: clamp(14px, 1.2vw, 16px);
       font-weight: 400;
       line-height: 1.55;
       transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
