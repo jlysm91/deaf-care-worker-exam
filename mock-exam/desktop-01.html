@@ -180,20 +180,15 @@
       padding: clamp(12px, 1.5vh, 20px) clamp(14px, 1.6vw, 22px);
       display: flex; flex-direction: column;
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      /* 컨테이너 자체는 overflow hidden → 내부에서만 스크롤 */
       overflow: hidden;
       min-height: 0;
     }
 
-    /* 문제+보기 영역만 내부 스크롤 */
+    /* 문제+보기 영역: 컨테이너 꽉 채움, 내부 스크롤 없음 */
     #quiz-content {
       flex: 1 1 auto;
       min-height: 0;
-      overflow-y: auto;
-      /* 스크롤바 안 보이게 (기능은 유지) */
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
-      padding-right: 4px;
+      overflow: hidden;
     }
 
     .question-meta {
@@ -237,14 +232,16 @@
     #options label:has(input:checked) { background: var(--primary-subtle); border-color: var(--primary-light); }
     #options label:has(input:checked) span { color: var(--primary); font-weight: 600; }
 
+    /* ━━━━━━ 독립 네비게이션 바 (quiz-top 아래, quick-nav 위) ━━━━━━ */
     #navigation-buttons {
       display: flex; align-items: center; justify-content: space-between;
       gap: 10px;
-      /* 항상 하단 고정 - 절대 밀리지 않음 */
       flex-shrink: 0;
-      margin-top: clamp(10px, 1.2vh, 18px);
-      padding-top: clamp(8px, 1vh, 14px);
-      border-top: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 12px;
+      padding: clamp(8px, 1vh, 12px) clamp(14px, 1.6vw, 22px);
+      margin-top: clamp(5px, 0.6vh, 8px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     #navigation-buttons button {
       padding: clamp(7px, 0.9vh, 10px) clamp(14px, 1.6vw, 22px);
@@ -271,12 +268,10 @@
     /* ━━━━━━ 빠른 이동 네비게이션 ━━━━━━ */
     #quick-nav-container {
       display: none; background: var(--surface); border-radius: 14px;
-      /* ✅ */
       padding: clamp(10px, 1.2vh, 16px) clamp(14px, 1.5vw, 20px) clamp(12px, 1.5vh, 20px);
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      /* ✅ 변경 12: flex-shrink 0으로 고정 (퀴즈 영역 침범 방지) */
       flex-shrink: 0;
-      margin-bottom: 0;
+      margin-top: clamp(5px, 0.6vh, 8px);
     }
 
     .nav-section-label {
@@ -370,12 +365,13 @@
           <h3><span id="question-text"></span></h3>
           <div id="options"></div>
         </div>
-        <div id="navigation-buttons">
-          <button id="prev-btn">← 이전</button>
-          <span id="question-counter"><span id="current-question">1</span> / <span id="total-questions">80</span></span>
-          <button id="next-btn">다음 →</button>
-        </div>
       </div>
+    </div>
+    <!-- ✅ 이전/다음 버튼: quiz-top 바깥 독립 행으로 이동 -->
+    <div id="navigation-buttons">
+      <button id="prev-btn">← 이전</button>
+      <span id="question-counter"><span id="current-question">1</span> / <span id="total-questions">80</span></span>
+      <button id="next-btn">다음 →</button>
     </div>
     <div id="quick-nav-container">
       <p class="nav-section-label">빠른 문항 이동</p>
