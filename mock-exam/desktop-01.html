@@ -190,8 +190,6 @@
       scrollbar-width: thin;
       scrollbar-color: var(--border) transparent;
       padding-right: 2px;
-      display: flex;
-      flex-direction: column;
     }
 
     .question-meta {
@@ -221,12 +219,11 @@
     #options {
       display: flex; flex-direction: column;
       gap: clamp(5px, 0.7vh, 8px);
-      flex: 1 1 auto;
     }
 
     #options label {
       display: flex; align-items: center; gap: 12px;
-      flex: 1;
+      min-height: 48px;
       padding: clamp(9px, 1.1vh, 13px) clamp(12px, 1.3vw, 16px);
       background: var(--surface); border: 1.5px solid var(--border);
       border-radius: 10px; cursor: pointer;
@@ -246,21 +243,6 @@
       background: var(--primary); border-color: var(--primary);
     }
     #options label:has(input:checked) span { color: #fff; font-weight: 600; }
-
-    /* ━━━━━━ 프로그레스 바 ━━━━━━ */
-    #progress-bar-wrap {
-      width: 100%; height: 4px;
-      background: var(--border); border-radius: 99px;
-      margin-bottom: clamp(8px, 1vh, 12px);
-      flex-shrink: 0;
-      overflow: hidden;
-    }
-    #progress-bar {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, var(--primary), var(--primary-light));
-      border-radius: 99px;
-      transition: width 0.3s ease;
-    }
 
     /* ━━━━━━ 네비게이션 버튼: 문제 박스 하단 고정 ━━━━━━ */
     #navigation-buttons {
@@ -399,8 +381,6 @@
           <h3><span id="question-text"></span></h3>
           <div id="options"></div>
         </div>
-        <!-- 프로그레스 바 + 버튼 -->
-        <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
         <div id="navigation-buttons">
           <button id="prev-btn">← 이전</button>
           <span id="question-counter"><span id="current-question">1</span> / <span id="total-questions">80</span></span>
@@ -656,10 +636,6 @@
       nextBtn.textContent=currentQuestionIndex===TOTAL_QUESTIONS-1?"제출하기":"다음 →";
       if(currentQuestionIndex===TOTAL_QUESTIONS-1)nextBtn.classList.add("submit-mode");
       else nextBtn.classList.remove("submit-mode");
-      // 프로그레스 바 업데이트
-      const pct = ((currentQuestionIndex + 1) / TOTAL_QUESTIONS) * 100;
-      const bar = document.getElementById("progress-bar");
-      if(bar) bar.style.width = pct + "%";
     }
 
     function createQuickNavButtons(){
