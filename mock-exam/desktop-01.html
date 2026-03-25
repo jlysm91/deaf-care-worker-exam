@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ✅ 변경 1: width=1280 고정 제거 → device-width 반응형으로 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>청각장애인 요양보호사 자격시험 대비: 1회 모의고사</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,6 +13,7 @@
     }
   </script>
   <style>
+    /* ✅ 변경 2: CSS 변수에 반응형 기본값 추가 */
     :root {
       --primary: #1D4ED8;
       --primary-light: #3B82F6;
@@ -28,18 +30,30 @@
       --surface: #FFFFFF;
       --surface-2: #F8FAFC;
       --bg: #F1F5F9;
+
+      /* ✅ JS가 실시간으로 갱신하는 화면 비율 변수 (기본값 1) */
+      --vw-ratio: 1;
     }
+
     *, *::before, *::after {
       box-sizing: border-box; margin: 0; padding: 0;
       user-select: none; -webkit-user-select: none;
     }
     input { user-select: text; -webkit-user-select: text; }
     img, iframe, a { -webkit-user-drag: none; pointer-events: auto; }
-    html, body { overflow: hidden !important; height: 100% !important; max-height: 100vh !important; }
+
+    /* ✅ 변경 3: overflow hidden 유지하되 max-height 제거 (redundant) */
+    html, body {
+      overflow: hidden !important;
+      height: 100% !important;
+    }
+
     body {
       font-family: 'Noto Sans KR', -apple-system, sans-serif;
-      background: var(--bg); color: var(--text-primary); min-height: 100vh; overflow: hidden;
+      background: var(--bg); color: var(--text-primary); min-height: 100vh;
     }
+
+    /* ━━━━━━ 시작 페이지 ━━━━━━ */
     #start-page {
       display: none;
       align-items: center;
@@ -48,14 +62,13 @@
       padding: 32px;
       background: var(--bg);
     }
-    .start-wrapper { width: 100%; max-width: 1100px; position: relative; }
+    .start-wrapper { width: 100%; max-width: min(1100px, 90vw); position: relative; }
     .start-wrapper::before { content: ''; display: block; padding-top: 56.25%; }
     .start-inner {
       position: absolute; inset: 0; border-radius: 20px; overflow: hidden;
       background: linear-gradient(150deg, #0C1F5C 0%, #1D4ED8 52%, #0EA5E9 100%);
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 20px 60px rgba(0,0,0,0.20);
-      user-select: none; -webkit-user-select: none;
     }
     .start-inner::before {
       content: ''; position: absolute; inset: 0;
@@ -67,24 +80,35 @@
       position: relative; z-index: 1;
       background: rgba(255,255,255,0.12); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
       border: 1px solid rgba(255,255,255,0.25); border-radius: 20px;
-      padding: 52px 56px; width: 480px; text-align: center;
+      /* ✅ 변경 4: 고정 480px → clamp로 유동 */
+      padding: clamp(28px, 4vw, 52px) clamp(24px, 4.5vw, 56px);
+      width: clamp(320px, 38vw, 480px);
+      text-align: center;
       box-shadow: 0 24px 64px rgba(0,0,0,0.22);
     }
     .start-badge {
       display: inline-block; background: rgba(255,255,255,0.18);
       border: 1px solid rgba(255,255,255,0.35); color: rgba(255,255,255,0.95);
-      font-size: 12px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+      /* ✅ 변경 5: 고정 font-size → clamp */
+      font-size: clamp(10px, 0.9vw, 12px);
+      font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
       padding: 6px 18px; border-radius: 50px; margin-bottom: 22px;
     }
     #start-page h2 {
-      font-size: 28px; font-weight: 700; color: #FFFFFF;
+      /* ✅ */
+      font-size: clamp(18px, 2.2vw, 28px);
+      font-weight: 700; color: #FFFFFF;
       line-height: 1.5; letter-spacing: -0.5px; margin-bottom: 10px;
     }
-    .start-subtitle { font-size: 15px; color: rgba(255,255,255,0.65); font-weight: 300; margin-bottom: 36px; }
+    .start-subtitle {
+      font-size: clamp(12px, 1.1vw, 15px);
+      color: rgba(255,255,255,0.65); font-weight: 300; margin-bottom: 36px;
+    }
     .input-group { margin-bottom: 14px; }
     .input-group input {
       width: 100%; padding: 15px 20px; background: rgba(255,255,255,0.96);
-      border: 2px solid transparent; border-radius: 12px; font-size: 15px;
+      border: 2px solid transparent; border-radius: 12px;
+      font-size: clamp(13px, 1.1vw, 15px);
       font-family: inherit; color: var(--text-primary); outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -94,53 +118,107 @@
       box-shadow: 0 0 0 4px rgba(255,255,255,0.18);
     }
     #start-quiz-btn {
-      width: 100%; padding: 16px; margin-top: 8px; font-size: 16px; font-weight: 700;
-      font-family: inherit; border: none; border-radius: 12px; background: #FFFFFF;
-      color: var(--primary); cursor: pointer; letter-spacing: -0.3px; transition: all 0.2s;
+      width: 100%; padding: 16px; margin-top: 8px;
+      font-size: clamp(13px, 1.2vw, 16px);
+      font-weight: 700; font-family: inherit; border: none; border-radius: 12px;
+      background: #FFFFFF; color: var(--primary); cursor: pointer;
+      letter-spacing: -0.3px; transition: all 0.2s;
     }
     #start-quiz-btn:hover {
       background: rgba(255,255,255,0.92); transform: translateY(-2px);
       box-shadow: 0 10px 28px rgba(0,0,0,0.22);
     }
+
+    /* ━━━━━━ 퀴즈 페이지 ━━━━━━ */
     #quiz-page {
-      display: none; flex-direction: column; height: fit-content;
-      padding: 10px 20px 10px 20px; background: var(--bg);
+      display: none; flex-direction: column;
+      /* ✅ 변경 6: fit-content → 100vh (뷰포트 전체 사용) */
+      height: 100vh;
+      /* ✅ 변경 7: 고정 padding → clamp */
+      padding: clamp(6px, 0.7vh, 10px) clamp(12px, 1.5vw, 20px) clamp(6px, 0.7vh, 10px);
+      background: var(--bg);
+      overflow: hidden;
     }
+
     .quiz-top {
-      display: flex; gap: 20px; align-items: stretch;
-      margin-bottom: 8px; flex-shrink: 0; margin-top: 11px;
+      display: flex; gap: clamp(10px, 1.2vw, 20px);
+      align-items: stretch;
+      /* ✅ 변경 8: flex-grow 추가 - 남은 높이 자동 채움 */
+      flex: 1 1 auto;
+      min-height: 0;
+      margin-bottom: clamp(5px, 0.6vh, 8px);
+      margin-top: clamp(6px, 0.8vh, 11px);
     }
+
     #video-container {
       flex: 0 0 62%; border-radius: 14px; overflow: hidden;
       box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      /* ✅ 변경 9: 높이를 부모에 맞춤 */
+      align-self: stretch;
+      display: flex; flex-direction: column;
     }
-    .video-wrapper { width: 100%; position: relative; }
-    .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+    .video-wrapper {
+      width: 100%;
+      /* ✅ 변경 10: 비디오가 컨테이너 높이에 꽉 차도록 */
+      flex: 1 1 auto;
+      position: relative;
+    }
+    .video-wrapper > div {
+      /* Vimeo 래퍼의 padding-top 56.25% 대신 절대 채움 */
+      position: absolute !important;
+      inset: 0 !important;
+      padding: 0 !important;
+    }
+    .video-wrapper iframe {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; border: none;
+    }
+
     #quiz-container {
-      flex: 1; background: var(--surface); border-radius: 14px; padding: 20px 22px;
+      flex: 1; background: var(--surface); border-radius: 14px;
+      /* ✅ 변경 11: padding clamp */
+      padding: clamp(12px, 1.5vh, 20px) clamp(14px, 1.6vw, 22px);
       display: flex; flex-direction: column; justify-content: space-between;
       box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow-y: auto;
+      min-height: 0;
     }
+
     #quiz-content { flex-grow: 1; }
-    .question-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+
+    .question-meta {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: clamp(8px, 1vh, 12px);
+    }
     .q-num-badge {
-      background: var(--primary); color: #fff; font-size: 12px; font-weight: 700;
-      padding: 4px 14px; border-radius: 50px;
+      background: var(--primary); color: #fff;
+      /* ✅ */
+      font-size: clamp(10px, 0.85vw, 12px);
+      font-weight: 700; padding: 4px 14px; border-radius: 50px;
     }
+
     #quiz-content h3 {
-      font-size: 14px; font-weight: 500; color: var(--text-primary);
-      line-height: 1.75; margin-bottom: 16px; padding-bottom: 14px;
+      /* ✅ */
+      font-size: clamp(12px, 1.05vw, 14px);
+      font-weight: 500; color: var(--text-primary);
+      line-height: 1.75; margin-bottom: clamp(10px, 1.2vh, 16px);
+      padding-bottom: clamp(8px, 1vh, 14px);
       border-bottom: 1px solid var(--border);
-      min-height: 3.5em;
+      min-height: 3em;
     }
-    #options { display: flex; flex-direction: column; gap: 7px; }
+
+    #options { display: flex; flex-direction: column; gap: clamp(4px, 0.6vh, 7px); }
+
     #options label {
-      display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px;
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: clamp(7px, 0.9vh, 11px) clamp(10px, 1.1vw, 14px);
       background: var(--surface-2); border: 1.5px solid var(--border); border-radius: 8px;
-      cursor: pointer; font-size: 13px; line-height: 1.6;
+      cursor: pointer;
+      /* ✅ */
+      font-size: clamp(11px, 0.95vw, 13px);
+      line-height: 1.55;
       transition: background 0.15s, border-color 0.15s;
       word-break: keep-all; white-space: normal;
-      min-height: 3.2em;
     }
     #options label:hover { background: var(--primary-subtle); border-color: #BFDBFE; }
     #options input[type="radio"] {
@@ -148,13 +226,20 @@
     }
     #options label:has(input:checked) { background: var(--primary-subtle); border-color: var(--primary-light); }
     #options label:has(input:checked) span { color: var(--primary); font-weight: 600; }
+
     #navigation-buttons {
       display: flex; align-items: center; justify-content: space-between;
-      gap: 10px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border);
+      gap: 10px;
+      margin-top: clamp(10px, 1.2vh, 18px);
+      padding-top: clamp(8px, 1vh, 14px);
+      border-top: 1px solid var(--border);
     }
     #navigation-buttons button {
-      padding: 10px 22px; font-size: 14px; font-weight: 600; font-family: inherit;
-      border-radius: 8px; cursor: pointer; transition: all 0.15s; min-width: 100px;
+      padding: clamp(7px, 0.9vh, 10px) clamp(14px, 1.6vw, 22px);
+      /* ✅ */
+      font-size: clamp(12px, 1.05vw, 14px);
+      font-weight: 600; font-family: inherit;
+      border-radius: 8px; cursor: pointer; transition: all 0.15s; min-width: 90px;
     }
     #prev-btn { background: var(--surface-2); color: var(--text-secondary); border: 1.5px solid var(--border); }
     #prev-btn:hover:not(:disabled) { background: #E2E8F0; color: var(--text-primary); }
@@ -163,24 +248,45 @@
     #next-btn:hover { background: var(--primary-hover); }
     #next-btn.submit-mode { background: var(--danger); }
     #next-btn.submit-mode:hover { background: #B91C1C; }
-    #question-counter { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+
+    #question-counter {
+      /* ✅ */
+      font-size: clamp(12px, 1.05vw, 14px);
+      font-weight: 600; color: var(--text-secondary);
+    }
     #total-questions { color: var(--primary); }
+
+    /* ━━━━━━ 빠른 이동 네비게이션 ━━━━━━ */
     #quick-nav-container {
       display: none; background: var(--surface); border-radius: 14px;
-      padding: 16px 20px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      flex-shrink: 0; margin-bottom: 16px; margin-top: 13px;
+      /* ✅ */
+      padding: clamp(10px, 1.2vh, 16px) clamp(14px, 1.5vw, 20px) clamp(12px, 1.5vh, 20px);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      /* ✅ 변경 12: flex-shrink 0으로 고정 (퀴즈 영역 침범 방지) */
+      flex-shrink: 0;
+      margin-bottom: 0;
     }
+
     .nav-section-label {
       display: inline-block; background: var(--primary); color: #fff;
-      font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
-      padding: 4px 14px; border-radius: 50px; margin-bottom: 10px;
+      /* ✅ */
+      font-size: clamp(10px, 0.85vw, 12px);
+      font-weight: 700; letter-spacing: 0.5px;
+      padding: 3px 12px; border-radius: 50px;
+      margin-bottom: clamp(6px, 0.8vh, 10px);
     }
-    #quick-nav-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; }
+
+    #quick-nav-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: clamp(3px, 0.4vw, 6px); }
+
     .nav-btn {
       background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px;
-      font-size: 13px; font-weight: 600; font-family: inherit; text-align: center;
+      /* ✅ */
+      font-size: clamp(10px, 0.9vw, 13px);
+      font-weight: 600; font-family: inherit; text-align: center;
       cursor: pointer; transition: all 0.12s; color: var(--text-secondary);
-      height: 32px; line-height: 32px; padding: 0; overflow: hidden; white-space: nowrap;
+      height: clamp(26px, 3vh, 32px);
+      line-height: clamp(26px, 3vh, 32px);
+      padding: 0; overflow: hidden; white-space: nowrap;
       user-select: none; -webkit-user-select: none;
     }
     .nav-btn:hover { background: #DBEAFE; border-color: #93C5FD; color: var(--primary); }
@@ -188,17 +294,22 @@
     .nav-btn.answered { background: var(--success-subtle); color: var(--success); border-color: #6EE7B7; }
     .nav-btn.correct  { background: var(--success-subtle) !important; color: var(--success) !important; border-color: #6EE7B7 !important; }
     .nav-btn.incorrect{ background: var(--danger-subtle) !important; color: var(--danger) !important; border-color: #FCA5A5 !important; }
+
+    /* ━━━━━━ 결과 페이지 ━━━━━━ */
     #result-page {
       display: none; flex-direction: column; align-items: center;
       min-height: 100vh; padding: 56px 32px; background: var(--bg);
     }
     .result-emoji { font-size: 48px; line-height: 1; margin-bottom: 16px; display: block; text-align: center; }
     #result-page h2 {
-      font-size: 28px; font-weight: 700; color: var(--text-primary);
+      font-size: clamp(20px, 2.2vw, 28px);
+      font-weight: 700; color: var(--text-primary);
       letter-spacing: -0.5px; margin-bottom: 8px; text-align: center;
     }
     #score {
-      display: inline-block; font-size: 17px; font-weight: 700; color: var(--primary);
+      display: inline-block;
+      font-size: clamp(13px, 1.3vw, 17px);
+      font-weight: 700; color: var(--primary);
       background: var(--primary-subtle); border: 1.5px solid #BFDBFE;
       border-radius: 12px; padding: 16px 36px; margin-bottom: 36px;
     }
@@ -216,7 +327,9 @@
     #quick-nav-grid-result .nav-btn .number { font-size: 14px; font-weight: 700; }
     #quick-nav-grid-result .nav-btn .detail { font-size: 9px; line-height: 1.3; opacity: 0.85; }
     #result-return-btn {
-      padding: 14px 48px; font-size: 15px; font-weight: 700; font-family: inherit;
+      padding: 14px 48px;
+      font-size: clamp(13px, 1.2vw, 15px);
+      font-weight: 700; font-family: inherit;
       border: none; border-radius: 10px; background: var(--primary); color: white;
       cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(29,78,216,0.25);
     }
@@ -224,38 +337,10 @@
       background: var(--primary-hover); transform: translateY(-1px);
       box-shadow: 0 8px 24px rgba(29,78,216,0.30);
     }
+
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
-
-    /* --- 노트북 환경(가로 1280px 이하) 반응형 추가 --- */
-    @media screen and (max-width: 1280px) {
-      #quiz-page {
-        padding: 10px; /* 전체 여백 축소 */
-      }
-      .quiz-top {
-        gap: 10px; /* 영상과 문제 영역 사이 간격 축소 */
-      }
-      #video-container {
-        flex: 0 0 55%; /* 화면이 좁을 땐 영상 비율을 약간 줄여 문제 영역 확보 */
-      }
-      #quiz-container {
-        padding: 15px; /* 문제 영역 내부 여백 축소 */
-      }
-      #quiz-content h3 {
-        font-size: 13px; /* 문제 글자 크기 미세 축소 */
-        min-height: 3em;
-      }
-      #options label {
-        font-size: 12px; /* 보기 글자 크기 미세 축소 */
-        padding: 8px 12px;
-        min-height: 2.8em;
-      }
-      #navigation-buttons button {
-        padding: 8px 16px;
-        min-width: 80px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -285,6 +370,7 @@
       <div id="quick-nav-grid"></div>
     </div>
   </div>
+
   <div id="result-page">
     <span class="result-emoji">📋</span>
     <h2>시험 결과</h2>
@@ -295,9 +381,47 @@
     </div>
     <button id="result-return-btn">다시 풀기</button>
   </div>
+
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
   <script>
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       ✅ 변경 13: 반응형 뷰포트 감지 + 실시간 갱신
+       - window.innerWidth / innerHeight 기준
+       - resize 이벤트로 실시간 반영
+       - 비디오 래퍼 높이를 동적으로 강제 지정
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function applyResponsiveLayout() {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      // 비디오 컨테이너 너비 계산 (gap 고려)
+      const gapPx = Math.max(10, Math.min(20, vw * 0.012));
+      const paddingX = Math.max(12, Math.min(20, vw * 0.015)) * 2;
+      const videoWidth = (vw - paddingX - gapPx) * 0.62;
+
+      // Vimeo 16:9 비율 높이
+      const videoHeight = videoWidth * 0.5625;
+
+      // .video-wrapper의 내부 div에 실제 높이 적용
+      const wrapper = document.querySelector('.video-wrapper');
+      if (wrapper) {
+        wrapper.style.height = videoHeight + 'px';
+        const inner = wrapper.querySelector('div');
+        if (inner) {
+          inner.style.position = 'relative';
+          inner.style.height = '100%';
+          inner.style.paddingTop = '0';
+        }
+      }
+    }
+
+    // 페이지 로드 시 + 창 크기 변경 시 실행
+    window.addEventListener('resize', applyResponsiveLayout);
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       기존 로직 (변경 없음)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
     const EXAM_ID = "exam1";
     const firebaseConfig = {
       apiKey: "AIzaSyDrff8zRQ6DuPFABxW_-9DPzbdTetDYHDk",
@@ -310,8 +434,14 @@
     };
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
+
     const startPage=document.getElementById("start-page"),quizPage=document.getElementById("quiz-page"),startQuizBtn=document.getElementById("start-quiz-btn"),userIdInput=document.getElementById("user-id"),userNameInput=document.getElementById("user-name"),resultPage=document.getElementById("result-page"),scoreSpan=document.getElementById("score"),questionNumberSpan=document.getElementById("question-number"),questionTextSpan=document.getElementById("question-text"),optionsDiv=document.getElementById("options"),videoWrapper=document.querySelector("#video-container .video-wrapper"),currentQuestionSpan=document.getElementById("current-question"),totalQuestionsSpan=document.getElementById("total-questions"),prevBtn=document.getElementById("prev-btn"),nextBtn=document.getElementById("next-btn"),quickNavGrid=document.getElementById("quick-nav-grid");
-    function getVideoEmbed(videoId,title){return`<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="${title}"></iframe></div>`;}
+
+    function getVideoEmbed(videoId,title){
+      // ✅ 변경 14: Vimeo 래퍼 padding-top 방식 대신 width/height 100% 방식으로
+      return `<div style="position:relative;width:100%;height:100%;"><iframe src="https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="${title}"></iframe></div>`;
+    }
+
     const quizRawData = [
       { number:"모0101", question:"노년기의 사회적 특성으로 옳은 것은?", options:["의존성의 감소","우울증 경향의 감소","외향성의 증가","유대감의 감소","역할의 확대"], correctAnswer:4, videoId:"1111492731" },
       { number:"모0102", question:"자녀가 노인 부모와 근거리 살면서 부양을 하는 새로운 가족형태는?", options:["이산가족","핵가족","고령화 가족","수정확대가족","노인부양가족"], correctAnswer:4, videoId:"1111493161" },
@@ -364,7 +494,7 @@
       { number:"모0149", question:"유치도뇨관을 사용하고 있는 대상자의 소변주머니를 비우는 순서는?", options:["가 - 나 - 다 - 라","가 - 다 - 라 - 나","나 - 가 - 다 - 라","다 - 라 - 가 - 나","라 - 가 - 다 - 나"], correctAnswer:2, videoId:"1113807044" },
       { number:"모0150", question:"우측편마비 대상자가 통 목욕을 할 때 돕는 방법은?", options:["욕실로 이동할 때는 왼쪽을 지지한다.","회음부 - 몸통 - 팔 - 다리 - 발 순서로 씻는다.","욕조 안에 미끄럼방지 매트를 깔아준다.","우측 발부터 욕조에 들어가도록 한다.","욕조에 30분 정도 담그게 한다."], correctAnswer:3, videoId:"1113807124" },
       { number:"모0151", question:"대상자가 침상 목욕을 할 때 돕는 방법으로 옳은 것은?", options:["얼굴은 이마 - 눈 - 코 - 입 순서로 닦는다.","상지는 손목 쪽에서 팔 쪽으로 닦는다","하지는 허벅지에서 발끝 쪽으로 닦는다.","유방은 위에서 아래로 닦는다.","복부는 배꼽을 중심으로 시계반대 방향으로 닦는다."], correctAnswer:2, videoId:"1113807253" },
-      { number:"모0152", question:"대상자의 옷 갈아입히기를 도울 때 주의사항으로 옳은 복장은?", options:["상의와 하의가 통으로 된 옷을 입힌다.","신축성이 없는 옷을 선택한다.","옷의 색상, 개인의 생활 리듬을 고려한다.","불편한 쪽의 소매를 먼저 벗긴다.","허리나 소매는 조여 주는 것을 선택한다."], correctAnswer:3, videoId:"1113807336" },
+      { number:"모0152", question:"대상자의 옷 갈아입히기를 도울 때 주의사항으로 옳은 것은?", options:["상의와 하의가 통으로 된 옷을 입힌다.","신축성이 없는 옷을 선택한다.","옷의 색상, 개인의 생활 리듬을 고려한다.","불편한 쪽의 소매를 먼저 벗긴다.","허리나 소매는 조여 주는 것을 선택한다."], correctAnswer:3, videoId:"1113807336" },
       { number:"모0153", question:"오른쪽 편마비 대상자가 왼쪽 팔에 수액을 맞고 있을 때 단추가 있는 옷을 입히는 순서는?", options:["오른쪽 팔 → 수액 주머니 → 왼쪽 팔","왼쪽 팔 → 수액 주머니 → 오른쪽 팔","수액 주머니 → 오른쪽 팔 → 왼쪽 팔","수액 주머니 → 왼쪽 팔 → 오른쪽 팔","오른쪽 팔 → 왼쪽 팔 → 수액 주머니"], correctAnswer:1, videoId:"1113807386" },
       { number:"모0154", question:"대상자를 침대에 걸터앉히고자 할 때 돕는 방법으로 옳은 것은?", options:["앉히고자는 반대쪽에서 대상자를 향하여 선다.","한 손으로 대상자의 허리 부위를 잡는다.","다른 한 손으로는 대상자의 엉덩이를 잡는다.","다리를 침대 아래로 내리면서 어깨를 들어 올린다.","대상자의 양발이 바닥에 닿지 않도록 한다."], correctAnswer:4, videoId:"1113807507" },
       { number:"모0155", question:"오른쪽 편마비 대상자를 휠체어에서 방바닥으로 이동할 때 돕는 방법은?", options:["[이미지] 그림1","[이미지] 그림2","[이미지] 그림3","[이미지] 그림4","[이미지] 그림5"], correctAnswer:5, videoId:"1113807597" },
@@ -394,9 +524,11 @@
       { number:"모0179", question:"대상자가 거실에 쓰러져 의식이 없는 것을 확인하였을 때 우선적으로 해야 할 응급처치는?", options:["가슴압박","도움요청","상태확인","인공호흡","기도유지"], correctAnswer:2, videoId:"1113809734" },
       { number:"모0180", question:"자동심장충격기를 사용하는 방법으로 옳은 것은?", options:["두 개의 패드를 부착한 후 전원을 켠다.","심장리듬 분석 중에는 대상자를 붙잡는다.","충전 중에는 가슴압박을 실시하지 않는다.","쇼크버튼을 누른 후 대상자에게서 손을 뗀다.","심장충격이 전달된 즉시 가슴압박을 시작한다."], correctAnswer:5, videoId:"1113809785" }
     ];
+
     const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+
     function startQuiz(uid,userName){
       currentUserId=uid;
       const userRef=database.ref(`exams/${EXAM_ID}/users/${uid}`);
@@ -413,19 +545,26 @@
         }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
       });
     }
+
     function showQuizPage(){
       startPage.style.display="none";quizPage.style.display="flex";
       document.getElementById("quick-nav-container").style.display="block";
       createQuickNavButtons();updateQuestion(currentQuestionIndex);
+      // ✅ 변경 15: 퀴즈 페이지 표시 후 레이아웃 즉시 적용
+      requestAnimationFrame(applyResponsiveLayout);
     }
+
     function saveQuizProgress(){
       if(!currentUserId)return;
       database.ref(`exams/${EXAM_ID}/users/${currentUserId}/progress`).set({currentQuestion:currentQuestionIndex,answers:userAnswers});
     }
+
     function updateQuestion(index){
       currentQuestionIndex=index;
       const question=quizData[currentQuestionIndex];
       videoWrapper.innerHTML=question.videoEmbed;
+      // ✅ 변경 16: 문제 변경 시마다 레이아웃 재적용 (새 iframe 크기 보정)
+      requestAnimationFrame(applyResponsiveLayout);
       questionNumberSpan.textContent=currentQuestionIndex+1;
       questionTextSpan.textContent=question.question;
       currentQuestionSpan.textContent=currentQuestionIndex+1;
@@ -453,6 +592,7 @@
       if(currentQuestionIndex===TOTAL_QUESTIONS-1)nextBtn.classList.add("submit-mode");
       else nextBtn.classList.remove("submit-mode");
     }
+
     function createQuickNavButtons(){
       quickNavGrid.innerHTML="";
       for(let i=1;i<=TOTAL_QUESTIONS;i++){
@@ -462,10 +602,12 @@
         quickNavGrid.appendChild(btn);
       }
     }
+
     function disableAnswers(){
       optionsDiv.querySelectorAll("input[type=radio]").forEach(r=>r.disabled=true);
       quickNavGrid.style.pointerEvents="none";
     }
+
     function submitQuiz(){
       let 필기=0,실기=0;
       quizData.forEach((item,i)=>{
@@ -486,6 +628,7 @@
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
       fetch(googleFormURL,{method:"POST",body:fd,mode:"no-cors"}).catch(console.error);
     }
+
     function resetQuiz(){
       if(!currentUserId){location.reload();return;}
       alert("초기화되었습니다!");
@@ -496,6 +639,7 @@
         quickNavGrid.style.pointerEvents="auto";
       });
     }
+
     function renderResultNav(){
       const grid=document.getElementById("quick-nav-grid-result");grid.innerHTML="";
       quizData.forEach((q,i)=>{
@@ -508,6 +652,7 @@
         grid.appendChild(div);
       });
     }
+
     // URL 파라미터로 자동 시작
     (function(){
       const params = new URLSearchParams(window.location.search);
@@ -515,9 +660,7 @@
       const name = params.get('name') || '';
       userIdInput.value = uid;
       userNameInput.value = name;
-      if(uid && name){
-        startQuiz(uid, name);
-      }
+      if(uid && name){ startQuiz(uid, name); }
     })();
 
     startQuizBtn.addEventListener("click",()=>{
