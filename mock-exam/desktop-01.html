@@ -206,13 +206,12 @@
       font-weight: 700; padding: 5px 16px; border-radius: 50px;
     }
 
-    /* 지문: 3줄 고정 높이 */
+    /* 지문: 2줄 고정 높이 */
     #quiz-content h3 {
       font-size: clamp(16px, 1.5vw, 20px);
       font-weight: 600; color: var(--text-primary);
       line-height: 1.75;
-      /* 3줄 고정 */
-      height: calc(1.75em * 3);
+      height: calc(1.75em * 2);
       overflow: hidden;
       margin-bottom: clamp(10px, 1.2vh, 14px);
       padding-bottom: clamp(8px, 1vh, 12px);
@@ -221,14 +220,14 @@
 
     #options {
       display: flex; flex-direction: column;
-      justify-content: space-between;
       flex: 1 1 auto;
-      gap: clamp(4px, 0.5vh, 6px);
+      gap: clamp(6px, 0.8vh, 10px);
     }
 
     #options label {
       display: flex; align-items: center; gap: 10px;
-      /* 2줄 고정 높이 (상하 패딩 포함) */
+      /* flex-grow로 균등하게 늘어남 */
+      flex: 1;
       min-height: calc(1.55em * 2 + clamp(9px, 1.1vh, 13px) * 2);
       padding: clamp(9px, 1.1vh, 13px) clamp(10px, 1.1vw, 14px);
       background: var(--surface-2); border: 1.5px solid var(--border); border-radius: 10px;
