@@ -142,10 +142,10 @@
     .quiz-top {
       display: flex; gap: clamp(10px, 1.2vw, 20px);
       align-items: stretch;
-      flex: 1 1 auto;
+      /* 비율 축소: 1 → 0.72 */
+      flex: 0 0 72vh;
       min-height: 0;
       margin-bottom: clamp(5px, 0.6vh, 8px);
-      /* margin-top 제거 → quiz-page padding으로 통일 */
     }
 
     #video-container {
@@ -293,8 +293,8 @@
       display: none; background: var(--surface); border-radius: 14px;
       padding: clamp(8px, 1vh, 12px) clamp(14px, 1.5vw, 20px) clamp(8px, 1vh, 12px);
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      /* flex-shrink: 1 → 공간 부족 시 자동으로 줄어듦 */
-      flex-shrink: 1;
+      /* 남은 공간을 모두 차지 */
+      flex: 1 1 auto;
       min-height: 0;
       overflow: hidden;
       margin-top: clamp(5px, 0.6vh, 8px);
