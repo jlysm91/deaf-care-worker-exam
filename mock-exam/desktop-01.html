@@ -147,7 +147,7 @@
       align-self: stretch;
       display: flex; flex-direction: column;
       /* ✅ 수정: #FFFFFF → var(--bg) 로 변경하여 페이지 배경과 자연스럽게 동화 */
-      background: var(--bg);
+      background: var(--surface);
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     }
 
@@ -402,14 +402,9 @@
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
   <script>
     function applyResponsiveLayout() {
-      const vw = window.innerWidth;
-      const gapPx = Math.max(10, Math.min(20, vw * 0.012));
-      const paddingX = Math.max(12, Math.min(20, vw * 0.015)) * 2;
-      const videoWidth = (vw - paddingX - gapPx) * 0.56;
-      const videoHeight = videoWidth * 0.5625;
       const wrapper = document.querySelector('.video-wrapper');
       if (wrapper) {
-        wrapper.style.height = videoHeight + 'px';
+        wrapper.style.height = '100%';
         const inner = wrapper.querySelector('div');
         if (inner) {
           inner.style.position = 'relative';
