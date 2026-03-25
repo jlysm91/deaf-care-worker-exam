@@ -83,6 +83,15 @@
     .header-counter .sep { color: rgba(255,255,255,0.55); }
     .header-counter .total { color: rgba(255,255,255,0.75); }
 
+    /* ━━━━━━ 콘텐츠 바디 (비디오 + 문제) ━━━━━━ */
+    .quiz-body {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
     /* 비디오 영역 */
     .video-section {
       flex-shrink: 0;
@@ -302,7 +311,7 @@
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: 6px;
-      height: 42px;
+      height: 44px;
       padding: 0;
       display: flex;
       flex-direction: column;
@@ -331,7 +340,74 @@
     .sheet-nav-btn .sn-num { font-size: 12px; font-weight: 700; line-height: 1; }
     .sheet-nav-btn .sn-ans { font-size: 9px; opacity: 0.85; line-height: 1; }
 
-    /* ━━━━━━ 결과 페이지 ━━━━━━ */
+    /* ━━━━━━ 태블릿 반응형 (601px 이상) ━━━━━━ */
+    @media (min-width: 601px) {
+
+      /* 헤더 */
+      .mobile-header { min-height: 56px; padding: 12px 24px; padding-top: calc(12px + env(safe-area-inset-top, 0px)); }
+      .header-badge { font-size: 14px; padding: 6px 18px; }
+      .header-counter { font-size: 18px; }
+
+      /* 비디오 + 문제 좌우 분리 */
+      .quiz-body { flex-direction: row; }
+
+      .video-section {
+        flex: 0 0 55%;
+        padding-top: 0;      /* 16:9 padding-top 해제 */
+        height: 100%;        /* 좌측 패널 전체 높이 채움 */
+      }
+
+      .quiz-scroll {
+        flex: 1;
+        padding: 20px 22px 0;
+        gap: 12px;
+      }
+
+      /* 문제 지문 */
+      .q-num-label { font-size: 13px; margin-bottom: 8px; }
+      .q-text-content { font-size: 18px; }
+      .question-box { padding: 16px 18px; }
+
+      /* 보기 옵션 */
+      .opt-label { padding: 14px 18px; min-height: 56px; gap: 14px; }
+      .opt-label span { font-size: 16px; }
+      .opt-label input[type="radio"] { width: 20px; height: 20px; }
+      .options-list { gap: 10px; }
+
+      /* 하단 네비 */
+      .bottom-nav { padding: 12px 24px; gap: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+      .bottom-nav button { padding: 16px 8px; font-size: 16px; border-radius: 12px; }
+
+      /* Bottom Sheet 가운데 정렬 */
+      .bottom-sheet {
+        left: 50%;
+        right: auto;
+        width: min(640px, 100vw);
+        transform: translateX(-50%) translateY(100%);
+        border-radius: 20px 20px 0 0;
+      }
+      .bottom-sheet.visible { transform: translateX(-50%) translateY(0); }
+
+      /* Sheet 내 버튼 크게 */
+      .sheet-nav-btn { height: 52px; }
+      .sheet-nav-btn .sn-num { font-size: 14px; }
+      .sheet-nav-btn .sn-ans { font-size: 11px; }
+      .sheet-title { font-size: 13px; }
+      .sheet-progress-inline { font-size: 13px; }
+      .sheet-close-btn { font-size: 22px; }
+
+      /* 결과 페이지 */
+      #result-page { padding: 32px; }
+      .r-title { font-size: 28px; }
+      .r-score-total { font-size: 48px; }
+      .r-score-sub { font-size: 38px; }
+      .r-score-label { font-size: 13px; }
+      .r-grid .rn { font-size: 13px; }
+      .r-grid .rm { font-size: 10px; }
+      .r-retry-btn { font-size: 18px; padding: 18px; }
+    }
+
+        /* ━━━━━━ 결과 페이지 ━━━━━━ */
     #result-page {
       display: none;
       flex-direction: column;
@@ -449,16 +525,18 @@
       </div>
     </div>
 
-    <div class="video-section" id="video-section">
-      <!-- Vimeo iframe 동적 삽입 -->
-    </div>
-
-    <div class="quiz-scroll" id="quiz-scroll">
-      <div class="question-box">
-        <div class="q-num-label">문제 <span id="q-number">1</span></div>
-        <div class="q-text-content" id="q-text"></div>
+    <div class="quiz-body">
+      <div class="video-section" id="video-section">
+        <!-- Vimeo iframe 동적 삽입 -->
       </div>
-      <div class="options-list" id="options"></div>
+
+      <div class="quiz-scroll" id="quiz-scroll">
+        <div class="question-box">
+          <div class="q-num-label">문제 <span id="q-number">1</span></div>
+          <div class="q-text-content" id="q-text"></div>
+        </div>
+        <div class="options-list" id="options"></div>
+      </div>
     </div>
 
     <div class="bottom-nav">
