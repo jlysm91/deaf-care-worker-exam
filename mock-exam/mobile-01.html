@@ -11,7 +11,7 @@
       --primary: #1D4ED8;
       --primary-light: #3B82F6;
       --primary-hover: #1E40AF;
-      --primary-subtle: #EFF6FF;
+      --primary-subtle: #BFDBFE;
       --success: #059669;
       --success-subtle: #ECFDF5;
       --danger: #DC2626;
@@ -19,10 +19,10 @@
       --text-primary: #0F172A;
       --text-secondary: #475569;
       --text-muted: #94A3B8;
-      --border: #E2E8F0;
-      --surface: #FFFFFF;
+      --border: #B8C4CE;
+      --surface: #F2F4F6;
       --surface-2: #F8FAFC;
-      --bg: #F1F5F9;
+      --bg: #A2ACB8;
     }
 
     *, *::before, *::after {
@@ -83,7 +83,7 @@
     .header-counter .sep { color: rgba(255,255,255,0.55); }
     .header-counter .total { color: rgba(255,255,255,0.75); }
 
-    /* ━━━━━━ 콘텐츠 바디 (비디오 + 문제) ━━━━━━ */
+    /* ━━━━━━ 콘텐츠 바디 ━━━━━━ */
     .quiz-body {
       flex: 1 1 auto;
       display: flex;
@@ -96,10 +96,9 @@
     .video-section {
       flex-shrink: 0;
       width: 100%;
-      /* ✅ padding-top 트릭 대신 aspect-ratio 사용 */
       aspect-ratio: 16 / 9;
       position: relative;
-      background: #000;
+      background: var(--bg);
     }
     .video-section iframe {
       position: absolute;
@@ -117,13 +116,14 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      background: var(--bg);
     }
     .quiz-scroll::-webkit-scrollbar { display: none; }
 
     /* 문제 지문 */
     .question-box {
       background: var(--primary-subtle);
-      border-left: 3px solid var(--primary);
+      border-left: 3px solid var(--primary-light);
       border-radius: 8px;
       padding: 12px 14px;
       flex-shrink: 0;
@@ -177,7 +177,6 @@
       word-break: keep-all;
       flex: 1;
     }
-    /* checked 상태 */
     .opt-label:has(input:checked) {
       background: var(--primary);
       border-color: var(--primary);
@@ -268,7 +267,6 @@
       justify-content: space-between;
       gap: 8px;
     }
-    /* 제목 + 답변현황을 하나의 중앙 블록으로 */
     .sheet-title-block {
       flex: 1;
       text-align: center;
@@ -343,64 +341,47 @@
 
     /* ━━━━━━ 태블릿 반응형 (601px 이상) ━━━━━━ */
     @media (min-width: 601px) {
-
-      /* 헤더 */
       .mobile-header { min-height: 56px; padding: 12px 24px; padding-top: calc(12px + env(safe-area-inset-top, 0px)); }
       .header-badge { font-size: 14px; padding: 6px 18px; }
       .header-counter { font-size: 18px; }
-
-      /* ✅ 비디오 + 문제 좌우 분리
-         quiz-body를 row로 전환하고 비디오는 aspect-ratio 해제 후 height:100% 채움 */
-      .quiz-body {
-        flex-direction: row;
-      }
+      .quiz-body { flex-direction: row; }
       .video-section {
         flex: 0 0 55%;
         width: 55%;
-        aspect-ratio: unset;   /* aspect-ratio 해제 */
-        align-self: stretch;   /* quiz-body 높이 전체 채움 */
+        aspect-ratio: unset;
+        align-self: stretch;
+        background: var(--bg);
       }
       .quiz-scroll {
         flex: 1;
         padding: 20px 22px 0;
         gap: 12px;
+        background: var(--bg);
       }
-
-      /* 문제 지문 */
       .q-num-label { font-size: 13px; margin-bottom: 8px; }
       .q-text-content { font-size: 18px; }
       .question-box { padding: 16px 18px; }
-
-      /* 보기 옵션 */
       .opt-label { padding: 14px 18px; min-height: 56px; gap: 14px; }
       .opt-label span { font-size: 16px; }
       .opt-label input[type="radio"] { width: 20px; height: 20px; }
       .options-list { gap: 10px; }
-
-      /* 하단 네비 */
       .bottom-nav { padding: 12px 24px; gap: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
       .bottom-nav button { padding: 16px 8px; font-size: 16px; border-radius: 12px; }
-
-      /* Bottom Sheet 가운데 정렬 + 80문항 전체 표시 */
       .bottom-sheet {
         left: 50%;
         right: auto;
         width: min(640px, 100vw);
         transform: translateX(-50%) translateY(100%);
-        max-height: 85vh;    /* 8행 전체가 들어갈 충분한 높이 */
-        overflow-y: hidden;  /* 내부 스크롤 제거 */
+        max-height: 85vh;
+        overflow-y: hidden;
       }
       .bottom-sheet.visible { transform: translateX(-50%) translateY(0); }
-
-      /* Sheet 버튼 */
       .sheet-nav-btn { height: 52px; }
       .sheet-nav-btn .sn-num { font-size: 14px; }
       .sheet-nav-btn .sn-ans { font-size: 11px; }
       .sheet-title { font-size: 13px; }
       .sheet-progress-inline { font-size: 13px; }
       .sheet-close-btn { font-size: 22px; }
-
-      /* 결과 페이지 */
       #result-page { padding: 32px; }
       .r-title { font-size: 28px; }
       .r-score-total { font-size: 48px; }
@@ -411,7 +392,7 @@
       .r-retry-btn { font-size: 18px; padding: 18px; }
     }
 
-        /* ━━━━━━ 결과 페이지 ━━━━━━ */
+    /* ━━━━━━ 결과 페이지 ━━━━━━ */
     #result-page {
       display: none;
       flex-direction: column;
@@ -508,7 +489,6 @@
     }
     .r-retry-btn:active { transform: scale(0.98); }
 
-    /* ━━━━━━ 드래그/복사/우클릭 방지 ━━━━━━ */
     img, iframe { pointer-events: auto; -webkit-user-drag: none; }
   </style>
 </head>
@@ -516,7 +496,6 @@
   <input type="hidden" id="user-id" />
   <input type="hidden" id="user-name" />
 
-  <!-- ✅ 퀴즈 페이지 -->
   <div id="quiz-page">
     <div class="mobile-header">
       <div class="header-badge">1회 모의고사</div>
@@ -530,10 +509,7 @@
     </div>
 
     <div class="quiz-body">
-      <div class="video-section" id="video-section">
-        <!-- Vimeo iframe 동적 삽입 -->
-      </div>
-
+      <div class="video-section" id="video-section"></div>
       <div class="quiz-scroll" id="quiz-scroll">
         <div class="question-box">
           <div class="q-num-label">문제 <span id="q-number">1</span></div>
@@ -550,7 +526,6 @@
     </div>
   </div>
 
-  <!-- ✅ 문항 이동 Bottom Sheet -->
   <div class="sheet-overlay" id="sheet-overlay"></div>
   <div class="bottom-sheet" id="bottom-sheet">
     <div class="sheet-sticky-top">
@@ -565,7 +540,6 @@
     <div class="sheet-grid" id="sheet-grid"></div>
   </div>
 
-  <!-- ✅ 결과 페이지 -->
   <div id="result-page">
     <div class="r-header">
       <div class="r-badge">1회 모의고사</div>
@@ -596,9 +570,6 @@
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
   <script>
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       Firebase 초기화
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
     const EXAM_ID = "exam1";
     const firebaseConfig = {
       apiKey: "AIzaSyDrff8zRQ6DuPFABxW_-9DPzbdTetDYHDk",
@@ -612,9 +583,6 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       문제 데이터 (80문항)
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
     const quizRawData = [
       { number:"모0101", question:"노년기의 사회적 특성으로 옳은 것은?", options:["의존성의 감소","우울증 경향의 감소","외향성의 증가","유대감의 감소","역할의 확대"], correctAnswer:4, videoId:"1111492731" },
       { number:"모0102", question:"자녀가 노인 부모와 근거리 살면서 부양을 하는 새로운 가족형태는?", options:["이산가족","핵가족","고령화 가족","수정확대가족","노인부양가족"], correctAnswer:4, videoId:"1111493161" },
@@ -700,12 +668,10 @@
 
     const quizData = quizRawData.map(item => ({ ...item }));
     const TOTAL = quizData.length;
-
     let currentIndex = 0;
     let currentUserId = "";
     let userAnswers = new Array(TOTAL).fill(null);
 
-    /* DOM 참조 */
     const quizPage = document.getElementById("quiz-page");
     const resultPage = document.getElementById("result-page");
     const videoSection = document.getElementById("video-section");
@@ -725,28 +691,19 @@
 
     totalQEl.textContent = TOTAL;
 
-    /* ━━━ Vimeo embed ━━━ */
     function setVideo(videoId, title) {
       videoSection.innerHTML = `<iframe src="https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" title="${title}"></iframe>`;
     }
 
-    /* ━━━ Firebase 시작 ━━━ */
     function startQuiz(uid, uname) {
       currentUserId = uid;
       const userRef = database.ref(`exams/${EXAM_ID}/users/${uid}`);
       userRef.once("value").then(snap => {
         const data = snap.val();
         if (data && data.result) {
-          showResult({
-            total: data.result.total,
-            필기: data.result.필기,
-            실기: data.result.실기,
-            answers: data.result.answers || [],
-            name: uname
-          });
+          showResult({ total: data.result.total, 필기: data.result.필기, 실기: data.result.실기, answers: data.result.answers || [], name: uname });
         } else if (data && data.progress) {
           currentIndex = data.progress.currentQuestion || 0;
-          // ✅ Firebase 배열의 undefined 슬롯을 null로 정규화
           const raw = data.progress.answers || [];
           userAnswers = Array.from({length: TOTAL}, (_, i) => (raw[i] != null) ? raw[i] : null);
           showQuizPage();
@@ -760,15 +717,10 @@
 
     function saveProgress() {
       if (!currentUserId) return;
-      // ✅ undefined 값을 null로 정규화하여 Firebase에 저장
       const normalized = userAnswers.map(a => (a != null) ? a : null);
-      database.ref(`exams/${EXAM_ID}/users/${currentUserId}/progress`).set({
-        currentQuestion: currentIndex,
-        answers: normalized
-      });
+      database.ref(`exams/${EXAM_ID}/users/${currentUserId}/progress`).set({ currentQuestion: currentIndex, answers: normalized });
     }
 
-    /* ━━━ 퀴즈 페이지 표시 ━━━ */
     function showQuizPage() {
       quizPage.style.display = "flex";
       resultPage.style.display = "none";
@@ -776,7 +728,6 @@
       updateQuestion(currentIndex);
     }
 
-    /* ━━━ 문제 업데이트 ━━━ */
     function updateQuestion(index) {
       currentIndex = index;
       const q = quizData[index];
@@ -784,12 +735,8 @@
       qNumber.textContent = index + 1;
       qText.textContent = q.question;
       currentQEl.textContent = index + 1;
-
-      // 스크롤 맨 위로
       const scroll = document.getElementById("quiz-scroll");
       if (scroll) scroll.scrollTop = 0;
-
-      // 보기 렌더링
       optionsDiv.innerHTML = "";
       q.options.forEach((opt, i) => {
         const label = document.createElement("label");
@@ -801,7 +748,6 @@
         const r = optionsDiv.querySelector(`input[value="${userAnswers[index]}"]`);
         if (r) r.checked = true;
       }
-
       prevBtn.disabled = (index === 0);
       if (index === TOTAL - 1) {
         nextBtn.textContent = "제출하기";
@@ -810,11 +756,9 @@
         nextBtn.textContent = "다음 →";
         nextBtn.classList.remove("submit-mode");
       }
-
       updateSheetGrid();
     }
 
-    /* ━━━ 보기 선택 ━━━ */
     optionsDiv.addEventListener("change", e => {
       const val = parseInt(e.target.value);
       userAnswers[currentIndex] = val;
@@ -823,7 +767,6 @@
       updateSheetProgress();
     });
 
-    /* ━━━ 이전/다음 버튼 ━━━ */
     prevBtn.addEventListener("click", () => {
       if (currentIndex > 0) { updateQuestion(currentIndex - 1); saveProgress(); }
     });
@@ -832,14 +775,12 @@
       else { updateQuestion(currentIndex + 1); saveProgress(); }
     });
 
-    /* ━━━ 제출 ━━━ */
     function submitQuiz() {
       const unanswered = userAnswers.filter(a => a === null).length;
       if (unanswered > 0) {
         const go = confirm(`아직 답하지 않은 문항이 ${unanswered}개 있습니다.\n그래도 제출하시겠습니까?`);
         if (!go) return;
       }
-
       let 필기 = 0, 실기 = 0;
       quizData.forEach((item, i) => {
         if (userAnswers[i] && userAnswers[i] == item.correctAnswer) {
@@ -848,41 +789,25 @@
       });
       const 총점 = 필기 + 실기;
       const uname = document.getElementById("user-name").value.trim();
-
       if (currentUserId) {
         const ref = database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
         ref.child("result").set({ total: 총점, 필기, 실기, answers: userAnswers });
         ref.child("progress").remove();
       }
-
-      // Google Form 제출
       const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSdpxneZyV9yTdMvI-jaaIdkE50RdNuIHP161SFVk2m5rX8fQA/formResponse";
       const fd = new FormData();
       fd.append("entry.295783163", uname);
       fd.append("entry.516479247", `${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
       fetch(googleFormURL, { method: "POST", body: fd, mode: "no-cors" }).catch(console.error);
-
-      // 올리사이트 opener로 결과 전송
       try {
         if (window.opener && !window.opener.closed) {
-          window.opener.postMessage({
-            type: "examResult",
-            total: 총점, 필기, 실기,
-            answers: userAnswers,
-            correctAnswers: quizData.map(q => q.correctAnswer),
-            name: uname,
-            uid: currentUserId
-          }, "*");
+          window.opener.postMessage({ type: "examResult", total: 총점, 필기, 실기, answers: userAnswers, correctAnswers: quizData.map(q => q.correctAnswer), name: uname, uid: currentUserId }, "*");
         }
       } catch(e) { console.error(e); }
-
       showResult({ total: 총점, 필기, 실기, answers: userAnswers, name: uname });
-
-      // 탭 닫기 시도
       try { window.close(); } catch(e) {}
     }
 
-    /* ━━━ 결과 표시 ━━━ */
     function showResult(d) {
       quizPage.style.display = "none";
       resultPage.style.display = "flex";
@@ -890,7 +815,6 @@
       document.getElementById("r-total").textContent = d.total + "점";
       document.getElementById("r-필기").textContent = d.필기 + "점";
       document.getElementById("r-실기").textContent = d.실기 + "점";
-
       const grid = document.getElementById("r-grid");
       grid.innerHTML = "";
       for (let i = 0; i < TOTAL; i++) {
@@ -906,7 +830,6 @@
       }
     }
 
-    /* ━━━ 다시 풀기 ━━━ */
     document.getElementById("retry-btn").addEventListener("click", () => {
       if (!currentUserId) { location.reload(); return; }
       const ref = database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
@@ -917,7 +840,6 @@
       });
     });
 
-    /* ━━━ Bottom Sheet (문항 이동) ━━━ */
     function buildSheetGrid() {
       sheetGrid.innerHTML = "";
       for (let i = 0; i < TOTAL; i++) {
@@ -925,11 +847,7 @@
         btn.className = "sheet-nav-btn";
         btn.dataset.q = i;
         btn.innerHTML = `<div class="sn-num">${i+1}</div><div class="sn-ans"></div>`;
-        btn.addEventListener("click", () => {
-          updateQuestion(i);
-          saveProgress();
-          closeSheet();
-        });
+        btn.addEventListener("click", () => { updateQuestion(i); saveProgress(); closeSheet(); });
         sheetGrid.appendChild(btn);
       }
       updateSheetGrid();
@@ -939,40 +857,31 @@
     function updateSheetGrid() {
       const btns = sheetGrid.querySelectorAll(".sheet-nav-btn");
       btns.forEach((btn, i) => {
-        // ✅ 클래스 초기화
         btn.classList.remove("answered", "active-q");
-        const ans = (userAnswers[i] != null) ? userAnswers[i] : null; // undefined·null 모두 null 처리
+        const ans = (userAnswers[i] != null) ? userAnswers[i] : null;
         const ansEl = btn.querySelector(".sn-ans");
-
         if (ans !== null) {
-          // 답변 있음 → 초록
           btn.classList.add("answered");
           ansEl.textContent = "(" + ans + ")";
         } else {
-          // 답변 없음 → 명시적으로 흰색 기본 스타일 강제
           btn.style.background = "";
           btn.style.color = "";
           btn.style.borderColor = "";
           ansEl.textContent = "";
         }
-
-        // 현재 문항 → 파란색 (answered보다 우선)
         if (i === currentIndex) btn.classList.add("active-q");
       });
     }
 
     function updateSheetProgress() {
-      const answered = userAnswers.filter(a => a != null).length; // undefined·null 모두 미답으로 처리
+      const answered = userAnswers.filter(a => a != null).length;
       progAnswered.textContent = answered;
       progUnanswered.textContent = TOTAL - answered;
     }
 
     function openSheet() {
       sheetOverlay.classList.add("active");
-      requestAnimationFrame(() => {
-        sheetOverlay.classList.add("visible");
-        bottomSheet.classList.add("visible");
-      });
+      requestAnimationFrame(() => { sheetOverlay.classList.add("visible"); bottomSheet.classList.add("visible"); });
       updateSheetGrid();
       updateSheetProgress();
     }
@@ -985,16 +894,12 @@
 
     navSheetBtn.addEventListener("click", openSheet);
     sheetOverlay.addEventListener("click", closeSheet);
-
-    /* ✅ 닫기 버튼 */
     document.getElementById("sheet-close-btn").addEventListener("click", closeSheet);
 
-    /* ━━━ 이벤트 방어 ━━━ */
     document.addEventListener("dragstart", e => e.preventDefault());
     document.addEventListener("selectstart", e => { if (e.target.tagName !== "INPUT") e.preventDefault(); });
     document.addEventListener("contextmenu", e => e.preventDefault());
 
-    /* ━━━ URL 파라미터로 자동 시작 ━━━ */
     (function() {
       const params = new URLSearchParams(window.location.search);
       const uid = params.get("uid") || "";
@@ -1003,7 +908,6 @@
       document.getElementById("user-name").value = name;
       if (uid && name) { startQuiz(uid, name); }
       else {
-        // uid/name 없으면 안내 메시지
         document.body.innerHTML = '<div style="display:flex;height:100vh;align-items:center;justify-content:center;font-family:sans-serif;text-align:center;padding:20px;color:#475569;"><div><div style="font-size:48px;margin-bottom:16px;">🔒</div><h2 style="font-size:20px;font-weight:700;color:#0F172A;margin-bottom:8px;">로그인이 필요합니다</h2><p style="font-size:14px;line-height:1.7;">올리사이트의 로그인 화면에서<br>아이디와 이름을 입력한 후 시작해주세요.</p></div></div>';
       }
     })();
