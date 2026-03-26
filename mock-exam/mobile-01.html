@@ -346,23 +346,31 @@
       .header-counter { font-size: 18px; }
       .quiz-body { flex-direction: row; }
       .video-section {
-        flex: 0 0 55%;
-        width: 55%;
+        flex: 0 0 52%;
+        width: 52%;
         aspect-ratio: unset;
         align-self: stretch;
         background: var(--bg);
+        display: flex;
+        align-items: center;
+      }
+      .video-section iframe {
+        position: relative;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
       }
       .quiz-scroll {
         flex: 1;
-        padding: 20px 22px 0;
-        gap: 12px;
+        padding: 16px 18px 0;
+        gap: 10px;
         background: var(--bg);
       }
       .q-num-label { font-size: 13px; margin-bottom: 8px; }
-      .q-text-content { font-size: 18px; }
+      .q-text-content { font-size: 19px; }
       .question-box { padding: 16px 18px; }
       .opt-label { padding: 14px 18px; min-height: 56px; gap: 14px; }
-      .opt-label span { font-size: 16px; }
+      .opt-label span { font-size: 17px; }
       .opt-label input[type="radio"] { width: 20px; height: 20px; }
       .options-list { gap: 10px; }
       .bottom-nav { padding: 12px 24px; gap: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
