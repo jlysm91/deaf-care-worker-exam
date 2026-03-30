@@ -1,1 +1,530 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>청각장애인 요양보호사 자격시험 대비: 1400題 1부</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>if(new URLSearchParams(location.search).get('uid')){document.write('<style>#start-page{display:none!important}</style>');}</script>
+  <style>
+    :root{
+      --primary:#1D4ED8;--primary-light:#3B82F6;--primary-hover:#1E40AF;
+      --primary-subtle:#BFDBFE;--success:#059669;--success-subtle:#ECFDF5;
+      --danger:#DC2626;--danger-subtle:#FEF2F2;--text-primary:#0F172A;
+      --text-secondary:#475569;--text-muted:#94A3B8;--border:#B8C4CE;
+      --surface:#F2F4F6;--surface-2:#F8FAFC;--bg:#A2ACB8;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;}
+    input{user-select:text;-webkit-user-select:text;}
+    img,iframe,a{-webkit-user-drag:none;pointer-events:auto;}
+    html,body{overflow:hidden!important;height:100%!important;}
+    body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--text-primary);min-height:100vh;}
 
+    /* ━━━ 시작 페이지 ━━━ */
+    #start-page{display:none;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(150deg,#0C1F5C 0%,#1D4ED8 52%,#0EA5E9 100%);}
+    .start-card{position:relative;z-index:1;background:rgba(255,255,255,0.12);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:clamp(28px,4vw,52px) clamp(24px,4.5vw,56px);width:clamp(320px,38vw,480px);text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.22);}
+    .start-badge{display:inline-block;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);color:rgba(255,255,255,0.95);font-size:clamp(10px,0.9vw,12px);font-weight:700;letter-spacing:2.5px;padding:6px 18px;border-radius:50px;margin-bottom:22px;}
+    .start-title{font-size:clamp(18px,2.2vw,26px);font-weight:700;color:#fff;line-height:1.5;margin-bottom:10px;}
+    .start-sub{font-size:clamp(12px,1.1vw,15px);color:rgba(255,255,255,0.65);font-weight:300;margin-bottom:36px;}
+    .ipt-group{margin-bottom:14px;}
+    .ipt-group input{width:100%;padding:15px 20px;background:rgba(255,255,255,0.96);border:2px solid transparent;border-radius:12px;font-size:clamp(13px,1.1vw,15px);font-family:inherit;color:var(--text-primary);outline:none;transition:border-color .2s,box-shadow .2s;}
+    .ipt-group input::placeholder{color:var(--text-muted);}
+    .ipt-group input:focus{background:#fff;border-color:rgba(255,255,255,0.8);box-shadow:0 0 0 4px rgba(255,255,255,0.18);}
+    #start-quiz-btn{width:100%;padding:16px;margin-top:8px;font-size:clamp(13px,1.2vw,16px);font-weight:700;font-family:inherit;border:none;border-radius:12px;background:var(--surface);color:var(--primary);cursor:pointer;transition:all .2s;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+    #start-quiz-btn:hover{background:rgba(255,255,255,0.92);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,0.22);}
+
+    /* ━━━ 장 선택 페이지 ━━━ */
+    #chapter-select-page{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(150deg,#0C1F5C 0%,#1D4ED8 52%,#0EA5E9 100%);padding:32px;}
+    .cs-badge{display:inline-block;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);color:rgba(255,255,255,0.95);font-size:clamp(10px,0.9vw,13px);font-weight:700;letter-spacing:2px;padding:6px 18px;border-radius:50px;margin-bottom:18px;}
+    .cs-title{font-size:clamp(22px,2.8vw,40px);font-weight:800;color:#fff;margin-bottom:10px;letter-spacing:-0.5px;text-shadow:0 2px 16px rgba(0,0,0,0.2);}
+    .cs-sub{font-size:clamp(12px,1.1vw,16px);color:rgba(255,255,255,0.7);margin-bottom:36px;}
+    .chapter-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;width:100%;max-width:min(720px,88vw);}
+    .chapter-btn{background:rgba(255,255,255,0.95);border:none;border-radius:16px;padding:clamp(20px,3vh,36px) clamp(16px,2vw,28px);text-align:center;cursor:pointer;transition:all .2s;font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+    .chapter-btn:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(0,0,0,0.25);background:#fff;}
+    .ch-num{font-size:clamp(14px,1.3vw,18px);font-weight:700;color:var(--primary);margin-bottom:6px;}
+    .ch-name{font-size:clamp(15px,1.6vw,20px);font-weight:700;color:var(--text-primary);line-height:1.4;}
+    .ch-total{font-size:clamp(11px,0.9vw,13px);color:var(--text-muted);margin-top:5px;}
+    .ch-result{font-size:clamp(12px,1vw,14px);font-weight:600;color:var(--success);margin-top:8px;min-height:18px;}
+
+    /* ━━━ 퀴즈 페이지 ━━━ */
+    #quiz-page{display:none;grid-template-rows:1fr auto;height:100vh;padding:clamp(14px,1.8vh,22px) clamp(18px,2vw,28px);gap:clamp(5px,.6vw,10px);background:var(--bg);overflow:hidden;}
+    .quiz-top{display:flex;gap:clamp(5px,.6vw,10px);align-items:stretch;min-height:0;overflow:hidden;}
+    #video-container{flex:0 0 63%;border-radius:14px;overflow:hidden;align-self:stretch;display:flex;flex-direction:column;background:var(--surface);box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+    .video-wrapper{width:100%;flex:1 1 auto;position:relative;}
+    .video-wrapper>div{position:absolute!important;inset:0!important;padding:0!important;}
+    .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+    #quiz-container{flex:1;background:var(--surface);border-radius:14px;padding:clamp(12px,1.5vh,20px) clamp(14px,1.6vw,22px);display:flex;flex-direction:column;box-shadow:0 2px 12px rgba(0,0,0,0.06);overflow:hidden;min-height:0;}
+    #quiz-content{flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;padding-right:2px;display:flex;flex-direction:column;}
+    .question-meta{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-bottom:clamp(10px,1.4vh,16px);}
+    .q-num-badge{background:var(--primary);color:#fff;font-size:clamp(11px,.9vw,13px);font-weight:700;padding:5px 16px;border-radius:50px;}
+    #quiz-content h3{font-size:clamp(14px,1.5vw,20px);font-weight:700;color:var(--text-primary);line-height:1.7;margin-bottom:clamp(10px,1.2vh,14px);padding:clamp(10px,1.2vh,14px);background:var(--primary-subtle);border-left:4px solid var(--primary-light);border-radius:8px;}
+    #options{display:flex;flex-direction:column;gap:clamp(5px,.7vh,8px);flex:1 1 auto;}
+    #options label{display:flex;align-items:center;gap:12px;flex:1;padding:clamp(9px,1.1vh,13px) clamp(12px,1.3vw,16px);background:var(--surface);border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:clamp(18px,1.8vw,24px);font-weight:400;line-height:1.5;transition:all .15s;word-break:keep-all;white-space:normal;}
+    #options label:hover{background:var(--primary-subtle);border-color:var(--primary-light);transform:translateX(2px);}
+    #options input[type="radio"]{flex-shrink:0;accent-color:var(--primary);width:16px;height:16px;}
+    #options label:has(input:checked){background:var(--primary);border-color:var(--primary);}
+    #options label:has(input:checked) span{color:#fff;font-weight:600;}
+    #navigation-buttons{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0;padding-top:clamp(14px,1.8vh,20px);margin-top:clamp(14px,1.8vh,20px);border-top:1px solid var(--border);}
+    #navigation-buttons button{padding:clamp(7px,.9vh,10px) clamp(14px,1.6vw,22px);font-size:clamp(12px,1.05vw,14px);font-weight:600;font-family:inherit;border-radius:8px;cursor:pointer;transition:all .15s;min-width:90px;}
+    #prev-btn{background:var(--surface-2);color:var(--text-secondary);border:1.5px solid var(--border);}
+    #prev-btn:hover:not(:disabled){background:var(--surface);color:var(--text-primary);}
+    #prev-btn:disabled{opacity:.35;cursor:not-allowed;}
+    #next-btn{background:var(--primary);color:white;border:none;}
+    #next-btn:hover{background:var(--primary-hover);}
+    #next-btn.submit-mode{background:var(--danger);}
+    #next-btn.submit-mode:hover{background:#B91C1C;}
+    #question-counter{font-size:clamp(12px,1.05vw,14px);font-weight:600;color:var(--text-secondary);}
+    #total-questions{color:var(--primary);}
+
+    /* ━━━ 빠른 이동 (페이지네이션) ━━━ */
+    #quick-nav-container{display:none;background:var(--surface);border-radius:14px;padding:clamp(10px,1.5vh,16px) clamp(14px,1.5vw,20px);box-shadow:0 2px 12px rgba(0,0,0,0.06);overflow:hidden;flex-direction:column;justify-content:center;}
+    .nav-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(6px,.8vh,10px);}
+    .nav-section-label{display:inline-block;background:var(--primary);color:#fff;font-size:clamp(13px,1.1vw,15px);font-weight:700;letter-spacing:.5px;padding:5px 18px;border-radius:50px;}
+    #nav-page-info{font-size:clamp(11px,.95vw,13px);font-weight:600;color:var(--text-secondary);}
+    #quick-nav-wrapper{display:flex;align-items:center;gap:clamp(6px,.8vw,10px);}
+    .nav-arrow{flex-shrink:0;background:var(--primary)!important;color:#fff!important;border:none!important;width:34px!important;height:34px!important;min-width:34px!important;border-radius:8px!important;cursor:pointer;font-size:14px;display:flex!important;align-items:center;justify-content:center;transition:all .15s;padding:0!important;}
+    .nav-arrow:hover:not(:disabled){background:var(--primary-hover)!important;transform:scale(1.08);}
+    .nav-arrow:disabled{background:var(--border)!important;cursor:not-allowed;opacity:.5;}
+    #quick-nav-grid-wrap{flex:1;overflow:hidden;}
+    #quick-nav-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:clamp(3px,.4vw,5px);}
+    .nav-btn{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;font-size:clamp(10px,.9vw,13px);font-weight:600;font-family:inherit;text-align:center;cursor:pointer;transition:all .12s;color:var(--text-secondary);height:var(--nav-btn-height,26px);line-height:var(--nav-btn-height,26px);padding:0;overflow:hidden;white-space:nowrap;}
+    .nav-btn:hover{background:#DBEAFE;border-color:#93C5FD;color:var(--primary);}
+    .nav-btn.active{background:var(--primary);color:white;border-color:var(--primary);}
+    .nav-btn.answered{background:var(--success-subtle);color:var(--success);border-color:#6EE7B7;}
+    .nav-btn.correct{background:var(--success-subtle)!important;color:var(--success)!important;border-color:#6EE7B7!important;}
+    .nav-btn.incorrect{background:var(--danger-subtle)!important;color:var(--danger)!important;border-color:#FCA5A5!important;}
+
+    /* ━━━ 결과 페이지 ━━━ */
+    #result-page{display:none;flex-direction:column;align-items:center;min-height:100vh;padding:48px 32px;background:var(--surface);overflow-y:auto;}
+    .r-badge{display:inline-block;background:var(--primary);color:#fff;font-size:clamp(11px,1.1vw,14px);font-weight:700;letter-spacing:2px;padding:5px 18px;border-radius:50px;margin-bottom:10px;}
+    #result-page h2{font-size:clamp(20px,2.2vw,30px);font-weight:800;color:var(--text-primary);margin-bottom:6px;text-align:center;}
+    #result-name{font-size:clamp(12px,1.2vw,16px);color:#64748B;font-weight:500;margin-top:8px;text-align:center;}
+    .r-score-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:clamp(16px,2%,28px);margin:20px 0 16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;gap:48px;width:100%;max-width:480px;}
+    .r-score-item{text-align:center;}
+    .r-score-label{font-size:clamp(10px,1vw,14px);font-weight:700;color:#64748B;letter-spacing:1px;margin-bottom:6px;}
+    .r-score-total{font-size:clamp(28px,4vw,52px);font-weight:900;color:var(--primary);line-height:1;}
+    .r-score-sub{font-size:clamp(20px,3vw,40px);font-weight:900;color:var(--text-primary);line-height:1;}
+    .r-grid-wrap{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:clamp(10px,1.5%,16px);box-shadow:0 2px 12px rgba(0,0,0,0.06);margin-bottom:24px;width:100%;max-width:960px;}
+    .r-grid-label{font-size:clamp(10px,1vw,13px);font-weight:700;color:#94A3B8;letter-spacing:1.5px;margin:0 0 10px;text-align:center;}
+    #result-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:clamp(3px,.4%,5px);}
+    #result-grid>div{border-radius:8px;padding:clamp(5px,.8%,9px) 3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
+    #result-grid>div .rn{font-size:clamp(10px,1.1vw,16px);font-weight:800;}
+    #result-grid>div .rm{font-size:clamp(8px,.9vw,13px);font-weight:600;opacity:.95;}
+    .r-btn-wrap{display:flex;gap:14px;}
+    .r-btn{padding:clamp(10px,1.2%,15px) clamp(24px,3.5%,48px);font-size:clamp(13px,1.3vw,17px);font-weight:700;font-family:inherit;border:none;border-radius:12px;cursor:pointer;letter-spacing:-.3px;}
+    .r-retry-btn{background:var(--primary);color:#fff;box-shadow:0 4px 14px rgba(29,78,216,.3);}
+    .r-chapter-btn{background:var(--surface-2);color:var(--text-secondary);border:1.5px solid var(--border);}
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}
+  </style>
+</head>
+<body>
+  <input type="hidden" id="user-id"/>
+  <input type="hidden" id="user-name"/>
+
+  <!-- 시작 페이지 -->
+  <div id="start-page" style="display:none">
+    <div class="start-card">
+      <div class="start-badge">1400題 1부</div>
+      <div class="start-title">청각장애인 요양보호사<br>자격시험 대비</div>
+      <p class="start-sub">시작하기 전에 아이디와 이름을 입력해 주세요.</p>
+      <div class="ipt-group"><input type="text" id="start-uid" placeholder="아이디"/></div>
+      <div class="ipt-group"><input type="text" id="start-uname" placeholder="이름"/></div>
+      <button id="start-quiz-btn">다음 →</button>
+    </div>
+  </div>
+
+  <!-- 장 선택 페이지 -->
+  <div id="chapter-select-page" style="display:none">
+    <div class="cs-badge">1400題 1부</div>
+    <h2 class="cs-title">1400題 1부 - 장 선택</h2>
+    <p class="cs-sub">학습할 장을 선택해주세요.</p>
+    <div class="chapter-grid">
+      <button class="chapter-btn" data-chapter="1">
+        <div class="ch-num">1장</div>
+        <div class="ch-name">요양보호 대상자 이해</div>
+        <div class="ch-total">33문항</div>
+        <div class="ch-result" id="result-ch1"></div>
+      </button>
+      <button class="chapter-btn" data-chapter="2">
+        <div class="ch-num">2장</div>
+        <div class="ch-name">노인복지와 장기요양 제도</div>
+        <div class="ch-total">103문항</div>
+        <div class="ch-result" id="result-ch2"></div>
+      </button>
+      <button class="chapter-btn" data-chapter="3">
+        <div class="ch-num">3장</div>
+        <div class="ch-name">노인의 인권과 보호</div>
+        <div class="ch-total">29문항</div>
+        <div class="ch-result" id="result-ch3"></div>
+      </button>
+      <button class="chapter-btn" data-chapter="4">
+        <div class="ch-num">4장</div>
+        <div class="ch-name">요양보호사의 인권보호와 자기계발</div>
+        <div class="ch-total">64문항</div>
+        <div class="ch-result" id="result-ch4"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- 퀴즈 페이지 -->
+  <div id="quiz-page" style="display:none">
+    <div class="quiz-top">
+      <div id="video-container"><div class="video-wrapper"></div></div>
+      <div id="quiz-container">
+        <div id="quiz-content">
+          <div class="question-meta"><span class="q-num-badge">문제 <span id="question-number">1</span></span></div>
+          <h3><span id="question-text"></span></h3>
+          <div id="options"></div>
+        </div>
+        <div id="navigation-buttons">
+          <button id="prev-btn">← 이전</button>
+          <span id="question-counter"><span id="current-question">1</span> / <span id="total-questions">33</span></span>
+          <button id="next-btn">다음 →</button>
+        </div>
+      </div>
+    </div>
+    <div id="quick-nav-container" style="display:none">
+      <div class="nav-header">
+        <p class="nav-section-label">빠른 문항 이동</p>
+        <span id="nav-page-info"></span>
+      </div>
+      <div id="quick-nav-wrapper">
+        <button class="nav-arrow" id="nav-prev">&#9664;</button>
+        <div id="quick-nav-grid-wrap"><div id="quick-nav-grid"></div></div>
+        <button class="nav-arrow" id="nav-next">&#9654;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 결과 페이지 -->
+  <div id="result-page" style="display:none">
+    <div class="r-badge" id="result-badge">1장</div>
+    <h2>시험 결과</h2>
+    <div id="result-name"></div>
+    <div class="r-score-card">
+      <div class="r-score-item"><div class="r-score-label">총점</div><div id="score-total" class="r-score-total"></div></div>
+      <div class="r-score-item"><div class="r-score-label">총 문항</div><div id="score-max" class="r-score-sub"></div></div>
+    </div>
+    <div class="r-grid-wrap">
+      <p class="r-grid-label">문항별 결과 &nbsp;·&nbsp; C: 정답 &nbsp;/&nbsp; M: 내 답</p>
+      <div id="result-grid"></div>
+    </div>
+    <div class="r-btn-wrap">
+      <button class="r-btn r-chapter-btn" id="result-chapter-btn">장 선택하기</button>
+      <button class="r-btn r-retry-btn" id="result-retry-btn">다시 풀기</button>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+  <script>
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // Firebase 설정
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  const firebaseConfig={
+    apiKey:"AIzaSyDrff8zRQ6DuPFABxW_-9DPzbdTetDYHDk",
+    authDomain:"deaf-for-database-develo-59bf8.firebaseapp.com",
+    databaseURL:"https://deaf-for-database-develo-59bf8-default-rtdb.firebaseio.com",
+    projectId:"deaf-for-database-develo-59bf8",
+    storageBucket:"deaf-for-database-develo-59bf8.appspot.com",
+    messagingSenderId:"735390767125",
+    appId:"1:735390767125:web:d1df8b89b1b3451bf1161c"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const database=firebase.database();
+
+  const chapterToExamId={1:"exam11",2:"exam12",3:"exam13",4:"exam14"};
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 1부 1장 데이터 (exam11) — 여기에 33문항 입력
+  // 형식: {number:"1-1", question:"질문", options:["①","②","③","④","⑤"], correctAnswer:3, videoId:"VIMEO_ID"}
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  const chapter1Data=[
+    {number:"1-1",question:"샘플 문제입니다.",options:["보기1","보기2","보기3","보기4","보기5"],correctAnswer:1,videoId:"1126673666"}
+    // 나머지 문항을 여기에 추가
+  ];
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 1부 2장 데이터 (exam12) — 여기에 103문항 입력
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  const chapter2Data=[
+    {number:"2-1",question:"샘플 문제입니다.",options:["보기1","보기2","보기3","보기4","보기5"],correctAnswer:1,videoId:"1126679563"}
+    // 나머지 문항을 여기에 추가
+  ];
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 1부 3장 데이터 (exam13) — 여기에 29문항 입력
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  const chapter3Data=[
+    {number:"3-1",question:"샘플 문제입니다.",options:["보기1","보기2","보기3","보기4","보기5"],correctAnswer:1,videoId:"1126738616"}
+    // 나머지 문항을 여기에 추가
+  ];
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 1부 4장 데이터 (exam14) — 여기에 64문항 입력
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  const chapter4Data=[
+    {number:"4-1",question:"샘플 문제입니다.",options:["보기1","보기2","보기3","보기4","보기5"],correctAnswer:1,videoId:"1126688859"}
+    // 나머지 문항을 여기에 추가
+  ];
+
+  const allChapterData={1:chapter1Data,2:chapter2Data,3:chapter3Data,4:chapter4Data};
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 상태 변수
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  let EXAM_ID="",quizData=[],TOTAL_QUESTIONS=0;
+  let currentQuestionIndex=0,currentUserId="",currentUserName="",currentChapter=0;
+  let userAnswers=[],currentNavPage=0;
+  const NAV_PAGE_SIZE=80;
+
+  // DOM
+  const startPage=document.getElementById("start-page");
+  const chapterSelectPage=document.getElementById("chapter-select-page");
+  const quizPage=document.getElementById("quiz-page");
+  const resultPage=document.getElementById("result-page");
+  const videoWrapper=document.querySelector("#video-container .video-wrapper");
+  const optionsDiv=document.getElementById("options");
+  const quickNavGrid=document.getElementById("quick-nav-grid");
+  const navPrevBtn=document.getElementById("nav-prev");
+  const navNextBtn=document.getElementById("nav-next");
+  const navPageInfo=document.getElementById("nav-page-info");
+
+  function getVideoEmbed(videoId,title){
+    return `<div style="position:absolute;inset:0;"><iframe src="https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="${title}"></iframe></div>`;
+  }
+
+  // ━━━ 시작 버튼 ━━━
+  document.getElementById("start-quiz-btn").addEventListener("click",()=>{
+    const uid=document.getElementById("start-uid").value.trim();
+    const uname=document.getElementById("start-uname").value.trim();
+    if(!uid||!uname){alert("아이디와 이름을 입력해주세요.");return;}
+    document.getElementById("user-id").value=uid;
+    document.getElementById("user-name").value=uname;
+    currentUserId=uid; currentUserName=uname;
+    startPage.style.display="none";
+    chapterSelectPage.style.display="flex";
+    loadChapterResults();
+  });
+
+  // ━━━ 장 선택 ━━━
+  document.querySelectorAll(".chapter-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      currentChapter=parseInt(btn.dataset.chapter);
+      EXAM_ID=chapterToExamId[currentChapter];
+      quizData=allChapterData[currentChapter].map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+      TOTAL_QUESTIONS=quizData.length;
+      userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+      document.getElementById("result-badge").textContent=currentChapter+"장";
+      startQuiz(currentUserId);
+    });
+  });
+
+  function startQuiz(uid){
+    const userRef=database.ref(`exams/${EXAM_ID}/users/${uid}`);
+    userRef.once("value").then(snap=>{
+      const data=snap.val();
+      if(data&&data.result){
+        chapterSelectPage.style.display="none";
+        showResult({total:data.result.total,totalQ:data.result.totalQuestions||TOTAL_QUESTIONS,answers:data.result.answers||[],name:currentUserName});
+      } else if(data&&data.progress){
+        currentQuestionIndex=data.progress.currentQuestion||0;
+        userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);
+        showQuizPage();
+      } else {
+        currentQuestionIndex=0;
+        userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+        showQuizPage();
+      }
+    });
+  }
+
+  function showQuizPage(){
+    chapterSelectPage.style.display="none";
+    quizPage.style.display="grid";
+    document.getElementById("quick-nav-container").style.display="flex";
+    currentNavPage=0;
+    updateQuestion(currentQuestionIndex);
+    updateNavDisplay();
+    requestAnimationFrame(autoResizeNavGrid);
+  }
+
+  function saveProgress(){
+    if(!currentUserId)return;
+    database.ref(`exams/${EXAM_ID}/users/${currentUserId}/progress`).set({currentQuestion:currentQuestionIndex,answers:userAnswers});
+  }
+
+  function updateQuestion(index){
+    currentQuestionIndex=index;
+    const q=quizData[index];
+    videoWrapper.innerHTML=q.videoEmbed;
+    document.getElementById("question-number").textContent=index+1;
+    document.getElementById("question-text").textContent=q.question;
+    document.getElementById("current-question").textContent=index+1;
+    document.getElementById("total-questions").textContent=TOTAL_QUESTIONS;
+    optionsDiv.innerHTML="";
+    q.options.forEach((opt,i)=>{
+      const label=document.createElement("label");
+      label.innerHTML=`<input type="radio" name="answer" value="${i+1}"><span>${opt}</span>`;
+      optionsDiv.appendChild(label);
+    });
+    if(userAnswers[index]!==null){
+      const r=optionsDiv.querySelector(`input[value="${userAnswers[index]}"]`);
+      if(r)r.checked=true;
+    }
+    document.getElementById("prev-btn").disabled=(index===0);
+    const nextBtn=document.getElementById("next-btn");
+    if(index===TOTAL_QUESTIONS-1){nextBtn.textContent="제출하기";nextBtn.classList.add("submit-mode");}
+    else{nextBtn.textContent="다음 →";nextBtn.classList.remove("submit-mode");}
+    updateNavDisplay();
+  }
+
+  // ━━━ 빠른 이동 페이지네이션 ━━━
+  function updateNavDisplay(){
+    quickNavGrid.innerHTML="";
+    const start=currentNavPage*NAV_PAGE_SIZE;
+    const end=Math.min(start+NAV_PAGE_SIZE,TOTAL_QUESTIONS);
+    for(let i=start;i<end;i++){
+      const btn=document.createElement("div");
+      btn.classList.add("nav-btn");
+      btn.dataset.q=i;
+      const ans=userAnswers[i];
+      btn.textContent=ans?`${i+1}(${ans})`:i+1;
+      if(ans)btn.classList.add("answered");
+      if(i===currentQuestionIndex)btn.classList.add("active");
+      quickNavGrid.appendChild(btn);
+    }
+    navPageInfo.textContent=`${start+1}-${end} / ${TOTAL_QUESTIONS}문항`;
+    const totalPages=Math.ceil(TOTAL_QUESTIONS/NAV_PAGE_SIZE);
+    navPrevBtn.disabled=(currentNavPage===0);
+    navNextBtn.disabled=(currentNavPage>=totalPages-1);
+  }
+
+  navPrevBtn.addEventListener("click",()=>{if(currentNavPage>0){currentNavPage--;updateNavDisplay();}});
+  navNextBtn.addEventListener("click",()=>{const tp=Math.ceil(TOTAL_QUESTIONS/NAV_PAGE_SIZE);if(currentNavPage<tp-1){currentNavPage++;updateNavDisplay();}});
+
+  quickNavGrid.addEventListener("click",e=>{
+    const btn=e.target.closest(".nav-btn");
+    if(btn){updateQuestion(parseInt(btn.dataset.q));saveProgress();}
+  });
+
+  document.getElementById("prev-btn").addEventListener("click",()=>{
+    if(currentQuestionIndex>0){updateQuestion(currentQuestionIndex-1);saveProgress();}
+  });
+  document.getElementById("next-btn").addEventListener("click",()=>{
+    if(currentQuestionIndex===TOTAL_QUESTIONS-1)submitQuiz();
+    else{updateQuestion(currentQuestionIndex+1);saveProgress();}
+  });
+
+  optionsDiv.addEventListener("change",e=>{
+    const val=parseInt(e.target.value);
+    userAnswers[currentQuestionIndex]=val;
+    saveProgress();
+    updateNavDisplay();
+  });
+
+  function submitQuiz(){
+    let correct=0;
+    quizData.forEach((item,i)=>{if(userAnswers[i]&&userAnswers[i]==item.correctAnswer)correct++;});
+    if(currentUserId){
+      const ref=database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
+      ref.child("result").set({total:correct,totalQuestions:TOTAL_QUESTIONS,answers:userAnswers});
+      ref.child("progress").remove();
+    }
+    quizPage.style.display="none";
+    document.getElementById("quick-nav-container").style.display="none";
+    showResult({total:correct,totalQ:TOTAL_QUESTIONS,answers:userAnswers,name:currentUserName});
+    alert("제출 완료하였습니다!");
+  }
+
+  function showResult(d){
+    resultPage.style.display="flex";
+    document.getElementById("result-name").textContent="응시자 : "+d.name;
+    document.getElementById("score-total").textContent=d.total+"점";
+    document.getElementById("score-max").textContent=d.totalQ+"문항";
+    const grid=document.getElementById("result-grid");
+    grid.innerHTML="";
+    for(let i=0;i<(d.answers.length||TOTAL_QUESTIONS);i++){
+      const ua=(d.answers[i]==null)?"-":d.answers[i];
+      const ca=quizData[i]?quizData[i].correctAnswer:"-";
+      const ok=ua!=="-"&&parseInt(ua)===parseInt(ca);
+      const cell=document.createElement("div");
+      cell.style.background=ok?"#ECFDF5":"#FEF2F2";
+      cell.style.border=ok?"1.5px solid #6EE7B7":"1.5px solid #FCA5A5";
+      cell.style.color=ok?"#059669":"#DC2626";
+      cell.innerHTML=`<div class="rn">${i+1}</div><div class="rm">C:${ca}/M:${ua}</div>`;
+      grid.appendChild(cell);
+    }
+  }
+
+  document.getElementById("result-retry-btn").addEventListener("click",()=>{
+    if(!currentUserId){location.reload();return;}
+    if(!confirm("다시 풀기를 하시겠습니까? 현재 결과가 삭제됩니다."))return;
+    const ref=database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
+    ref.child("progress").remove().then(()=>ref.child("result").remove()).then(()=>{
+      resultPage.style.display="none";
+      currentQuestionIndex=0; currentNavPage=0;
+      userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+      showQuizPage();
+    });
+  });
+
+  document.getElementById("result-chapter-btn").addEventListener("click",()=>{
+    resultPage.style.display="none";
+    chapterSelectPage.style.display="flex";
+    loadChapterResults();
+  });
+
+  async function loadChapterResults(){
+    if(!currentUserId)return;
+    for(let ch=1;ch<=4;ch++){
+      const examId=chapterToExamId[ch];
+      const snap=await database.ref(`exams/${examId}/users/${currentUserId}/result`).once("value");
+      const data=snap.val();
+      const el=document.getElementById(`result-ch${ch}`);
+      if(el)el.textContent=data?`(${data.total}점 / ${data.totalQuestions}문항)`:"";
+    }
+  }
+
+  function autoResizeNavGrid(){
+    const navCont=document.getElementById("quick-nav-container");
+    const grid=document.getElementById("quick-nav-grid");
+    if(!navCont||!grid)return;
+    const navH=navCont.clientHeight;
+    const cs=getComputedStyle(navCont);
+    const padV=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
+    const headerH=(document.querySelector(".nav-header")||{}).offsetHeight||0;
+    const gridGap=parseFloat(getComputedStyle(grid).gap)||5;
+    const rows=Math.ceil(Math.min(NAV_PAGE_SIZE,TOTAL_QUESTIONS)/10);
+    const rowGaps=(rows-1)*gridGap;
+    const gridH=navH-padV-headerH-10;
+    const btnH=Math.max(14,Math.min(28,Math.floor((gridH-rowGaps)/rows)));
+    document.documentElement.style.setProperty("--nav-btn-height",btnH+"px");
+  }
+
+  window.addEventListener("resize",autoResizeNavGrid);
+
+  // URL 파라미터로 자동 로그인
+  (function(){
+    const params=new URLSearchParams(location.search);
+    const uid=params.get("uid")||"";
+    const name=params.get("name")||"";
+    if(uid&&name){
+      document.getElementById("user-id").value=uid;
+      document.getElementById("user-name").value=name;
+      currentUserId=uid; currentUserName=name;
+      chapterSelectPage.style.display="flex";
+      loadChapterResults();
+    }
+  })();
+
+  document.addEventListener("dragstart",e=>e.preventDefault());
+  document.addEventListener("selectstart",e=>{if(e.target.tagName!=="INPUT")e.preventDefault();});
+  document.addEventListener("contextmenu",e=>e.preventDefault());
+  document.addEventListener("mousedown",e=>{if(e.target.tagName!=="INPUT"&&e.target.tagName!=="BUTTON")e.preventDefault();});
+  </script>
+</body>
+</html>
