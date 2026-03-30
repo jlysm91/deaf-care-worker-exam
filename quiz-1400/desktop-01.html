@@ -50,8 +50,8 @@
     /* ━━━ 퀴즈 페이지 ━━━ */
     #quiz-page{display:none;grid-template-rows:1fr auto;height:100vh;padding:clamp(14px,1.8vh,22px) clamp(18px,2vw,28px);gap:clamp(5px,.6vw,10px);background:var(--bg);overflow:hidden;}
     .quiz-top{display:flex;gap:clamp(5px,.6vw,10px);align-items:stretch;min-height:0;overflow:hidden;}
-    #video-container{flex:0 0 63%;border-radius:14px;overflow:hidden;align-self:stretch;display:flex;flex-direction:column;background:var(--surface);box-shadow:0 2px 12px rgba(0,0,0,0.06);}
-    .video-wrapper{width:100%;flex:1 1 auto;position:relative;}
+    #video-container{flex:0 0 63%;border-radius:14px;overflow:hidden;align-self:stretch;display:flex;flex-direction:column;background:#000;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+    .video-wrapper{width:100%;flex:1 1 auto;position:relative;height:100%;}
     .video-wrapper>div{position:absolute!important;inset:0!important;padding:0!important;}
     .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
     #quiz-container{flex:1;background:var(--surface);border-radius:14px;padding:clamp(12px,1.5vh,20px) clamp(14px,1.6vw,22px);display:flex;flex-direction:column;box-shadow:0 2px 12px rgba(0,0,0,0.06);overflow:hidden;min-height:0;}
@@ -1981,16 +1981,23 @@
   // ━━━ 빠른 이동 페이지네이션 ━━━
   function updateNavDisplay(){
     quickNavGrid.innerHTML="";
+    const FIXED_SIZE=80;
     const start=currentNavPage*NAV_PAGE_SIZE;
     const end=Math.min(start+NAV_PAGE_SIZE,TOTAL_QUESTIONS);
-    for(let i=start;i<end;i++){
+    for(let i=0;i<FIXED_SIZE;i++){
       const btn=document.createElement("div");
       btn.classList.add("nav-btn");
-      btn.dataset.q=i;
-      const ans=userAnswers[i];
-      btn.textContent=ans?`${i+1}(${ans})`:i+1;
-      if(ans)btn.classList.add("answered");
-      if(i===currentQuestionIndex)btn.classList.add("active");
+      const realIdx=start+i;
+      if(realIdx<end){
+        btn.dataset.q=realIdx;
+        const ans=userAnswers[realIdx];
+        btn.textContent=ans?`${realIdx+1}(${ans})`:realIdx+1;
+        if(ans)btn.classList.add("answered");
+        if(realIdx===currentQuestionIndex)btn.classList.add("active");
+      } else {
+        btn.style.visibility="hidden";
+        btn.style.pointerEvents="none";
+      }
       quickNavGrid.appendChild(btn);
     }
     navPageInfo.textContent=`${start+1}-${end} / ${TOTAL_QUESTIONS}문항`;
