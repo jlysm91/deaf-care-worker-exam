@@ -81,9 +81,8 @@
     #quick-nav-container{display:none;background:var(--surface);border-radius:14px;padding:clamp(10px,1.5vh,16px) clamp(14px,1.5vw,20px);box-shadow:0 2px 12px rgba(0,0,0,0.06);overflow:hidden;flex-direction:column;justify-content:center;}
     .nav-header{display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:clamp(6px,.8vh,10px);}
     .nav-section-label{display:inline-block;background:var(--primary);color:#fff;font-size:clamp(13px,1.1vw,15px);font-weight:700;letter-spacing:.5px;padding:5px 18px;border-radius:50px;}
-    #nav-page-info{font-size:clamp(11px,.95vw,13px);font-weight:600;color:var(--text-secondary);position:absolute;right:0;}
     #quick-nav-wrapper{display:flex;align-items:center;gap:clamp(6px,.8vw,10px);}
-    .nav-arrow{flex-shrink:0;background:var(--primary)!important;color:#fff!important;border:none!important;width:34px!important;height:34px!important;min-width:34px!important;border-radius:8px!important;cursor:pointer;font-size:14px;display:flex!important;align-items:center;justify-content:center;transition:all .15s;padding:0!important;}
+    .nav-arrow{flex-shrink:0;background:var(--primary)!important;color:#fff!important;border:none!important;width:34px!important;height:34px!important;min-width:34px!important;border-radius:8px!important;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0!important;}
     .nav-arrow:hover:not(:disabled){background:var(--primary-hover)!important;transform:scale(1.08);}
     .nav-arrow:disabled{background:var(--border)!important;cursor:not-allowed;opacity:.5;}
     #quick-nav-grid-wrap{flex:1;overflow:hidden;}
@@ -189,7 +188,6 @@
     <div id="quick-nav-container" style="display:none">
       <div class="nav-header">
         <p class="nav-section-label">빠른 문항 이동</p>
-        <span id="nav-page-info"></span>
       </div>
       <div id="quick-nav-wrapper">
         <button class="nav-arrow" id="nav-prev">&#9664;</button>
@@ -1886,7 +1884,6 @@
   const quickNavGrid=document.getElementById("quick-nav-grid");
   const navPrevBtn=document.getElementById("nav-prev");
   const navNextBtn=document.getElementById("nav-next");
-  const navPageInfo=document.getElementById("nav-page-info");
 
   function getVideoEmbed(videoId,title){
     return `<div style="position:absolute;inset:0;"><iframe src="https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="${title}"></iframe></div>`;
@@ -2015,7 +2012,6 @@
       }
       quickNavGrid.appendChild(btn);
     }
-    navPageInfo.textContent=`${start+1}-${end} / ${TOTAL_QUESTIONS}문항`;
     const totalPages=Math.ceil(TOTAL_QUESTIONS/NAV_PAGE_SIZE);
     navPrevBtn.disabled=(currentNavPage===0);
     navNextBtn.disabled=(currentNavPage>=totalPages-1);
