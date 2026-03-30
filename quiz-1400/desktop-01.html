@@ -60,7 +60,7 @@
     .q-num-badge{background:var(--primary);color:#fff;font-size:clamp(11px,.9vw,13px);font-weight:700;padding:5px 16px;border-radius:50px;}
     #quiz-content h3{font-size:clamp(14px,1.5vw,20px);font-weight:700;color:var(--text-primary);line-height:1.7;margin-bottom:clamp(10px,1.2vh,14px);padding:clamp(10px,1.2vh,14px);background:var(--primary-subtle);border-left:4px solid var(--primary-light);border-radius:8px;}
     #options{display:flex;flex-direction:column;gap:clamp(5px,.7vh,8px);flex:1 1 auto;}
-    #options label{display:flex;align-items:center;gap:12px;flex:1;padding:clamp(9px,1.1vh,13px) clamp(12px,1.3vw,16px);background:var(--surface);border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:clamp(18px,1.8vw,24px);font-weight:400;line-height:1.5;transition:all .15s;word-break:keep-all;white-space:normal;}
+    #options label{display:flex;align-items:center;gap:12px;flex:1;padding:clamp(9px,1.1vh,13px) clamp(12px,1.3vw,16px);background:var(--surface);border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:clamp(14px,1.5vw,20px);font-weight:400;line-height:1.5;transition:all .15s;word-break:keep-all;white-space:normal;}
     #options label:hover{background:var(--primary-subtle);border-color:var(--primary-light);transform:translateX(2px);}
     #options input[type="radio"]{flex-shrink:0;accent-color:var(--primary);width:16px;height:16px;}
     #options label:has(input:checked){background:var(--primary);border-color:var(--primary);}
@@ -1945,6 +1945,7 @@
     updateQuestion(currentQuestionIndex);
     updateNavDisplay();
     requestAnimationFrame(autoResizeNavGrid);
+    applyLayout();
   }
 
   function saveProgress(){
@@ -2093,14 +2094,22 @@
     const padV=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
     const headerH=(document.querySelector(".nav-header")||{}).offsetHeight||0;
     const gridGap=parseFloat(getComputedStyle(grid).gap)||5;
-    const rows=Math.ceil(Math.min(NAV_PAGE_SIZE,TOTAL_QUESTIONS)/10);
+    const rows=Math.ceil(NAV_PAGE_SIZE/10);
     const rowGaps=(rows-1)*gridGap;
     const gridH=navH-padV-headerH-10;
     const btnH=Math.max(14,Math.min(28,Math.floor((gridH-rowGaps)/rows)));
     document.documentElement.style.setProperty("--nav-btn-height",btnH+"px");
   }
 
-  window.addEventListener("resize",autoResizeNavGrid);
+  window.addEventListener("resize",function(){autoResizeNavGrid();applyLayout();});
+
+  function applyLayout(){
+    var wrapper=document.querySelector(".video-wrapper");
+    if(!wrapper)return;
+    wrapper.style.height="100%";
+    var inner=wrapper.querySelector("div");
+    if(inner){inner.style.position="absolute";inner.style.inset="0";}
+  }
 
   // URL 파라미터로 자동 로그인
   (function(){
