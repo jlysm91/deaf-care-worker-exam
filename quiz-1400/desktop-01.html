@@ -2007,7 +2007,7 @@
         if(ans)btn.classList.add("answered");
         if(realIdx===currentQuestionIndex)btn.classList.add("active");
       } else {
-        btn.style.visibility="hidden";
+        btn.style.opacity="0";
         btn.style.pointerEvents="none";
       }
       quickNavGrid.appendChild(btn);
@@ -2116,6 +2116,8 @@
     const gridH=navH-padV-headerH;
     const btnH=Math.max(14,Math.min(28,Math.floor((gridH-rowGaps)/8)));
     document.documentElement.style.setProperty("--nav-btn-height",btnH+"px");
+    // 문항 수와 무관하게 그리드 높이를 항상 8행 기준으로 고정
+    grid.style.height=(btnH*8+rowGaps)+"px";
   }
 
   window.addEventListener("resize",()=>{applyResponsiveLayout();fitQuestionText();requestAnimationFrame(autoResizeNavGrid);});
