@@ -50,7 +50,7 @@
     /* ━━━ 퀴즈 페이지 ━━━ */
     #quiz-page{display:none;grid-template-rows:1fr auto;height:100vh;padding:clamp(14px,1.8vh,22px) clamp(18px,2vw,28px);gap:clamp(5px,.6vw,10px);background:var(--bg);overflow:hidden;}
     .quiz-top{display:flex;gap:clamp(5px,.6vw,10px);align-items:stretch;min-height:0;overflow:hidden;}
-    #video-container{flex:0 0 63%;border-radius:14px;overflow:hidden;align-self:stretch;display:flex;flex-direction:column;background:#000;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+    #video-container{flex:0 0 63%;border-radius:14px;overflow:hidden;align-self:stretch;display:flex;flex-direction:column;background:var(--surface);box-shadow:0 2px 12px rgba(0,0,0,0.06);}
     .video-wrapper{width:100%;flex:1 1 auto;position:relative;height:100%;}
     .video-wrapper>div{position:absolute!important;inset:0!important;padding:0!important;}
     .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
@@ -1942,6 +1942,14 @@
     quizPage.style.display="grid";
     document.getElementById("quick-nav-container").style.display="flex";
     currentNavPage=0;
+    // 80문항 미만이면 이전/다음 화살표 버튼 숨기기
+    if(TOTAL_QUESTIONS<=NAV_PAGE_SIZE){
+      navPrevBtn.style.display="none";
+      navNextBtn.style.display="none";
+    } else {
+      navPrevBtn.style.display="flex";
+      navNextBtn.style.display="flex";
+    }
     updateQuestion(currentQuestionIndex);
     updateNavDisplay();
     requestAnimationFrame(autoResizeNavGrid);
