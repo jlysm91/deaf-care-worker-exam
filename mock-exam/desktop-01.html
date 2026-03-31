@@ -721,8 +721,11 @@
       document.documentElement.style.setProperty("--nav-btn-height",btnH+"px");
       const fixedGridH=btnH*8+rowGaps;
       grid.style.height=fixedGridH+"px";
+      const navHeader=document.querySelector(".nav-header");
+      const headerMarginB=navHeader?parseFloat(getComputedStyle(navHeader).marginBottom)||0:0;
+      const fixedNavH=fixedGridH+padV+headerH+headerMarginB;
       const quizPage=document.getElementById("quiz-page");
-      if(quizPage) quizPage.style.gridTemplateRows="1fr "+(fixedGridH+padV+headerH)+"px";
+      if(quizPage) quizPage.style.gridTemplateRows="1fr "+fixedNavH+"px";
     }
 
     window.addEventListener("resize",()=>{
