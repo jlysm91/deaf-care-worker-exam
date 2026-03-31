@@ -413,7 +413,12 @@
       }
     }
 
-    window.addEventListener('resize', applyResponsiveLayout);
+    window.addEventListener('resize', ()=>{
+      applyResponsiveLayout();
+      fitQuestionText();
+      fitOptionsText();
+      requestAnimationFrame(autoResizeNavGrid);
+    });
 
     const EXAM_ID = "exam8";
     const firebaseConfig = {
@@ -445,6 +450,51 @@
       while(h3.scrollHeight > maxH + 2 && size > 12){
         size -= 0.5;
         h3.style.fontSize = size + "px";
+      }
+    }
+
+    function fitOptionsText(){
+      const quizContent = document.getElementById("quiz-content");
+      const optionsWrap = document.getElementById("options");
+      const labels = document.querySelectorAll("#options label");
+      if(!quizContent || !labels.length) return;
+
+      // 1단계: 기본 크기/패딩으로 초기화
+      labels.forEach(l => { l.style.fontSize = ""; l.style.paddingTop = ""; l.style.paddingBottom = ""; });
+      optionsWrap.style.gap = "";
+      const defaultSize = parseFloat(getComputedStyle(labels[0]).fontSize);
+
+      // 2단계: 두 줄인 선택지만 개별로 최대 8% 이내 조금 축소
+      labels.forEach(label => {
+        label.style.whiteSpace = "nowrap";
+        const oneLineH = label.scrollHeight;
+        label.style.whiteSpace = "";
+        if(label.scrollHeight > oneLineH * 1.3){
+          const minSize = defaultSize * 0.92;
+          let size = defaultSize;
+          while(label.scrollHeight > oneLineH * 1.3 && size > minSize){
+            size -= 0.2;
+            label.style.fontSize = size + "px";
+          }
+        }
+      });
+
+      // 3단계: 전체가 넘치면 → 상하 패딩만 줄이기 (간격/좌우패딩 유지)
+      if(quizContent.scrollHeight > quizContent.clientHeight + 2){
+        let pad = parseFloat(getComputedStyle(labels[0]).paddingTop) || 9;
+        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && pad > 4){
+          pad -= 0.5;
+          labels.forEach(l => { l.style.paddingTop = pad + "px"; l.style.paddingBottom = pad + "px"; });
+        }
+      }
+
+      // 4단계: 그래도 넘치면 → 폰트 최소 15px까지만 축소
+      if(quizContent.scrollHeight > quizContent.clientHeight + 2){
+        let size = parseFloat(getComputedStyle(labels[0]).fontSize);
+        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && size > 15){
+          size -= 0.2;
+          labels.forEach(l => l.style.fontSize = size + "px");
+        }
       }
     }
 
@@ -559,6 +609,7 @@
       requestAnimationFrame(()=>{
         applyResponsiveLayout();
         fitQuestionText();
+        fitOptionsText();
         requestAnimationFrame(()=>{
           autoResizeNavGrid();
           requestAnimationFrame(autoResizeNavGrid);
@@ -581,6 +632,7 @@
       currentQuestionSpan.textContent=currentQuestionIndex+1;
       totalQuestionsSpan.textContent=TOTAL_QUESTIONS;
       requestAnimationFrame(fitQuestionText);
+      requestAnimationFrame(fitOptionsText);
       optionsDiv.innerHTML="";
       question.options.forEach((option,i)=>{
         const label=document.createElement("label");
@@ -731,6 +783,7 @@
     window.addEventListener("resize",()=>{
       applyResponsiveLayout();
       fitQuestionText();
+      fitOptionsText();
       requestAnimationFrame(autoResizeNavGrid);
     });
 
