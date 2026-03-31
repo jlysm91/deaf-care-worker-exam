@@ -197,6 +197,15 @@
   const firebaseConfig={apiKey:"AIzaSyDrff8zRQ6DuPFABxW_-9DPzbdTetDYHDk",authDomain:"deaf-for-database-develo-59bf8.firebaseapp.com",databaseURL:"https://deaf-for-database-develo-59bf8-default-rtdb.firebaseio.com",projectId:"deaf-for-database-develo-59bf8",storageBucket:"deaf-for-database-develo-59bf8.appspot.com",messagingSenderId:"735390767125",appId:"1:735390767125:web:d1df8b89b1b3451bf1161c"};
   firebase.initializeApp(firebaseConfig);
   const database=firebase.database();
+  // Firebase는 null이 포함된 배열을 객체로 변환하므로 다시 배열로 복원
+  function toAnswersArray(raw, total){
+    if(!raw) return new Array(total).fill(null);
+    if(Array.isArray(raw)) return raw;
+    const arr = new Array(total).fill(null);
+    Object.keys(raw).forEach(k => { arr[parseInt(k)] = raw[k]; });
+    return arr;
+  }
+
   const chapterToExamId={5:"exam25",6:"exam26",7:"exam27"};
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1766,7 +1775,7 @@
           type:"examResult1400",
           total:data.result.total,
           totalQuestions:data.result.totalQuestions||TOTAL_QUESTIONS,
-          answers:data.result.answers||[],
+          answers:toAnswersArray(data.result.answers, data.result.totalQuestions||TOTAL_QUESTIONS),
           correctAnswers:quizData.map(q=>q.correctAnswer),
           name:currentUserName,uid:currentUserId,
           examId:EXAM_ID,
@@ -1783,7 +1792,7 @@
         showResult({total:data.result.total,totalQ:data.result.totalQuestions||TOTAL_QUESTIONS,answers:data.result.answers||[],name:currentUserName});
       } else if(data&&data.progress){
         currentQuestionIndex=data.progress.currentQuestion||0;
-        userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);
+        userAnswers=toAnswersArray(data.progress.answers, TOTAL_QUESTIONS);
         showQuizPage();
       } else {
         currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
