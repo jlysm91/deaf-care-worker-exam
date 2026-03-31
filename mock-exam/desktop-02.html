@@ -455,11 +455,13 @@
 
     function fitOptionsText(){
       const quizContent = document.getElementById("quiz-content");
+      const optionsWrap = document.getElementById("options");
       const labels = document.querySelectorAll("#options label");
       if(!quizContent || !labels.length) return;
 
-      // 1단계: 기본 크기로 초기화
-      labels.forEach(l => l.style.fontSize = "");
+      // 1단계: 기본 크기/패딩/간격으로 초기화
+      labels.forEach(l => { l.style.fontSize = ""; l.style.padding = ""; });
+      optionsWrap.style.gap = "";
       const defaultSize = parseFloat(getComputedStyle(labels[0]).fontSize);
 
       // 2단계: 두 줄인 선택지만 개별로 최대 8% 이내 조금 축소
@@ -477,10 +479,25 @@
         }
       });
 
-      // 3단계: 그래도 전체가 넘치면 → 모든 선택지 함께 추가 축소 (최소 13px까지)
+      // 3단계: 전체가 넘치면 → 패딩/간격을 먼저 줄이기
+      if(quizContent.scrollHeight > quizContent.clientHeight + 2){
+        let gap = parseFloat(getComputedStyle(optionsWrap).gap) || 8;
+        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && gap > 3){
+          gap -= 0.5;
+          optionsWrap.style.gap = gap + "px";
+        }
+        // 패딩도 줄이기
+        let pad = parseFloat(getComputedStyle(labels[0]).paddingTop) || 9;
+        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && pad > 5){
+          pad -= 0.5;
+          labels.forEach(l => l.style.padding = pad + "px " + (pad * 1.4) + "px");
+        }
+      }
+
+      // 4단계: 그래도 넘치면 → 폰트 최소 15px까지만 축소
       if(quizContent.scrollHeight > quizContent.clientHeight + 2){
         let size = parseFloat(getComputedStyle(labels[0]).fontSize);
-        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && size > 13){
+        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && size > 15){
           size -= 0.2;
           labels.forEach(l => l.style.fontSize = size + "px");
         }
