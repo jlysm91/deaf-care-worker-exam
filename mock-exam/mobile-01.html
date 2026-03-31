@@ -865,12 +865,18 @@
 
     function buildSheetGrid() {
       sheetGrid.innerHTML = "";
-      for (let i = 0; i < TOTAL; i++) {
+      const FIXED_SIZE = 80;
+      for (let i = 0; i < FIXED_SIZE; i++) {
         const btn = document.createElement("div");
         btn.className = "sheet-nav-btn";
-        btn.dataset.q = i;
-        btn.innerHTML = `<div class="sn-num">${i+1}</div><div class="sn-ans"></div>`;
-        btn.addEventListener("click", () => { updateQuestion(i); saveProgress(); closeSheet(); });
+        if (i < TOTAL) {
+          btn.dataset.q = i;
+          btn.innerHTML = `<div class="sn-num">${i+1}</div><div class="sn-ans"></div>`;
+          btn.addEventListener("click", () => { updateQuestion(i); saveProgress(); closeSheet(); });
+        } else {
+          btn.style.opacity = "0";
+          btn.style.pointerEvents = "none";
+        }
         sheetGrid.appendChild(btn);
       }
       updateSheetGrid();
