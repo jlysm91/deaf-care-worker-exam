@@ -477,12 +477,11 @@
         }
       });
 
-      // 3단계: 그래도 전체가 넘치면 → 모든 선택지 함께 추가 축소 (최대 15% 이내)
+      // 3단계: 그래도 전체가 넘치면 → 모든 선택지 함께 추가 축소 (최소 13px까지)
       if(quizContent.scrollHeight > quizContent.clientHeight + 2){
-        const minTotal = defaultSize * 0.85;
         let size = parseFloat(getComputedStyle(labels[0]).fontSize);
-        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && size > minTotal){
-          size -= 0.3;
+        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && size > 13){
+          size -= 0.2;
           labels.forEach(l => l.style.fontSize = size + "px");
         }
       }
