@@ -460,28 +460,29 @@
 
       // 1단계: 기본 크기로 초기화
       labels.forEach(l => l.style.fontSize = "");
+      const defaultSize = parseFloat(getComputedStyle(labels[0]).fontSize);
 
-      // 2단계: 각 선택지 개별 축소 (두 줄이면 최대 15% 이내 조금만 줄이기)
+      // 2단계: 두 줄인 선택지만 개별로 최대 8% 이내 조금 축소
       labels.forEach(label => {
         label.style.whiteSpace = "nowrap";
         const oneLineH = label.scrollHeight;
         label.style.whiteSpace = "";
         if(label.scrollHeight > oneLineH * 1.3){
-          const defaultSize = parseFloat(getComputedStyle(label).fontSize);
-          const minSize = defaultSize * 0.85;
+          const minSize = defaultSize * 0.92;
           let size = defaultSize;
           while(label.scrollHeight > oneLineH * 1.3 && size > minSize){
-            size -= 0.3;
+            size -= 0.2;
             label.style.fontSize = size + "px";
           }
         }
       });
 
-      // 3단계: 그래도 전체가 넘치면 → 모든 선택지 함께 추가 축소
+      // 3단계: 그래도 전체가 넘치면 → 모든 선택지 함께 추가 축소 (최대 15% 이내)
       if(quizContent.scrollHeight > quizContent.clientHeight + 2){
+        const minTotal = defaultSize * 0.85;
         let size = parseFloat(getComputedStyle(labels[0]).fontSize);
-        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && size > 12){
-          size -= 0.5;
+        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && size > minTotal){
+          size -= 0.3;
           labels.forEach(l => l.style.fontSize = size + "px");
         }
       }
