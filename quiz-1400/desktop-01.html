@@ -521,11 +521,11 @@
     const gridH=navH-padV-headerH;
     const btnH=Math.max(14,Math.min(28,Math.floor((gridH-rowGaps)/8)));
     document.documentElement.style.setProperty("--nav-btn-height",btnH+"px");
-    // 그리드 높이 항상 8행 고정
     const fixedGridH=btnH*8+rowGaps;
     grid.style.height=fixedGridH+"px";
-    // quiz-page의 nav 행 높이도 직접 고정 → 영상+문제 영역 크기 일정하게 유지
-    const fixedNavH=fixedGridH+padV+headerH;
+    const navHeader=document.querySelector(".nav-header");
+    const headerMarginB=navHeader?parseFloat(getComputedStyle(navHeader).marginBottom)||0:0;
+    const fixedNavH=fixedGridH+padV+headerH+headerMarginB;
     const quizPage=document.getElementById("quiz-page");
     if(quizPage) quizPage.style.gridTemplateRows="1fr "+fixedNavH+"px";
   }
