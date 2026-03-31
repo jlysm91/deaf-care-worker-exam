@@ -607,10 +607,17 @@
 
     function createQuickNavButtons(){
       quickNavGrid.innerHTML="";
-      for(let i=1;i<=TOTAL_QUESTIONS;i++){
+      const FIXED_SIZE=80;
+      for(let i=0;i<FIXED_SIZE;i++){
         const btn=document.createElement("div");
-        btn.textContent=i;btn.classList.add("nav-btn");btn.dataset.q=i-1;
-        btn.draggable=false;btn.addEventListener("mousedown",e=>e.preventDefault());
+        btn.classList.add("nav-btn");
+        if(i<TOTAL_QUESTIONS){
+          btn.textContent=i+1;btn.dataset.q=i;
+          btn.draggable=false;btn.addEventListener("mousedown",e=>e.preventDefault());
+        } else {
+          btn.style.opacity="0";
+          btn.style.pointerEvents="none";
+        }
         quickNavGrid.appendChild(btn);
       }
     }
@@ -712,6 +719,10 @@
       const gridH=navH-padV-headerH;
       const btnH=Math.max(14,Math.min(28,Math.floor((gridH-rowGaps)/8)));
       document.documentElement.style.setProperty("--nav-btn-height",btnH+"px");
+      const fixedGridH=btnH*8+rowGaps;
+      grid.style.height=fixedGridH+"px";
+      const quizPage=document.getElementById("quiz-page");
+      if(quizPage) quizPage.style.gridTemplateRows="1fr "+(fixedGridH+padV+headerH)+"px";
     }
 
     window.addEventListener("resize",()=>{
