@@ -413,7 +413,12 @@
       }
     }
 
-    window.addEventListener('resize', applyResponsiveLayout);
+    window.addEventListener('resize', ()=>{
+      applyResponsiveLayout();
+      fitQuestionText();
+      fitOptionsText();
+      requestAnimationFrame(autoResizeNavGrid);
+    });
 
     const EXAM_ID = "exam1";
     const firebaseConfig = {
@@ -445,6 +450,21 @@
       while(h3.scrollHeight > maxH + 2 && size > 12){
         size -= 0.5;
         h3.style.fontSize = size + "px";
+      }
+    }
+
+    function fitOptionsText(){
+      const quizContent = document.getElementById("quiz-content");
+      const container = document.getElementById("quiz-container");
+      const labels = document.querySelectorAll("#options label");
+      if(!quizContent || !container || !labels.length) return;
+      // 최대/최소 폰트 크기 설정
+      let size = Math.min(24, Math.max(12, container.clientWidth * 0.018));
+      labels.forEach(l => l.style.fontSize = size + "px");
+      // quiz-content가 넘치면 줄이기
+      while(quizContent.scrollHeight > quizContent.clientHeight + 2 && size > 12){
+        size -= 0.5;
+        labels.forEach(l => l.style.fontSize = size + "px");
       }
     }
 
@@ -559,6 +579,7 @@
       requestAnimationFrame(()=>{
         applyResponsiveLayout();
         fitQuestionText();
+        fitOptionsText();
         requestAnimationFrame(()=>{
           autoResizeNavGrid();
           requestAnimationFrame(autoResizeNavGrid);
@@ -581,6 +602,7 @@
       currentQuestionSpan.textContent=currentQuestionIndex+1;
       totalQuestionsSpan.textContent=TOTAL_QUESTIONS;
       requestAnimationFrame(fitQuestionText);
+      requestAnimationFrame(fitOptionsText);
       optionsDiv.innerHTML="";
       question.options.forEach((option,i)=>{
         const label=document.createElement("label");
@@ -700,6 +722,7 @@
       if(e.target.classList.contains("nav-btn")){updateQuestion(parseInt(e.target.dataset.q));saveQuizProgress();}
     });
     optionsDiv.addEventListener("change",e=>{
+      requestAnimationFrame(fitOptionsText);
       const ans=parseInt(e.target.value);userAnswers[currentQuestionIndex]=ans;saveQuizProgress();
       const btn=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
       if(btn){btn.textContent=`${currentQuestionIndex+1}(${ans})`;btn.classList.add("answered");}
