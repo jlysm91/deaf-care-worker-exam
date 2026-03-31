@@ -4050,10 +4050,21 @@
       ref.child("result").set({total:correct,totalQuestions:TOTAL_QUESTIONS,answers:userAnswers});
       ref.child("progress").remove();
     }
+    const resultData={
+      type:"examResult1400",
+      total:correct,totalQuestions:TOTAL_QUESTIONS,
+      answers:userAnswers,
+      correctAnswers:quizData.map(q=>q.correctAnswer),
+      name:currentUserName,uid:currentUserId,
+      examId:EXAM_ID,
+      chapterLabel:document.getElementById("result-badge").textContent
+    };
+    try{if(window.opener&&!window.opener.closed){window.opener.postMessage(resultData,"*");}}catch(e){}
     quizPage.style.display="none";
     document.getElementById("quick-nav-container").style.display="none";
     showResult({total:correct,totalQ:TOTAL_QUESTIONS,answers:userAnswers,name:currentUserName});
     alert("제출 완료하였습니다!");
+    try{window.close();}catch(e){}
   }
 
   function showResult(d){
