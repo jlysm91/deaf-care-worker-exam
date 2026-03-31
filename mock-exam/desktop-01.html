@@ -454,18 +454,25 @@
     }
 
     function fitOptionsText(){
-      const quizContent = document.getElementById("quiz-content");
-      const container = document.getElementById("quiz-container");
       const labels = document.querySelectorAll("#options label");
-      if(!quizContent || !container || !labels.length) return;
-      // 최대/최소 폰트 크기 설정
-      let size = Math.min(24, Math.max(12, container.clientWidth * 0.018));
-      labels.forEach(l => l.style.fontSize = size + "px");
-      // quiz-content가 넘치면 줄이기
-      while(quizContent.scrollHeight > quizContent.clientHeight + 2 && size > 12){
-        size -= 0.5;
-        labels.forEach(l => l.style.fontSize = size + "px");
-      }
+      if(!labels.length) return;
+      // 각 선택지 개별적으로 처리 - 두 줄이면 한 줄에 맞게만 줄이기
+      labels.forEach(label => {
+        // 먼저 CSS 기본 크기로 초기화
+        label.style.fontSize = "";
+        const singleLineH = label.scrollHeight;
+        // 실제로 두 줄 이상인지 확인
+        const lineH = parseFloat(getComputedStyle(label).lineHeight) || 
+                      parseFloat(getComputedStyle(label).fontSize) * 1.5;
+        if(label.scrollHeight > lineH * 1.4){
+          // 두 줄 이상 → 한 줄에 맞게 줄이기
+          let size = parseFloat(getComputedStyle(label).fontSize);
+          while(label.scrollHeight > lineH * 1.4 && size > 12){
+            size -= 0.5;
+            label.style.fontSize = size + "px";
+          }
+        }
+      });
     }
 
     const quizRawData = [
