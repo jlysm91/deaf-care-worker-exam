@@ -253,6 +253,15 @@
   firebase.initializeApp(firebaseConfig);
   const database=firebase.database();
 
+  // Firebase는 null이 포함된 배열을 객체로 변환하므로 다시 배열로 복원
+  function toAnswersArray(raw, total){
+    if(!raw) return new Array(total).fill(null);
+    if(Array.isArray(raw)) return raw;
+    const arr = new Array(total).fill(null);
+    Object.keys(raw).forEach(k => { arr[parseInt(k)] = raw[k]; });
+    return arr;
+  }
+
   const chapterToExamId={8:"exam38",9:"exam39",11:"exam311"};
   const sectionToExamId={1:"exam3101",2:"exam3102",3:"exam3103",4:"exam3104",5:"exam3105",6:"exam3106"};
 
@@ -3963,7 +3972,7 @@
           type:"examResult1400",
           total:data.result.total,
           totalQuestions:data.result.totalQuestions||TOTAL_QUESTIONS,
-          answers:data.result.answers||[],
+          answers:toAnswersArray(data.result.answers, data.result.totalQuestions||TOTAL_QUESTIONS),
           correctAnswers:quizData.map(q=>q.correctAnswer),
           name:currentUserName,uid:currentUserId,
           examId:EXAM_ID,
@@ -3980,7 +3989,7 @@
         showResult({total:data.result.total,totalQ:data.result.totalQuestions||TOTAL_QUESTIONS,answers:data.result.answers||[],name:currentUserName});
       } else if(data&&data.progress){
         currentQuestionIndex=data.progress.currentQuestion||0;
-        userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);
+        userAnswers=toAnswersArray(data.progress.answers, TOTAL_QUESTIONS);
         prevPage.style.display="none";showQuizPage();
       } else {
         currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
