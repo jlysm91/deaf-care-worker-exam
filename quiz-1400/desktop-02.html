@@ -1762,6 +1762,23 @@
     database.ref(`exams/${EXAM_ID}/users/${uid}`).once("value").then(snap=>{
       const data=snap.val();
       if(data&&data.result){
+        const resultData={
+          type:"examResult1400",
+          total:data.result.total,
+          totalQuestions:data.result.totalQuestions||TOTAL_QUESTIONS,
+          answers:data.result.answers||[],
+          correctAnswers:quizData.map(q=>q.correctAnswer),
+          name:currentUserName,uid:currentUserId,
+          examId:EXAM_ID,
+          chapterLabel:document.getElementById("result-badge").textContent
+        };
+        try{
+          if(window.opener&&!window.opener.closed){
+            window.opener.postMessage(resultData,"*");
+            window.close();return;
+          }
+        }catch(e){}
+        // opener 없을 때 fallback
         chapterSelectPage.style.display="none";
         showResult({total:data.result.total,totalQ:data.result.totalQuestions||TOTAL_QUESTIONS,answers:data.result.answers||[],name:currentUserName});
       } else if(data&&data.progress){
