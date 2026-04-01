@@ -4223,9 +4223,39 @@
   (function(){
     const params=new URLSearchParams(location.search);
     const uid=params.get("uid")||"";const name=params.get("name")||"";
+    const chapterParam=params.get("chapter");
+    const sectionParam=params.get("section");
     if(uid&&name){
       document.getElementById("user-id").value=uid;document.getElementById("user-name").value=name;
       currentUserId=uid;currentUserName=name;
+      if(chapterParam){
+        // 장 파라미터 - 8장, 9장, 11장
+        const ch=parseInt(chapterParam);
+        if(allChapterData[ch]){
+          currentChapter=ch;currentSection=0;
+          EXAM_ID=chapterToExamId[ch];
+          quizData=allChapterData[ch].map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+          TOTAL_QUESTIONS=quizData.length;
+          userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+          document.getElementById("result-badge").textContent=ch+"장";
+          startQuiz(uid);
+          return;
+        }
+      }
+      if(sectionParam){
+        // 절 파라미터 - 10장 1~6절
+        const sec=parseInt(sectionParam);
+        if(allSectionData[sec]){
+          currentChapter=10;currentSection=sec;
+          EXAM_ID=sectionToExamId[sec];
+          quizData=allSectionData[sec].map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+          TOTAL_QUESTIONS=quizData.length;
+          userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+          document.getElementById("result-badge").textContent="10장 "+sec+"절";
+          startQuiz(uid);
+          return;
+        }
+      }
       chapterSelectPage.style.display="flex";loadChapterResults();
     }
   })();
