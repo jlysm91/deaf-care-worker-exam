@@ -2235,10 +2235,24 @@
     const params=new URLSearchParams(location.search);
     const uid=params.get("uid")||"";
     const name=params.get("name")||"";
+    const chapterParam=params.get("chapter");
     if(uid&&name){
       document.getElementById("user-id").value=uid;
       document.getElementById("user-name").value=name;
-      currentUserId=uid; currentUserName=name;
+      currentUserId=uid;currentUserName=name;
+      if(chapterParam){
+        const ch=parseInt(chapterParam);
+        if(allChapterData[ch]){
+          currentChapter=ch;
+          EXAM_ID=chapterToExamId[ch];
+          quizData=allChapterData[ch].map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+          TOTAL_QUESTIONS=quizData.length;
+          userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+          document.getElementById("result-badge").textContent=ch+"장";
+          startQuiz(uid);
+          return;
+        }
+      }
       chapterSelectPage.style.display="flex";
       loadChapterResults();
     }
