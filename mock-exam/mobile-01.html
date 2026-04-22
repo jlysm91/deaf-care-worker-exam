@@ -333,30 +333,16 @@
       font-size: 11px; font-weight: 700; color: var(--text-muted);
       text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;
     }
-    #quick-nav-grid-result { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: clamp(3px, 0.6vw, 6px); margin-bottom: 40px; width: 100%; }
+    #quick-nav-grid-result { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(60px, calc((100% - 45px) / 10)), 1fr)); gap: 5px; margin-bottom: 40px; width: 100%; }
     #quick-nav-grid-result .nav-btn {
       height: auto; line-height: 1;
-      padding: clamp(4px, 1vh, 9px) clamp(1px, 0.4vw, 4px);
+      padding: 8px 4px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: clamp(2px, 0.4vh, 4px); cursor: default; border-radius: 7px;
+      gap: 3px; cursor: default; border-radius: 7px;
       min-width: 0; overflow: hidden;
     }
-    #quick-nav-grid-result .nav-btn .number { font-size: clamp(11px, 1.2vw, 14px); font-weight: 700; }
-    #quick-nav-grid-result .nav-btn .detail { font-size: clamp(8px, 0.85vw, 9px); line-height: 1.3; opacity: 0.85; white-space: nowrap; }
-
-    /* 모바일: 좁은 화면에서 5열 × 16행으로 자동 전환 (가독성 우선) */
-    @media (max-width: 600px) {
-      #quick-nav-grid-result {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 5px;
-      }
-      #quick-nav-grid-result .nav-btn {
-        padding: 10px 6px;
-        gap: 4px;
-      }
-      #quick-nav-grid-result .nav-btn .number { font-size: 14px; }
-      #quick-nav-grid-result .nav-btn .detail { font-size: 11px; }
-    }
+    #quick-nav-grid-result .nav-btn .number { font-size: 14px; font-weight: 700; }
+    #quick-nav-grid-result .nav-btn .detail { font-size: 9px; line-height: 1.3; opacity: 0.85; white-space: nowrap; }
     #result-return-btn {
       padding: 14px 48px;
       font-size: clamp(13px, 1.2vw, 15px);
@@ -438,7 +424,6 @@
       fitQuestionText();
       fitOptionsText();
       requestAnimationFrame(autoResizeNavGrid);
-      fitResultGrid();
     });
 
     const EXAM_ID = "exam1";
@@ -748,34 +733,6 @@
         div.classList.add(ua!=="-"&&ua===q.correctAnswer?"correct":"incorrect");
         grid.appendChild(div);
       });
-      setTimeout(fitResultGrid,60);
-    }
-
-    function fitResultGrid(){
-      const grid=document.getElementById("quick-nav-grid-result");
-      const container=document.getElementById("quick-nav-container-result");
-      if(!grid||!container)return;
-      const w=container.offsetWidth;
-      document.title="폭:"+w;
-      if(w>0 && w<=600){
-        grid.style.gridTemplateColumns="repeat(5, minmax(0, 1fr))";
-        grid.style.gap="5px";
-        grid.querySelectorAll(".nav-btn").forEach(function(btn){
-          btn.style.padding="10px 6px";
-          var n=btn.querySelector(".number"),d=btn.querySelector(".detail");
-          if(n)n.style.fontSize="14px";
-          if(d)d.style.fontSize="11px";
-        });
-      }else{
-        grid.style.gridTemplateColumns="repeat(10, minmax(0, 1fr))";
-        grid.style.gap="";
-        grid.querySelectorAll(".nav-btn").forEach(function(btn){
-          btn.style.padding="";
-          var n=btn.querySelector(".number"),d=btn.querySelector(".detail");
-          if(n)n.style.fontSize="";
-          if(d)d.style.fontSize="";
-        });
-      }
     }
 
     (function(){
@@ -836,7 +793,6 @@
       applyResponsiveLayout();
       fitQuestionText();
       requestAnimationFrame(autoResizeNavGrid);
-      fitResultGrid();
     });
 
     document.addEventListener("dragstart",e=>e.preventDefault());
