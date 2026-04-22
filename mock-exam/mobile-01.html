@@ -811,16 +811,18 @@
         }
       });
       const 총점 = 필기 + 실기;
+      const 합격여부 = (필기 >= 21 && 실기 >= 27) ? "합격" : "불합격";
       const uname = document.getElementById("user-name").value.trim();
       if (currentUserId) {
         const ref = database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
         ref.child("result").set({ total: 총점, 필기, 실기, answers: userAnswers });
         ref.child("progress").remove();
       }
-      const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSdpxneZyV9yTdMvI-jaaIdkE50RdNuIHP161SFVk2m5rX8fQA/formResponse";
+      const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
       const fd = new FormData();
       fd.append("entry.295783163", uname);
       fd.append("entry.516479247", `${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
+      fd.append("entry.516661777", 합격여부);
       fetch(googleFormURL, { method: "POST", body: fd, mode: "no-cors" }).catch(console.error);
       try {
         if (window.opener && !window.opener.closed) {
