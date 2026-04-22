@@ -823,7 +823,7 @@
       fd.append("entry.295783163", uname);
       fd.append("entry.516479247", `${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
       fd.append("entry.516661777", 합격여부);
-      fetch(googleFormURL, { method: "POST", body: fd, mode: "no-cors" }).catch(console.error);
+      fetch(googleFormURL, { method: "POST", body: fd, mode: "no-cors", keepalive: true }).catch(console.error);
       try {
         if (window.opener && !window.opener.closed) {
           window.opener.postMessage({ type: "examResult", total: 총점, 필기, 실기, answers: userAnswers, correctAnswers: quizData.map(q => q.correctAnswer), name: uname, uid: currentUserId }, "*");
