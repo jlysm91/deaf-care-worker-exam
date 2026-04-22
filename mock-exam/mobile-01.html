@@ -864,7 +864,7 @@
       const wrap = document.querySelector(".r-grid-wrap");
       const grid = document.getElementById("r-grid");
       if (!wrap || !grid) return;
-      const available = wrap.offsetWidth - 20;
+      const available = wrap.getBoundingClientRect().width - 20;  // ← 변경
       const cellW = Math.max(Math.floor((available - 36) / 10), 24);
       grid.style.gridTemplateColumns = `repeat(10, ${cellW}px)`;
     }
