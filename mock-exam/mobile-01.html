@@ -422,7 +422,6 @@
       height: 100vh;
       height: 100dvh;
       overflow-y: auto;
-      overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
       background: var(--bg);
       padding: 20px 16px;
@@ -431,6 +430,8 @@
       gap: 14px;
     }
     #result-page::-webkit-scrollbar { display: none; }
+    /* iOS Safari: overflow-x:hidden을 별도 래퍼 없이 같은 요소에 쓰면 클리핑 안 됨 */
+    /* 대신 r-grid-wrap의 overflow:hidden으로 처리 */
 
     .r-header { text-align: center; }
     .r-badge {
@@ -472,6 +473,9 @@
       border-radius: 14px;
       padding: 14px 10px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      overflow: hidden;
+      max-width: 100%;
+      box-sizing: border-box;
     }
     .r-grid-label {
       font-size: 11px;
@@ -857,22 +861,28 @@
         cell.innerHTML = `<div class="rn">${i+1}</div><div class="rm">C:${ca}/M:${ua}</div>`;
         grid.appendChild(cell);
       }
-      setTimeout(() => autoResizeResultGrid(), 0);
+      setTimeout(() => autoResizeResultGrid(), 100);
     }
 
     function autoResizeResultGrid() {
       const grid = document.getElementById("r-grid");
-      if (!grid) return;
-      // body.clientWidth = iframe 내부 실제 너비
-      const bodyW = document.body.clientWidth;
-      const pagePad = 32;  // #result-page 좌우 padding 16px × 2
-      const wrapPad = 20;  // .r-grid-wrap 좌우 padding 10px × 2
-      const available = bodyW - pagePad - wrapPad;
-      const cellW = Math.max(Math.floor((available - 36) / 10), 20); // gap 4×9=36
+      const resultPage = document.getElementById("result-page");
+      if (!grid || !resultPage) return;
+      // documentElement.clientWidth = 가장 신뢰할 수 있는 iframe 내부 뷰포트 너비
+      const viewW = document.documentElement.clientWidth;
+      const pageStyle = window.getComputedStyle(resultPage);
+      const wrapEl = document.querySelector(".r-grid-wrap");
+      const wrapStyle = wrapEl ? window.getComputedStyle(wrapEl) : null;
+      const pagePadH = parseFloat(pageStyle.paddingLeft) + parseFloat(pageStyle.paddingRight);
+      const wrapPadH = wrapStyle
+        ? parseFloat(wrapStyle.paddingLeft) + parseFloat(wrapStyle.paddingRight)
+        : 20;
+      const available = viewW - pagePadH - wrapPadH;
+      const cellW = Math.max(Math.floor((available - 36) / 10), 20);
       grid.style.gridTemplateColumns = `repeat(10, ${cellW}px)`;
     }
 
-    window.addEventListener("resize", () => setTimeout(() => autoResizeResultGrid(), 0));
+    window.addEventListener("resize", () => setTimeout(() => autoResizeResultGrid(), 100));
 
     document.getElementById("retry-btn").addEventListener("click", () => {
       if (!currentUserId) { location.reload(); return; }
