@@ -857,7 +857,7 @@
         cell.innerHTML = `<div class="rn">${i+1}</div><div class="rm">C:${ca}/M:${ua}</div>`;
         grid.appendChild(cell);
       }
-      autoResizeResultGrid();
+      requestAniMationFrame(() => autoResizeResultGrid());
     }
 
     function autoResizeResultGrid() {   // ← 함수 정의는 밖에
