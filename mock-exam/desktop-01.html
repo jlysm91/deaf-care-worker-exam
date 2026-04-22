@@ -424,6 +424,7 @@
       fitQuestionText();
       fitOptionsText();
       requestAnimationFrame(autoResizeNavGrid);
+      fitResultGrid();
     });
 
     const EXAM_ID = "exam1";
@@ -733,6 +734,33 @@
         div.classList.add(ua!=="-"&&ua===q.correctAnswer?"correct":"incorrect");
         grid.appendChild(div);
       });
+      setTimeout(fitResultGrid,60);
+    }
+
+    function fitResultGrid(){
+      const grid=document.getElementById("quick-nav-grid-result");
+      const container=document.getElementById("quick-nav-container-result");
+      if(!grid||!container)return;
+      const w=container.offsetWidth;
+      if(w>0 && w<=600){
+        grid.style.gridTemplateColumns="repeat(5, minmax(0, 1fr))";
+        grid.style.gap="5px";
+        grid.querySelectorAll(".nav-btn").forEach(function(btn){
+          btn.style.padding="10px 6px";
+          var n=btn.querySelector(".number"),d=btn.querySelector(".detail");
+          if(n)n.style.fontSize="14px";
+          if(d)d.style.fontSize="11px";
+        });
+      }else{
+        grid.style.gridTemplateColumns="repeat(10, minmax(0, 1fr))";
+        grid.style.gap="";
+        grid.querySelectorAll(".nav-btn").forEach(function(btn){
+          btn.style.padding="";
+          var n=btn.querySelector(".number"),d=btn.querySelector(".detail");
+          if(n)n.style.fontSize="";
+          if(d)d.style.fontSize="";
+        });
+      }
     }
 
     (function(){
@@ -793,6 +821,7 @@
       applyResponsiveLayout();
       fitQuestionText();
       requestAnimationFrame(autoResizeNavGrid);
+      fitResultGrid();
     });
 
     document.addEventListener("dragstart",e=>e.preventDefault());
