@@ -742,7 +742,7 @@
       const container=document.getElementById("quick-nav-container-result");
       if(!grid||!container)return;
       const w=container.offsetWidth;
-      alert("컨테이너 폭: " + w); 
+      document.title="폭:"+w;
       if(w>0 && w<=600){
         grid.style.gridTemplateColumns="repeat(5, minmax(0, 1fr))";
         grid.style.gap="5px";
