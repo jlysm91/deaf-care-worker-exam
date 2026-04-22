@@ -857,21 +857,22 @@
         cell.innerHTML = `<div class="rn">${i+1}</div><div class="rm">C:${ca}/M:${ua}</div>`;
         grid.appendChild(cell);
       }
-      requestAniMationFrame(() => autoResizeResultGrid());
+      setTimeout(() => autoResizeResultGrid(), 0);
     }
 
-    function autoResizeResultGrid() {   // ← 함수 정의는 밖에
-      const wrap = document.querySelector(".r-grid-wrap");
+    function autoResizeResultGrid() {
       const grid = document.getElementById("r-grid");
-      if (!wrap || !grid) return;
-      const available = wrap.getBoundingClientRect().width - 20;  // ← 변경
-      const cellW = Math.max(Math.floor((available - 36) / 10), 24);
+      if (!grid) return;
+      // body.clientWidth = iframe 내부 실제 너비
+      const bodyW = document.body.clientWidth;
+      const pagePad = 32;  // #result-page 좌우 padding 16px × 2
+      const wrapPad = 20;  // .r-grid-wrap 좌우 padding 10px × 2
+      const available = bodyW - pagePad - wrapPad;
+      const cellW = Math.max(Math.floor((available - 36) / 10), 20); // gap 4×9=36
       grid.style.gridTemplateColumns = `repeat(10, ${cellW}px)`;
     }
 
-    const _rGridObserver = new ResizeObserver(() => autoResizeResultGrid());
-    _rGridObserver.observe(document.querySelector(".r-grid-wrap") || document.body);
-    window.addEventListener("resize", autoResizeResultGrid);
+    window.addEventListener("resize", () => setTimeout(() => autoResizeResultGrid(), 0));
 
     document.getElementById("retry-btn").addEventListener("click", () => {
       if (!currentUserId) { location.reload(); return; }
