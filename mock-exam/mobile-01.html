@@ -857,7 +857,21 @@
         cell.innerHTML = `<div class="rn">${i+1}</div><div class="rm">C:${ca}/M:${ua}</div>`;
         grid.appendChild(cell);
       }
+      autoResizeResultGrid();
     }
+
+    function autoResizeResultGrid() {   // ← 함수 정의는 밖에
+      const wrap = document.querySelector(".r-grid-wrap");
+      const grid = document.getElementById("r-grid");
+      if (!wrap || !grid) return;
+      const available = wrap.offsetWidth - 20;
+      const cellW = Math.max(Math.floor((available - 36) / 10), 24);
+      grid.style.gridTemplateColumns = `repeat(10, ${cellW}px)`;
+    }
+
+    const _rGridObserver = new ResizeObserver(() => autoResizeResultGrid());
+    _rGridObserver.observe(document.querySelector(".r-grid-wrap") || document.body);
+    window.addEventListener("resize", autoResizeResultGrid);
 
     document.getElementById("retry-btn").addEventListener("click", () => {
       if (!currentUserId) { location.reload(); return; }
