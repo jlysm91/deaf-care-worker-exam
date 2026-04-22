@@ -685,6 +685,7 @@
         if(userAnswers[i]&&userAnswers[i]==item.correctAnswer){if(i<35)필기++;else 실기++;}
       });
       const 총점=필기+실기;
+      const 합격여부 = (필기 >= 21 && 실기 >= 27) ? "합격" : "불합격";
       quizPage.style.display="none";resultPage.style.display="flex";
       scoreSpan.textContent=`총점: ${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`;
       if(currentUserId){
@@ -697,6 +698,7 @@
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
+      fd.append("entry.516661777", 합격여부);
       fetch(googleFormURL,{method:"POST",body:fd,mode:"no-cors"}).catch(console.error);
       const resultData={type:"examResult",total:총점,필기:필기,실기:실기,answers:userAnswers,correctAnswers:quizData.map(q=>q.correctAnswer),name:userNameInput.value.trim()};
       try{if(window.opener&&!window.opener.closed){window.opener.postMessage(resultData,"*");}}catch(e){console.error(e);}
