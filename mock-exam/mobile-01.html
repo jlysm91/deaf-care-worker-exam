@@ -422,6 +422,7 @@
       height: 100vh;
       height: 100dvh;
       overflow-y: auto;
+      overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
       background: var(--bg);
       padding: 20px 16px;
@@ -430,8 +431,6 @@
       gap: 14px;
     }
     #result-page::-webkit-scrollbar { display: none; }
-    /* iOS Safari: overflow-x:hidden을 별도 래퍼 없이 같은 요소에 쓰면 클리핑 안 됨 */
-    /* 대신 r-grid-wrap의 overflow:hidden으로 처리 */
 
     .r-header { text-align: center; }
     .r-badge {
@@ -861,28 +860,28 @@
         cell.innerHTML = `<div class="rn">${i+1}</div><div class="rm">C:${ca}/M:${ua}</div>`;
         grid.appendChild(cell);
       }
-      setTimeout(() => autoResizeResultGrid(), 100);
+      setTimeout(() => autoResizeResultGrid(), 0);
     }
 
     function autoResizeResultGrid() {
       const grid = document.getElementById("r-grid");
-      const resultPage = document.getElementById("result-page");
-      if (!grid || !resultPage) return;
-      // documentElement.clientWidth = 가장 신뢰할 수 있는 iframe 내부 뷰포트 너비
-      const viewW = document.documentElement.clientWidth;
-      const pageStyle = window.getComputedStyle(resultPage);
-      const wrapEl = document.querySelector(".r-grid-wrap");
-      const wrapStyle = wrapEl ? window.getComputedStyle(wrapEl) : null;
-      const pagePadH = parseFloat(pageStyle.paddingLeft) + parseFloat(pageStyle.paddingRight);
-      const wrapPadH = wrapStyle
-        ? parseFloat(wrapStyle.paddingLeft) + parseFloat(wrapStyle.paddingRight)
-        : 20;
-      const available = viewW - pagePadH - wrapPadH;
-      const cellW = Math.max(Math.floor((available - 36) / 10), 20);
-      grid.style.gridTemplateColumns = `repeat(10, ${cellW}px)`;
+      const wrap = document.querySelector(".r-grid-wrap");
+      if (!grid || !wrap) return;
+      // 그리드를 잠깐 숨겨서 wrap이 원래 너비로 돌아오게 한 뒤 측정
+      grid.style.visibility = "hidden";
+      grid.style.gridTemplateColumns = "";
+      requestAnimationFrame(() => {
+        const wrapW = wrap.getBoundingClientRect().width;
+        grid.style.visibility = "";
+        if (wrapW < 10) return;
+        const padH = 20; // wrap 좌우 padding 10px × 2
+        const available = wrapW - padH;
+        const cellW = Math.max(Math.floor((available - 36) / 10), 20);
+        grid.style.gridTemplateColumns = `repeat(10, ${cellW}px)`;
+      });
     }
 
-    window.addEventListener("resize", () => setTimeout(() => autoResizeResultGrid(), 100));
+    window.addEventListener("resize", () => autoResizeResultGrid());
 
     document.getElementById("retry-btn").addEventListener("click", () => {
       if (!currentUserId) { location.reload(); return; }
