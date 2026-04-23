@@ -801,46 +801,58 @@
       width: 100% !important;
       max-width: 100% !important;
       min-width: 0 !important;
-      font-size: clamp(15px, 4.2vw, 22px) !important;
-      line-height: 1.32 !important;
+      font-size: var(--question-font-size, clamp(15px, 3.8vw, 18px)) !important;
+      line-height: 1.38 !important;
       margin-bottom: 8px !important;
       flex: 0 0 auto !important;
-      white-space: nowrap !important;
-      overflow: hidden !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
     #question-text {
       display: block;
       width: 100%;
       min-width: 0;
       max-width: 100%;
-      white-space: nowrap !important;
-      overflow: hidden !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
     #options {
-      flex: 0 0 auto !important;
+      flex: 1 1 auto !important;
       min-width: 0 !important;
+      min-height: 0 !important;
       width: 100% !important;
       max-width: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
     }
     #options label {
       width: 100% !important;
       max-width: 100% !important;
       min-width: 0 !important;
-      font-size: clamp(14px, 4.4vw, 20px) !important;
-      line-height: 1.26 !important;
+      min-height: var(--option-card-min-height, 50px) !important;
+      font-size: var(--option-font-size, clamp(16px, 4.2vw, 19px)) !important;
+      line-height: 1.28 !important;
       padding-top: 10px !important;
       padding-bottom: 10px !important;
-      flex: 0 0 auto !important;
-      white-space: nowrap !important;
+      flex: 1 1 0 !important;
+      white-space: normal !important;
       overflow: hidden !important;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
     #options label span {
       display: block;
       min-width: 0;
       max-width: 100%;
       flex: 1 1 auto;
-      white-space: nowrap !important;
-      overflow: hidden !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
 
     #navigation-buttons {
@@ -1130,37 +1142,24 @@ const EXAM_ID = "exam1";
       return `<div style="position:relative;width:100%;height:100%;"><iframe src="https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="${title}"></iframe></div>`;
     }
 
-    function getContentWidth(el){
-      const cs=getComputedStyle(el);
-      const pad=(parseFloat(cs.paddingLeft)||0)+(parseFloat(cs.paddingRight)||0);
-      return Math.max(0,el.clientWidth-pad);
-    }
-
-    function fitSingleLineText(textEl,sizeEl,maxSize,minSize){
-      if(!textEl||!sizeEl)return;
-      textEl.style.whiteSpace="nowrap";
-      textEl.style.overflow="hidden";
-
-      let size=maxSize;
-      sizeEl.style.setProperty("font-size",size+"px","important");
-      const boxWidth=getContentWidth(sizeEl);
-      const textBoxWidth=Math.floor(textEl.getBoundingClientRect().width);
-      const available=Math.max(24,Math.min(boxWidth||textBoxWidth,textBoxWidth||boxWidth));
-
-      while(textEl.scrollWidth>available+1&&size>minSize){
-        size-=0.35;
-        sizeEl.style.setProperty("font-size",size+"px","important");
-      }
-    }
-
     function fitQuestionText(){
       const h3=document.querySelector("#quiz-content h3");
       const text=document.getElementById("question-text");
       if(!h3||!text)return;
 
       const viewportW=(window.visualViewport&&window.visualViewport.width)||window.innerWidth||390;
-      const maxSize=Math.max(15,Math.min(22,viewportW*0.052));
-      fitSingleLineText(text,h3,maxSize,9);
+      let size=Math.max(15,Math.min(18,viewportW*0.038));
+      h3.style.setProperty("--question-font-size",size+"px");
+      text.style.whiteSpace="normal";
+
+      let guard=0;
+      while(guard<16){
+        const lineHeight=parseFloat(getComputedStyle(h3).lineHeight)||size*1.38;
+        if(h3.scrollHeight<=lineHeight*3+2||size<=13)break;
+        size-=0.25;
+        h3.style.setProperty("--question-font-size",size+"px");
+        guard++;
+      }
     }
 
     function fitOptionsText(){
@@ -1170,17 +1169,36 @@ const EXAM_ID = "exam1";
       if(!quizContent||!optionsWrap||!labels.length)return;
 
       const viewportW=(window.visualViewport&&window.visualViewport.width)||window.innerWidth||390;
-      const baseSize=Math.max(14,Math.min(20,viewportW*0.046));
-      const minSize=9;
+      let size=Math.max(16,Math.min(19,viewportW*0.042));
       const basePad=Math.max(7,Math.min(11,viewportW*0.02));
+      const gap=Math.max(6,Math.min(9,viewportW*0.016));
 
-      optionsWrap.style.gap=Math.max(6,Math.min(9,viewportW*0.016))+"px";
+      optionsWrap.style.gap=gap+"px";
+      optionsWrap.style.setProperty("--option-font-size",size+"px");
+
       labels.forEach(label=>{
         label.style.setProperty("padding-top",basePad+"px","important");
         label.style.setProperty("padding-bottom",basePad+"px","important");
-        const text=label.querySelector("span");
-        fitSingleLineText(text,label,baseSize,minSize);
       });
+
+      let guard=0;
+      while(guard<20&&size>13){
+        const tooTall=labels.some(label=>{
+          const lineHeight=parseFloat(getComputedStyle(label).lineHeight)||size*1.28;
+          const text=label.querySelector("span");
+          return text&&text.scrollHeight>lineHeight*2+2;
+        });
+        if(!tooTall)break;
+        size-=0.25;
+        optionsWrap.style.setProperty("--option-font-size",size+"px");
+        guard++;
+      }
+
+      const wrapHeight=Math.floor(optionsWrap.getBoundingClientRect().height);
+      if(wrapHeight>0){
+        const cardH=Math.max(48,Math.floor((wrapHeight-gap*(labels.length-1))/labels.length));
+        optionsWrap.style.setProperty("--option-card-min-height",cardH+"px");
+      }
     }
 
     const quizRawData = [
