@@ -783,20 +783,37 @@
       display: none;
     }
     #quiz-content h3 {
-      font-size: clamp(17px, 4.8vw, 30px) !important;
-      line-height: 1.42 !important;
+      font-size: clamp(15px, 4.2vw, 22px) !important;
+      line-height: 1.32 !important;
       margin-bottom: 8px !important;
       flex: 0 0 auto !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+    }
+    #question-text {
+      display: block;
+      max-width: 100%;
+      white-space: nowrap !important;
+      overflow: hidden !important;
     }
     #options {
       flex: 0 0 auto !important;
     }
     #options label {
-      font-size: clamp(15px, 5vw, 24px) !important;
-      line-height: 1.34 !important;
+      font-size: clamp(14px, 4.4vw, 20px) !important;
+      line-height: 1.26 !important;
       padding-top: 10px !important;
       padding-bottom: 10px !important;
       flex: 0 0 auto !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+    }
+    #options label span {
+      display: block;
+      min-width: 0;
+      flex: 1 1 auto;
+      white-space: nowrap !important;
+      overflow: hidden !important;
     }
 
     #navigation-buttons {
@@ -1086,63 +1103,56 @@ const EXAM_ID = "exam1";
       return `<div style="position:relative;width:100%;height:100%;"><iframe src="https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="${title}"></iframe></div>`;
     }
 
+    function getContentWidth(el){
+      const cs=getComputedStyle(el);
+      const pad=(parseFloat(cs.paddingLeft)||0)+(parseFloat(cs.paddingRight)||0);
+      return Math.max(0,el.clientWidth-pad);
+    }
+
+    function fitSingleLineText(textEl,sizeEl,maxSize,minSize){
+      if(!textEl||!sizeEl)return;
+      textEl.style.whiteSpace="nowrap";
+      textEl.style.overflow="hidden";
+
+      let size=maxSize;
+      const widthSource=sizeEl.closest("label")||sizeEl;
+      sizeEl.style.setProperty("font-size",size+"px","important");
+      const available=textEl.clientWidth||getContentWidth(widthSource);
+
+      while(textEl.scrollWidth>available+1&&size>minSize){
+        size-=0.35;
+        sizeEl.style.setProperty("font-size",size+"px","important");
+      }
+    }
+
     function fitQuestionText(){
       const h3=document.querySelector("#quiz-content h3");
-      if(!h3) return;
+      const text=document.getElementById("question-text");
+      if(!h3||!text)return;
 
-      h3.style.removeProperty("font-size");
       const viewportW=(window.visualViewport&&window.visualViewport.width)||window.innerWidth||390;
-      const base=Math.max(18,Math.min(31,viewportW*0.062));
-      let size=base;
-      h3.style.setProperty("font-size",size+"px","important");
-
-      const lineHeight=parseFloat(getComputedStyle(h3).lineHeight)||(size*1.45);
-      const maxLines=viewportW<=430?2.8:2.4;
-      const maxHeight=lineHeight*maxLines;
-
-      while(h3.scrollHeight>maxHeight+2&&size>15){
-        size-=0.4;
-        h3.style.setProperty("font-size",size+"px","important");
-      }
+      const maxSize=Math.max(15,Math.min(22,viewportW*0.052));
+      fitSingleLineText(text,h3,maxSize,10.5);
     }
 
     function fitOptionsText(){
       const quizContent=document.getElementById("quiz-content");
       const optionsWrap=document.getElementById("options");
       const labels=[...document.querySelectorAll("#options label")];
-      if(!quizContent||!optionsWrap||!labels.length) return;
+      if(!quizContent||!optionsWrap||!labels.length)return;
 
       const viewportW=(window.visualViewport&&window.visualViewport.width)||window.innerWidth||390;
-      const baseSize=Math.max(15,Math.min(24,viewportW*0.055));
-      const minSize=13.5;
-      const basePad=Math.max(7,Math.min(13,viewportW*0.022));
+      const baseSize=Math.max(14,Math.min(20,viewportW*0.046));
+      const minSize=10.5;
+      const basePad=Math.max(7,Math.min(11,viewportW*0.02));
 
+      optionsWrap.style.gap=Math.max(6,Math.min(9,viewportW*0.016))+"px";
       labels.forEach(label=>{
-        label.style.setProperty("font-size",baseSize+"px","important");
         label.style.setProperty("padding-top",basePad+"px","important");
         label.style.setProperty("padding-bottom",basePad+"px","important");
+        const text=label.querySelector("span");
+        fitSingleLineText(text,label,baseSize,minSize);
       });
-      optionsWrap.style.gap=Math.max(6,Math.min(10,viewportW*0.018))+"px";
-
-      let size=baseSize;
-      let pad=basePad;
-      let guard=0;
-
-      while(quizContent.scrollHeight>quizContent.clientHeight+2&&guard<80){
-        if(size>minSize){
-          size-=0.25;
-          labels.forEach(label=>label.style.setProperty("font-size",size+"px","important"));
-        }else if(pad>5){
-          pad-=0.25;
-          labels.forEach(label=>{
-            label.style.setProperty("padding-top",pad+"px","important");
-            label.style.setProperty("padding-bottom",pad+"px","important");
-          });
-        }else{
-          break;
-        }
-        guard++;
-      }
     }
 
     const quizRawData = [
