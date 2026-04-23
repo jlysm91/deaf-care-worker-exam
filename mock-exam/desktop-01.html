@@ -731,6 +731,54 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #A7B7C7; border-radius: 99px; }
+    /* === OllySite 관리 화면 안전 결과 레이아웃: 폭 감지 실패 시에도 그리드 밀림 방지 === */
+    #result-page > .result-emoji,
+    #result-page > h2,
+    #result-page > #score,
+    #result-page > #quick-nav-container-result,
+    #result-page > #result-return-btn,
+    #result-shell,
+    .result-summary-card,
+    #quick-nav-container-result {
+      width: min(100%, 560px) !important;
+      max-width: 560px !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+    }
+    #quick-nav-container-result {
+      overflow-x: hidden !important;
+      padding-left: 12px !important;
+      padding-right: 12px !important;
+    }
+    #quick-nav-grid-result {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+      gap: 5px !important;
+      box-sizing: border-box !important;
+    }
+    #quick-nav-grid-result .nav-btn {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      min-height: 52px !important;
+      padding: 8px 4px !important;
+      box-sizing: border-box !important;
+    }
+    #quick-nav-grid-result .nav-btn .number {
+      font-size: 13px !important;
+    }
+    #quick-nav-grid-result .nav-btn .detail {
+      font-size: 9.5px !important;
+      max-width: 100% !important;
+      white-space: nowrap !important;
+    }
+    @media (max-width: 520px) {
+      #quick-nav-grid-result {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1115,32 +1163,22 @@
       const container=document.getElementById("quick-nav-container-result");
       if(!grid||!container)return;
 
-      const cs=getComputedStyle(container);
-      const padX=(parseFloat(cs.paddingLeft)||0)+(parseFloat(cs.paddingRight)||0);
-      const usable=Math.max(0,(container.clientWidth||container.offsetWidth)-padX);
-      if(!usable)return;
-
-      let cols=10;
-      if(usable<=480) cols=4;
-      else if(usable<=620) cols=5;
-      else if(usable<=780) cols=6;
-      else if(usable<=980) cols=8;
-
-      const gap=cols<=5?5:(cols<=8?6:7);
+      const viewportW=(window.visualViewport&&window.visualViewport.width)||window.innerWidth||640;
+      const cols=viewportW<=520?4:5;
       grid.style.gridTemplateColumns=`repeat(${cols}, minmax(0, 1fr))`;
-      grid.style.gap=gap+"px";
-      grid.classList.toggle("compact",cols<10);
+      grid.style.gap="5px";
+      grid.classList.add("compact");
 
       grid.querySelectorAll(".nav-btn").forEach(function(btn){
         btn.style.width="100%";
         btn.style.minWidth="0";
         btn.style.maxWidth="100%";
-        btn.style.padding=cols<=5?"8px 4px":(cols<=8?"8px 5px":"");
-        btn.style.minHeight=cols<=5?"52px":(cols<=8?"54px":"");
+        btn.style.minHeight="52px";
+        btn.style.padding="8px 4px";
         const n=btn.querySelector(".number"),d=btn.querySelector(".detail");
-        if(n)n.style.fontSize=cols<=5?"13px":(cols<=8?"13.5px":"");
+        if(n)n.style.fontSize="13px";
         if(d){
-          d.style.fontSize=cols<=5?"9.5px":(cols<=8?"10px":"");
+          d.style.fontSize="9.5px";
           d.style.maxWidth="100%";
           d.style.whiteSpace="nowrap";
         }
