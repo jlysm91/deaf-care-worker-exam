@@ -1380,18 +1380,21 @@
     .result-chip {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      max-width: 100%;
+      gap: 8px;
+      padding: 7px 10px;
       border-radius: 999px;
       border: 1px solid #D8E3ED;
-      background: #F8FAFC;
-      color: #425166;
-      padding: 7px 10px;
-      font-size: clamp(12px, 1.2vw, 14px);
+      background: #F8FBFD;
+      color: #506273;
+      font-size: clamp(11px, 1vw, 13px);
       font-weight: 800;
-      line-height: 1.2;
+      line-height: 1.1;
       white-space: nowrap;
+      font-variant-numeric: tabular-nums;
     }
+    .result-chip .chip-no { display: inline-flex; align-items: center; justify-content: center; min-width: 4.3em; flex-shrink: 0; }
+    .result-chip .chip-meta { display: inline-flex; align-items: center; justify-content: center; min-width: 7.8em; }
+    .result-chip.correct { border-color: #A7E2C1; background: #F1FCF5; color: #0F8A4C; }
     .result-chip.wrong { border-color: #F3B2B0; background: #FFF4F4; color: #C13C36; }
     .result-chip.empty { border-color: #F3D6A8; background: #FFF8EA; color: #A05A00; }
     .result-empty-note {
@@ -1400,30 +1403,9 @@
       font-size: 13px;
       font-weight: 700;
     }
-    .result-action-row {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-    .result-open-full-btn {
-      border: 0;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #005D7A, #2F93B6);
-      color: #FFFFFF;
-      padding: 12px 18px;
-      font-family: inherit;
-      font-size: clamp(13px, 1.3vw, 16px);
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 9px 18px rgba(0, 93, 122, .2);
-    }
-    .result-open-full-btn:hover { transform: translateY(-1px); }
     @media (max-width: 560px) {
       .result-insight-grid { grid-template-columns: 1fr; }
       .result-chip { width: 100%; justify-content: space-between; border-radius: 12px; }
-      .result-open-full-btn { width: 100%; }
     }
 </style>
 </head>
@@ -1836,8 +1818,6 @@ const EXAM_ID = "exam1";
       });
     }
 
-    const FULL_RESULT_PAGE_URL="https://jlysm91.github.io/deaf-care-worker-exam/mock-exam/result-01.html";
-
     function normalizeResultAnswers(answers){
       const arr=new Array(TOTAL_QUESTIONS).fill(null);
       if(Array.isArray(answers)){
@@ -1851,23 +1831,10 @@ const EXAM_ID = "exam1";
       return arr;
     }
 
-    function getFullResultUrl(){
-      const uid=currentUserId||userIdInput.value.trim();
-      const name=userNameInput.value.trim();
-      const params=new URLSearchParams();
-      if(uid)params.set("uid",uid);
-      if(name)params.set("name",name);
-      return FULL_RESULT_PAGE_URL+(params.toString()?"?"+params.toString():"");
-    }
-
-    function openFullResultPage(){
-      const url=getFullResultUrl();
-      try{window.top.open(url,"_blank");}
-      catch(e){window.open(url,"_blank");}
-    }
 
     function makeResultChip(item,type){
-      return `<span class="result-chip ${type}"><span>${item.no}번</span><span>C:${item.correct} / M:${item.mine}</span></span>`;
+      const no=String(item.no).padStart(2,"0")+"번";
+      return `<span class="result-chip ${type}"><span class="chip-no">${no}</span><span class="chip-meta">C:${item.correct} / M:${item.mine}</span></span>`;
     }
 
     function renderResultNav(){
@@ -1878,19 +1845,24 @@ const EXAM_ID = "exam1";
       userAnswers=normalizeResultAnswers(userAnswers);
 
       let correct=0;
+      const solved=[];
       const wrong=[];
       const empty=[];
       quizData.forEach(function(q,i){
         const raw=userAnswers[i];
         const mine=(raw===null||raw===undefined||raw==="")?"-":raw;
         const ok=mine!=="-"&&parseInt(mine,10)===parseInt(q.correctAnswer,10);
-        if(ok)correct++;
+        if(ok){
+          correct++;
+          solved.push({no:i+1,correct:q.correctAnswer,mine:mine});
+        }
         else if(mine==="-")empty.push({no:i+1,correct:q.correctAnswer,mine:mine});
         else wrong.push({no:i+1,correct:q.correctAnswer,mine:mine});
       });
 
       const wrongHtml=wrong.length?wrong.map(function(item){return makeResultChip(item,"wrong");}).join(""):'<p class="result-empty-note">오답 문항이 없습니다.</p>';
       const emptyHtml=empty.length?empty.map(function(item){return makeResultChip(item,"empty");}).join(""):'<p class="result-empty-note">미응답 문항이 없습니다.</p>';
+      const solvedHtml=solved.length?solved.map(function(item){return makeResultChip(item,"correct");}).join(""):'<p class="result-empty-note">정답 문항이 없습니다.</p>';
 
       grid.innerHTML=`
         <div class="result-insight-grid">
@@ -1906,12 +1878,10 @@ const EXAM_ID = "exam1";
           <h3 class="result-section-title">미응답 문항</h3>
           <div class="result-chip-wrap">${emptyHtml}</div>
         </section>
-        <div class="result-action-row">
-          <button type="button" id="result-open-full-btn" class="result-open-full-btn">새 창에서 전체 문항 결과 보기</button>
-        </div>`;
-
-      const fullBtn=document.getElementById("result-open-full-btn");
-      if(fullBtn)fullBtn.addEventListener("click",openFullResultPage);
+        <section class="result-section-list">
+          <h3 class="result-section-title">정답 문항</h3>
+          <div class="result-chip-wrap">${solvedHtml}</div>
+        </section>`;
     }
 
     function fitResultGrid(){}
