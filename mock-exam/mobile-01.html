@@ -738,22 +738,29 @@
       max-height: none !important;
       min-height: 0 !important;
       overflow: hidden !important;
+      border-radius: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      background: #000 !important;
     }
     #video-container .video-wrapper {
       width: 100% !important;
       height: 100% !important;
+      border-radius: 0 !important;
     }
     #video-container .video-wrapper > div {
       inset: 0 !important;
       width: 100% !important;
       height: 100% !important;
       padding: 0 !important;
+      border-radius: 0 !important;
     }
     #video-container .video-wrapper iframe {
       display: block;
       width: 100% !important;
       height: 100% !important;
       margin: 0 !important;
+      border-radius: 0 !important;
     }
 
     #quiz-container {
@@ -762,6 +769,17 @@
     }
     #quiz-content {
       padding-bottom: 12px !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      overscroll-behavior: contain;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    #quiz-content::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
     }
     #quiz-content h3 {
       font-size: clamp(17px, 4.8vw, 30px) !important;
@@ -773,6 +791,7 @@
       line-height: 1.34 !important;
       padding-top: 10px !important;
       padding-bottom: 10px !important;
+      flex: 0 0 auto !important;
     }
 
     #navigation-buttons {
