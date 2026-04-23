@@ -772,6 +772,7 @@
       overflow-y: auto !important;
       overflow-x: hidden !important;
       overscroll-behavior: contain;
+      touch-action: pan-y !important;
       scrollbar-width: none;
       -ms-overflow-style: none;
       -webkit-overflow-scrolling: touch;
@@ -785,6 +786,10 @@
       font-size: clamp(17px, 4.8vw, 30px) !important;
       line-height: 1.42 !important;
       margin-bottom: 8px !important;
+      flex: 0 0 auto !important;
+    }
+    #options {
+      flex: 0 0 auto !important;
     }
     #options label {
       font-size: clamp(15px, 5vw, 24px) !important;
@@ -1085,11 +1090,11 @@ const EXAM_ID = "exam1";
       const h3=document.querySelector("#quiz-content h3");
       if(!h3) return;
 
-      h3.style.fontSize="";
+      h3.style.removeProperty("font-size");
       const viewportW=(window.visualViewport&&window.visualViewport.width)||window.innerWidth||390;
       const base=Math.max(18,Math.min(31,viewportW*0.062));
       let size=base;
-      h3.style.fontSize=size+"px";
+      h3.style.setProperty("font-size",size+"px","important");
 
       const lineHeight=parseFloat(getComputedStyle(h3).lineHeight)||(size*1.45);
       const maxLines=viewportW<=430?2.8:2.4;
@@ -1097,7 +1102,7 @@ const EXAM_ID = "exam1";
 
       while(h3.scrollHeight>maxHeight+2&&size>15){
         size-=0.4;
-        h3.style.fontSize=size+"px";
+        h3.style.setProperty("font-size",size+"px","important");
       }
     }
 
@@ -1113,9 +1118,9 @@ const EXAM_ID = "exam1";
       const basePad=Math.max(7,Math.min(13,viewportW*0.022));
 
       labels.forEach(label=>{
-        label.style.fontSize=baseSize+"px";
-        label.style.paddingTop=basePad+"px";
-        label.style.paddingBottom=basePad+"px";
+        label.style.setProperty("font-size",baseSize+"px","important");
+        label.style.setProperty("padding-top",basePad+"px","important");
+        label.style.setProperty("padding-bottom",basePad+"px","important");
       });
       optionsWrap.style.gap=Math.max(6,Math.min(10,viewportW*0.018))+"px";
 
@@ -1126,12 +1131,12 @@ const EXAM_ID = "exam1";
       while(quizContent.scrollHeight>quizContent.clientHeight+2&&guard<80){
         if(size>minSize){
           size-=0.25;
-          labels.forEach(label=>label.style.fontSize=size+"px");
+          labels.forEach(label=>label.style.setProperty("font-size",size+"px","important"));
         }else if(pad>5){
           pad-=0.25;
           labels.forEach(label=>{
-            label.style.paddingTop=pad+"px";
-            label.style.paddingBottom=pad+"px";
+            label.style.setProperty("padding-top",pad+"px","important");
+            label.style.setProperty("padding-bottom",pad+"px","important");
           });
         }else{
           break;
@@ -1287,6 +1292,12 @@ const EXAM_ID = "exam1";
         const r=optionsDiv.querySelector(`input[value="${userAnswers[currentQuestionIndex]}"]`);
         if(r)r.checked=true;
       }
+      const quizContentEl=document.getElementById("quiz-content");
+      if(quizContentEl)quizContentEl.scrollTop=0;
+      requestAnimationFrame(()=>{
+        fitQuestionText();
+        fitOptionsText();
+      });
       document.querySelectorAll(".nav-btn").forEach((btn,i)=>{
         btn.classList.remove("active","answered");
         const ans=userAnswers[i];
