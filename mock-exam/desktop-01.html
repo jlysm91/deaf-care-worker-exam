@@ -554,7 +554,7 @@
       border-radius: 16px;
       box-shadow: var(--shadow-card);
       padding: clamp(12px, 1.9vh, 18px) clamp(10px, 1.8vw, 18px);
-      overflow-x: clip;
+      overflow-x: hidden;
     }
     .result-grid-title {
       text-align: center;
@@ -589,6 +589,12 @@
       transform: none;
     }
     #quick-nav-grid-result .nav-btn:hover { transform: none; }
+    #quick-nav-grid-result,
+    #quick-nav-grid-result .nav-btn {
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
     #quick-nav-grid-result .nav-btn .number {
       font-size: clamp(11px, 1.2vw, 15px);
       font-weight: 800;
@@ -1108,28 +1114,38 @@
       const grid=document.getElementById("quick-nav-grid-result");
       const container=document.getElementById("quick-nav-container-result");
       if(!grid||!container)return;
-      const w=container.offsetWidth;
-      if(w>0 && w<=600){
-        grid.style.gridTemplateColumns="repeat(5, minmax(0, 1fr))";
-        grid.style.gap="5px";
-        grid.querySelectorAll(".nav-btn").forEach(function(btn){
-          btn.style.padding="10px 6px";
-          var n=btn.querySelector(".number"),d=btn.querySelector(".detail");
-          if(n)n.style.fontSize="14px";
-          if(d)d.style.fontSize="11px";
-        });
-      }else{
-        grid.style.gridTemplateColumns="repeat(10, minmax(0, 1fr))";
-        grid.style.gap="";
-        grid.querySelectorAll(".nav-btn").forEach(function(btn){
-          btn.style.padding="";
-          var n=btn.querySelector(".number"),d=btn.querySelector(".detail");
-          if(n)n.style.fontSize="";
-          if(d)d.style.fontSize="";
-        });
-      }
-    }
 
+      const cs=getComputedStyle(container);
+      const padX=(parseFloat(cs.paddingLeft)||0)+(parseFloat(cs.paddingRight)||0);
+      const usable=Math.max(0,(container.clientWidth||container.offsetWidth)-padX);
+      if(!usable)return;
+
+      let cols=10;
+      if(usable<=480) cols=4;
+      else if(usable<=620) cols=5;
+      else if(usable<=780) cols=6;
+      else if(usable<=980) cols=8;
+
+      const gap=cols<=5?5:(cols<=8?6:7);
+      grid.style.gridTemplateColumns=`repeat(${cols}, minmax(0, 1fr))`;
+      grid.style.gap=gap+"px";
+      grid.classList.toggle("compact",cols<10);
+
+      grid.querySelectorAll(".nav-btn").forEach(function(btn){
+        btn.style.width="100%";
+        btn.style.minWidth="0";
+        btn.style.maxWidth="100%";
+        btn.style.padding=cols<=5?"8px 4px":(cols<=8?"8px 5px":"");
+        btn.style.minHeight=cols<=5?"52px":(cols<=8?"54px":"");
+        const n=btn.querySelector(".number"),d=btn.querySelector(".detail");
+        if(n)n.style.fontSize=cols<=5?"13px":(cols<=8?"13.5px":"");
+        if(d){
+          d.style.fontSize=cols<=5?"9.5px":(cols<=8?"10px":"");
+          d.style.maxWidth="100%";
+          d.style.whiteSpace="nowrap";
+        }
+      });
+    }
     (function(){
       const params=new URLSearchParams(window.location.search);
       const uid=params.get('uid')||'';
