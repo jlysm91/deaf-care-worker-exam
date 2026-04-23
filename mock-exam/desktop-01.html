@@ -759,6 +759,121 @@
       max-width: 100%;
       overflow: visible;
     }
+
+    /* === 결과 페이지 요약 UX: 올리사이트 폭 제한 대응 === */
+    #quick-nav-container-result {
+      width: min(100%, 760px) !important;
+      max-width: 760px !important;
+      overflow: visible !important;
+      padding: clamp(14px, 2vw, 22px) !important;
+    }
+    #quick-nav-grid-result {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      overflow: visible !important;
+    }
+    .result-grid-title { margin-bottom: 12px !important; }
+    .result-insight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .result-mini-card {
+      border: 1px solid #D8E3ED;
+      background: #FFFFFF;
+      border-radius: 14px;
+      padding: 12px 8px;
+      text-align: center;
+      box-shadow: 0 5px 14px rgba(22,34,48,.05);
+    }
+    .result-mini-label {
+      display: block;
+      color: #71839A;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      margin-bottom: 5px;
+    }
+    .result-mini-value {
+      display: block;
+      color: #162230;
+      font-size: clamp(20px, 2.6vw, 30px);
+      font-weight: 900;
+      line-height: 1;
+    }
+    .result-mini-card.correct .result-mini-value { color: #0F8A4C; }
+    .result-mini-card.wrong .result-mini-value { color: #C13C36; }
+    .result-mini-card.empty .result-mini-value { color: #A05A00; }
+    .result-section-list {
+      border: 1px solid #D8E3ED;
+      border-radius: 14px;
+      background: #FFFFFF;
+      padding: 12px;
+      margin-top: 10px;
+      text-align: left;
+    }
+    .result-section-title {
+      margin: 0 0 8px;
+      color: #162230;
+      font-size: clamp(14px, 1.4vw, 17px);
+      font-weight: 900;
+    }
+    .result-chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .result-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      max-width: 100%;
+      border-radius: 999px;
+      border: 1px solid #D8E3ED;
+      background: #F8FAFC;
+      color: #425166;
+      padding: 7px 10px;
+      font-size: clamp(12px, 1.2vw, 14px);
+      font-weight: 800;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .result-chip.wrong { border-color: #F3B2B0; background: #FFF4F4; color: #C13C36; }
+    .result-chip.empty { border-color: #F3D6A8; background: #FFF8EA; color: #A05A00; }
+    .result-empty-note {
+      margin: 0;
+      color: #71839A;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .result-action-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .result-open-full-btn {
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #005D7A, #2F93B6);
+      color: #FFFFFF;
+      padding: 12px 18px;
+      font-family: inherit;
+      font-size: clamp(13px, 1.3vw, 16px);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 9px 18px rgba(0, 93, 122, .2);
+    }
+    .result-open-full-btn:hover { transform: translateY(-1px); }
+    @media (max-width: 560px) {
+      .result-insight-grid { grid-template-columns: 1fr; }
+      .result-chip { width: 100%; justify-content: space-between; border-radius: 12px; }
+      .result-open-full-btn { width: 100%; }
+    }
 </style>
 </head>
 <body>
@@ -1108,7 +1223,7 @@
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
       fd.append("entry.516661777", 합격여부);
       fetch(googleFormURL,{method:"POST",body:fd,mode:"no-cors", keepalive: true }).catch(console.error);
-      const resultData={type:"examResult",total:총점,필기:필기,실기:실기,answers:userAnswers,correctAnswers:quizData.map(q=>q.correctAnswer),name:userNameInput.value.trim()};
+      const resultData={type:"examResult",total:총점,필기:필기,실기:실기,answers:userAnswers,correctAnswers:quizData.map(q=>q.correctAnswer),name:userNameInput.value.trim(),uid:currentUserId};
       try{if(window.opener&&!window.opener.closed){window.opener.postMessage(resultData,"*");}}catch(e){console.error(e);}
       try{window.close();}catch(e){}
     }
@@ -1124,115 +1239,85 @@
       });
     }
 
+    const FULL_RESULT_PAGE_URL="https://jlysm91.github.io/deaf-care-worker-exam/mock-exam/result-01.html";
+
+    function normalizeResultAnswers(answers){
+      const arr=new Array(TOTAL_QUESTIONS).fill(null);
+      if(Array.isArray(answers)){
+        for(let i=0;i<TOTAL_QUESTIONS;i++)arr[i]=answers[i]??null;
+      }else if(answers&&typeof answers==="object"){
+        Object.keys(answers).forEach(function(k){
+          const idx=parseInt(k,10);
+          if(idx>=0&&idx<TOTAL_QUESTIONS)arr[idx]=answers[k];
+        });
+      }
+      return arr;
+    }
+
+    function getFullResultUrl(){
+      const uid=currentUserId||userIdInput.value.trim();
+      const name=userNameInput.value.trim();
+      const params=new URLSearchParams();
+      if(uid)params.set("uid",uid);
+      if(name)params.set("name",name);
+      return FULL_RESULT_PAGE_URL+(params.toString()?"?"+params.toString():"");
+    }
+
+    function openFullResultPage(){
+      const url=getFullResultUrl();
+      try{window.top.open(url,"_blank");}
+      catch(e){window.open(url,"_blank");}
+    }
+
+    function makeResultChip(item,type){
+      return `<span class="result-chip ${type}"><span>${item.no}번</span><span>C:${item.correct} / M:${item.mine}</span></span>`;
+    }
+
     function renderResultNav(){
       const grid=document.getElementById("quick-nav-grid-result");
+      const title=document.querySelector(".result-grid-title");
       if(!grid)return;
-      grid.innerHTML="";
-      drawResultSvg();
-      requestAnimationFrame(drawResultSvg);
-      setTimeout(drawResultSvg,60);
-      setTimeout(drawResultSvg,250);
-    }
+      if(title)title.textContent="학습 요약";
+      userAnswers=normalizeResultAnswers(userAnswers);
 
-    function getResultGridWidth(container){
-      if(!container)return 0;
-      const rect=container.getBoundingClientRect();
-      const cs=getComputedStyle(container);
-      const padX=(parseFloat(cs.paddingLeft)||0)+(parseFloat(cs.paddingRight)||0);
-      const candidates=[
-        rect.width,
-        container.clientWidth,
-        container.offsetWidth,
-        container.parentElement?container.parentElement.getBoundingClientRect().width:0,
-        document.documentElement.clientWidth,
-        window.innerWidth,
-        window.visualViewport?window.visualViewport.width:0
-      ].filter(function(v){return Number.isFinite(v)&&v>0;});
-      if(!candidates.length)return 0;
-      return Math.max(0,Math.min.apply(null,candidates)-padX);
-    }
-
-    function getResultColumnCount(){
-      const container=document.getElementById("quick-nav-container-result");
-      const w=getResultGridWidth(container);
-      if(w<=520)return 4;
-      if(w<=660)return 5;
-      if(w<=820)return 6;
-      if(w<=1040)return 8;
-      return 10;
-    }
-
-    function drawResultSvg(){
-      const grid=document.getElementById("quick-nav-grid-result");
-      if(!grid)return;
-
-      const cols=getResultColumnCount();
-      const rows=Math.ceil(TOTAL_QUESTIONS/cols);
-      const cellW=66;
-      const cellH=48;
-      const gap=5;
-      const width=cols*cellW+(cols-1)*gap;
-      const height=rows*cellH+(rows-1)*gap;
-      const ns="http://www.w3.org/2000/svg";
-
-      grid.innerHTML="";
-      const svg=document.createElementNS(ns,"svg");
-      svg.setAttribute("viewBox","0 0 "+width+" "+height);
-      svg.setAttribute("width","100%");
-      svg.setAttribute("height","auto");
-      svg.setAttribute("preserveAspectRatio","xMidYMin meet");
-      svg.setAttribute("role","img");
-      svg.setAttribute("aria-label","문항별 결과");
-
+      let correct=0;
+      const wrong=[];
+      const empty=[];
       quizData.forEach(function(q,i){
-        const ua=userAnswers[i]==null?"-":userAnswers[i];
-        const ok=ua!=="-"&&parseInt(ua,10)===parseInt(q.correctAnswer,10);
-        const col=i%cols;
-        const row=Math.floor(i/cols);
-        const x=col*(cellW+gap);
-        const y=row*(cellH+gap);
-        const color=ok?"#059669":"#DC2626";
-
-        const rect=document.createElementNS(ns,"rect");
-        rect.setAttribute("x",x);
-        rect.setAttribute("y",y);
-        rect.setAttribute("width",cellW);
-        rect.setAttribute("height",cellH);
-        rect.setAttribute("rx","8");
-        rect.setAttribute("fill",ok?"#ECFDF5":"#FEF2F2");
-        rect.setAttribute("stroke",ok?"#6EE7B7":"#FCA5A5");
-        rect.setAttribute("stroke-width","1.4");
-        svg.appendChild(rect);
-
-        const num=document.createElementNS(ns,"text");
-        num.setAttribute("x",x+cellW/2);
-        num.setAttribute("y",y+17);
-        num.setAttribute("text-anchor","middle");
-        num.setAttribute("font-family","Noto Sans KR, sans-serif");
-        num.setAttribute("font-size","13");
-        num.setAttribute("font-weight","800");
-        num.setAttribute("fill",color);
-        num.textContent=String(i+1);
-        svg.appendChild(num);
-
-        const detail=document.createElementNS(ns,"text");
-        detail.setAttribute("x",x+cellW/2);
-        detail.setAttribute("y",y+34);
-        detail.setAttribute("text-anchor","middle");
-        detail.setAttribute("font-family","Noto Sans KR, sans-serif");
-        detail.setAttribute("font-size","9.5");
-        detail.setAttribute("font-weight","700");
-        detail.setAttribute("fill",color);
-        detail.textContent="C:"+q.correctAnswer+"/M:"+ua;
-        svg.appendChild(detail);
+        const raw=userAnswers[i];
+        const mine=(raw===null||raw===undefined||raw==="")?"-":raw;
+        const ok=mine!=="-"&&parseInt(mine,10)===parseInt(q.correctAnswer,10);
+        if(ok)correct++;
+        else if(mine==="-")empty.push({no:i+1,correct:q.correctAnswer,mine:mine});
+        else wrong.push({no:i+1,correct:q.correctAnswer,mine:mine});
       });
 
-      grid.appendChild(svg);
+      const wrongHtml=wrong.length?wrong.map(function(item){return makeResultChip(item,"wrong");}).join(""):'<p class="result-empty-note">오답 문항이 없습니다.</p>';
+      const emptyHtml=empty.length?empty.map(function(item){return makeResultChip(item,"empty");}).join(""):'<p class="result-empty-note">미응답 문항이 없습니다.</p>';
+
+      grid.innerHTML=`
+        <div class="result-insight-grid">
+          <div class="result-mini-card correct"><span class="result-mini-label">정답</span><span class="result-mini-value">${correct}</span></div>
+          <div class="result-mini-card wrong"><span class="result-mini-label">오답</span><span class="result-mini-value">${wrong.length}</span></div>
+          <div class="result-mini-card empty"><span class="result-mini-label">미응답</span><span class="result-mini-value">${empty.length}</span></div>
+        </div>
+        <section class="result-section-list">
+          <h3 class="result-section-title">틀린 문항</h3>
+          <div class="result-chip-wrap">${wrongHtml}</div>
+        </section>
+        <section class="result-section-list">
+          <h3 class="result-section-title">미응답 문항</h3>
+          <div class="result-chip-wrap">${emptyHtml}</div>
+        </section>
+        <div class="result-action-row">
+          <button type="button" id="result-open-full-btn" class="result-open-full-btn">새 창에서 전체 문항 결과 보기</button>
+        </div>`;
+
+      const fullBtn=document.getElementById("result-open-full-btn");
+      if(fullBtn)fullBtn.addEventListener("click",openFullResultPage);
     }
 
-    function fitResultGrid(){
-      drawResultSvg();
-    }
+    function fitResultGrid(){}
     (function(){
       const params=new URLSearchParams(window.location.search);
       const uid=params.get('uid')||'';
