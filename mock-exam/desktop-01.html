@@ -475,7 +475,7 @@
       align-items: center;
       position: fixed;
       inset: 0;
-      padding: clamp(14px, 2.2vh, 26px) clamp(10px, 2vw, 24px);
+      padding: clamp(10px, 1.5vh, 18px) clamp(10px, 2vw, 24px);
       background:
         radial-gradient(circle at 12% 16%, rgba(42, 142, 181, 0.16) 0%, transparent 34%),
         radial-gradient(circle at 86% 78%, rgba(0, 93, 122, 0.12) 0%, transparent 40%),
@@ -483,7 +483,7 @@
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-      gap: clamp(10px, 1.8vh, 16px);
+      gap: clamp(8px, 1.2vh, 12px);
     }
     #result-page > .result-emoji,
     #result-page > h2,
@@ -516,7 +516,7 @@
       background: rgba(255, 255, 255, 0.90);
       border: 1.5px solid #BEE5F3;
       border-radius: 14px;
-      padding: clamp(11px, 1.8vh, 16px) clamp(14px, 2vw, 28px);
+      padding: clamp(8px, 1.2vh, 12px) clamp(14px, 2vw, 28px);
       box-shadow: var(--shadow-card);
       word-break: keep-all;
     }
@@ -525,7 +525,7 @@
       width: min(100%, 1120px);
       display: flex;
       flex-direction: column;
-      gap: clamp(10px, 1.8vh, 16px);
+      gap: clamp(8px, 1.2vh, 12px);
       margin: 0 auto;
     }
     .result-summary-card {
@@ -537,7 +537,7 @@
       border: 1px solid #CFDDE8;
       border-radius: 16px;
       box-shadow: var(--shadow-card);
-      padding: clamp(14px, 2vh, 20px) clamp(14px, 2vw, 24px);
+      padding: clamp(10px, 1.4vh, 14px) clamp(14px, 2vw, 24px);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
     }
@@ -553,7 +553,7 @@
       border: 1px solid #CFDDE8;
       border-radius: 16px;
       box-shadow: var(--shadow-card);
-      padding: clamp(12px, 1.9vh, 18px) clamp(10px, 1.8vw, 18px);
+      padding: clamp(10px, 1.4vh, 14px) clamp(10px, 1.6vw, 16px);
       overflow-x: hidden;
     }
     .result-grid-title {
@@ -630,7 +630,7 @@
     #result-return-btn {
       width: min(100%, 420px);
       margin: 2px auto 0;
-      padding: 14px 20px;
+      padding: 12px 18px;
       border: none;
       border-radius: 12px;
       background: linear-gradient(120deg, var(--primary) 0%, #0E8FB2 100%);
@@ -765,7 +765,7 @@
       width: min(100%, 760px) !important;
       max-width: 760px !important;
       overflow: visible !important;
-      padding: clamp(14px, 2vw, 22px) !important;
+      padding: clamp(10px, 1.5vw, 16px) !important;
     }
     #quick-nav-grid-result {
       display: block !important;
@@ -774,33 +774,33 @@
       max-width: 100% !important;
       overflow: visible !important;
     }
-    .result-grid-title { margin-bottom: 12px !important; }
+    .result-grid-title { margin-bottom: 8px !important; }
     .result-insight-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 8px;
+      margin-bottom: 10px;
     }
     .result-mini-card {
       border: 1px solid #D8E3ED;
       background: #FFFFFF;
       border-radius: 14px;
-      padding: 12px 8px;
+      padding: 9px 8px;
       text-align: center;
       box-shadow: 0 5px 14px rgba(22,34,48,.05);
     }
     .result-mini-label {
       display: block;
       color: #71839A;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       letter-spacing: .04em;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
     }
     .result-mini-value {
       display: block;
       color: #162230;
-      font-size: clamp(20px, 2.6vw, 30px);
+      font-size: clamp(18px, 2.2vw, 26px);
       font-weight: 900;
       line-height: 1;
     }
@@ -811,31 +811,31 @@
       border: 1px solid #D8E3ED;
       border-radius: 14px;
       background: #FFFFFF;
-      padding: 12px;
-      margin-top: 10px;
+      padding: 10px;
+      margin-top: 8px;
       text-align: left;
     }
     .result-section-title {
-      margin: 0 0 8px;
+      margin: 0 0 6px;
       color: #162230;
-      font-size: clamp(14px, 1.4vw, 17px);
+      font-size: clamp(13px, 1.25vw, 16px);
       font-weight: 900;
     }
     .result-chip-wrap {
       display: flex;
       flex-wrap: wrap;
-      gap: 7px;
+      gap: 6px;
     }
     .result-chip {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 7px 10px;
+      padding: 6px 9px;
       border-radius: 999px;
       border: 1px solid #D8E3ED;
       background: #F8FBFD;
       color: #506273;
-      font-size: clamp(11px, 1vw, 13px);
+      font-size: clamp(10px, 0.92vw, 12px);
       font-weight: 800;
       line-height: 1.1;
       white-space: nowrap;
