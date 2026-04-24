@@ -485,27 +485,50 @@
       -webkit-overflow-scrolling: touch;
       gap: clamp(8px, 1.2vh, 12px);
     }
-    #result-page > .result-emoji,
-    #result-page > h2,
+    #result-page > .result-heading,
     #result-page > #score,
     #result-page > #quick-nav-container-result,
     #result-page > #result-return-btn {
       width: min(100%, 1120px);
     }
-    .result-emoji {
-      display: block;
-      text-align: center;
-      font-size: clamp(34px, 4.5vw, 52px);
-      line-height: 1;
+    .result-heading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: nowrap;
+      white-space: nowrap;
       margin: 0;
     }
-    #result-page h2 {
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 16px;
+      border-radius: 999px;
+      background: #2E57D7;
+      color: #FFFFFF;
+      font-size: clamp(11px, 0.95vw, 13px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+    .result-heading h2 {
       text-align: center;
-      font-size: clamp(22px, 2.6vw, 34px);
+      font-size: clamp(18px, 1.9vw, 28px);
       color: var(--text-primary);
       font-weight: 800;
       letter-spacing: -0.5px;
       margin: 0;
+    }
+    .result-user-name {
+      margin: 0;
+      color: #64748B;
+      font-size: clamp(12px, 1vw, 15px);
+      font-weight: 600;
+      line-height: 1.2;
+      flex-shrink: 0;
     }
     #score {
       text-align: center;
@@ -541,8 +564,7 @@
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
     }
-    .result-summary-card .result-emoji,
-    .result-summary-card h2,
+    .result-summary-card .result-heading,
     .result-summary-card #score {
       width: 100%;
     }
@@ -891,8 +913,11 @@
   </div>
 
   <div id="result-page">
-    <span class="result-emoji">📋</span>
-    <h2>시험 결과</h2>
+    <div class="result-heading">
+      <span class="result-badge">1회 모의고사</span>
+      <h2>시험 결과</h2>
+      <p id="result-user-name" class="result-user-name"></p>
+    </div>
     <p id="score"></p>
     <div id="quick-nav-container-result">
       <p class="result-grid-title">문항별 결과 (C: 정답 / M: 내 답)</p>
@@ -938,7 +963,7 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    const startPage=document.getElementById("start-page"),quizPage=document.getElementById("quiz-page"),startQuizBtn=document.getElementById("start-quiz-btn"),userIdInput=document.getElementById("user-id"),userNameInput=document.getElementById("user-name"),resultPage=document.getElementById("result-page"),scoreSpan=document.getElementById("score"),questionNumberSpan=document.getElementById("question-number"),questionTextSpan=document.getElementById("question-text"),optionsDiv=document.getElementById("options"),videoWrapper=document.querySelector("#video-container .video-wrapper"),currentQuestionSpan=document.getElementById("current-question"),totalQuestionsSpan=document.getElementById("total-questions"),prevBtn=document.getElementById("prev-btn"),nextBtn=document.getElementById("next-btn"),quickNavGrid=document.getElementById("quick-nav-grid");
+    const startPage=document.getElementById("start-page"),quizPage=document.getElementById("quiz-page"),startQuizBtn=document.getElementById("start-quiz-btn"),userIdInput=document.getElementById("user-id"),userNameInput=document.getElementById("user-name"),resultPage=document.getElementById("result-page"),scoreSpan=document.getElementById("score"),resultUserName=document.getElementById("result-user-name"),questionNumberSpan=document.getElementById("question-number"),questionTextSpan=document.getElementById("question-text"),optionsDiv=document.getElementById("options"),videoWrapper=document.querySelector("#video-container .video-wrapper"),currentQuestionSpan=document.getElementById("current-question"),totalQuestionsSpan=document.getElementById("total-questions"),prevBtn=document.getElementById("prev-btn"),nextBtn=document.getElementById("next-btn"),quickNavGrid=document.getElementById("quick-nav-grid");
 
     function getVideoEmbed(videoId,title){
       return `<div style="position:relative;width:100%;height:100%;"><iframe src="https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="${title}"></iframe></div>`;
@@ -1088,10 +1113,16 @@
 
     const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
-    let currentQuestionIndex=0,currentUserId="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+    let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+
+    function syncResultUserName(name){
+      if(resultUserName)resultUserName.textContent=name?`응시자: ${name}`:"";
+    }
 
     function startQuiz(uid,userName){
       currentUserId=uid;
+      currentUserName=userName||userNameInput.value.trim()||"";
+      syncResultUserName(currentUserName);
       const userRef=database.ref(`exams/${EXAM_ID}/users/${uid}`);
       userRef.once("value").then(snapshot=>{
         const data=snapshot.val();
@@ -1192,6 +1223,7 @@
       const 총점=필기+실기;
       const 합격여부 = (필기 >= 21 && 실기 >= 27) ? "합격" : "불합격";
       quizPage.style.display="none";resultPage.style.display="flex";
+      syncResultUserName(userNameInput.value.trim()||currentUserName);
       scoreSpan.textContent=`총점: ${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`;
       if(currentUserId){
         const ref=database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
