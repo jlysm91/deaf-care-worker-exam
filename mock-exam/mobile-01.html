@@ -1432,9 +1432,14 @@
         align-items: center !important;
       }
       #options label span {
-        white-space: nowrap !important;
+        display: block !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        white-space: normal !important;
         overflow: hidden !important;
         text-overflow: clip !important;
+        word-break: keep-all;
+        overflow-wrap: break-word;
       }
       #navigation-buttons {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
@@ -1882,7 +1887,7 @@ const EXAM_ID = "exam1";
       let size=Math.max(15,Math.min(17,viewport.width*0.038));
 
       if(isTabletLandscapeLayout()){
-        size=Math.max(16,Math.min(22,Math.min(panelRect.width*0.046,panelRect.height*0.04)));
+        size=Math.max(15,Math.min(20,Math.min(panelRect.width*0.042,panelRect.height*0.037)));
         for(let next=size;next>=12;next-=0.5){
           h3.style.setProperty("--question-font-size",next+"px");
           const style=getComputedStyle(h3);
@@ -1925,11 +1930,18 @@ const EXAM_ID = "exam1";
           optionsWrap.style.setProperty("--option-font-size",baseSize+"px");
           labels.forEach(label=>{
             const span=label.querySelector("span")||label;
-            let fittedSize=baseSize;
-            for(let next=baseSize;next>=minSize;next-=0.5){
+            label.style.setProperty("--option-font-size",baseSize+"px");
+            let style=getComputedStyle(span);
+            let lineHeight=parseFloat(style.lineHeight)||baseSize*1.4;
+            const wrapsAtBase=span.scrollHeight>lineHeight+2||span.scrollWidth>span.clientWidth+1;
+            const startSize=wrapsAtBase?Math.max(minSize,baseSize-1.5):baseSize;
+            let fittedSize=startSize;
+            for(let next=startSize;next>=minSize;next-=0.5){
               label.style.setProperty("--option-font-size",next+"px");
+              style=getComputedStyle(span);
+              lineHeight=parseFloat(style.lineHeight)||next*1.4;
               fittedSize=next;
-              if(span.scrollWidth<=span.clientWidth+1&&label.scrollHeight<=label.clientHeight+2)break;
+              if(span.scrollWidth<=span.clientWidth+1&&span.scrollHeight<=lineHeight*2+2&&label.scrollHeight<=label.clientHeight+2)break;
             }
             if(fittedSize===baseSize){
               label.style.removeProperty("--option-font-size");
