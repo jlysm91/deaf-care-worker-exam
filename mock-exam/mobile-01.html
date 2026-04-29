@@ -227,65 +227,6 @@
       border: none;
     }
 
-    #tablet-status-bar {
-      display: none;
-    }
-    .tablet-status-card {
-      min-width: 0;
-      border: 1px solid #D4E0EA;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.96);
-      box-shadow: var(--shadow-card);
-      padding: 12px 14px;
-    }
-    .tablet-status-label {
-      display: block;
-      margin-bottom: 4px;
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 800;
-      line-height: 1;
-    }
-    .tablet-status-value {
-      display: block;
-      color: var(--text-primary);
-      font-size: 18px;
-      font-weight: 900;
-      line-height: 1.15;
-      white-space: nowrap;
-    }
-    .tablet-status-progress {
-      min-width: 0;
-      border: 1px solid #CDE2EC;
-      border-radius: 14px;
-      background: #FFFFFF;
-      box-shadow: var(--shadow-card);
-      padding: 12px 14px;
-    }
-    .tablet-progress-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 9px;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 800;
-    }
-    .tablet-progress-track {
-      height: 9px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: #E1EAF1;
-    }
-    #tablet-progress-fill {
-      width: 0%;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
-      transition: width 0.2s ease;
-    }
-
     #quiz-container {
       min-height: 0;
       background: rgba(255, 255, 255, 0.92);
@@ -1373,65 +1314,52 @@
       }
     }
   
-    /* === 결과 페이지 요약 UX: 올리사이트 폭 제한 대응 === */
-    @media (min-width: 701px) and (orientation: landscape) {
+    /* === 태블릿 가로형: 상단 영상/문제, 하단 1~80번 전체 문항판 === */
+    @media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
       #quiz-page {
-        padding: 0 !important;
+        display: grid !important;
+        grid-template-rows: minmax(0, 1fr) auto !important;
+        padding: 14px !important;
+        gap: 12px !important;
         height: var(--quiz-vh, 100dvh) !important;
         min-height: var(--quiz-vh, 100dvh) !important;
         max-height: var(--quiz-vh, 100dvh) !important;
       }
       #quiz-page .quiz-top {
         display: grid !important;
-        grid-template-columns: minmax(0, 1.45fr) minmax(430px, 1fr) !important;
+        grid-template-columns: minmax(0, 7fr) minmax(340px, 3fr) !important;
         grid-template-rows: minmax(0, 1fr) !important;
         align-items: stretch !important;
         align-content: start !important;
         gap: 12px !important;
-        padding: 14px !important;
+        padding: 0 !important;
         height: 100% !important;
         max-height: 100% !important;
       }
       .tablet-video-panel {
-        grid-column: 1 !important;
-        grid-row: 1 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
-        align-self: stretch !important;
-        gap: 12px !important;
-        min-width: 0 !important;
-        min-height: 0 !important;
-        height: calc(var(--quiz-vh, 100dvh) - 28px) !important;
-        max-height: calc(var(--quiz-vh, 100dvh) - 28px) !important;
+        display: contents !important;
       }
       #video-container {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
         width: 100% !important;
         max-width: 100% !important;
         height: auto !important;
-        max-height: calc(var(--quiz-vh, 100dvh) - 112px) !important;
-        align-self: flex-start !important;
+        max-height: 100% !important;
+        align-self: stretch !important;
         aspect-ratio: 16 / 9 !important;
         border: 1px solid #CDD9E3 !important;
         border-radius: 16px !important;
         box-shadow: 0 14px 30px rgba(22, 34, 48, 0.12) !important;
-      }
-      #tablet-status-bar {
-        display: grid !important;
-        grid-template-columns: minmax(124px, auto) minmax(0, 1fr) minmax(124px, auto) !important;
-        align-items: stretch !important;
-        align-self: stretch !important;
-        gap: 10px !important;
-        width: 100% !important;
-        min-width: 0 !important;
       }
       #quiz-container {
         grid-column: 2 !important;
         grid-row: 1 !important;
         flex: 1 1 0 !important;
         min-width: 0 !important;
-        height: calc(var(--quiz-vh, 100dvh) - 28px) !important;
-        max-height: calc(var(--quiz-vh, 100dvh) - 28px) !important;
+        height: auto !important;
+        max-height: 100% !important;
+        align-self: stretch !important;
         border: 1px solid #D3DEE7 !important;
         border-radius: 16px !important;
         background: #FFFFFF !important;
@@ -1458,8 +1386,13 @@
         line-height: 1.4 !important;
       }
       #navigation-buttons {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
         padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
         gap: 8px !important;
+      }
+      #navigation-buttons #question-counter,
+      #navigation-buttons #quick-nav-container {
+        display: none !important;
       }
       #navigation-buttons > button,
       #navigation-buttons #quick-nav-container .nav-section-label {
@@ -1467,14 +1400,150 @@
         font-size: 13px !important;
         border-radius: 10px !important;
       }
+      #quick-nav-container {
+        grid-row: 2 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: 10px 12px !important;
+        margin: 0 !important;
+        border: 1px solid #D3DEE7 !important;
+        border-radius: 16px !important;
+        background: rgba(255, 255, 255, 0.96) !important;
+        box-shadow: 0 12px 26px rgba(22, 34, 48, 0.10) !important;
+        overflow: hidden !important;
+      }
+      #quick-nav-container .nav-header {
+        display: none !important;
+      }
       #quick-nav-grid-wrap {
-        width: min(760px, calc(42vw - 24px)) !important;
-        right: 10px !important;
+        position: static !important;
         left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
         transform: none !important;
       }
       #quick-nav-container.open #quick-nav-grid-wrap {
         transform: none !important;
+      }
+      #quick-nav-grid {
+        grid-template-columns: repeat(20, minmax(0, 1fr)) !important;
+        gap: 5px !important;
+        height: auto !important;
+      }
+      #quick-nav-grid .nav-btn {
+        height: var(--nav-btn-height, 30px) !important;
+        line-height: var(--nav-btn-height, 30px) !important;
+        border-radius: 7px !important;
+        font-size: 12px !important;
+      }
+    }
+
+    /* === 스마트폰 가로형: 영상만 보이지 않도록 문제 패널을 함께 노출 === */
+    @media (max-width: 899px) and (orientation: landscape) {
+      #quiz-page {
+        display: flex !important;
+        flex-direction: column !important;
+        height: var(--quiz-vh, 100dvh) !important;
+        min-height: var(--quiz-vh, 100dvh) !important;
+        max-height: var(--quiz-vh, 100dvh) !important;
+        padding: 8px !important;
+        overflow: hidden !important;
+      }
+      #quiz-page .quiz-top {
+        flex: 1 1 auto !important;
+        display: grid !important;
+        grid-template-columns: minmax(0, 58fr) minmax(300px, 42fr) !important;
+        grid-template-rows: minmax(0, 1fr) !important;
+        gap: 8px !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+      }
+      .tablet-video-panel {
+        display: contents !important;
+      }
+      #video-container {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: 100% !important;
+        align-self: start !important;
+        aspect-ratio: 16 / 9 !important;
+        border-radius: 12px !important;
+        border: 1px solid #CDD9E3 !important;
+        box-shadow: 0 10px 22px rgba(22, 34, 48, 0.10) !important;
+      }
+      #quiz-container {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        border: 1px solid #D3DEE7 !important;
+        border-radius: 12px !important;
+        background: #FFFFFF !important;
+        box-shadow: 0 10px 22px rgba(22, 34, 48, 0.08) !important;
+      }
+      #quiz-content {
+        padding: 8px 10px 0 !important;
+        gap: 6px !important;
+        background: #FFFFFF !important;
+      }
+      .q-num-badge {
+        padding: 5px 11px !important;
+        font-size: 11px !important;
+      }
+      #quiz-content h3 {
+        padding: 8px 10px !important;
+        font-size: var(--question-font-size, 14px) !important;
+        line-height: 1.35 !important;
+      }
+      #options {
+        gap: 6px !important;
+        padding-bottom: 8px !important;
+      }
+      #options label {
+        min-height: 38px !important;
+        padding: 8px 10px !important;
+        gap: 8px !important;
+        font-size: var(--option-font-size, 13px) !important;
+        line-height: 1.35 !important;
+        border-radius: 8px !important;
+      }
+      #options input[type="radio"] {
+        width: 16px !important;
+        height: 16px !important;
+      }
+      #navigation-buttons {
+        grid-template-columns: minmax(68px, 1fr) minmax(116px, 1fr) minmax(68px, 1fr) !important;
+        padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+        gap: 6px !important;
+      }
+      #navigation-buttons > button,
+      #navigation-buttons #quick-nav-container .nav-section-label {
+        min-height: 38px !important;
+        border-radius: 8px !important;
+        font-size: 12px !important;
+      }
+      #quick-nav-grid-wrap {
+        bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+        width: min(620px, calc(100vw - 16px)) !important;
       }
     }
 
@@ -1585,23 +1654,6 @@
     <div class="quiz-top">
       <div class="tablet-video-panel">
         <div id="video-container"><div class="video-wrapper"></div></div>
-        <div id="tablet-status-bar">
-          <div class="tablet-status-card">
-            <span class="tablet-status-label">현재 문항</span>
-            <strong class="tablet-status-value" id="tablet-current-status">1 / 80</strong>
-          </div>
-          <div class="tablet-status-progress">
-            <div class="tablet-progress-row">
-              <span>풀이 진행률</span>
-              <strong id="tablet-progress-text">0%</strong>
-            </div>
-            <div class="tablet-progress-track"><div id="tablet-progress-fill"></div></div>
-          </div>
-          <div class="tablet-status-card">
-            <span class="tablet-status-label">답변 현황</span>
-            <strong class="tablet-status-value" id="tablet-answered-status">0 / 80</strong>
-          </div>
-        </div>
       </div>
       <div id="quiz-container">
         <div id="quiz-content">
@@ -1677,27 +1729,44 @@ const EXAM_ID = "exam1";
     const quickNavContainer=document.getElementById("quick-nav-container");
     const quickNavLabel=quickNavContainer?quickNavContainer.querySelector(".nav-section-label"):null;
 
+    function isTabletLandscapeLayout(){
+      return window.matchMedia("(min-width: 900px) and (min-height: 560px) and (orientation: landscape)").matches;
+    }
+
     function closeQuickNavPanel(){
       if(quickNavContainer) quickNavContainer.classList.remove("open");
     }
 
     function toggleQuickNavPanel(forceOpen){
       if(!quickNavContainer) return;
+      if(isTabletLandscapeLayout()){
+        closeQuickNavPanel();
+        return;
+      }
       const nextState=(typeof forceOpen==="boolean")?forceOpen:!quickNavContainer.classList.contains("open");
       quickNavContainer.classList.toggle("open",nextState);
     }
 
     function initQuickNavBottomBar(){
       const navButtons=document.getElementById("navigation-buttons");
-      if(!navButtons||!quickNavContainer||quickNavContainer.dataset.bottomBarInit==="1") return;
+      if(!navButtons||!quickNavContainer) return;
 
-      if(!navButtons.contains(quickNavContainer)) navButtons.insertBefore(quickNavContainer,nextBtn);
+      if(isTabletLandscapeLayout()){
+        if(quizPage&&!quizPage.contains(quickNavContainer)) quizPage.appendChild(quickNavContainer);
+        if(quizPage&&quickNavContainer.parentElement!==quizPage) quizPage.appendChild(quickNavContainer);
+        quickNavContainer.dataset.quickNavMode="tablet";
+        closeQuickNavPanel();
+      }else{
+        if(!navButtons.contains(quickNavContainer)) navButtons.insertBefore(quickNavContainer,nextBtn);
+        quickNavContainer.dataset.quickNavMode="bottom";
+      }
 
       const counter=document.getElementById("question-counter");
       if(counter) counter.style.display="none";
 
-      quickNavContainer.dataset.bottomBarInit="1";
       quickNavContainer.style.display="flex";
+
+      if(quickNavContainer.dataset.bottomBarInit==="1") return;
 
       if(quickNavLabel){
         quickNavLabel.setAttribute("role","button");
@@ -1718,6 +1787,7 @@ const EXAM_ID = "exam1";
         quickWrap.dataset.touchLock="1";
       }
       document.addEventListener("click",closeQuickNavPanel);
+      quickNavContainer.dataset.bottomBarInit="1";
     }
 
     function getVideoEmbed(videoId,title){
@@ -1863,20 +1933,6 @@ const EXAM_ID = "exam1";
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
-    function updateTabletStatus(){
-      const currentStatus=document.getElementById("tablet-current-status");
-      const answeredStatus=document.getElementById("tablet-answered-status");
-      const progressText=document.getElementById("tablet-progress-text");
-      const progressFill=document.getElementById("tablet-progress-fill");
-      if(!currentStatus&&!answeredStatus&&!progressText&&!progressFill)return;
-      const answered=userAnswers.reduce((count,answer)=>answer!==null&&answer!==undefined?count+1:count,0);
-      const percent=TOTAL_QUESTIONS?Math.round((answered/TOTAL_QUESTIONS)*100):0;
-      if(currentStatus)currentStatus.textContent=`${currentQuestionIndex+1} / ${TOTAL_QUESTIONS}`;
-      if(answeredStatus)answeredStatus.textContent=`${answered} / ${TOTAL_QUESTIONS}`;
-      if(progressText)progressText.textContent=`${percent}%`;
-      if(progressFill)progressFill.style.width=`${percent}%`;
-    }
-
     function startQuiz(uid,userName){
       currentUserId=uid;
       const userRef=database.ref(`exams/${EXAM_ID}/users/${uid}`);
@@ -1926,7 +1982,6 @@ const EXAM_ID = "exam1";
       questionTextSpan.textContent=question.question;
       currentQuestionSpan.textContent=currentQuestionIndex+1;
       totalQuestionsSpan.textContent=TOTAL_QUESTIONS;
-      updateTabletStatus();
       requestAnimationFrame(fitQuestionText);
       requestAnimationFrame(fitOptionsText);
       optionsDiv.innerHTML="";
@@ -2146,6 +2201,7 @@ const EXAM_ID = "exam1";
     if(window.visualViewport){
       window.visualViewport.addEventListener("resize",()=>{
         updateQuizViewportHeight();
+        initQuickNavBottomBar();
         fitResultGrid();
         fitQuestionText();
         fitOptionsText();
@@ -2154,6 +2210,7 @@ const EXAM_ID = "exam1";
     }
     window.addEventListener("orientationchange",()=>setTimeout(()=>{
       updateQuizViewportHeight();
+      initQuickNavBottomBar();
       fitResultGrid();
       fitQuestionText();
       fitOptionsText();
@@ -2187,7 +2244,6 @@ const EXAM_ID = "exam1";
     optionsDiv.addEventListener("change",e=>{
       requestAnimationFrame(fitOptionsText);
       const ans=parseInt(e.target.value);userAnswers[currentQuestionIndex]=ans;saveQuizProgress();
-      updateTabletStatus();
       const btn=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
       if(btn){btn.textContent=`${currentQuestionIndex+1}(${ans})`;btn.classList.add("answered");}
     });
@@ -2202,9 +2258,10 @@ const EXAM_ID = "exam1";
       const vw=(vv&&vv.width)||window.innerWidth||390;
       const vh=(vv&&vv.height)||window.innerHeight||844;
 
-      const cols=10;
-      const rows=8;
-      const gap=vw<=700?4:6;
+      const tabletLandscape=isTabletLandscapeLayout();
+      const cols=tabletLandscape?20:10;
+      const rows=Math.ceil(80/cols);
+      const gap=tabletLandscape?5:(vw<=700?4:6);
 
       grid.style.gridTemplateColumns=`repeat(${cols}, minmax(0, 1fr))`;
       grid.style.gap=gap+"px";
@@ -2219,14 +2276,15 @@ const EXAM_ID = "exam1";
 
       const nav=document.getElementById("navigation-buttons");
       const navH=nav?Math.ceil(nav.getBoundingClientRect().height):64;
-      const bottomReserve=Math.max(74,navH+12);
-      const topReserve=vw<=700?10:16;
-      const wrapMaxH=Math.max(190,vh-bottomReserve-topReserve);
+      const bottomReserve=tabletLandscape?0:Math.max(74,navH+12);
+      const topReserve=tabletLandscape?0:(vw<=700?10:16);
+      const wrapMaxH=tabletLandscape?Math.max(96,wrap.clientHeight||160):Math.max(190,vh-bottomReserve-topReserve);
       const usableHeight=Math.max(140,wrapMaxH-padY);
       const heightBtnH=Math.floor((usableHeight-gap*(rows-1))/rows);
 
       let btnH=Math.min(widthBtnH,heightBtnH);
-      btnH=Math.max(vw<=700?22:24,Math.min(btnH,vw<=700?34:36));
+      if(tabletLandscape) btnH=Math.max(24,Math.min(btnH,34));
+      else btnH=Math.max(vw<=700?22:24,Math.min(btnH,vw<=700?34:36));
 
       const gridHeight=rows*btnH+(rows-1)*gap;
       const wrapHeight=gridHeight+padY;
@@ -2240,6 +2298,7 @@ const EXAM_ID = "exam1";
 
     window.addEventListener("resize",()=>{
       updateQuizViewportHeight();
+      initQuickNavBottomBar();
       applyResponsiveLayout();
       fitQuestionText();
       fitOptionsText();
