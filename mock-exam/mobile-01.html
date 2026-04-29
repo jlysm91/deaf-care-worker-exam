@@ -1931,13 +1931,25 @@ const EXAM_ID = "exam1";
         if(tabletLandscape){
           const baseSize=size;
           optionsWrap.style.setProperty("--option-font-size",baseSize+"px");
-          labels.forEach(label=>{
+          const wrapStates=labels.map(label=>{
             const span=label.querySelector("span")||label;
             label.style.setProperty("--option-font-size",baseSize+"px");
             let style=getComputedStyle(span);
             let lineHeight=parseFloat(style.lineHeight)||baseSize*1.4;
-            const wrapsAtBase=span.scrollHeight>lineHeight+2||span.scrollWidth>span.clientWidth+1;
-            const startSize=wrapsAtBase?Math.max(minSize,baseSize-1.5):baseSize;
+            return span.scrollHeight>lineHeight+2||span.scrollWidth>span.clientWidth+1;
+          });
+          const longTextStates=labels.map(label=>{
+            const span=label.querySelector("span")||label;
+            return span.textContent.trim().replace(/\s+/g," ").length>=27;
+          });
+          const denseLongOptions=wrapStates.filter(Boolean).length>=Math.ceil(labels.length*0.6)||longTextStates.filter(Boolean).length>=Math.ceil(labels.length*0.8);
+          labels.forEach((label,index)=>{
+            const span=label.querySelector("span")||label;
+            let style=getComputedStyle(span);
+            let lineHeight=parseFloat(style.lineHeight)||baseSize*1.4;
+            const wrapsAtBase=wrapStates[index];
+            const shouldTighten=wrapsAtBase||(denseLongOptions&&longTextStates[index]);
+            const startSize=shouldTighten?Math.max(minSize,baseSize-(denseLongOptions?2:1.5)):baseSize;
             let fittedSize=startSize;
             for(let next=startSize;next>=minSize;next-=0.5){
               label.style.setProperty("--option-font-size",next+"px");
@@ -1953,7 +1965,7 @@ const EXAM_ID = "exam1";
             }
             style=getComputedStyle(span);
             lineHeight=parseFloat(style.lineHeight)||fittedSize*1.4;
-            if(span.scrollHeight>lineHeight+2){
+            if(!denseLongOptions&&span.scrollHeight>lineHeight+2){
               label.style.setProperty("flex","1.32 1 0","important");
             }
           });
