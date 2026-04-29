@@ -1884,7 +1884,57 @@ const EXAM_ID = "exam1";
         </section>`;
     }
 
-    function fitResultGrid(){}
+    function enhanceResultPageLayout(){
+      const page=document.getElementById("result-page");
+      if(!page||page.dataset.uxEnhanced==="1")return;
+
+      const emoji=page.querySelector(".result-emoji");
+      const title=page.querySelector("h2");
+      const score=document.getElementById("score");
+      const gridCard=document.getElementById("quick-nav-container-result");
+      const returnBtn=document.getElementById("result-return-btn");
+
+      const shell=document.createElement("div");
+      shell.id="result-shell";
+
+      const summary=document.createElement("section");
+      summary.className="result-summary-card";
+      if(emoji)summary.appendChild(emoji);
+      if(title)summary.appendChild(title);
+      if(score)summary.appendChild(score);
+
+      shell.appendChild(summary);
+      if(gridCard)shell.appendChild(gridCard);
+      if(returnBtn)shell.appendChild(returnBtn);
+
+      page.appendChild(shell);
+      page.dataset.uxEnhanced="1";
+    }
+
+    function fitResultGrid(){
+      const grid=document.getElementById("quick-nav-grid-result");
+      const container=document.getElementById("quick-nav-container-result");
+      if(!grid||!container)return;
+
+      const rectW=container.getBoundingClientRect().width;
+      const fallbackW=window.innerWidth||document.documentElement.clientWidth||0;
+      const w=rectW>0?rectW:fallbackW;
+      if(w<=0){
+        requestAnimationFrame(fitResultGrid);
+        return;
+      }
+
+      let cols=6;
+      if(w<=520)cols=4;
+      else if(w<=760)cols=5;
+      else if(w<=1024)cols=6;
+      else cols=8;
+
+      const gap=w<=600?6:(w<=1024?8:10);
+      grid.style.setProperty("--result-grid-cols",String(cols));
+      grid.style.setProperty("--result-grid-gap",gap+"px");
+      grid.classList.toggle("compact",w<=760);
+    }
 
     enhanceResultPageLayout();
 
