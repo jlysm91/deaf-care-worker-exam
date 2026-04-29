@@ -1303,22 +1303,26 @@
     @media (max-width: 700px) {
       #quiz-page { padding: 0 !important; }
       #quiz-content {
-        overflow: hidden !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+        overscroll-behavior: contain !important;
       }
       #options {
-        flex: 1 1 0 !important;
-        min-height: 0 !important;
+        flex: 0 0 auto !important;
+        min-height: auto !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: var(--tablet-option-gap, 7px) !important;
+        gap: 7px !important;
         padding-bottom: 12px !important;
-        overflow: hidden !important;
+        overflow: visible !important;
       }
       #options label {
-        flex: 1 1 0 !important;
-        min-height: 42px !important;
+        flex: 0 0 auto !important;
+        min-height: 48px !important;
         height: auto !important;
-        padding: var(--tablet-option-padding-y, 12px) 14px !important;
+        padding: 12px 14px !important;
         align-items: center !important;
       }
       #navigation-buttons {
@@ -1426,6 +1430,11 @@
         font-size: var(--option-font-size, 14px) !important;
         line-height: 1.4 !important;
         align-items: center !important;
+      }
+      #options label span {
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: clip !important;
       }
       #navigation-buttons {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
@@ -1874,6 +1883,15 @@ const EXAM_ID = "exam1";
 
       if(isTabletLandscapeLayout()){
         size=Math.max(16,Math.min(22,Math.min(panelRect.width*0.046,panelRect.height*0.04)));
+        for(let next=size;next>=12;next-=0.5){
+          h3.style.setProperty("--question-font-size",next+"px");
+          const style=getComputedStyle(h3);
+          const lineHeight=parseFloat(style.lineHeight)||next*1.45;
+          const paddingY=(parseFloat(style.paddingTop)||0)+(parseFloat(style.paddingBottom)||0);
+          const maxHeight=lineHeight*2+paddingY+3;
+          size=next;
+          if(h3.scrollHeight<=maxHeight)break;
+        }
       }else if(isPhoneLandscapeLayout()){
         size=Math.max(13,Math.min(16,Math.min(panelRect.width*0.05,panelRect.height*0.06)));
       }
@@ -1888,19 +1906,27 @@ const EXAM_ID = "exam1";
       const optionsRect=optionsWrap.getBoundingClientRect();
       const tabletLandscape=isTabletLandscapeLayout();
       const phoneLandscape=isPhoneLandscapeLayout();
-      const phonePortrait=viewport.width<=700&&!phoneLandscape;
       let size=Math.max(14,Math.min(16,viewport.width*0.036));
 
-      if(tabletLandscape||phoneLandscape||phonePortrait){
+      if(tabletLandscape||phoneLandscape){
         const minGap=phoneLandscape?5:7;
-        const maxGap=phoneLandscape?8:(phonePortrait?10:12);
+        const maxGap=phoneLandscape?8:12;
         const gap=Math.max(minGap,Math.min(maxGap,optionsRect.height*0.018));
         const cardHeight=(optionsRect.height-(labels.length-1)*gap)/labels.length;
-        const maxSize=phoneLandscape?15:(phonePortrait?16:20);
-        const minSize=phoneLandscape?12:14;
+        const maxSize=phoneLandscape?15:20;
+        const minSize=phoneLandscape?12:9;
         size=Math.max(minSize,Math.min(maxSize,Math.min(optionsRect.width*0.05,cardHeight*0.42)));
         optionsWrap.style.setProperty("--tablet-option-gap",gap+"px");
-        optionsWrap.style.setProperty("--tablet-option-padding-y",Math.max(phoneLandscape?6:8,Math.min(phoneLandscape?9:(phonePortrait?13:14),cardHeight*0.18))+"px");
+        optionsWrap.style.setProperty("--tablet-option-padding-y",Math.max(phoneLandscape?6:8,Math.min(phoneLandscape?9:14,cardHeight*0.18))+"px");
+
+        if(tabletLandscape){
+          const spans=labels.map(label=>label.querySelector("span")||label);
+          for(let next=size;next>=minSize;next-=0.5){
+            optionsWrap.style.setProperty("--option-font-size",next+"px");
+            size=next;
+            if(spans.every(span=>span.scrollWidth<=span.clientWidth+1))break;
+          }
+        }
       }else{
         optionsWrap.style.removeProperty("--tablet-option-gap");
         optionsWrap.style.removeProperty("--tablet-option-padding-y");
@@ -2053,6 +2079,7 @@ const EXAM_ID = "exam1";
       startPage.style.display="none";quizPage.style.display="flex";
       updateQuizViewportHeight();
       initQuickNavBottomBar();
+      enableQuizContentTouchScroll();
       document.getElementById("quick-nav-container").style.display="flex";
       closeQuickNavPanel();
       createQuickNavButtons();updateQuestion(currentQuestionIndex);
