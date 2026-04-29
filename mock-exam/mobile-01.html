@@ -1312,6 +1312,80 @@
     }
   
     /* === 결과 페이지 요약 UX: 올리사이트 폭 제한 대응 === */
+    @media (min-width: 701px) and (orientation: landscape) {
+      #quiz-page {
+        padding: 0 !important;
+        height: var(--quiz-vh, 100dvh) !important;
+        min-height: var(--quiz-vh, 100dvh) !important;
+        max-height: var(--quiz-vh, 100dvh) !important;
+      }
+      #quiz-page .quiz-top {
+        flex-direction: row !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: 10px !important;
+        height: 100% !important;
+        max-height: 100% !important;
+      }
+      #video-container {
+        flex: 0 0 58% !important;
+        width: auto !important;
+        max-width: 58% !important;
+        height: auto !important;
+        max-height: calc(var(--quiz-vh, 100dvh) - 20px) !important;
+        align-self: flex-start !important;
+        aspect-ratio: 16 / 9 !important;
+      }
+      #quiz-container {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+        height: calc(var(--quiz-vh, 100dvh) - 20px) !important;
+        max-height: calc(var(--quiz-vh, 100dvh) - 20px) !important;
+        border: 1px solid #D3DEE7 !important;
+        border-radius: 12px !important;
+        background: #FFFFFF !important;
+      }
+      #quiz-content {
+        padding: 12px 14px 0 !important;
+        gap: 8px !important;
+        background: #FFFFFF !important;
+      }
+      #quiz-content h3 {
+        font-size: var(--question-font-size, 16px) !important;
+        line-height: 1.45 !important;
+        padding: 10px 12px !important;
+      }
+      #options {
+        gap: 7px !important;
+        padding-bottom: 10px !important;
+      }
+      #options label {
+        min-height: 46px !important;
+        padding: 10px 12px !important;
+        font-size: var(--option-font-size, 14px) !important;
+        line-height: 1.4 !important;
+      }
+      #navigation-buttons {
+        padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+        gap: 8px !important;
+      }
+      #navigation-buttons > button,
+      #navigation-buttons #quick-nav-container .nav-section-label {
+        min-height: 42px !important;
+        font-size: 13px !important;
+        border-radius: 10px !important;
+      }
+      #quick-nav-grid-wrap {
+        width: min(760px, calc(42vw - 24px)) !important;
+        right: 10px !important;
+        left: auto !important;
+        transform: none !important;
+      }
+      #quick-nav-container.open #quick-nav-grid-wrap {
+        transform: none !important;
+      }
+    }
+
     #quick-nav-container-result {
       width: min(100%, 760px) !important;
       max-width: 760px !important;
