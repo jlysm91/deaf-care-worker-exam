@@ -1902,6 +1902,7 @@ const EXAM_ID = "exam1";
       const optionsWrap=document.getElementById("options");
       const labels=[...document.querySelectorAll("#options label")];
       if(!optionsWrap||!labels.length)return;
+      labels.forEach(label=>label.style.removeProperty("--option-font-size"));
       const viewport=getViewportSize();
       const optionsRect=optionsWrap.getBoundingClientRect();
       const tabletLandscape=isTabletLandscapeLayout();
@@ -1920,12 +1921,22 @@ const EXAM_ID = "exam1";
         optionsWrap.style.setProperty("--tablet-option-padding-y",Math.max(phoneLandscape?6:8,Math.min(phoneLandscape?9:14,cardHeight*0.18))+"px");
 
         if(tabletLandscape){
-          const spans=labels.map(label=>label.querySelector("span")||label);
-          for(let next=size;next>=minSize;next-=0.5){
-            optionsWrap.style.setProperty("--option-font-size",next+"px");
-            size=next;
-            if(spans.every(span=>span.scrollWidth<=span.clientWidth+1))break;
-          }
+          const baseSize=size;
+          optionsWrap.style.setProperty("--option-font-size",baseSize+"px");
+          labels.forEach(label=>{
+            const span=label.querySelector("span")||label;
+            let fittedSize=baseSize;
+            for(let next=baseSize;next>=minSize;next-=0.5){
+              label.style.setProperty("--option-font-size",next+"px");
+              fittedSize=next;
+              if(span.scrollWidth<=span.clientWidth+1&&label.scrollHeight<=label.clientHeight+2)break;
+            }
+            if(fittedSize===baseSize){
+              label.style.removeProperty("--option-font-size");
+            }else{
+              label.style.setProperty("--option-font-size",fittedSize+"px");
+            }
+          });
         }
       }else{
         optionsWrap.style.removeProperty("--tablet-option-gap");
