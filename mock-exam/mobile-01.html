@@ -195,6 +195,9 @@
       min-height: 0;
       align-items: stretch;
     }
+    .tablet-video-panel {
+      display: contents;
+    }
     #video-container {
       min-height: 0;
       border-radius: var(--radius-lg);
@@ -222,6 +225,65 @@
       width: 100%;
       height: 100%;
       border: none;
+    }
+
+    #tablet-status-bar {
+      display: none;
+    }
+    .tablet-status-card {
+      min-width: 0;
+      border: 1px solid #D4E0EA;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: var(--shadow-card);
+      padding: 12px 14px;
+    }
+    .tablet-status-label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .tablet-status-value {
+      display: block;
+      color: var(--text-primary);
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+    .tablet-status-progress {
+      min-width: 0;
+      border: 1px solid #CDE2EC;
+      border-radius: 14px;
+      background: #FFFFFF;
+      box-shadow: var(--shadow-card);
+      padding: 12px 14px;
+    }
+    .tablet-progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 9px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .tablet-progress-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #E1EAF1;
+    }
+    #tablet-progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+      transition: width 0.2s ease;
     }
 
     #quiz-container {
@@ -1320,30 +1382,60 @@
         max-height: var(--quiz-vh, 100dvh) !important;
       }
       #quiz-page .quiz-top {
-        flex-direction: row !important;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1.45fr) minmax(430px, 1fr) !important;
+        grid-template-rows: minmax(0, 1fr) !important;
         align-items: stretch !important;
-        gap: 10px !important;
-        padding: 10px !important;
+        align-content: start !important;
+        gap: 12px !important;
+        padding: 14px !important;
         height: 100% !important;
         max-height: 100% !important;
       }
+      .tablet-video-panel {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        align-self: stretch !important;
+        gap: 12px !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        height: calc(var(--quiz-vh, 100dvh) - 28px) !important;
+        max-height: calc(var(--quiz-vh, 100dvh) - 28px) !important;
+      }
       #video-container {
-        flex: 0 0 58% !important;
-        width: auto !important;
-        max-width: 58% !important;
+        width: 100% !important;
+        max-width: 100% !important;
         height: auto !important;
-        max-height: calc(var(--quiz-vh, 100dvh) - 20px) !important;
+        max-height: calc(var(--quiz-vh, 100dvh) - 112px) !important;
         align-self: flex-start !important;
         aspect-ratio: 16 / 9 !important;
+        border: 1px solid #CDD9E3 !important;
+        border-radius: 16px !important;
+        box-shadow: 0 14px 30px rgba(22, 34, 48, 0.12) !important;
+      }
+      #tablet-status-bar {
+        display: grid !important;
+        grid-template-columns: minmax(124px, auto) minmax(0, 1fr) minmax(124px, auto) !important;
+        align-items: stretch !important;
+        align-self: stretch !important;
+        gap: 10px !important;
+        width: 100% !important;
+        min-width: 0 !important;
       }
       #quiz-container {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
         flex: 1 1 0 !important;
         min-width: 0 !important;
-        height: calc(var(--quiz-vh, 100dvh) - 20px) !important;
-        max-height: calc(var(--quiz-vh, 100dvh) - 20px) !important;
+        height: calc(var(--quiz-vh, 100dvh) - 28px) !important;
+        max-height: calc(var(--quiz-vh, 100dvh) - 28px) !important;
         border: 1px solid #D3DEE7 !important;
-        border-radius: 12px !important;
+        border-radius: 16px !important;
         background: #FFFFFF !important;
+        box-shadow: 0 16px 34px rgba(22, 34, 48, 0.10) !important;
       }
       #quiz-content {
         padding: 12px 14px 0 !important;
@@ -1491,7 +1583,26 @@
 
   <div id="quiz-page">
     <div class="quiz-top">
-      <div id="video-container"><div class="video-wrapper"></div></div>
+      <div class="tablet-video-panel">
+        <div id="video-container"><div class="video-wrapper"></div></div>
+        <div id="tablet-status-bar">
+          <div class="tablet-status-card">
+            <span class="tablet-status-label">현재 문항</span>
+            <strong class="tablet-status-value" id="tablet-current-status">1 / 80</strong>
+          </div>
+          <div class="tablet-status-progress">
+            <div class="tablet-progress-row">
+              <span>풀이 진행률</span>
+              <strong id="tablet-progress-text">0%</strong>
+            </div>
+            <div class="tablet-progress-track"><div id="tablet-progress-fill"></div></div>
+          </div>
+          <div class="tablet-status-card">
+            <span class="tablet-status-label">답변 현황</span>
+            <strong class="tablet-status-value" id="tablet-answered-status">0 / 80</strong>
+          </div>
+        </div>
+      </div>
       <div id="quiz-container">
         <div id="quiz-content">
           <div class="question-meta"><span class="q-num-badge">문제 <span id="question-number">1</span></span></div>
@@ -1752,6 +1863,20 @@ const EXAM_ID = "exam1";
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
+    function updateTabletStatus(){
+      const currentStatus=document.getElementById("tablet-current-status");
+      const answeredStatus=document.getElementById("tablet-answered-status");
+      const progressText=document.getElementById("tablet-progress-text");
+      const progressFill=document.getElementById("tablet-progress-fill");
+      if(!currentStatus&&!answeredStatus&&!progressText&&!progressFill)return;
+      const answered=userAnswers.reduce((count,answer)=>answer!==null&&answer!==undefined?count+1:count,0);
+      const percent=TOTAL_QUESTIONS?Math.round((answered/TOTAL_QUESTIONS)*100):0;
+      if(currentStatus)currentStatus.textContent=`${currentQuestionIndex+1} / ${TOTAL_QUESTIONS}`;
+      if(answeredStatus)answeredStatus.textContent=`${answered} / ${TOTAL_QUESTIONS}`;
+      if(progressText)progressText.textContent=`${percent}%`;
+      if(progressFill)progressFill.style.width=`${percent}%`;
+    }
+
     function startQuiz(uid,userName){
       currentUserId=uid;
       const userRef=database.ref(`exams/${EXAM_ID}/users/${uid}`);
@@ -1801,6 +1926,7 @@ const EXAM_ID = "exam1";
       questionTextSpan.textContent=question.question;
       currentQuestionSpan.textContent=currentQuestionIndex+1;
       totalQuestionsSpan.textContent=TOTAL_QUESTIONS;
+      updateTabletStatus();
       requestAnimationFrame(fitQuestionText);
       requestAnimationFrame(fitOptionsText);
       optionsDiv.innerHTML="";
@@ -2061,6 +2187,7 @@ const EXAM_ID = "exam1";
     optionsDiv.addEventListener("change",e=>{
       requestAnimationFrame(fitOptionsText);
       const ans=parseInt(e.target.value);userAnswers[currentQuestionIndex]=ans;saveQuizProgress();
+      updateTabletStatus();
       const btn=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
       if(btn){btn.textContent=`${currentQuestionIndex+1}(${ans})`;btn.classList.add("answered");}
     });
