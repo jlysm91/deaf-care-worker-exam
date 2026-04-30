@@ -700,9 +700,9 @@
     body.mobile-page #quiz-content h3 { flex: 0 0 auto !important; width: 100% !important; max-width: 100% !important; min-width: 0 !important; margin: 0 !important; padding: 10px 14px !important; font-size: var(--question-font-size, 15px) !important; line-height: 1.65 !important; font-weight: 700 !important; border-radius: 8px !important; border: 1px solid #CAE8F4 !important; border-left: 3px solid var(--primary-light) !important; background: #EDF7FC !important; white-space: normal !important; overflow: visible !important; word-break: keep-all; overflow-wrap: break-word; }
     body.mobile-page #question-text { display: block; width: 100%; min-width: 0; max-width: 100%; white-space: normal !important; overflow: visible !important; word-break: keep-all; overflow-wrap: break-word; }
     body.mobile-page #options { flex: 0 0 auto !important; min-height: auto !important; width: 100% !important; max-width: 100% !important; display: flex !important; flex-direction: column !important; gap: 7px !important; padding-bottom: 12px !important; overflow: visible !important; }
-    body.mobile-page #options label { flex: 0 0 auto !important; min-height: 48px !important; width: 100% !important; max-width: 100% !important; padding: 12px 14px !important; display: flex !important; align-items: center !important; gap: 10px !important; font-size: var(--option-font-size, 14px) !important; line-height: 1.55 !important; overflow: visible !important; white-space: normal !important; word-break: keep-all; overflow-wrap: break-word; }
-    body.mobile-page #options label span { flex: 1 1 auto !important; min-width: 0 !important; max-width: 100% !important; display: block !important; font-size: inherit !important; line-height: inherit !important; white-space: normal !important; overflow: visible !important; word-break: keep-all; overflow-wrap: break-word; }
-    body.mobile-page #options input[type="radio"] { flex: 0 0 auto !important; width: 18px !important; height: 18px !important; margin-top: 0 !important; }
+    body.mobile-page #options label { flex: 0 0 auto !important; min-height: 48px !important; width: 100% !important; max-width: 100% !important; padding: 12px 14px !important; display: flex !important; align-items: center !important; gap: 10px !important; font-size: var(--option-font-size, 14px) !important; line-height: 1.55 !important; overflow: visible !important; white-space: normal !important; word-break: keep-all; overflow-wrap: break-word; touch-action: pan-y !important; -webkit-user-select: none; user-select: none; }
+    body.mobile-page #options label span { flex: 1 1 auto !important; min-width: 0 !important; max-width: 100% !important; display: block !important; font-size: inherit !important; line-height: inherit !important; white-space: normal !important; overflow: visible !important; word-break: keep-all; overflow-wrap: break-word; touch-action: pan-y !important; }
+    body.mobile-page #options input[type="radio"] { flex: 0 0 auto !important; width: 18px !important; height: 18px !important; margin-top: 0 !important; touch-action: pan-y !important; }
     body.mobile-page #navigation-buttons { position: static !important; transform: none !important; flex: 0 0 auto !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)) !important; border: 0 !important; border-top: 1px solid #D3DEE7 !important; border-radius: 0 !important; background: rgba(255,255,255,0.96) !important; box-shadow: 0 -2px 14px rgba(0,0,0,0.07) !important; display: grid !important; grid-template-columns: minmax(74px, 1fr) minmax(112px, 1fr) minmax(74px, 1fr) !important; gap: 8px !important; align-items: stretch !important; z-index: 40 !important; }
     body.mobile-page #navigation-buttons #question-counter { display: none !important; }
     body.mobile-page #navigation-buttons > button, body.mobile-page #navigation-buttons #quick-nav-container .nav-section-label { min-width: 0 !important; min-height: 44px !important; width: 100% !important; padding: 0 8px !important; border-radius: 10px !important; font-size: 13px !important; line-height: 1.2 !important; font-weight: 700 !important; white-space: nowrap !important; text-align: center !important; }
@@ -5134,14 +5134,41 @@ const chapter8Data=[
   function enableQuizContentTouchScroll() {
     const scroller = document.getElementById("quiz-content");
     if (!scroller || scroller.dataset.touchScrollInit === "1") return;
-    let lastY = 0; let moved = false;
-    scroller.addEventListener("touchstart", event => { if (event.touches.length !== 1) return; lastY = event.touches[0].clientY; moved = false; }, { passive: true });
-    scroller.addEventListener("touchmove", event => {
+    let lastY = 0;
+    let moved = false;
+    let startTarget = null;
+
+    const handleTouchStart = event => {
+      if (event.touches.length !== 1) return;
+      lastY = event.touches[0].clientY;
+      moved = false;
+      startTarget = event.target;
+    };
+
+    const handleTouchMove = event => {
       if (event.touches.length !== 1 || scroller.scrollHeight <= scroller.clientHeight + 1) return;
-      const y = event.touches[0].clientY; const delta = lastY - y;
-      if (Math.abs(delta) > 1) { scroller.scrollTop += delta; lastY = y; moved = true; event.preventDefault(); event.stopPropagation(); }
-    }, { passive: false });
-    scroller.addEventListener("click", event => { if (moved) { event.preventDefault(); event.stopPropagation(); moved = false; } }, true);
+      const y = event.touches[0].clientY;
+      const delta = lastY - y;
+      if (Math.abs(delta) <= 1) return;
+      scroller.scrollTop += delta;
+      lastY = y;
+      moved = true;
+      if (event.cancelable) event.preventDefault();
+      event.stopPropagation();
+    };
+
+    scroller.addEventListener("touchstart", handleTouchStart, { passive: true, capture: true });
+    scroller.addEventListener("touchmove", handleTouchMove, { passive: false, capture: true });
+    scroller.addEventListener("click", event => {
+      if (!moved) return;
+      const optionStarted = startTarget && startTarget.closest && startTarget.closest("#options label");
+      if (optionStarted || scroller.contains(event.target)) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      moved = false;
+      startTarget = null;
+    }, true);
     scroller.dataset.touchScrollInit = "1";
   }
 
