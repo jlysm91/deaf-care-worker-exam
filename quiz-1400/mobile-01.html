@@ -687,7 +687,7 @@
     html.quiz-active, html.quiz-active body.mobile-page { height: var(--quiz-vh, 100dvh) !important; min-height: var(--quiz-vh, 100dvh) !important; max-height: var(--quiz-vh, 100dvh) !important; overflow: hidden !important; }
     body.mobile-page { overflow: hidden !important; background: var(--bg) !important; overscroll-behavior: none !important; }
     body.mobile-page.quiz-active { position: fixed !important; inset: 0 !important; width: 100vw !important; height: var(--quiz-vh, 100dvh) !important; max-height: var(--quiz-vh, 100dvh) !important; overflow: hidden !important; }
-    body.mobile-page #quiz-page { display: flex !important; flex-direction: column !important; height: var(--quiz-vh, 100dvh) !important; min-height: var(--quiz-vh, 100dvh) !important; max-height: var(--quiz-vh, 100dvh) !important; width: 100vw !important; max-width: 100vw !important; padding: 0 !important; gap: 0 !important; overflow: hidden !important; background: var(--bg) !important; }
+    body.mobile-page #quiz-page { flex-direction: column !important; height: var(--quiz-vh, 100dvh) !important; min-height: var(--quiz-vh, 100dvh) !important; max-height: var(--quiz-vh, 100dvh) !important; width: 100vw !important; max-width: 100vw !important; padding: 0 !important; gap: 0 !important; overflow: hidden !important; background: var(--bg) !important; }
     body.mobile-page #quiz-page .quiz-top { flex: 1 1 auto !important; display: flex !important; flex-direction: column !important; min-height: 0 !important; width: 100% !important; max-width: 100% !important; gap: 0 !important; overflow: hidden !important; }
     body.mobile-page #video-container { flex: 0 0 auto !important; width: 100% !important; max-width: 100% !important; min-height: 0 !important; height: auto !important; aspect-ratio: 16 / 9 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; background: #000 !important; overflow: hidden !important; }
     body.mobile-page #video-container .video-wrapper, body.mobile-page #video-container .video-wrapper > div, body.mobile-page #video-container .video-wrapper iframe { width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; border-radius: 0 !important; }
@@ -748,18 +748,18 @@
     }
     @media (orientation: portrait) {
       body.mobile-page #quiz-content {
-        height: auto !important;
-        max-height: none !important;
-        overflow-y: scroll !important;
+        overflow-y: auto !important;
         overflow-x: hidden !important;
         -webkit-overflow-scrolling: touch !important;
         overscroll-behavior: contain !important;
         touch-action: pan-y !important;
       }
       body.mobile-page #options {
-        flex: 0 0 auto !important;
-        min-height: auto !important;
-        overflow: visible !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
         touch-action: pan-y !important;
       }
       body.mobile-page #options label,
