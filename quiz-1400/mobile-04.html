@@ -683,8 +683,11 @@
 
 
     /* === 1400제 모바일/태블릿: 모의고사 모바일 UI 기준 보정 === */
-    body.mobile-page { overflow: hidden !important; background: var(--bg) !important; }
-    body.mobile-page #quiz-page { flex-direction: column !important; height: var(--quiz-vh, 100dvh) !important; min-height: var(--quiz-vh, 100dvh) !important; max-height: var(--quiz-vh, 100dvh) !important; width: 100vw !important; max-width: 100vw !important; padding: 0 !important; gap: 0 !important; overflow: hidden !important; background: var(--bg) !important; }
+    html { height: 100% !important; min-height: 100% !important; overflow: hidden !important; overscroll-behavior: none !important; }
+    html.quiz-active, html.quiz-active body.mobile-page { height: var(--quiz-vh, 100dvh) !important; min-height: var(--quiz-vh, 100dvh) !important; max-height: var(--quiz-vh, 100dvh) !important; overflow: hidden !important; }
+    body.mobile-page { overflow: hidden !important; background: var(--bg) !important; overscroll-behavior: none !important; }
+    body.mobile-page.quiz-active { position: fixed !important; inset: 0 !important; width: 100vw !important; height: var(--quiz-vh, 100dvh) !important; max-height: var(--quiz-vh, 100dvh) !important; overflow: hidden !important; }
+    body.mobile-page #quiz-page { display: flex !important; flex-direction: column !important; height: var(--quiz-vh, 100dvh) !important; min-height: var(--quiz-vh, 100dvh) !important; max-height: var(--quiz-vh, 100dvh) !important; width: 100vw !important; max-width: 100vw !important; padding: 0 !important; gap: 0 !important; overflow: hidden !important; background: var(--bg) !important; }
     body.mobile-page #quiz-page .quiz-top { flex: 1 1 auto !important; display: flex !important; flex-direction: column !important; min-height: 0 !important; width: 100% !important; max-width: 100% !important; gap: 0 !important; overflow: hidden !important; }
     body.mobile-page #video-container { flex: 0 0 auto !important; width: 100% !important; max-width: 100% !important; min-height: 0 !important; height: auto !important; aspect-ratio: 16 / 9 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; background: #000 !important; overflow: hidden !important; }
     body.mobile-page #video-container .video-wrapper, body.mobile-page #video-container .video-wrapper > div, body.mobile-page #video-container .video-wrapper iframe { width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; border-radius: 0 !important; }
@@ -711,7 +714,10 @@
     body.mobile-page #quick-nav-container.open[data-quick-nav-mode="bottom"] #quick-nav-wrapper { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; transform: translate(-50%, 0) !important; }
     body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-grid-wrap, body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] #quick-nav-grid-wrap { position: static !important; transform: none !important; flex: 1 1 auto !important; width: auto !important; min-width: 0 !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; overflow: hidden !important; }
     body.mobile-page #quick-nav-grid { grid-template-columns: repeat(10, minmax(0, 1fr)) !important; gap: 4px !important; height: auto !important; }
-    body.mobile-page #quick-nav-grid .nav-btn { height: var(--nav-btn-height, 28px) !important; line-height: var(--nav-btn-height, 28px) !important; border-radius: 7px !important; font-size: clamp(11px, 2.9vw, 13px) !important; font-weight: 700 !important; }
+    body.mobile-page #quick-nav-grid .nav-btn { height: var(--nav-btn-height, 28px) !important; line-height: 1 !important; border-radius: 7px !important; font-size: clamp(11px, 2.9vw, 13px) !important; font-weight: 700 !important; display: flex !important; align-items: center !important; justify-content: center !important; position: relative !important; color: transparent !important; }
+    body.mobile-page #quick-nav-grid .nav-btn::after { content: attr(data-label); position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
+    body.mobile-page #quick-nav-grid .nav-btn.active::after { color: #FFFFFF; }
+    body.mobile-page #quick-nav-grid .nav-btn.answered::after { color: var(--success); }
     body.mobile-page .nav-arrow { width: 30px !important; height: var(--nav-btn-height, 28px) !important; min-height: var(--nav-btn-height, 28px) !important; border-radius: 8px !important; flex: 0 0 30px !important; }
     @media (min-width: 601px) { body.mobile-page #quiz-content { padding: 16px 18px 0 !important; gap: 10px !important; } body.mobile-page #quiz-content h3 { font-size: var(--question-font-size, 17px) !important; padding: 14px 16px !important; } body.mobile-page #options { gap: 10px !important; padding-bottom: 16px !important; } body.mobile-page #options label { min-height: 56px !important; padding: 14px 18px !important; font-size: var(--option-font-size, 16px) !important; } body.mobile-page #navigation-buttons { padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px)) !important; gap: 12px !important; } body.mobile-page #navigation-buttons > button, body.mobile-page #navigation-buttons #quick-nav-container .nav-section-label { min-height: 48px !important; font-size: 15px !important; border-radius: 12px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper { bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important; } }
     @media (max-width: 700px) { body.mobile-page { overflow: hidden !important; } body.mobile-page #navigation-buttons { width: 100% !important; grid-template-columns: minmax(74px, 1fr) minmax(112px, 1fr) minmax(74px, 1fr) !important; gap: 8px !important; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)) !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper { width: calc(100vw - 10px) !important; bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important; } body.mobile-page #quick-nav-grid .nav-btn { height: var(--nav-btn-height, 24px) !important; line-height: var(--nav-btn-height, 24px) !important; } }
@@ -2600,6 +2606,7 @@ const chapter12Data=[
     if (isTabletLandscapeLayout()) { closeQuickNavPanel(); return; }
     const nextState = (typeof forceOpen === "boolean") ? forceOpen : !quickNavContainer.classList.contains("open");
     quickNavContainer.classList.toggle("open", nextState);
+    if (nextState) requestAnimationFrame(autoResizeNavGrid);
   }
 
   function initQuickNavBottomBar() {
@@ -2653,7 +2660,18 @@ const chapter12Data=[
     return `<div style="position:relative;width:100%;height:100%;"><iframe src="https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="${title}"></iframe></div>`;
   }
 
+  function setQuizActive(active) {
+    document.documentElement.classList.toggle("quiz-active", active);
+    if (document.body) document.body.classList.toggle("quiz-active", active);
+    if (active) {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
+    }
+  }
+
   function hideAllPages() {
+    setQuizActive(false);
     [startPage, chapterSelectPage, sectionSelectPage, quizPage, resultPage].forEach(page => {
       if (page) page.style.display = "none";
     });
@@ -2771,7 +2789,8 @@ const chapter12Data=[
   }
 
   function showQuizPage() {
-    showPage(quizPage, "grid");
+    showPage(quizPage, "flex");
+    setQuizActive(true);
     updateQuizViewportHeight();
     initQuickNavBottomBar();
     enableQuizContentTouchScroll();
@@ -2851,9 +2870,11 @@ const chapter12Data=[
       btn.className = "nav-btn";
       if (realIdx >= TOTAL_QUESTIONS) {
         btn.classList.add("placeholder");
+        btn.dataset.label = "";
         btn.tabIndex = -1;
       } else {
         btn.textContent = realIdx + 1;
+        btn.dataset.label = realIdx + 1;
         if (realIdx === currentQuestionIndex) btn.classList.add("active");
         if (userAnswers[realIdx] !== null && userAnswers[realIdx] !== undefined) btn.classList.add("answered");
         btn.addEventListener("click", () => {
