@@ -724,6 +724,53 @@
     @media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) { html, body.mobile-page { background: #FFFFFF !important; overflow: hidden !important; } body.mobile-page #quiz-page { display: grid !important; grid-template-rows: minmax(0, 1fr) auto !important; padding: 14px !important; gap: 12px !important; background: #FFFFFF !important; } body.mobile-page #quiz-page .quiz-top { display: grid !important; grid-template-columns: minmax(0, 7fr) minmax(340px, 3fr) !important; grid-template-rows: minmax(0, 1fr) !important; align-items: stretch !important; gap: 12px !important; height: 100% !important; max-height: 100% !important; } body.mobile-page #video-container { grid-column: 1 !important; grid-row: 1 !important; align-self: stretch !important; border: 1px solid #CDD9E3 !important; border-radius: 16px !important; box-shadow: 0 14px 30px rgba(22,34,48,.12) !important; } body.mobile-page #quiz-container { grid-column: 2 !important; grid-row: 1 !important; align-self: stretch !important; border: 1px solid #D3DEE7 !important; border-radius: 16px !important; background: #FFFFFF !important; box-shadow: 0 16px 34px rgba(22,34,48,.10) !important; } body.mobile-page #quiz-content { padding: 12px 14px 0 !important; gap: 8px !important; background: #FFFFFF !important; overflow: hidden !important; } body.mobile-page #quiz-content h3 { font-size: var(--question-font-size, 16px) !important; line-height: 1.45 !important; padding: 10px 12px !important; } body.mobile-page #options { flex: 1 1 0 !important; min-height: 0 !important; gap: var(--tablet-option-gap, 7px) !important; padding-bottom: 10px !important; overflow: hidden !important; } body.mobile-page #options label { flex: 1 1 0 !important; min-height: 0 !important; height: auto !important; padding: var(--tablet-option-padding-y, 10px) 12px !important; font-size: var(--option-font-size, 14px) !important; line-height: 1.4 !important; } body.mobile-page #options label span { overflow: hidden !important; text-overflow: clip !important; } body.mobile-page #navigation-buttons { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) !important; gap: 8px !important; } body.mobile-page #navigation-buttons #question-counter, body.mobile-page #navigation-buttons #quick-nav-container { display: none !important; } body.mobile-page #navigation-buttons > button { min-height: 42px !important; font-size: 13px !important; border-radius: 10px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] { grid-row: 2 !important; display: flex !important; flex-direction: column !important; width: 100% !important; padding: 10px 12px !important; border: 1px solid #D3DEE7 !important; border-radius: 16px !important; background: #FFFFFF !important; box-shadow: 0 12px 26px rgba(22,34,48,.10) !important; overflow: hidden !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] .nav-header { display: none !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] #quick-nav-wrapper { display: flex !important; width: 100% !important; gap: 6px !important; align-items: center !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] #quick-nav-grid { grid-template-columns: repeat(20, minmax(0, 1fr)) !important; gap: 5px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] #quick-nav-grid .nav-btn { height: var(--nav-btn-height, 30px) !important; line-height: var(--nav-btn-height, 30px) !important; border-radius: 7px !important; font-size: 12px !important; } }
     @media (max-width: 899px) and (orientation: landscape) { body.mobile-page #quiz-page { display: flex !important; flex-direction: column !important; padding: 8px !important; overflow: hidden !important; } body.mobile-page #quiz-page .quiz-top { flex: 1 1 auto !important; display: grid !important; grid-template-columns: minmax(0, 58fr) minmax(300px, 42fr) !important; grid-template-rows: minmax(0, 1fr) !important; gap: 8px !important; height: 100% !important; min-height: 0 !important; overflow: hidden !important; } body.mobile-page #video-container { grid-column: 1 !important; grid-row: 1 !important; align-self: start !important; border-radius: 12px !important; border: 1px solid #CDD9E3 !important; box-shadow: 0 10px 22px rgba(22,34,48,.10) !important; } body.mobile-page #quiz-container { grid-column: 2 !important; grid-row: 1 !important; height: 100% !important; border: 1px solid #D3DEE7 !important; border-radius: 12px !important; background: #FFFFFF !important; box-shadow: 0 10px 22px rgba(22,34,48,.08) !important; } body.mobile-page #quiz-content { padding: 8px 10px 0 !important; gap: 6px !important; background: #FFFFFF !important; overflow: hidden !important; } body.mobile-page #quiz-content h3 { padding: 8px 10px !important; font-size: var(--question-font-size, 14px) !important; line-height: 1.35 !important; } body.mobile-page #options { flex: 1 1 0 !important; min-height: 0 !important; gap: var(--tablet-option-gap, 6px) !important; padding-bottom: 8px !important; overflow: hidden !important; } body.mobile-page #options label { flex: 1 1 0 !important; min-height: 0 !important; height: auto !important; padding: var(--tablet-option-padding-y, 8px) 10px !important; gap: 8px !important; font-size: var(--option-font-size, 13px) !important; line-height: 1.35 !important; border-radius: 8px !important; } body.mobile-page #navigation-buttons { grid-template-columns: minmax(68px, 1fr) minmax(116px, 1fr) minmax(68px, 1fr) !important; padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)) !important; gap: 6px !important; } body.mobile-page #navigation-buttons > button, body.mobile-page #navigation-buttons #quick-nav-container .nav-section-label { min-height: 38px !important; border-radius: 8px !important; font-size: 12px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper { bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important; width: min(620px, calc(100vw - 16px)) !important; } }
 
+    /* === 1400제 1부: 1회 모의고사 모바일 스크롤 방식 재적용 === */
+    html:not(.quiz-active),
+    html:not(.quiz-active) body.mobile-page {
+      height: auto !important;
+      min-height: 100% !important;
+      max-height: none !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      overscroll-behavior: auto !important;
+    }
+    body.mobile-page .select-page {
+      height: var(--quiz-vh, 100dvh) !important;
+      min-height: var(--quiz-vh, 100dvh) !important;
+      max-height: var(--quiz-vh, 100dvh) !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-y !important;
+    }
+    body.mobile-page .select-shell {
+      min-height: max-content !important;
+    }
+    @media (orientation: portrait) {
+      body.mobile-page #quiz-content {
+        height: auto !important;
+        max-height: none !important;
+        overflow-y: scroll !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        touch-action: pan-y !important;
+      }
+      body.mobile-page #options {
+        flex: 0 0 auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        touch-action: pan-y !important;
+      }
+      body.mobile-page #options label,
+      body.mobile-page #options label span,
+      body.mobile-page #options input[type="radio"] {
+        touch-action: pan-y !important;
+        -webkit-user-select: auto !important;
+        user-select: auto !important;
+      }
+    }
+
   </style>
 </head>
 <body class="mobile-page">
@@ -2755,7 +2802,6 @@ const chapter1Data=[
       span.textContent = option;
       label.appendChild(input);
       label.appendChild(span);
-      bindOptionTouchScroll(label);
       optionsDiv.appendChild(label);
     });
     prevBtn.disabled = currentQuestionIndex === 0;
@@ -3111,62 +3157,6 @@ const chapter1Data=[
     labels.forEach(label => { label.style.removeProperty("padding-top"); label.style.removeProperty("padding-bottom"); });
   }
 
-  function scrollQuizContentBy(delta) {
-    const scroller = document.getElementById("quiz-content");
-    if (!scroller || scroller.scrollHeight <= scroller.clientHeight + 1) return false;
-    scroller.scrollTop += delta;
-    return true;
-  }
-
-  function bindOptionTouchScroll(label) {
-    if (!label || label.dataset.optionTouchScroll === "1") return;
-    let startY = 0;
-    let lastY = 0;
-    let moved = false;
-    let suppressClick = false;
-
-    label.addEventListener("touchstart", event => {
-      if (event.touches.length !== 1) return;
-      startY = event.touches[0].clientY;
-      lastY = startY;
-      moved = false;
-    }, { passive: true });
-
-    label.addEventListener("touchmove", event => {
-      if (event.touches.length !== 1) return;
-      const y = event.touches[0].clientY;
-      const delta = lastY - y;
-      if (Math.abs(delta) <= 1) return;
-      const didScroll = scrollQuizContentBy(delta);
-      lastY = y;
-      if (Math.abs(y - startY) > 5) moved = true;
-      if (didScroll) {
-        if (event.cancelable) event.preventDefault();
-        event.stopPropagation();
-      }
-    }, { passive: false });
-
-    label.addEventListener("touchend", () => {
-      if (!moved) return;
-      suppressClick = true;
-      setTimeout(() => { suppressClick = false; }, 120);
-    }, { passive: true });
-
-    label.addEventListener("touchcancel", () => {
-      moved = false;
-      suppressClick = false;
-    }, { passive: true });
-
-    label.addEventListener("click", event => {
-      if (!suppressClick) return;
-      event.preventDefault();
-      event.stopPropagation();
-      suppressClick = false;
-    }, true);
-
-    label.dataset.optionTouchScroll = "1";
-  }
-
   function enableQuizContentTouchScroll() {
     const scroller = document.getElementById("quiz-content");
     if (!scroller || scroller.dataset.touchScrollInit === "1") return;
@@ -3185,7 +3175,7 @@ const chapter1Data=[
       scroller.scrollTop += delta;
       lastY = y;
       moved = true;
-      if (event.cancelable) event.preventDefault();
+      event.preventDefault();
       event.stopPropagation();
     }, { passive: false });
     scroller.addEventListener("click", event => {
