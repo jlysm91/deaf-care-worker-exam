@@ -180,12 +180,12 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: min(1040px, 92vw);
+      max-width: min(1480px, 94vw);
       text-align: center;
     }
     .cs-badge { margin-bottom: 16px; }
     .cs-title {
-      font-size: clamp(24px, 3vw, 42px);
+      font-size: clamp(34px, 4vw, 58px);
       font-weight: 800;
       color: #FFFFFF;
       letter-spacing: -0.5px;
@@ -193,22 +193,22 @@
       margin-bottom: 10px;
       text-shadow: 0 2px 16px rgba(0, 0, 0, 0.16);
     }
-    .cs-sub { margin-bottom: clamp(24px, 4vh, 40px); }
+    .cs-sub { margin-bottom: clamp(34px, 5vh, 58px); }
     .chapter-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: clamp(14px, 1.8vw, 20px);
+      gap: clamp(22px, 2.4vw, 34px);
       width: 100%;
-      max-width: min(760px, 92vw);
+      max-width: min(1120px, 92vw);
       margin: 0 auto;
     }
-    .chapter-grid.cols3 { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: min(920px, 92vw); }
-    .chapter-grid.cols4 { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: min(1060px, 94vw); }
+    .chapter-grid.cols3 { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: min(1180px, 92vw); }
+    .chapter-grid.cols4 { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: min(1420px, 94vw); }
     .chapter-btn {
-      min-height: clamp(126px, 16vh, 176px);
-      padding: clamp(20px, 3vh, 34px) clamp(16px, 2vw, 28px);
+      min-height: clamp(190px, 24vh, 270px);
+      padding: clamp(32px, 4.6vh, 56px) clamp(26px, 2.8vw, 42px);
       border: 1px solid rgba(255, 255, 255, 0.82);
-      border-radius: 18px;
+      border-radius: 22px;
       background: rgba(255, 255, 255, 0.95);
       box-shadow: 0 14px 30px rgba(4, 24, 39, 0.18);
       font-family: inherit;
@@ -221,16 +221,16 @@
       box-shadow: 0 20px 42px rgba(4, 24, 39, 0.25);
       background: #FFFFFF;
     }
-    .ch-num { color: var(--primary); font-size: clamp(14px, 1.3vw, 18px); font-weight: 800; margin-bottom: 8px; }
+    .ch-num { color: var(--primary); font-size: clamp(20px, 1.8vw, 28px); font-weight: 800; margin-bottom: 12px; }
     .ch-name {
       color: var(--text-primary);
-      font-size: clamp(15px, 1.5vw, 20px);
+      font-size: clamp(22px, 2vw, 30px);
       font-weight: 800;
       line-height: 1.42;
       word-break: keep-all;
     }
-    .ch-total { margin-top: 8px; color: var(--text-muted); font-size: clamp(11px, 0.95vw, 13px); font-weight: 600; }
-    .ch-result { min-height: 18px; margin-top: 8px; color: var(--success); font-size: clamp(12px, 1vw, 14px); font-weight: 700; }
+    .ch-total { margin-top: 14px; color: var(--text-muted); font-size: clamp(15px, 1.15vw, 18px); font-weight: 700; }
+    .ch-result { min-height: 24px; margin-top: 12px; color: var(--success); font-size: clamp(15px, 1.2vw, 18px); font-weight: 800; }
     .back-btn {
       margin: 0 auto clamp(16px, 2.2vh, 24px);
       padding: 10px 18px;
@@ -589,7 +589,10 @@
       .start-card { width: min(94vw, 430px); padding: 24px 18px 22px; }
       .select-page { justify-content: flex-start; padding: 22px 14px; }
       .chapter-grid, .chapter-grid.cols3, .chapter-grid.cols4 { grid-template-columns: 1fr; max-width: min(430px, 94vw); }
-      .chapter-btn { min-height: auto; padding: 20px 16px; border-radius: 14px; }
+      .chapter-btn { min-height: 150px; padding: 28px 22px; border-radius: 18px; }
+      .ch-num { font-size: 22px; }
+      .ch-name { font-size: 23px; }
+      .ch-total, .ch-result { font-size: 16px; }
       #quiz-page { padding: 8px; gap: 7px; }
       html, body { overflow: auto !important; }
       #quiz-page {
