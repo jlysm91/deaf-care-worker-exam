@@ -451,6 +451,7 @@
     .nav-btn.answered { background: var(--success-subtle); color: var(--success); border-color: #84D7AC; }
     .nav-btn.correct { background: var(--success-subtle) !important; color: var(--success) !important; border-color: #84D7AC !important; }
     .nav-btn.incorrect { background: var(--danger-subtle) !important; color: var(--danger) !important; border-color: #EBA29D !important; }
+    .nav-btn.unanswered { background: #F1F5F9 !important; color: #64748B !important; border-color: #CBD5E1 !important; }
     .nav-btn.placeholder { visibility: hidden; pointer-events: none; }
     #result-page {
       display: none;
@@ -496,16 +497,68 @@
     }
     .result-user-name { margin: 0; color: #64748B; font-size: clamp(12px, 1vw, 14px); font-weight: 700; flex-shrink: 0; }
     #score {
-      text-align: center;
-      font-size: clamp(16px, 1.8vw, 24px);
-      font-weight: 800;
-      color: var(--primary);
-      padding: clamp(10px, 1.3vh, 14px) clamp(16px, 2.5vw, 28px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(10px, 1.3vh, 14px);
+      color: var(--text-primary);
+      padding: clamp(12px, 1.6vh, 18px) clamp(14px, 2.2vw, 24px);
       border-radius: var(--radius-lg);
       background: rgba(255, 255, 255, 0.94);
       border: 1px solid #D8E2EB;
       box-shadow: var(--shadow-card);
     }
+    .result-summary-main {
+      display: grid;
+      grid-template-columns: minmax(170px, 0.7fr) minmax(0, 1.3fr);
+      gap: clamp(10px, 1.4vw, 16px);
+      align-items: stretch;
+    }
+    .result-status-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 120px;
+      border-radius: 15px;
+      padding: 16px;
+      color: #FFFFFF;
+      text-align: center;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.13);
+    }
+    #score.pass .result-status-card { background: linear-gradient(135deg, #009C72 0%, #06B585 100%); }
+    #score.fail .result-status-card { background: linear-gradient(135deg, #C13C36 0%, #E0645A 100%); }
+    .result-status-label { font-size: clamp(26px, 3vw, 40px); font-weight: 900; line-height: 1; }
+    .result-status-note { font-size: clamp(13px, 1vw, 15px); font-weight: 800; opacity: 0.94; }
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(7px, 0.8vw, 10px);
+    }
+    .result-stat {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 82px;
+      padding: 12px 10px;
+      border-radius: 13px;
+      background: #F8FBFD;
+      border: 1px solid #D8E2EB;
+      text-align: center;
+    }
+    .result-stat strong { color: var(--text-primary); font-size: clamp(18px, 1.8vw, 28px); font-weight: 900; line-height: 1.1; }
+    .result-stat span { margin-top: 6px; color: #64748B; font-size: clamp(11px, 0.9vw, 13px); font-weight: 800; }
+    .result-standard {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #64748B;
+      font-size: clamp(12px, 1vw, 14px);
+      font-weight: 800;
+      text-align: center;
+    }
+    .result-standard strong { color: var(--primary); }
     #quick-nav-container-result {
       display: flex;
       flex-direction: column;
@@ -622,6 +675,8 @@
       #quick-nav-grid-result { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
       #quick-nav-grid-result .nav-btn { height: 48px; }
       .result-heading { flex-wrap: wrap; white-space: normal; }
+      .result-summary-main { grid-template-columns: 1fr; }
+      .result-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .result-actions { flex-direction: column; }
       .result-actions button { width: 100%; }
     }
@@ -708,10 +763,10 @@
   <div id="result-page" style="display:none">
     <div class="result-heading">
       <span class="result-badge" id="result-badge">5장</span>
-      <h2>시험 결과</h2>
+      <h2>학습 결과</h2>
       <p id="result-user-name" class="result-user-name"></p>
     </div>
-    <p id="score"></p>
+    <div id="score" class="result-summary"></div>
     <div id="quick-nav-container-result">
       <p class="result-grid-title">문항별 결과 (C: 정답 / M: 내 답)</p>
       <div id="result-grid-nav">
@@ -2563,9 +2618,33 @@ const chapter5Data=[
   }
 
   function showResult(data) {
-    currentResultAnswers = toAnswersArray(data.answers, data.totalQ || TOTAL_QUESTIONS);
+    const totalQ = data.totalQ || TOTAL_QUESTIONS;
+    const correctCount = Number(data.total) || 0;
+    currentResultAnswers = toAnswersArray(data.answers, totalQ);
+    const unansweredCount = currentResultAnswers.filter(answer => answer === null || answer === undefined || answer === "").length;
+    const wrongCount = Math.max(totalQ - correctCount - unansweredCount, 0);
+    const passCount = Math.ceil(totalQ * 0.6);
+    const rate = totalQ ? (correctCount / totalQ) * 100 : 0;
+    const isPassed = correctCount >= passCount;
+    const statusNote = isPassed ? (rate >= 80 ? "안정권" : "기준 통과, 복습 권장") : "재학습 필요";
+    const scoreEl = document.getElementById("score");
     document.getElementById("result-user-name").textContent = data.name ? `응시자 : ${data.name}` : "";
-    document.getElementById("score").textContent = `총점: ${data.total}점 / 총 문항: ${data.totalQ}문항`;
+    scoreEl.className = `result-summary ${isPassed ? "pass" : "fail"}`;
+    scoreEl.innerHTML = `
+      <div class="result-summary-main">
+        <div class="result-status-card">
+          <div class="result-status-label">${isPassed ? "합격" : "불합격"}</div>
+          <div class="result-status-note">${statusNote}</div>
+        </div>
+        <div class="result-stats">
+          <div class="result-stat"><strong>${rate.toFixed(1)}%</strong><span>정답률</span></div>
+          <div class="result-stat"><strong>${correctCount} / ${totalQ}</strong><span>정답</span></div>
+          <div class="result-stat"><strong>${wrongCount}</strong><span>오답</span></div>
+          <div class="result-stat"><strong>${unansweredCount}</strong><span>미답</span></div>
+        </div>
+      </div>
+      <div class="result-standard">장별 학습 기준: <strong>60% 이상</strong> · 합격 기준 정답 <strong>${passCount}문항 이상</strong></div>
+    `;
     renderResultGrid(0);
     requestAnimationFrame(fitResultGrid);
   }
@@ -2594,10 +2673,12 @@ const chapter5Data=[
       if (idx >= total) {
         cell.classList.add("placeholder");
       } else {
-        const ua = currentResultAnswers[idx] == null ? "-" : currentResultAnswers[idx];
+        const uaRaw = currentResultAnswers[idx];
+        const unanswered = uaRaw === null || uaRaw === undefined || uaRaw === "";
+        const ua = unanswered ? "-" : uaRaw;
         const ca = quizData[idx] ? quizData[idx].correctAnswer : "-";
-        const ok = ua !== "-" && parseInt(ua, 10) === parseInt(ca, 10);
-        cell.classList.add(ok ? "correct" : "incorrect");
+        const ok = !unanswered && parseInt(ua, 10) === parseInt(ca, 10);
+        cell.classList.add(unanswered ? "unanswered" : (ok ? "correct" : "incorrect"));
         cell.innerHTML = `<span class="number">${idx + 1}</span><span class="detail">C:${ca} / M:${ua}</span>`;
       }
       grid.appendChild(cell);
