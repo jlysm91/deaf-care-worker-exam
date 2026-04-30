@@ -681,6 +681,43 @@
       .result-actions button { width: 100%; }
     }
 
+
+    /* === 1400제 모바일/태블릿: 모의고사 모바일 UI 기준 보정 === */
+    body.mobile-page { overflow: hidden !important; background: var(--bg) !important; }
+    body.mobile-page #quiz-page { flex-direction: column !important; height: var(--quiz-vh, 100dvh) !important; min-height: var(--quiz-vh, 100dvh) !important; max-height: var(--quiz-vh, 100dvh) !important; width: 100vw !important; max-width: 100vw !important; padding: 0 !important; gap: 0 !important; overflow: hidden !important; background: var(--bg) !important; }
+    body.mobile-page #quiz-page .quiz-top { flex: 1 1 auto !important; display: flex !important; flex-direction: column !important; min-height: 0 !important; width: 100% !important; max-width: 100% !important; gap: 0 !important; overflow: hidden !important; }
+    body.mobile-page #video-container { flex: 0 0 auto !important; width: 100% !important; max-width: 100% !important; min-height: 0 !important; height: auto !important; aspect-ratio: 16 / 9 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; background: #000 !important; overflow: hidden !important; }
+    body.mobile-page #video-container .video-wrapper, body.mobile-page #video-container .video-wrapper > div, body.mobile-page #video-container .video-wrapper iframe { width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; border-radius: 0 !important; }
+    body.mobile-page #video-container .video-wrapper > div { inset: 0 !important; }
+    body.mobile-page #quiz-container { flex: 1 1 auto !important; min-height: 0 !important; width: 100% !important; max-width: 100% !important; display: flex !important; flex-direction: column !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; background: var(--bg) !important; overflow: hidden !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    body.mobile-page #quiz-content { flex: 1 1 auto !important; min-height: 0 !important; width: 100% !important; max-width: 100% !important; display: flex !important; flex-direction: column !important; gap: 8px !important; padding: 12px 14px 0 !important; overflow-y: auto !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-y !important; scrollbar-width: none; -ms-overflow-style: none; background: var(--bg) !important; }
+    body.mobile-page #quiz-content::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+    body.mobile-page .question-meta { flex: 0 0 auto !important; margin: 0 !important; }
+    body.mobile-page .q-num-badge { min-height: 0 !important; padding: 6px 13px !important; border-radius: 999px !important; font-size: 12px !important; line-height: 1 !important; }
+    body.mobile-page #quiz-content h3 { flex: 0 0 auto !important; width: 100% !important; max-width: 100% !important; min-width: 0 !important; margin: 0 !important; padding: 10px 14px !important; font-size: var(--question-font-size, 15px) !important; line-height: 1.65 !important; font-weight: 700 !important; border-radius: 8px !important; border: 1px solid #CAE8F4 !important; border-left: 3px solid var(--primary-light) !important; background: #EDF7FC !important; white-space: normal !important; overflow: visible !important; word-break: keep-all; overflow-wrap: break-word; }
+    body.mobile-page #question-text { display: block; width: 100%; min-width: 0; max-width: 100%; white-space: normal !important; overflow: visible !important; word-break: keep-all; overflow-wrap: break-word; }
+    body.mobile-page #options { flex: 0 0 auto !important; min-height: auto !important; width: 100% !important; max-width: 100% !important; display: flex !important; flex-direction: column !important; gap: 7px !important; padding-bottom: 12px !important; overflow: visible !important; }
+    body.mobile-page #options label { flex: 0 0 auto !important; min-height: 48px !important; width: 100% !important; max-width: 100% !important; padding: 12px 14px !important; display: flex !important; align-items: center !important; gap: 10px !important; font-size: var(--option-font-size, 14px) !important; line-height: 1.55 !important; overflow: visible !important; white-space: normal !important; word-break: keep-all; overflow-wrap: break-word; }
+    body.mobile-page #options label span { flex: 1 1 auto !important; min-width: 0 !important; max-width: 100% !important; display: block !important; font-size: inherit !important; line-height: inherit !important; white-space: normal !important; overflow: visible !important; word-break: keep-all; overflow-wrap: break-word; }
+    body.mobile-page #options input[type="radio"] { flex: 0 0 auto !important; width: 18px !important; height: 18px !important; margin-top: 0 !important; }
+    body.mobile-page #navigation-buttons { position: static !important; transform: none !important; flex: 0 0 auto !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)) !important; border: 0 !important; border-top: 1px solid #D3DEE7 !important; border-radius: 0 !important; background: rgba(255,255,255,0.96) !important; box-shadow: 0 -2px 14px rgba(0,0,0,0.07) !important; display: grid !important; grid-template-columns: minmax(74px, 1fr) minmax(112px, 1fr) minmax(74px, 1fr) !important; gap: 8px !important; align-items: stretch !important; z-index: 40 !important; }
+    body.mobile-page #navigation-buttons #question-counter { display: none !important; }
+    body.mobile-page #navigation-buttons > button, body.mobile-page #navigation-buttons #quick-nav-container .nav-section-label { min-width: 0 !important; min-height: 44px !important; width: 100% !important; padding: 0 8px !important; border-radius: 10px !important; font-size: 13px !important; line-height: 1.2 !important; font-weight: 700 !important; white-space: nowrap !important; text-align: center !important; }
+    body.mobile-page #quick-nav-container { display: flex !important; align-items: stretch !important; justify-content: center !important; min-width: 0 !important; width: 100% !important; padding: 0 !important; margin: 0 !important; border: 0 !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; overflow: visible !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    body.mobile-page #quick-nav-container .nav-header { width: 100% !important; margin: 0 !important; }
+    body.mobile-page #quick-nav-container .nav-section-label { border: 1.5px solid #BECFDC !important; background: #FFFFFF !important; color: var(--text-secondary) !important; cursor: pointer; user-select: none; -webkit-user-select: none; }
+    body.mobile-page #quick-nav-container.open .nav-section-label { border-color: transparent !important; background: linear-gradient(120deg, var(--primary) 0%, #0E8FB2 100%) !important; color: #FFFFFF !important; box-shadow: 0 8px 16px rgba(0, 93, 122, 0.24); }
+    body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper { position: fixed !important; left: 50% !important; transform: translate(-50%, 8px) !important; bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important; width: min(1120px, calc(100vw - 12px)) !important; padding: 6px !important; border-radius: 14px !important; border: 1px solid #C9D6E1 !important; background: rgba(255,255,255,0.98) !important; box-shadow: 0 16px 32px rgba(22,34,48,.18) !important; display: flex !important; align-items: center !important; gap: 6px !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transition: opacity .16s ease, transform .16s ease, visibility .16s ease; z-index: 41 !important; overflow: hidden !important; }
+    body.mobile-page #quick-nav-container.open[data-quick-nav-mode="bottom"] #quick-nav-wrapper { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; transform: translate(-50%, 0) !important; }
+    body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-grid-wrap, body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] #quick-nav-grid-wrap { position: static !important; transform: none !important; flex: 1 1 auto !important; width: auto !important; min-width: 0 !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; overflow: hidden !important; }
+    body.mobile-page #quick-nav-grid { grid-template-columns: repeat(10, minmax(0, 1fr)) !important; gap: 4px !important; height: auto !important; }
+    body.mobile-page #quick-nav-grid .nav-btn { height: var(--nav-btn-height, 28px) !important; line-height: var(--nav-btn-height, 28px) !important; border-radius: 7px !important; font-size: clamp(11px, 2.9vw, 13px) !important; font-weight: 700 !important; }
+    body.mobile-page .nav-arrow { width: 30px !important; height: var(--nav-btn-height, 28px) !important; min-height: var(--nav-btn-height, 28px) !important; border-radius: 8px !important; flex: 0 0 30px !important; }
+    @media (min-width: 601px) { body.mobile-page #quiz-content { padding: 16px 18px 0 !important; gap: 10px !important; } body.mobile-page #quiz-content h3 { font-size: var(--question-font-size, 17px) !important; padding: 14px 16px !important; } body.mobile-page #options { gap: 10px !important; padding-bottom: 16px !important; } body.mobile-page #options label { min-height: 56px !important; padding: 14px 18px !important; font-size: var(--option-font-size, 16px) !important; } body.mobile-page #navigation-buttons { padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px)) !important; gap: 12px !important; } body.mobile-page #navigation-buttons > button, body.mobile-page #navigation-buttons #quick-nav-container .nav-section-label { min-height: 48px !important; font-size: 15px !important; border-radius: 12px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper { bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important; } }
+    @media (max-width: 700px) { body.mobile-page { overflow: hidden !important; } body.mobile-page #navigation-buttons { width: 100% !important; grid-template-columns: minmax(74px, 1fr) minmax(112px, 1fr) minmax(74px, 1fr) !important; gap: 8px !important; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)) !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper { width: calc(100vw - 10px) !important; bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important; } body.mobile-page #quick-nav-grid .nav-btn { height: var(--nav-btn-height, 24px) !important; line-height: var(--nav-btn-height, 24px) !important; } }
+    @media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) { html, body.mobile-page { background: #FFFFFF !important; overflow: hidden !important; } body.mobile-page #quiz-page { display: grid !important; grid-template-rows: minmax(0, 1fr) auto !important; padding: 14px !important; gap: 12px !important; background: #FFFFFF !important; } body.mobile-page #quiz-page .quiz-top { display: grid !important; grid-template-columns: minmax(0, 7fr) minmax(340px, 3fr) !important; grid-template-rows: minmax(0, 1fr) !important; align-items: stretch !important; gap: 12px !important; height: 100% !important; max-height: 100% !important; } body.mobile-page #video-container { grid-column: 1 !important; grid-row: 1 !important; align-self: stretch !important; border: 1px solid #CDD9E3 !important; border-radius: 16px !important; box-shadow: 0 14px 30px rgba(22,34,48,.12) !important; } body.mobile-page #quiz-container { grid-column: 2 !important; grid-row: 1 !important; align-self: stretch !important; border: 1px solid #D3DEE7 !important; border-radius: 16px !important; background: #FFFFFF !important; box-shadow: 0 16px 34px rgba(22,34,48,.10) !important; } body.mobile-page #quiz-content { padding: 12px 14px 0 !important; gap: 8px !important; background: #FFFFFF !important; overflow: hidden !important; } body.mobile-page #quiz-content h3 { font-size: var(--question-font-size, 16px) !important; line-height: 1.45 !important; padding: 10px 12px !important; } body.mobile-page #options { flex: 1 1 0 !important; min-height: 0 !important; gap: var(--tablet-option-gap, 7px) !important; padding-bottom: 10px !important; overflow: hidden !important; } body.mobile-page #options label { flex: 1 1 0 !important; min-height: 0 !important; height: auto !important; padding: var(--tablet-option-padding-y, 10px) 12px !important; font-size: var(--option-font-size, 14px) !important; line-height: 1.4 !important; } body.mobile-page #options label span { overflow: hidden !important; text-overflow: clip !important; } body.mobile-page #navigation-buttons { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) !important; gap: 8px !important; } body.mobile-page #navigation-buttons #question-counter, body.mobile-page #navigation-buttons #quick-nav-container { display: none !important; } body.mobile-page #navigation-buttons > button { min-height: 42px !important; font-size: 13px !important; border-radius: 10px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] { grid-row: 2 !important; display: flex !important; flex-direction: column !important; width: 100% !important; padding: 10px 12px !important; border: 1px solid #D3DEE7 !important; border-radius: 16px !important; background: #FFFFFF !important; box-shadow: 0 12px 26px rgba(22,34,48,.10) !important; overflow: hidden !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] .nav-header { display: none !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] #quick-nav-wrapper { display: flex !important; width: 100% !important; gap: 6px !important; align-items: center !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] #quick-nav-grid { grid-template-columns: repeat(20, minmax(0, 1fr)) !important; gap: 5px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] #quick-nav-grid .nav-btn { height: var(--nav-btn-height, 30px) !important; line-height: var(--nav-btn-height, 30px) !important; border-radius: 7px !important; font-size: 12px !important; } }
+    @media (max-width: 899px) and (orientation: landscape) { body.mobile-page #quiz-page { display: flex !important; flex-direction: column !important; padding: 8px !important; overflow: hidden !important; } body.mobile-page #quiz-page .quiz-top { flex: 1 1 auto !important; display: grid !important; grid-template-columns: minmax(0, 58fr) minmax(300px, 42fr) !important; grid-template-rows: minmax(0, 1fr) !important; gap: 8px !important; height: 100% !important; min-height: 0 !important; overflow: hidden !important; } body.mobile-page #video-container { grid-column: 1 !important; grid-row: 1 !important; align-self: start !important; border-radius: 12px !important; border: 1px solid #CDD9E3 !important; box-shadow: 0 10px 22px rgba(22,34,48,.10) !important; } body.mobile-page #quiz-container { grid-column: 2 !important; grid-row: 1 !important; height: 100% !important; border: 1px solid #D3DEE7 !important; border-radius: 12px !important; background: #FFFFFF !important; box-shadow: 0 10px 22px rgba(22,34,48,.08) !important; } body.mobile-page #quiz-content { padding: 8px 10px 0 !important; gap: 6px !important; background: #FFFFFF !important; overflow: hidden !important; } body.mobile-page #quiz-content h3 { padding: 8px 10px !important; font-size: var(--question-font-size, 14px) !important; line-height: 1.35 !important; } body.mobile-page #options { flex: 1 1 0 !important; min-height: 0 !important; gap: var(--tablet-option-gap, 6px) !important; padding-bottom: 8px !important; overflow: hidden !important; } body.mobile-page #options label { flex: 1 1 0 !important; min-height: 0 !important; height: auto !important; padding: var(--tablet-option-padding-y, 8px) 10px !important; gap: 8px !important; font-size: var(--option-font-size, 13px) !important; line-height: 1.35 !important; border-radius: 8px !important; } body.mobile-page #navigation-buttons { grid-template-columns: minmax(68px, 1fr) minmax(116px, 1fr) minmax(68px, 1fr) !important; padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)) !important; gap: 6px !important; } body.mobile-page #navigation-buttons > button, body.mobile-page #navigation-buttons #quick-nav-container .nav-section-label { min-height: 38px !important; border-radius: 8px !important; font-size: 12px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper { bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important; width: min(620px, calc(100vw - 16px)) !important; } }
+
   </style>
 </head>
 <body class="mobile-page">
@@ -4475,6 +4512,65 @@ const chapter8Data=[
   const prevBtn = document.getElementById("prev-btn");
   const nextBtn = document.getElementById("next-btn");
 
+  const quickNavContainer = document.getElementById("quick-nav-container");
+  const quickNavLabel = quickNavContainer ? quickNavContainer.querySelector(".nav-section-label") : null;
+
+  function updateQuizViewportHeight() {
+    const h = (window.visualViewport && window.visualViewport.height) || window.innerHeight || document.documentElement.clientHeight;
+    if (h) document.documentElement.style.setProperty("--quiz-vh", h + "px");
+  }
+
+  function isTabletLandscapeLayout() {
+    return window.matchMedia("(min-width: 900px) and (min-height: 560px) and (orientation: landscape)").matches;
+  }
+
+  function isPhoneLandscapeLayout() {
+    return window.matchMedia("(max-width: 899px) and (orientation: landscape)").matches;
+  }
+
+  function closeQuickNavPanel() {
+    if (quickNavContainer) quickNavContainer.classList.remove("open");
+  }
+
+  function toggleQuickNavPanel(forceOpen) {
+    if (!quickNavContainer) return;
+    if (isTabletLandscapeLayout()) { closeQuickNavPanel(); return; }
+    const nextState = (typeof forceOpen === "boolean") ? forceOpen : !quickNavContainer.classList.contains("open");
+    quickNavContainer.classList.toggle("open", nextState);
+  }
+
+  function initQuickNavBottomBar() {
+    const navButtons = document.getElementById("navigation-buttons");
+    if (!navButtons || !quickNavContainer) return;
+    if (isTabletLandscapeLayout()) {
+      if (quizPage && quickNavContainer.parentElement !== quizPage) quizPage.appendChild(quickNavContainer);
+      quickNavContainer.dataset.quickNavMode = "tablet";
+      closeQuickNavPanel();
+    } else {
+      if (!navButtons.contains(quickNavContainer)) navButtons.insertBefore(quickNavContainer, nextBtn);
+      quickNavContainer.dataset.quickNavMode = "bottom";
+    }
+    const counter = document.getElementById("question-counter");
+    if (counter) counter.style.display = "none";
+    quickNavContainer.style.display = "flex";
+    if (quickNavContainer.dataset.bottomBarInit === "1") return;
+    if (quickNavLabel) {
+      quickNavLabel.setAttribute("role", "button");
+      quickNavLabel.setAttribute("tabindex", "0");
+      quickNavLabel.addEventListener("click", event => { event.preventDefault(); event.stopPropagation(); toggleQuickNavPanel(); });
+      quickNavLabel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); toggleQuickNavPanel(); } });
+    }
+    quickNavContainer.addEventListener("click", event => event.stopPropagation());
+    document.addEventListener("click", closeQuickNavPanel);
+    quickNavContainer.dataset.bottomBarInit = "1";
+  }
+
+  function getViewportSize() {
+    const vv = window.visualViewport;
+    return { width: (vv && vv.width) || window.innerWidth || document.documentElement.clientWidth || 390, height: (vv && vv.height) || window.innerHeight || document.documentElement.clientHeight || 844 };
+  }
+
+
   function toAnswersArray(raw, total) {
     if (!raw) return new Array(total).fill(null);
     if (Array.isArray(raw)) {
@@ -4613,12 +4709,15 @@ const chapter8Data=[
 
   function showQuizPage() {
     showPage(quizPage, "grid");
+    updateQuizViewportHeight();
+    initQuickNavBottomBar();
+    enableQuizContentTouchScroll();
+    closeQuickNavPanel();
     document.getElementById("quick-nav-container").style.display = "flex";
     updateQuestion(currentQuestionIndex);
     requestAnimationFrame(() => {
       applyResponsiveLayout();
-      fitQuestionText();
-      fitOptionsText();
+      scheduleQuizAutoFit();
       autoResizeNavGrid();
     });
   }
@@ -4697,6 +4796,7 @@ const chapter8Data=[
         btn.addEventListener("click", () => {
           updateQuestion(realIdx);
           saveProgress();
+          closeQuickNavPanel();
         });
       }
       quickNavGrid.appendChild(btn);
@@ -4921,58 +5021,148 @@ const chapter8Data=[
   }
 
   function applyResponsiveLayout() {
+    updateQuizViewportHeight();
     const wrapper = document.querySelector(".video-wrapper");
     if (!wrapper) return;
     wrapper.style.height = "100%";
     const inner = wrapper.querySelector("div");
-    if (inner) {
-      inner.style.position = "relative";
-      inner.style.height = "100%";
-      inner.style.paddingTop = "0";
-    }
+    if (inner) { inner.style.position = "relative"; inner.style.height = "100%"; inner.style.paddingTop = "0"; }
   }
 
   function fitQuestionText() {
     const h3 = document.querySelector("#quiz-content h3");
-    const container = document.getElementById("quiz-container");
-    if (!h3 || !container) return;
-    const maxSize = Math.min(20, Math.max(12, container.clientWidth * 0.022));
-    let size = maxSize;
-    h3.style.fontSize = size + "px";
-    const maxH = size * 1.7 * 2.2;
-    while (h3.scrollHeight > maxH && size > 12) {
-      size -= 0.5;
-      h3.style.fontSize = size + "px";
+    const quizContainer = document.getElementById("quiz-container");
+    if (!h3) return;
+    const viewport = getViewportSize();
+    const panelRect = quizContainer ? quizContainer.getBoundingClientRect() : { width: viewport.width, height: viewport.height };
+    let size = Math.max(15, Math.min(17, viewport.width * 0.038));
+    if (isTabletLandscapeLayout()) {
+      size = Math.max(15, Math.min(20, Math.min(panelRect.width * 0.042, panelRect.height * 0.037)));
+      for (let next = size; next >= 12; next -= 0.5) {
+        h3.style.setProperty("--question-font-size", next + "px");
+        const style = getComputedStyle(h3);
+        const lineHeight = parseFloat(style.lineHeight) || next * 1.45;
+        const paddingY = (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0);
+        size = next;
+        if (h3.scrollHeight <= lineHeight * 2 + paddingY + 3) break;
+      }
+    } else if (isPhoneLandscapeLayout()) {
+      size = Math.max(13, Math.min(16, Math.min(panelRect.width * 0.05, panelRect.height * 0.06)));
     }
+    h3.style.setProperty("--question-font-size", size + "px");
   }
 
   function fitOptionsText() {
-    const labels = document.querySelectorAll("#options label");
-    if (!labels.length) return;
-    labels.forEach(label => {
-      label.style.fontSize = "";
-      let size = parseFloat(getComputedStyle(label).fontSize);
-      const minSize = Math.max(13, size * 0.86);
-      while (label.scrollHeight > label.clientHeight + 2 && size > minSize) {
-        size -= 0.5;
-        label.style.fontSize = size + "px";
+    const optionsWrap = document.getElementById("options");
+    const labels = Array.from(document.querySelectorAll("#options label"));
+    if (!optionsWrap || !labels.length) return;
+    labels.forEach(label => { label.style.removeProperty("--option-font-size"); label.style.removeProperty("flex"); });
+    const viewport = getViewportSize();
+    const optionsRect = optionsWrap.getBoundingClientRect();
+    const tabletLandscape = isTabletLandscapeLayout();
+    const phoneLandscape = isPhoneLandscapeLayout();
+    let size = Math.max(14, Math.min(16, viewport.width * 0.036));
+    if (tabletLandscape || phoneLandscape) {
+      const minGap = phoneLandscape ? 5 : 7;
+      const maxGap = phoneLandscape ? 8 : 12;
+      const gap = Math.max(minGap, Math.min(maxGap, optionsRect.height * 0.018));
+      const cardHeight = (optionsRect.height - (labels.length - 1) * gap) / labels.length;
+      const maxSize = phoneLandscape ? 15 : 20;
+      const minSize = phoneLandscape ? 12 : 9;
+      size = Math.max(minSize, Math.min(maxSize, Math.min(optionsRect.width * 0.05, cardHeight * 0.42)));
+      optionsWrap.style.setProperty("--tablet-option-gap", gap + "px");
+      optionsWrap.style.setProperty("--tablet-option-padding-y", Math.max(phoneLandscape ? 6 : 8, Math.min(phoneLandscape ? 9 : 14, cardHeight * 0.18)) + "px");
+      if (tabletLandscape) {
+        const baseSize = size;
+        optionsWrap.style.setProperty("--option-font-size", baseSize + "px");
+        const wrapStates = labels.map(label => {
+          const span = label.querySelector("span") || label;
+          label.style.setProperty("--option-font-size", baseSize + "px");
+          const style = getComputedStyle(span);
+          const lineHeight = parseFloat(style.lineHeight) || baseSize * 1.4;
+          return span.scrollHeight > lineHeight + 2 || span.scrollWidth > span.clientWidth + 1;
+        });
+        const longTextStates = labels.map(label => (label.querySelector("span") || label).textContent.trim().replace(/\s+/g, " ").length >= 27);
+        const denseLongOptions = wrapStates.filter(Boolean).length >= Math.ceil(labels.length * 0.6) || longTextStates.filter(Boolean).length >= Math.ceil(labels.length * 0.8);
+        labels.forEach((label, index) => {
+          const span = label.querySelector("span") || label;
+          const startSize = (wrapStates[index] || (denseLongOptions && longTextStates[index])) ? Math.max(minSize, baseSize - (denseLongOptions ? 2 : 1.5)) : baseSize;
+          let fittedSize = startSize;
+          for (let next = startSize; next >= minSize; next -= 0.5) {
+            label.style.setProperty("--option-font-size", next + "px");
+            const style = getComputedStyle(span);
+            const lineHeight = parseFloat(style.lineHeight) || next * 1.4;
+            fittedSize = next;
+            if (span.scrollWidth <= span.clientWidth + 1 && span.scrollHeight <= lineHeight * 2 + 2 && label.scrollHeight <= label.clientHeight + 2) break;
+          }
+          if (fittedSize === baseSize) label.style.removeProperty("--option-font-size"); else label.style.setProperty("--option-font-size", fittedSize + "px");
+          const style = getComputedStyle(span);
+          const lineHeight = parseFloat(style.lineHeight) || fittedSize * 1.4;
+          if (!denseLongOptions && span.scrollHeight > lineHeight + 2) label.style.setProperty("flex", "1.32 1 0", "important");
+        });
       }
-    });
+    } else {
+      optionsWrap.style.removeProperty("--tablet-option-gap");
+      optionsWrap.style.removeProperty("--tablet-option-padding-y");
+    }
+    optionsWrap.style.setProperty("--option-font-size", size + "px");
+    optionsWrap.style.removeProperty("--option-card-min-height");
+    labels.forEach(label => { label.style.removeProperty("padding-top"); label.style.removeProperty("padding-bottom"); });
+  }
+
+  function enableQuizContentTouchScroll() {
+    const scroller = document.getElementById("quiz-content");
+    if (!scroller || scroller.dataset.touchScrollInit === "1") return;
+    let lastY = 0; let moved = false;
+    scroller.addEventListener("touchstart", event => { if (event.touches.length !== 1) return; lastY = event.touches[0].clientY; moved = false; }, { passive: true });
+    scroller.addEventListener("touchmove", event => {
+      if (event.touches.length !== 1 || scroller.scrollHeight <= scroller.clientHeight + 1) return;
+      const y = event.touches[0].clientY; const delta = lastY - y;
+      if (Math.abs(delta) > 1) { scroller.scrollTop += delta; lastY = y; moved = true; event.preventDefault(); event.stopPropagation(); }
+    }, { passive: false });
+    scroller.addEventListener("click", event => { if (moved) { event.preventDefault(); event.stopPropagation(); moved = false; } }, true);
+    scroller.dataset.touchScrollInit = "1";
+  }
+
+  let quizAutoFitFrame = 0;
+  function scheduleQuizAutoFit() {
+    if (quizAutoFitFrame) cancelAnimationFrame(quizAutoFitFrame);
+    quizAutoFitFrame = requestAnimationFrame(() => { fitQuestionText(); fitOptionsText(); requestAnimationFrame(autoResizeNavGrid); });
   }
 
   function autoResizeNavGrid() {
-    const navCont = document.getElementById("quick-nav-container");
+    const wrap = document.getElementById("quick-nav-grid-wrap");
     const grid = document.getElementById("quick-nav-grid");
-    if (!navCont || !grid || navCont.style.display === "none") return;
-    const cs = getComputedStyle(navCont);
-    const padV = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
-    const headerH = (document.querySelector(".nav-header") || {}).offsetHeight || 0;
-    const gridGap = parseFloat(getComputedStyle(grid).gap) || 5;
-    const columns = window.innerWidth <= 700 ? 5 : 10;
-    const rows = Math.ceil(NAV_PAGE_SIZE / columns);
-    const gridH = navCont.clientHeight - padV - headerH;
-    const btnH = Math.max(18, Math.min(window.innerWidth <= 700 ? 30 : 28, Math.floor((gridH - (rows - 1) * gridGap) / rows)));
-    document.documentElement.style.setProperty("--nav-btn-height", `${btnH}px`);
+    if (!wrap || !grid) return;
+    const viewport = getViewportSize();
+    const tabletLandscape = isTabletLandscapeLayout();
+    const cols = tabletLandscape ? 20 : 10;
+    const rows = Math.ceil(NAV_PAGE_SIZE / cols);
+    const gap = tabletLandscape ? 5 : (viewport.width <= 700 ? 4 : 6);
+    grid.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0, 1fr))";
+    grid.style.gap = gap + "px";
+    const wrapStyles = getComputedStyle(wrap);
+    const padX = (parseFloat(wrapStyles.paddingLeft) || 0) + (parseFloat(wrapStyles.paddingRight) || 0);
+    const padY = (parseFloat(wrapStyles.paddingTop) || 0) + (parseFloat(wrapStyles.paddingBottom) || 0);
+    const wrapWidth = Math.max(280, wrap.clientWidth || (viewport.width - (viewport.width <= 700 ? 10 : 16)));
+    const usableWidth = Math.max(220, wrapWidth - padX);
+    const widthBtnH = Math.floor((usableWidth - gap * (cols - 1)) / cols);
+    const nav = document.getElementById("navigation-buttons");
+    const navH = nav ? Math.ceil(nav.getBoundingClientRect().height) : 64;
+    const bottomReserve = tabletLandscape ? 0 : Math.max(74, navH + 12);
+    const topReserve = tabletLandscape ? 0 : (viewport.width <= 700 ? 10 : 16);
+    const wrapMaxH = tabletLandscape ? Math.max(96, wrap.clientHeight || 160) : Math.max(190, viewport.height - bottomReserve - topReserve);
+    const usableHeight = Math.max(140, wrapMaxH - padY);
+    const heightBtnH = Math.floor((usableHeight - gap * (rows - 1)) / rows);
+    let btnH = Math.min(widthBtnH, heightBtnH);
+    if (tabletLandscape) btnH = Math.max(24, Math.min(btnH, 34)); else btnH = Math.max(viewport.width <= 700 ? 22 : 24, Math.min(btnH, viewport.width <= 700 ? 34 : 36));
+    const gridHeight = rows * btnH + (rows - 1) * gap;
+    const wrapHeight = gridHeight + padY;
+    document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
+    grid.style.height = gridHeight + "px";
+    wrap.style.height = wrapHeight + "px";
+    wrap.style.maxHeight = wrapHeight + "px";
+    wrap.style.overflowY = "hidden";
   }
 
   function fitResultGrid() {
@@ -4992,12 +5182,28 @@ const chapter8Data=[
   }
 
   window.addEventListener("resize", () => {
+    updateQuizViewportHeight();
+    initQuickNavBottomBar();
     applyResponsiveLayout();
-    fitQuestionText();
-    fitOptionsText();
-    autoResizeNavGrid();
+    scheduleQuizAutoFit();
     fitResultGrid();
   });
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", () => {
+      updateQuizViewportHeight();
+      initQuickNavBottomBar();
+      fitResultGrid();
+      scheduleQuizAutoFit();
+    });
+  }
+
+  window.addEventListener("orientationchange", () => setTimeout(() => {
+    updateQuizViewportHeight();
+    initQuickNavBottomBar();
+    fitResultGrid();
+    scheduleQuizAutoFit();
+  }, 120));
 
   (function initFromParams() {
     const params = new URLSearchParams(location.search);
