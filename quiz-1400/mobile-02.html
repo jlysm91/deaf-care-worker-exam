@@ -2620,6 +2620,7 @@ const chapter5Data=[
       span.textContent = option;
       label.appendChild(input);
       label.appendChild(span);
+      bindOptionTouchScroll(label);
       optionsDiv.appendChild(label);
     });
     prevBtn.disabled = currentQuestionIndex === 0;
@@ -2975,21 +2976,73 @@ const chapter5Data=[
     labels.forEach(label => { label.style.removeProperty("padding-top"); label.style.removeProperty("padding-bottom"); });
   }
 
+  function scrollQuizContentBy(delta) {
+    const scroller = document.getElementById("quiz-content");
+    if (!scroller || scroller.scrollHeight <= scroller.clientHeight + 1) return false;
+    scroller.scrollTop += delta;
+    return true;
+  }
+
+  function bindOptionTouchScroll(label) {
+    if (!label || label.dataset.optionTouchScroll === "1") return;
+    let startY = 0;
+    let lastY = 0;
+    let moved = false;
+    let suppressClick = false;
+
+    label.addEventListener("touchstart", event => {
+      if (event.touches.length !== 1) return;
+      startY = event.touches[0].clientY;
+      lastY = startY;
+      moved = false;
+    }, { passive: true });
+
+    label.addEventListener("touchmove", event => {
+      if (event.touches.length !== 1) return;
+      const y = event.touches[0].clientY;
+      const delta = lastY - y;
+      if (Math.abs(delta) <= 1) return;
+      const didScroll = scrollQuizContentBy(delta);
+      lastY = y;
+      if (Math.abs(y - startY) > 5) moved = true;
+      if (didScroll) {
+        if (event.cancelable) event.preventDefault();
+        event.stopPropagation();
+      }
+    }, { passive: false });
+
+    label.addEventListener("touchend", () => {
+      if (!moved) return;
+      suppressClick = true;
+      setTimeout(() => { suppressClick = false; }, 120);
+    }, { passive: true });
+
+    label.addEventListener("touchcancel", () => {
+      moved = false;
+      suppressClick = false;
+    }, { passive: true });
+
+    label.addEventListener("click", event => {
+      if (!suppressClick) return;
+      event.preventDefault();
+      event.stopPropagation();
+      suppressClick = false;
+    }, true);
+
+    label.dataset.optionTouchScroll = "1";
+  }
+
   function enableQuizContentTouchScroll() {
     const scroller = document.getElementById("quiz-content");
     if (!scroller || scroller.dataset.touchScrollInit === "1") return;
     let lastY = 0;
     let moved = false;
-    let startTarget = null;
-
-    const handleTouchStart = event => {
+    scroller.addEventListener("touchstart", event => {
       if (event.touches.length !== 1) return;
       lastY = event.touches[0].clientY;
       moved = false;
-      startTarget = event.target;
-    };
-
-    const handleTouchMove = event => {
+    }, { passive: true });
+    scroller.addEventListener("touchmove", event => {
       if (event.touches.length !== 1 || scroller.scrollHeight <= scroller.clientHeight + 1) return;
       const y = event.touches[0].clientY;
       const delta = lastY - y;
@@ -2999,19 +3052,12 @@ const chapter5Data=[
       moved = true;
       if (event.cancelable) event.preventDefault();
       event.stopPropagation();
-    };
-
-    scroller.addEventListener("touchstart", handleTouchStart, { passive: true, capture: true });
-    scroller.addEventListener("touchmove", handleTouchMove, { passive: false, capture: true });
+    }, { passive: false });
     scroller.addEventListener("click", event => {
       if (!moved) return;
-      const optionStarted = startTarget && startTarget.closest && startTarget.closest("#options label");
-      if (optionStarted || scroller.contains(event.target)) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
+      event.preventDefault();
+      event.stopPropagation();
       moved = false;
-      startTarget = null;
     }, true);
     scroller.dataset.touchScrollInit = "1";
   }
