@@ -1724,38 +1724,47 @@
       font-weight: 900;
     }
     .result-chip-wrap {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 7px;
     }
     .result-chip {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
+      justify-content: space-between;
+      gap: 6px;
+      width: 100%;
+      min-width: 0;
+      padding: 7px 9px;
+      box-sizing: border-box;
       border-radius: 999px;
       border: 1px solid #D8E3ED;
       background: #F8FBFD;
       color: #506273;
-      font-size: clamp(11px, 1vw, 13px);
+      font-size: clamp(10.5px, .9vw, 12.5px);
       font-weight: 800;
       line-height: 1.1;
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
     }
-    .result-chip .chip-no { display: inline-flex; align-items: center; justify-content: center; min-width: 4.3em; flex-shrink: 0; }
-    .result-chip .chip-meta { display: inline-flex; align-items: center; justify-content: center; min-width: 7.8em; }
+    .result-chip .chip-no { display: inline-flex; align-items: center; justify-content: flex-start; min-width: 3.1em; flex-shrink: 0; }
+    .result-chip .chip-meta { display: inline-flex; align-items: center; justify-content: flex-end; min-width: 0; }
     .result-chip.correct { border-color: #A7E2C1; background: #F1FCF5; color: #0F8A4C; }
     .result-chip.wrong { border-color: #F3B2B0; background: #FFF4F4; color: #C13C36; }
     .result-chip.empty { border-color: #F3D6A8; background: #FFF8EA; color: #A05A00; }
     .result-empty-note {
+      grid-column: 1 / -1;
       margin: 0;
       color: #71839A;
       font-size: 13px;
       font-weight: 700;
     }
+    @media (max-width: 700px) {
+      .result-chip-wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
     @media (max-width: 560px) {
       .result-insight-grid { grid-template-columns: 1fr; }
+      .result-chip-wrap { grid-template-columns: 1fr; }
       .result-chip { width: 100%; justify-content: space-between; border-radius: 12px; }
     }
 </style>
