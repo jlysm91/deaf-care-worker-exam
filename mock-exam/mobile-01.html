@@ -1316,6 +1316,7 @@
       #quiz-content.no-scroll-needed {
         overflow-y: hidden !important;
         overscroll-behavior: none !important;
+        touch-action: none !important;
         -webkit-overflow-scrolling: auto !important;
       }
       #options {
@@ -2024,7 +2025,12 @@ const EXAM_ID = "exam1";
         moved=false;
       },{passive:true});
       scroller.addEventListener("touchmove",e=>{
-        if(e.touches.length!==1||scroller.scrollHeight<=scroller.clientHeight+1)return;
+        if(e.touches.length!==1)return;
+        if(scroller.classList.contains("no-scroll-needed")||scroller.scrollHeight<=scroller.clientHeight+1){
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
         const y=e.touches[0].clientY;
         const delta=lastY-y;
         if(Math.abs(delta)>1){
