@@ -1308,6 +1308,7 @@
         -webkit-overflow-scrolling: touch !important;
         touch-action: pan-y !important;
         overscroll-behavior: contain !important;
+        gap: var(--phone-portrait-content-gap, 10px) !important;
       }
       #quiz-content.scroll-needed {
         overflow-y: auto !important;
@@ -1324,16 +1325,22 @@
         min-height: auto !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: 7px !important;
-        padding-bottom: 12px !important;
+        gap: var(--phone-option-gap, 7px) !important;
+        padding-bottom: var(--phone-options-padding-bottom, 12px) !important;
         overflow: visible !important;
       }
       #options label {
         flex: 0 0 auto !important;
-        min-height: 48px !important;
+        min-height: var(--phone-option-min-height, 48px) !important;
         height: auto !important;
-        padding: 12px 14px !important;
+        padding: var(--phone-option-padding-y, 12px) 14px !important;
+        gap: var(--phone-option-inner-gap, 12px) !important;
+        font-size: var(--option-font-size, var(--phone-option-font-size, 16px)) !important;
         align-items: center !important;
+      }
+      #options input[type="radio"] {
+        width: var(--phone-radio-size, 20px) !important;
+        height: var(--phone-radio-size, 20px) !important;
       }
       #navigation-buttons {
         width: 100% !important;
@@ -1931,6 +1938,10 @@ const EXAM_ID = "exam7";
       return window.matchMedia("(max-width: 899px) and (orientation: landscape)").matches;
     }
 
+    function isPhonePortraitLayout(){
+      return window.matchMedia("(max-width: 700px) and (orientation: portrait)").matches;
+    }
+
     function isTabletPortraitLayout(){
       return window.matchMedia("(min-width: 701px) and (orientation: portrait)").matches;
     }
@@ -1956,6 +1967,8 @@ const EXAM_ID = "exam7";
         }
       }else if(isPhoneLandscapeLayout()){
         size=Math.max(13,Math.min(16,Math.min(panelRect.width*0.05,panelRect.height*0.06)));
+      }else if(isPhonePortraitLayout()){
+        size=Math.max(16,Math.min(19,Math.min(panelRect.width*0.047,panelRect.height*0.038)));
       }else if(isTabletPortraitLayout()){
         size=Math.max(18,Math.min(22,Math.min(panelRect.width*0.02,panelRect.height*0.055)));
       }
@@ -1963,6 +1976,19 @@ const EXAM_ID = "exam7";
       if(isTabletPortraitLayout()) h3.style.setProperty("--tablet-portrait-question-font-size",size+"px");
       else h3.style.removeProperty("--tablet-portrait-question-font-size");
       h3.style.setProperty("--question-font-size",size+"px");
+    }
+    function clearPhonePortraitOptionSizing(optionsWrap){
+      document.documentElement.style.removeProperty("--phone-portrait-content-gap");
+      if(!optionsWrap)return;
+      [
+        "--phone-option-gap",
+        "--phone-options-padding-bottom",
+        "--phone-option-min-height",
+        "--phone-option-padding-y",
+        "--phone-option-inner-gap",
+        "--phone-option-font-size",
+        "--phone-radio-size"
+      ].forEach(name=>optionsWrap.style.removeProperty(name));
     }
     function fitOptionsText(){
       const optionsWrap=document.getElementById("options");
@@ -1977,9 +2003,11 @@ const EXAM_ID = "exam7";
       const tabletLandscape=isTabletLandscapeLayout();
       const tabletPortrait=isTabletPortraitLayout();
       const phoneLandscape=isPhoneLandscapeLayout();
+      const phonePortrait=isPhonePortraitLayout();
       let size=Math.max(14,Math.min(16,viewport.width*0.036));
 
       if(tabletPortrait){
+        clearPhonePortraitOptionSizing(optionsWrap);
         optionsWrap.style.removeProperty("--tablet-option-gap");
         optionsWrap.style.removeProperty("--tablet-option-padding-y");
 
@@ -2004,6 +2032,7 @@ const EXAM_ID = "exam7";
         optionsWrap.style.setProperty("--tablet-portrait-option-font-size",size+"px");
         optionsWrap.style.setProperty("--tablet-portrait-radio-size",radioSize+"px");
       }else if(tabletLandscape||phoneLandscape){
+        clearPhonePortraitOptionSizing(optionsWrap);
         optionsWrap.style.removeProperty("--tablet-portrait-option-gap");
         optionsWrap.style.removeProperty("--tablet-portrait-option-height");
         optionsWrap.style.removeProperty("--tablet-portrait-option-padding-y");
@@ -2064,7 +2093,56 @@ const EXAM_ID = "exam7";
             }
           });
         }
+      }else if(phonePortrait){
+        optionsWrap.style.removeProperty("--tablet-portrait-option-gap");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-height");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-padding-y");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-padding-bottom");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-inner-gap");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-font-size");
+        optionsWrap.style.removeProperty("--tablet-portrait-radio-size");
+        optionsWrap.style.removeProperty("--tablet-option-gap");
+        optionsWrap.style.removeProperty("--tablet-option-padding-y");
+
+        const nav=document.getElementById("navigation-buttons");
+        const navRect=nav?nav.getBoundingClientRect():null;
+        const navTop=(navRect&&navRect.top>0)?navRect.top:viewport.height;
+        const availableHeight=Math.max(190,navTop-optionsRect.top-2);
+        const labelCount=Math.max(1,labels.length);
+        const gap=Math.max(5,Math.min(8,availableHeight*0.012));
+        const bottomPad=Math.max(6,Math.min(10,gap+1));
+        const rawCardHeight=(availableHeight-bottomPad-gap*(labelCount-1))/labelCount;
+        const maxCardHeight=Math.max(56,Math.min(70,viewport.height*0.08));
+        const cardHeight=Math.max(42,Math.min(maxCardHeight,rawCardHeight));
+        const paddingY=Math.max(8,Math.min(11,cardHeight*0.18));
+        const radioSize=Math.max(18,Math.min(21,cardHeight*0.38));
+        size=Math.max(15,Math.min(17,Math.min(optionsRect.width*0.042,cardHeight*0.36)));
+
+        document.documentElement.style.setProperty("--phone-portrait-content-gap",Math.max(7,Math.min(10,gap+2))+"px");
+        optionsWrap.style.setProperty("--phone-option-gap",gap+"px");
+        optionsWrap.style.setProperty("--phone-options-padding-bottom",bottomPad+"px");
+        optionsWrap.style.setProperty("--phone-option-min-height",cardHeight+"px");
+        optionsWrap.style.setProperty("--phone-option-padding-y",paddingY+"px");
+        optionsWrap.style.setProperty("--phone-option-inner-gap",Math.max(9,Math.min(12,radioSize*0.6))+"px");
+        optionsWrap.style.setProperty("--phone-option-font-size",size+"px");
+        optionsWrap.style.setProperty("--phone-radio-size",radioSize+"px");
+
+        labels.forEach(label=>{
+          const span=label.querySelector("span")||label;
+          let fittedSize=size;
+          for(let next=size;next>=14;next-=0.5){
+            label.style.setProperty("--option-font-size",next+"px");
+            const style=getComputedStyle(span);
+            const lineHeight=parseFloat(style.lineHeight)||next*1.45;
+            fittedSize=next;
+            if(span.scrollWidth<=span.clientWidth+1&&span.scrollHeight<=lineHeight*2+2)break;
+          }
+          if(fittedSize<size)label.style.setProperty("--option-font-size",fittedSize+"px");
+          else label.style.removeProperty("--option-font-size");
+        });
       }else{
+        document.documentElement.style.removeProperty("--phone-portrait-content-gap");
+        clearPhonePortraitOptionSizing(optionsWrap);
         optionsWrap.style.removeProperty("--tablet-portrait-option-gap");
         optionsWrap.style.removeProperty("--tablet-portrait-option-height");
         optionsWrap.style.removeProperty("--tablet-portrait-option-padding-y");
@@ -2092,7 +2170,8 @@ const EXAM_ID = "exam7";
         scroller.classList.remove("scroll-needed","no-scroll-needed");
         return;
       }
-      const needsScroll=scroller.scrollHeight>scroller.clientHeight+4;
+      const overflow=scroller.scrollHeight-scroller.clientHeight;
+      const needsScroll=overflow>(isPhonePortraitLayout()?8:4);
       scroller.classList.toggle("scroll-needed",needsScroll);
       scroller.classList.toggle("no-scroll-needed",!needsScroll);
       if(!needsScroll)scroller.scrollTop=0;
