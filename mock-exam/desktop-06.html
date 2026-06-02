@@ -925,7 +925,7 @@
 
   <div id="result-page">
     <div class="result-heading">
-      <span class="result-badge">1회 모의고사</span>
+      <span class="result-badge">6회 모의고사</span>
       <h2>시험 결과</h2>
       <p id="result-user-name" class="result-user-name"></p>
     </div>
@@ -1120,7 +1120,9 @@
       { number:"모0678", question:"길을 가던 노인이 쓰러져 있을 때 의식을 확인하는 방법으로 옳은 것은?", options:["몸통을 흔든다.","발바닥을 때린다.","어깨를 가볍게 두드린다.","손발의 움직임을 확인한다.","얼굴을 좌우로 흔든다."], correctAnswer:3, videoId:"1119266782" },
       { number:"모0679", question:"심정지 대상자에게 자동심장충격기를 사용하는 방법으로 옳은 것은?", options:["두 개의 패드를 부착한 후 전원을 켠다.","5분 간격으로 심장리듬 분석을 자동 반복한다.","심장충격 버튼을 누를 때는 대상자를 붙잡아 준다.","충격이 전달되면 즉시 인공호흡을 시작한다.","자동심장충격기 사용은 구급대가 도착할 때까지 지속한다."], correctAnswer:5, videoId:"1119266829" },
       { number:"모0680", question:"치매대상자가 더운 날씨에 옷을 여러 벌 껴입어 벗기려고 하는데 자꾸만 공격성을 보일 경우 요양보호사의 대처방법으로 옳은 것은?", options:["\"(팔을 잡아다니며) 벗어요. 얼른.\"","\"어르신, 옷 입자, 옷 입어 냄새나잖아 옷 갈아입어.\"","\"(대상자의 옷에 물을 살짝 쏱으며) 어머나! 물에 다 젖었네, 아유, 옷을 갈아입어야겠네요.\"","\"옷 안 갈아입으면, 무서운 아들한테 이를거에요.\"","\"날도 더운데, 땀띠 나니까 얼른 벗으세요.\""], correctAnswer:3, videoId:"1119266893" }
-    ];const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+    ];
+
+    const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
@@ -1240,7 +1242,7 @@
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
-      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLScK1zCcRzO3cCaqefHrfRRCM70SmUc63Hi0_9gQxPFOzTXAXw/formResponse";
+      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);

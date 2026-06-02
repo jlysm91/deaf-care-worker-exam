@@ -925,7 +925,7 @@
 
   <div id="result-page">
     <div class="result-heading">
-      <span class="result-badge">1회 모의고사</span>
+      <span class="result-badge">8회 모의고사</span>
       <h2>시험 결과</h2>
       <p id="result-user-name" class="result-user-name"></p>
     </div>
@@ -1120,7 +1120,9 @@
       { number:"모0878", question:"대상자가 낙상하여 발목 골절이 의심될 때 응급처치 방법은?", options:["다리를 심장보다 높게 올려준다.","튀어나온 뼈는 직접 압박하여 넣는다.","골절 부위에 따뜻한 물수건으로 감싸준다.","대상자를 업고 신속하게 병원으로 이송한다.","대상자를 안정시키고 스스로 움직이지 않도록 한다."], correctAnswer:5, videoId:"1119280360" },
       { number:"모0879", question:"의식을 잃은 대상자에게 심폐소생술을 할 때 순서로 옳은 것은?", options:["가 → 나 → 다 → 라","가 → 다 → 라 → 나","가 → 라 → 나 → 다","다 → 가 → 라 → 나","라 → 가 → 다 → 나"], correctAnswer:3, videoId:"1119280395" },
       { number:"모0880", question:"자동심장충격기 사용 시 심폐소생술을 멈추고 대상자에게서 손을 떼야 하는 단계로 옳은 것은?", options:["가","나","나, 다","다, 라","가, 나, 다"], correctAnswer:4, videoId:"1119280412" }
-    ];const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+    ];
+
+    const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
@@ -1240,7 +1242,7 @@
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
-      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfbkSqiIK0u3GTiP6s3uYGo-tjsMG2jbfUuyZlJDxFKwmIUqA/formResponse";
+      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);

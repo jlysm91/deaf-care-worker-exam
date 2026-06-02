@@ -1309,6 +1309,16 @@
         touch-action: pan-y !important;
         overscroll-behavior: contain !important;
       }
+      #quiz-content.scroll-needed {
+        overflow-y: auto !important;
+        overscroll-behavior: contain !important;
+      }
+      #quiz-content.no-scroll-needed {
+        overflow-y: hidden !important;
+        overscroll-behavior: none !important;
+        touch-action: none !important;
+        -webkit-overflow-scrolling: auto !important;
+      }
       #options {
         flex: 0 0 auto !important;
         min-height: auto !important;
@@ -1338,6 +1348,40 @@
     }
   
     /* === 태블릿 가로형: 상단 영상/문제, 하단 1~80번 전체 문항판 === */
+    @media (min-width: 701px) and (orientation: portrait) {
+      #quiz-content {
+        gap: clamp(12px, 1.15vh, 16px) !important;
+        padding: clamp(18px, 1.8vh, 26px) clamp(24px, 3vw, 34px) 0 !important;
+      }
+      #quiz-content h3 {
+        min-height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: clamp(13px, 1.45vh, 18px) clamp(20px, 2.4vw, 28px) !important;
+        font-size: var(--tablet-portrait-question-font-size, clamp(18px, 2vw, 22px)) !important;
+      }
+      #options {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        gap: var(--tablet-portrait-option-gap, clamp(10px, 1vh, 14px)) !important;
+        padding-bottom: var(--tablet-portrait-option-padding-bottom, clamp(12px, 1.35vh, 18px)) !important;
+      }
+      #options label {
+        flex: 0 0 var(--tablet-portrait-option-height, 88px) !important;
+        height: var(--tablet-portrait-option-height, 88px) !important;
+        min-height: 0 !important;
+        max-height: var(--tablet-portrait-option-height, 88px) !important;
+        padding: var(--tablet-portrait-option-padding-y, 12px) clamp(18px, 2.4vw, 28px) !important;
+        gap: var(--tablet-portrait-option-inner-gap, 14px) !important;
+        border-radius: 12px !important;
+        font-size: var(--tablet-portrait-option-font-size, clamp(16px, 1.8vw, 20px)) !important;
+      }
+      #options input[type="radio"] {
+        width: var(--tablet-portrait-radio-size, 20px) !important;
+        height: var(--tablet-portrait-radio-size, 20px) !important;
+      }
+    }
+
     @media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
       html,
       body {
@@ -1680,38 +1724,47 @@
       font-weight: 900;
     }
     .result-chip-wrap {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 7px;
     }
     .result-chip {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
+      justify-content: space-between;
+      gap: 6px;
+      width: 100%;
+      min-width: 0;
+      padding: 7px 9px;
+      box-sizing: border-box;
       border-radius: 999px;
       border: 1px solid #D8E3ED;
       background: #F8FBFD;
       color: #506273;
-      font-size: clamp(11px, 1vw, 13px);
+      font-size: clamp(10.5px, .9vw, 12.5px);
       font-weight: 800;
       line-height: 1.1;
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
     }
-    .result-chip .chip-no { display: inline-flex; align-items: center; justify-content: center; min-width: 4.3em; flex-shrink: 0; }
-    .result-chip .chip-meta { display: inline-flex; align-items: center; justify-content: center; min-width: 7.8em; }
+    .result-chip .chip-no { display: inline-flex; align-items: center; justify-content: flex-start; min-width: 3.1em; flex-shrink: 0; }
+    .result-chip .chip-meta { display: inline-flex; align-items: center; justify-content: flex-end; min-width: 0; }
     .result-chip.correct { border-color: #A7E2C1; background: #F1FCF5; color: #0F8A4C; }
     .result-chip.wrong { border-color: #F3B2B0; background: #FFF4F4; color: #C13C36; }
     .result-chip.empty { border-color: #F3D6A8; background: #FFF8EA; color: #A05A00; }
     .result-empty-note {
+      grid-column: 1 / -1;
       margin: 0;
       color: #71839A;
       font-size: 13px;
       font-weight: 700;
     }
+    @media (max-width: 700px) {
+      .result-chip-wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
     @media (max-width: 560px) {
       .result-insight-grid { grid-template-columns: 1fr; }
+      .result-chip-wrap { grid-template-columns: 1fr; }
       .result-chip { width: 100%; justify-content: space-between; border-radius: 12px; }
     }
 </style>
@@ -1878,6 +1931,10 @@ const EXAM_ID = "exam4";
       return window.matchMedia("(max-width: 899px) and (orientation: landscape)").matches;
     }
 
+    function isTabletPortraitLayout(){
+      return window.matchMedia("(min-width: 701px) and (orientation: portrait)").matches;
+    }
+
     function fitQuestionText(){
       const h3=document.querySelector("#quiz-content h3");
       const quizContainer=document.getElementById("quiz-container");
@@ -1899,8 +1956,12 @@ const EXAM_ID = "exam4";
         }
       }else if(isPhoneLandscapeLayout()){
         size=Math.max(13,Math.min(16,Math.min(panelRect.width*0.05,panelRect.height*0.06)));
+      }else if(isTabletPortraitLayout()){
+        size=Math.max(18,Math.min(22,Math.min(panelRect.width*0.02,panelRect.height*0.055)));
       }
 
+      if(isTabletPortraitLayout()) h3.style.setProperty("--tablet-portrait-question-font-size",size+"px");
+      else h3.style.removeProperty("--tablet-portrait-question-font-size");
       h3.style.setProperty("--question-font-size",size+"px");
     }
     function fitOptionsText(){
@@ -1914,10 +1975,43 @@ const EXAM_ID = "exam4";
       const viewport=getViewportSize();
       const optionsRect=optionsWrap.getBoundingClientRect();
       const tabletLandscape=isTabletLandscapeLayout();
+      const tabletPortrait=isTabletPortraitLayout();
       const phoneLandscape=isPhoneLandscapeLayout();
       let size=Math.max(14,Math.min(16,viewport.width*0.036));
 
-      if(tabletLandscape||phoneLandscape){
+      if(tabletPortrait){
+        optionsWrap.style.removeProperty("--tablet-option-gap");
+        optionsWrap.style.removeProperty("--tablet-option-padding-y");
+
+        const nav=document.getElementById("navigation-buttons");
+        const navRect=nav?nav.getBoundingClientRect():null;
+        const navTop=(navRect&&navRect.top>0)?navRect.top:viewport.height;
+        const availableHeight=Math.max(180,navTop-optionsRect.top-10);
+        const gap=Math.max(8,Math.min(14,availableHeight*0.018));
+        const rawCardHeight=(availableHeight-gap*(labels.length-1))/labels.length;
+        const minCardHeight=Math.max(48,Math.min(58,viewport.height*0.035));
+        const maxCardHeight=Math.max(86,Math.min(108,viewport.height*0.06));
+        const cardHeight=Math.max(minCardHeight,Math.min(maxCardHeight,rawCardHeight));
+        const paddingY=Math.max(9,Math.min(14,cardHeight*0.13));
+        const radioSize=Math.max(18,Math.min(22,cardHeight*0.22));
+        size=Math.max(15,Math.min(20,Math.min(optionsRect.width*0.018,cardHeight*0.22)));
+
+        optionsWrap.style.setProperty("--tablet-portrait-option-gap",gap+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-option-height",cardHeight+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-option-padding-y",paddingY+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-option-padding-bottom",Math.max(10,Math.min(16,gap+2))+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-option-inner-gap",Math.max(12,Math.min(16,radioSize*0.7))+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-option-font-size",size+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-radio-size",radioSize+"px");
+      }else if(tabletLandscape||phoneLandscape){
+        optionsWrap.style.removeProperty("--tablet-portrait-option-gap");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-height");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-padding-y");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-padding-bottom");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-inner-gap");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-font-size");
+        optionsWrap.style.removeProperty("--tablet-portrait-radio-size");
+
         const minGap=phoneLandscape?5:7;
         const maxGap=phoneLandscape?8:12;
         const gap=Math.max(minGap,Math.min(maxGap,optionsRect.height*0.018));
@@ -1971,6 +2065,13 @@ const EXAM_ID = "exam4";
           });
         }
       }else{
+        optionsWrap.style.removeProperty("--tablet-portrait-option-gap");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-height");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-padding-y");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-padding-bottom");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-inner-gap");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-font-size");
+        optionsWrap.style.removeProperty("--tablet-portrait-radio-size");
         optionsWrap.style.removeProperty("--tablet-option-gap");
         optionsWrap.style.removeProperty("--tablet-option-padding-y");
       }
@@ -1980,6 +2081,27 @@ const EXAM_ID = "exam4";
       labels.forEach(label=>{
         label.style.removeProperty("padding-top");
         label.style.removeProperty("padding-bottom");
+      });
+    }
+    let quizContentScrollFrame=0;
+    function updateQuizContentScrollState(){
+      const scroller=document.getElementById("quiz-content");
+      if(!scroller)return;
+      const shouldManageScroll=window.matchMedia("(max-width: 700px) and (orientation: portrait)").matches;
+      if(!shouldManageScroll){
+        scroller.classList.remove("scroll-needed","no-scroll-needed");
+        return;
+      }
+      const needsScroll=scroller.scrollHeight>scroller.clientHeight+4;
+      scroller.classList.toggle("scroll-needed",needsScroll);
+      scroller.classList.toggle("no-scroll-needed",!needsScroll);
+      if(!needsScroll)scroller.scrollTop=0;
+    }
+    function scheduleQuizContentScrollState(){
+      if(quizContentScrollFrame)cancelAnimationFrame(quizContentScrollFrame);
+      quizContentScrollFrame=requestAnimationFrame(()=>{
+        quizContentScrollFrame=0;
+        updateQuizContentScrollState();
       });
     }
     function enableQuizContentTouchScroll(){
@@ -1994,7 +2116,12 @@ const EXAM_ID = "exam4";
         moved=false;
       },{passive:true});
       scroller.addEventListener("touchmove",e=>{
-        if(e.touches.length!==1||scroller.scrollHeight<=scroller.clientHeight+1)return;
+        if(e.touches.length!==1)return;
+        if(scroller.classList.contains("no-scroll-needed")||scroller.scrollHeight<=scroller.clientHeight+1){
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
         const y=e.touches[0].clientY;
         const delta=lastY-y;
         if(Math.abs(delta)>1){
@@ -2095,7 +2222,9 @@ const EXAM_ID = "exam4";
       { number:"모0478", question:"심폐소생술에 대한 설명으로 옳은 것은?", options:["쓰러진 환자의 얼굴과 가슴을 30초 이내로 관찰한다.","호흡이 없거나 비정상적이면 인공호흡을 시작한다.","호흡확인은 구급상황요원의 지시에 따라 확인한다.","가슴압박은 분당 120회 이상 속도로 실시한다.","심폐소생술 시행 중에는 자동심장충격기를 사용하지 않는다."], correctAnswer:3, videoId:"1119295650" },
       { number:"모0479", question:"자동심장충격기 사용 시 패드 부착하는 위치로 옳은 것은?", options:["[이미지] 그림1","[이미지] 그림2","[이미지] 그림3","[이미지] 그림4","[이미지] 그림5"], correctAnswer:3, videoId:"1119295673" },
       { number:"모0480", question:"다음 사례에서 요양보호사의 공감적 반응으로 옳은 것은?", options:["\"남편들은 원래 그래요. 신경 쓰지 마세요.\"","\"남편 분께 서운한 부분을 이야기해 보세요.\"","\"남편 분한테 화내시면 본인 기분만 더 안 좋아요. 참으세요.\"","\"대부분의 가족들이 며느리가 다 해야 하는 것으로 생각하더라구요.\"","\"남편 분이 따뜻한 말 한마디라도 해 주셨으면 좋겠는데 그러지 않아 서운하시군요.\""], correctAnswer:5, videoId:"1119295685" }
-    ];const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+    ];
+
+    const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
@@ -2166,6 +2295,7 @@ const EXAM_ID = "exam4";
       requestAnimationFrame(()=>{
         fitQuestionText();
         fitOptionsText();
+        scheduleQuizContentScrollState();
       });
       document.querySelectorAll(".nav-btn").forEach((btn,i)=>{
         btn.classList.remove("active","answered");
@@ -2218,7 +2348,7 @@ const EXAM_ID = "exam4";
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
-      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfQYoSaNSLQCmvTyUPSaGA2KKgG4NSL6Xs7FOzFmhEGBWg5YA/formResponse";
+      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
@@ -2371,6 +2501,7 @@ const EXAM_ID = "exam4";
       quizAutoFitFrame=requestAnimationFrame(()=>{
         fitQuestionText();
         fitOptionsText();
+        scheduleQuizContentScrollState();
         requestAnimationFrame(autoResizeNavGrid);
       });
     }
@@ -2422,6 +2553,7 @@ const EXAM_ID = "exam4";
     });
     optionsDiv.addEventListener("change",e=>{
       requestAnimationFrame(fitOptionsText);
+      scheduleQuizContentScrollState();
       const ans=parseInt(e.target.value);userAnswers[currentQuestionIndex]=ans;saveQuizProgress();
       const btn=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
       if(btn){btn.textContent=`${currentQuestionIndex+1}(${ans})`;btn.classList.add("answered");}

@@ -1309,6 +1309,16 @@
         touch-action: pan-y !important;
         overscroll-behavior: contain !important;
       }
+      #quiz-content.scroll-needed {
+        overflow-y: auto !important;
+        overscroll-behavior: contain !important;
+      }
+      #quiz-content.no-scroll-needed {
+        overflow-y: hidden !important;
+        overscroll-behavior: none !important;
+        touch-action: none !important;
+        -webkit-overflow-scrolling: auto !important;
+      }
       #options {
         flex: 0 0 auto !important;
         min-height: auto !important;
@@ -1338,6 +1348,40 @@
     }
   
     /* === 태블릿 가로형: 상단 영상/문제, 하단 1~80번 전체 문항판 === */
+    @media (min-width: 701px) and (orientation: portrait) {
+      #quiz-content {
+        gap: clamp(12px, 1.15vh, 16px) !important;
+        padding: clamp(18px, 1.8vh, 26px) clamp(24px, 3vw, 34px) 0 !important;
+      }
+      #quiz-content h3 {
+        min-height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: clamp(13px, 1.45vh, 18px) clamp(20px, 2.4vw, 28px) !important;
+        font-size: var(--tablet-portrait-question-font-size, clamp(18px, 2vw, 22px)) !important;
+      }
+      #options {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        gap: var(--tablet-portrait-option-gap, clamp(10px, 1vh, 14px)) !important;
+        padding-bottom: var(--tablet-portrait-option-padding-bottom, clamp(12px, 1.35vh, 18px)) !important;
+      }
+      #options label {
+        flex: 0 0 var(--tablet-portrait-option-height, 88px) !important;
+        height: var(--tablet-portrait-option-height, 88px) !important;
+        min-height: 0 !important;
+        max-height: var(--tablet-portrait-option-height, 88px) !important;
+        padding: var(--tablet-portrait-option-padding-y, 12px) clamp(18px, 2.4vw, 28px) !important;
+        gap: var(--tablet-portrait-option-inner-gap, 14px) !important;
+        border-radius: 12px !important;
+        font-size: var(--tablet-portrait-option-font-size, clamp(16px, 1.8vw, 20px)) !important;
+      }
+      #options input[type="radio"] {
+        width: var(--tablet-portrait-radio-size, 20px) !important;
+        height: var(--tablet-portrait-radio-size, 20px) !important;
+      }
+    }
+
     @media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
       html,
       body {
@@ -1680,38 +1724,47 @@
       font-weight: 900;
     }
     .result-chip-wrap {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 7px;
     }
     .result-chip {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
+      justify-content: space-between;
+      gap: 6px;
+      width: 100%;
+      min-width: 0;
+      padding: 7px 9px;
+      box-sizing: border-box;
       border-radius: 999px;
       border: 1px solid #D8E3ED;
       background: #F8FBFD;
       color: #506273;
-      font-size: clamp(11px, 1vw, 13px);
+      font-size: clamp(10.5px, .9vw, 12.5px);
       font-weight: 800;
       line-height: 1.1;
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
     }
-    .result-chip .chip-no { display: inline-flex; align-items: center; justify-content: center; min-width: 4.3em; flex-shrink: 0; }
-    .result-chip .chip-meta { display: inline-flex; align-items: center; justify-content: center; min-width: 7.8em; }
+    .result-chip .chip-no { display: inline-flex; align-items: center; justify-content: flex-start; min-width: 3.1em; flex-shrink: 0; }
+    .result-chip .chip-meta { display: inline-flex; align-items: center; justify-content: flex-end; min-width: 0; }
     .result-chip.correct { border-color: #A7E2C1; background: #F1FCF5; color: #0F8A4C; }
     .result-chip.wrong { border-color: #F3B2B0; background: #FFF4F4; color: #C13C36; }
     .result-chip.empty { border-color: #F3D6A8; background: #FFF8EA; color: #A05A00; }
     .result-empty-note {
+      grid-column: 1 / -1;
       margin: 0;
       color: #71839A;
       font-size: 13px;
       font-weight: 700;
     }
+    @media (max-width: 700px) {
+      .result-chip-wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
     @media (max-width: 560px) {
       .result-insight-grid { grid-template-columns: 1fr; }
+      .result-chip-wrap { grid-template-columns: 1fr; }
       .result-chip { width: 100%; justify-content: space-between; border-radius: 12px; }
     }
 </style>
@@ -1878,6 +1931,10 @@ const EXAM_ID = "exam9";
       return window.matchMedia("(max-width: 899px) and (orientation: landscape)").matches;
     }
 
+    function isTabletPortraitLayout(){
+      return window.matchMedia("(min-width: 701px) and (orientation: portrait)").matches;
+    }
+
     function fitQuestionText(){
       const h3=document.querySelector("#quiz-content h3");
       const quizContainer=document.getElementById("quiz-container");
@@ -1899,8 +1956,12 @@ const EXAM_ID = "exam9";
         }
       }else if(isPhoneLandscapeLayout()){
         size=Math.max(13,Math.min(16,Math.min(panelRect.width*0.05,panelRect.height*0.06)));
+      }else if(isTabletPortraitLayout()){
+        size=Math.max(18,Math.min(22,Math.min(panelRect.width*0.02,panelRect.height*0.055)));
       }
 
+      if(isTabletPortraitLayout()) h3.style.setProperty("--tablet-portrait-question-font-size",size+"px");
+      else h3.style.removeProperty("--tablet-portrait-question-font-size");
       h3.style.setProperty("--question-font-size",size+"px");
     }
     function fitOptionsText(){
@@ -1914,10 +1975,43 @@ const EXAM_ID = "exam9";
       const viewport=getViewportSize();
       const optionsRect=optionsWrap.getBoundingClientRect();
       const tabletLandscape=isTabletLandscapeLayout();
+      const tabletPortrait=isTabletPortraitLayout();
       const phoneLandscape=isPhoneLandscapeLayout();
       let size=Math.max(14,Math.min(16,viewport.width*0.036));
 
-      if(tabletLandscape||phoneLandscape){
+      if(tabletPortrait){
+        optionsWrap.style.removeProperty("--tablet-option-gap");
+        optionsWrap.style.removeProperty("--tablet-option-padding-y");
+
+        const nav=document.getElementById("navigation-buttons");
+        const navRect=nav?nav.getBoundingClientRect():null;
+        const navTop=(navRect&&navRect.top>0)?navRect.top:viewport.height;
+        const availableHeight=Math.max(180,navTop-optionsRect.top-10);
+        const gap=Math.max(8,Math.min(14,availableHeight*0.018));
+        const rawCardHeight=(availableHeight-gap*(labels.length-1))/labels.length;
+        const minCardHeight=Math.max(48,Math.min(58,viewport.height*0.035));
+        const maxCardHeight=Math.max(86,Math.min(108,viewport.height*0.06));
+        const cardHeight=Math.max(minCardHeight,Math.min(maxCardHeight,rawCardHeight));
+        const paddingY=Math.max(9,Math.min(14,cardHeight*0.13));
+        const radioSize=Math.max(18,Math.min(22,cardHeight*0.22));
+        size=Math.max(15,Math.min(20,Math.min(optionsRect.width*0.018,cardHeight*0.22)));
+
+        optionsWrap.style.setProperty("--tablet-portrait-option-gap",gap+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-option-height",cardHeight+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-option-padding-y",paddingY+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-option-padding-bottom",Math.max(10,Math.min(16,gap+2))+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-option-inner-gap",Math.max(12,Math.min(16,radioSize*0.7))+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-option-font-size",size+"px");
+        optionsWrap.style.setProperty("--tablet-portrait-radio-size",radioSize+"px");
+      }else if(tabletLandscape||phoneLandscape){
+        optionsWrap.style.removeProperty("--tablet-portrait-option-gap");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-height");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-padding-y");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-padding-bottom");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-inner-gap");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-font-size");
+        optionsWrap.style.removeProperty("--tablet-portrait-radio-size");
+
         const minGap=phoneLandscape?5:7;
         const maxGap=phoneLandscape?8:12;
         const gap=Math.max(minGap,Math.min(maxGap,optionsRect.height*0.018));
@@ -1971,6 +2065,13 @@ const EXAM_ID = "exam9";
           });
         }
       }else{
+        optionsWrap.style.removeProperty("--tablet-portrait-option-gap");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-height");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-padding-y");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-padding-bottom");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-inner-gap");
+        optionsWrap.style.removeProperty("--tablet-portrait-option-font-size");
+        optionsWrap.style.removeProperty("--tablet-portrait-radio-size");
         optionsWrap.style.removeProperty("--tablet-option-gap");
         optionsWrap.style.removeProperty("--tablet-option-padding-y");
       }
@@ -1980,6 +2081,27 @@ const EXAM_ID = "exam9";
       labels.forEach(label=>{
         label.style.removeProperty("padding-top");
         label.style.removeProperty("padding-bottom");
+      });
+    }
+    let quizContentScrollFrame=0;
+    function updateQuizContentScrollState(){
+      const scroller=document.getElementById("quiz-content");
+      if(!scroller)return;
+      const shouldManageScroll=window.matchMedia("(max-width: 700px) and (orientation: portrait)").matches;
+      if(!shouldManageScroll){
+        scroller.classList.remove("scroll-needed","no-scroll-needed");
+        return;
+      }
+      const needsScroll=scroller.scrollHeight>scroller.clientHeight+4;
+      scroller.classList.toggle("scroll-needed",needsScroll);
+      scroller.classList.toggle("no-scroll-needed",!needsScroll);
+      if(!needsScroll)scroller.scrollTop=0;
+    }
+    function scheduleQuizContentScrollState(){
+      if(quizContentScrollFrame)cancelAnimationFrame(quizContentScrollFrame);
+      quizContentScrollFrame=requestAnimationFrame(()=>{
+        quizContentScrollFrame=0;
+        updateQuizContentScrollState();
       });
     }
     function enableQuizContentTouchScroll(){
@@ -1994,7 +2116,12 @@ const EXAM_ID = "exam9";
         moved=false;
       },{passive:true});
       scroller.addEventListener("touchmove",e=>{
-        if(e.touches.length!==1||scroller.scrollHeight<=scroller.clientHeight+1)return;
+        if(e.touches.length!==1)return;
+        if(scroller.classList.contains("no-scroll-needed")||scroller.scrollHeight<=scroller.clientHeight+1){
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
         const y=e.touches[0].clientY;
         const delta=lastY-y;
         if(Math.abs(delta)>1){
@@ -2095,7 +2222,9 @@ const EXAM_ID = "exam9";
       { number:"모0978", question:"대상자가 입에서 거품을 내고 경련을 일으키며 쓰러졌을 때 응급처치 방법으로 옳은 것은?", options:["고개를 옆으로 돌려준다.","몸을 꽉 잡아준다.","머리를 올려준다.","옷의 단추를 잠그고 보온을 유지한다.","입에 따뜻한 물을 넣어준다."], correctAnswer:1, videoId:"1119287538" },
       { number:"모0979", question:"심정지 대상자에게 가슴압박을 실시하는 방법으로 옳은 것은?", options:["흉골의 위쪽 절반 부위에 깍지 낀 두 손바닥을 댄다.","손가락이 가슴에 닿도록 놓는다.","양팔을 30° 구부린 상태로 가슴을 압박한다.","압박된 가슴은 완전히 이완되도록 한다.","분당 60~100회의 속도와 약 3cm 깊이로 압박한다."], correctAnswer:4, videoId:"1119287582" },
       { number:"모0980", question:"자동심장충격기 사용하는 방법으로 옳은 것은?", options:["자동심장충격기는 매년 1회 정기점검을 한다.","먼저 패드를 부착하고 전원을 켠다.","5분마다 심장리듬 분석을 반복한다.","충전 중에도 가슴압박을 시행한다.","심장충격 시행 후 즉시 인공호흡을 시작한다."], correctAnswer:4, videoId:"1119287637" }
-    ];const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+    ];
+
+    const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
@@ -2166,6 +2295,7 @@ const EXAM_ID = "exam9";
       requestAnimationFrame(()=>{
         fitQuestionText();
         fitOptionsText();
+        scheduleQuizContentScrollState();
       });
       document.querySelectorAll(".nav-btn").forEach((btn,i)=>{
         btn.classList.remove("active","answered");
@@ -2218,7 +2348,7 @@ const EXAM_ID = "exam9";
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
-      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSf3B31P9u8y7VH_gZN-wGyMHllvN7S7JggtjxGdfNF_W4IENg/formResponse";
+      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
@@ -2371,6 +2501,7 @@ const EXAM_ID = "exam9";
       quizAutoFitFrame=requestAnimationFrame(()=>{
         fitQuestionText();
         fitOptionsText();
+        scheduleQuizContentScrollState();
         requestAnimationFrame(autoResizeNavGrid);
       });
     }
@@ -2422,6 +2553,7 @@ const EXAM_ID = "exam9";
     });
     optionsDiv.addEventListener("change",e=>{
       requestAnimationFrame(fitOptionsText);
+      scheduleQuizContentScrollState();
       const ans=parseInt(e.target.value);userAnswers[currentQuestionIndex]=ans;saveQuizProgress();
       const btn=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
       if(btn){btn.textContent=`${currentQuestionIndex+1}(${ans})`;btn.classList.add("answered");}

@@ -925,7 +925,7 @@
 
   <div id="result-page">
     <div class="result-heading">
-      <span class="result-badge">1회 모의고사</span>
+      <span class="result-badge">7회 모의고사</span>
       <h2>시험 결과</h2>
       <p id="result-user-name" class="result-user-name"></p>
     </div>
@@ -1120,7 +1120,9 @@
       { number:"모0778", question:"대상자가 입에서 거품을 내고 경련을 일으키며 쓰러졌을 때 응급처치 방법으로 옳은 것은?", options:["고개를 옆으로 돌려준다.","몸을 꽉 잡아준다.","머리를 올려준다.","옷의 단추를 잠그고 보온을 유지한다.","입에 따뜻한 물을 넣어준다."], correctAnswer:1, videoId:"1119277184" },
       { number:"모0779", question:"심정지 대상자에게 가슴압박을 실시하는 방법으로 옳은 것은?", options:["흉골의 위쪽 절반 부위에 깍지 낀 두 손바닥을 댄다.","손가락이 가슴에 닿도록 놓는다.","양팔을 30° 구부린 상태로 가슴을 압박한다.","압박된 가슴은 완전히 이완되도록 한다.","분당 60~100회의 속도와 약 3cm 깊이로 압박한다."], correctAnswer:4, videoId:"1119277224" },
       { number:"모0780", question:"자동심장충격기 사용하는 방법으로 옳은 것은?", options:["자동심장충격기는 매년 1회 정기점검을 한다.","먼저 패드를 부착하고 전원을 켠다.","5분마다 심장리듬 분석을 반복한다.","충전 중에도 가슴압박을 시행한다.","심장충격 시행 후 즉시 인공호흡을 시작한다."], correctAnswer:4, videoId:"1119277290" }
-    ];const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+    ];
+
+    const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
@@ -1240,7 +1242,7 @@
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
-      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfxTbF6xJKrYuFjyqwP7fJG8GHf5caMxrag9CWCtXg09pqdeA/formResponse";
+      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);

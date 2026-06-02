@@ -925,7 +925,7 @@
 
   <div id="result-page">
     <div class="result-heading">
-      <span class="result-badge">1회 모의고사</span>
+      <span class="result-badge">10회 모의고사</span>
       <h2>시험 결과</h2>
       <p id="result-user-name" class="result-user-name"></p>
     </div>
@@ -1120,7 +1120,9 @@
       { number:"모1078", question:"대량 출혈로 인한 급성 저혈압의 증상으로 옳은 것은?", options:["손발의 체온이 상승한다.","피부색이 붉어진다.","호흡수가 증가한다.","맥박이 감소한다.","기도폐색이 나타난다."], correctAnswer:3, videoId:"1119291317" },
       { number:"모1079", question:"대상자가 갑자기 쓰러져서 경련을 일으킬 때 응급처치 방법은?", options:["고개를 뒤로 젖혀 기도를 열어준다.","팔과 다리를 꽉 붙잡고 주물러준다.","혀를 깨물지 않게 입에 거즈를 넣어준다.","주변에 뾰족한 물건은 치워준다.","머리 아래에 딱딱한 것을 대준다."], correctAnswer:4, videoId:"1119291346" },
       { number:"모1080", question:"심폐소생술 시 가슴압박을 실시하는 방법으로 옳은 것은?", options:["가슴뼈 아래쪽 절반 부위에 깍지 낀 두 손의 손바닥 뒤꿈치를 댄다.","1분당 30회 속도로 천천히 압박한다.","손가락을 가슴에 대면서 압박한다.","양팔을 유연성이 있도록 구부려 압박한다.","15회 가슴압박 후 2번 인공호흡을 한다."], correctAnswer:1, videoId:"1119291363" }
-    ];const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+    ];
+
+    const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
@@ -1240,7 +1242,7 @@
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
-      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLScX1P_TbdVuclSyBiuVwZmhP6qcmRnqwfmD_ltCm_CY9gmPYA/formResponse";
+      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);

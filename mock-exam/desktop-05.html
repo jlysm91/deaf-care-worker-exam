@@ -925,7 +925,7 @@
 
   <div id="result-page">
     <div class="result-heading">
-      <span class="result-badge">1회 모의고사</span>
+      <span class="result-badge">5회 모의고사</span>
       <h2>시험 결과</h2>
       <p id="result-user-name" class="result-user-name"></p>
     </div>
@@ -1120,7 +1120,9 @@
       { number:"모0578", question:"대상자가 요양원 복도에서 넘어져 골절이 의심될 때 응급처치 방법은?", options:["손상 부위에 파스를 붙여준다.","손상 부위를 부목으로 고정한다.","손상 부위를 직접압박 한다.","손상 부위를 똑바로 맞춘다.","상처가 없으면 온찜질한다."], correctAnswer:2, videoId:"1119261557" },
       { number:"모0579", question:"의식을 잃은 대상자가 반응은 없으나 정상적인 호흡을 할 때 올바른 대처방법은?", options:["인공호흡을 실시한다.","가슴압박을 실시한다.","자동심장충격기를 사용한다.","옆으로 누운 자세를 취하게 한다.","반응할 때까지 어깨를 두드린다."], correctAnswer:4, videoId:"1119261608" },
       { number:"모0580", question:"치매에 걸린 아내를 돌보는 남편이 우울해하고 불안해할 때 요양보호사의 힘 돋우기 소통방법으로 옳은 것은?", options:["\"힘드시면 입주 간병인이라도 소개시켜 드릴까요?\"","\"기저귀를 채워보세요. 한결 수월해 질거예요.\"","\"누구나 겪고 있어요. 조그만 참아보세요.\"","\"힘들면 요양시설에 보내세요, 시설에 가면 나아질거예요.\"","\"언제든 도움이 필요하시면 말씀하세요. 최선을 다해 도와드리겠습니다.\""], correctAnswer:5, videoId:"1119261659" }
-    ];const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+    ];
+
+    const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
@@ -1240,7 +1242,7 @@
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
-      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSczTxQu6OVngVs0E9jVTZeqQOO_iqc17uENuSKtHePt5MYwAQ/formResponse";
+      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);

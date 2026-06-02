@@ -925,7 +925,7 @@
 
   <div id="result-page">
     <div class="result-heading">
-      <span class="result-badge">1회 모의고사</span>
+      <span class="result-badge">3회 모의고사</span>
       <h2>시험 결과</h2>
       <p id="result-user-name" class="result-user-name"></p>
     </div>
@@ -1120,7 +1120,9 @@
       { number:"모0378", question:"대상자가 경련을 일으킬 때 돕는 방법으로 옳은 것은?", options:["입안에 숟가락을 넣어 질식을 예방한다.","입안에 수건을 넣어 혀 말림을 예방한다.","즉시 뇌전증약을 먹인다.","경련을 멈추기 위해 손과 발을 잡아준다.","경련이 발생한 시각을 기록해둔다."], correctAnswer:5, videoId:"1118944666" },
       { number:"모0379", question:"자동심장충격기 사용 시 분석 중이라는 음성지시가 나올 때 대처방법은?", options:["귀로 숨소리를 들어본다.","가슴압박을 중단하고 환자에게서 손을 뗀다.","가슴압박을 실시한다.","환자가 움직이지 못하도록 꽉 잡아준다.","인공호흡을 실시한다."], correctAnswer:2, videoId:"1118944706" },
       { number:"모0380", question:"다음 사례와 같이 치매대상자가 헛것을 보는 정신행동증상 나타날 때 대처방법으로 옳은 것은?", options:["\"이상하네요. 어르신하고 나 밖에 없는데, 왜 그러세요?\"","\"어르신, 제발 정신 좀 차리세요.\"","\"음료수 한잔 마시고, 밖에 나가서 산책하고 올까요?\"","\"그 사람이 안 보이게 조명을 어둡게 해드릴게요.\"","\"치매가 심해져서 헛것이 보이시나 보네요.\""], correctAnswer:3, videoId:"1118944743" }
-    ];const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+    ];
+
+    const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
@@ -1240,7 +1242,7 @@
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
-      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLScZLlJBlnz98rbUb1GW6NqEOqOay6mu5xN5_ajlakMyTiFNtA/formResponse";
+      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);

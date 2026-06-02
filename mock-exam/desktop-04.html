@@ -925,7 +925,7 @@
 
   <div id="result-page">
     <div class="result-heading">
-      <span class="result-badge">1회 모의고사</span>
+      <span class="result-badge">4회 모의고사</span>
       <h2>시험 결과</h2>
       <p id="result-user-name" class="result-user-name"></p>
     </div>
@@ -1120,7 +1120,9 @@
       { number:"모0478", question:"심폐소생술에 대한 설명으로 옳은 것은?", options:["쓰러진 환자의 얼굴과 가슴을 30초 이내로 관찰한다.","호흡이 없거나 비정상적이면 인공호흡을 시작한다.","호흡확인은 구급상황요원의 지시에 따라 확인한다.","가슴압박은 분당 120회 이상 속도로 실시한다.","심폐소생술 시행 중에는 자동심장충격기를 사용하지 않는다."], correctAnswer:3, videoId:"1119295650" },
       { number:"모0479", question:"자동심장충격기 사용 시 패드 부착하는 위치로 옳은 것은?", options:["[이미지] 그림1","[이미지] 그림2","[이미지] 그림3","[이미지] 그림4","[이미지] 그림5"], correctAnswer:3, videoId:"1119295673" },
       { number:"모0480", question:"다음 사례에서 요양보호사의 공감적 반응으로 옳은 것은?", options:["\"남편들은 원래 그래요. 신경 쓰지 마세요.\"","\"남편 분께 서운한 부분을 이야기해 보세요.\"","\"남편 분한테 화내시면 본인 기분만 더 안 좋아요. 참으세요.\"","\"대부분의 가족들이 며느리가 다 해야 하는 것으로 생각하더라구요.\"","\"남편 분이 따뜻한 말 한마디라도 해 주셨으면 좋겠는데 그러지 않아 서운하시군요.\""], correctAnswer:5, videoId:"1119295685" }
-    ];const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+    ];
+
+    const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
@@ -1240,7 +1242,7 @@
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
-      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfQYoSaNSLQCmvTyUPSaGA2KKgG4NSL6Xs7FOzFmhEGBWg5YA/formResponse";
+      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
