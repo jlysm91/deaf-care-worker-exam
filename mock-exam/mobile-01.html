@@ -1309,6 +1309,15 @@
         touch-action: pan-y !important;
         overscroll-behavior: contain !important;
       }
+      #quiz-content.scroll-needed {
+        overflow-y: auto !important;
+        overscroll-behavior: contain !important;
+      }
+      #quiz-content.no-scroll-needed {
+        overflow-y: hidden !important;
+        overscroll-behavior: none !important;
+        -webkit-overflow-scrolling: auto !important;
+      }
       #options {
         flex: 0 0 auto !important;
         min-height: auto !important;
@@ -1982,6 +1991,27 @@ const EXAM_ID = "exam1";
         label.style.removeProperty("padding-bottom");
       });
     }
+    let quizContentScrollFrame=0;
+    function updateQuizContentScrollState(){
+      const scroller=document.getElementById("quiz-content");
+      if(!scroller)return;
+      const shouldManageScroll=window.matchMedia("(max-width: 700px) and (orientation: portrait)").matches;
+      if(!shouldManageScroll){
+        scroller.classList.remove("scroll-needed","no-scroll-needed");
+        return;
+      }
+      const needsScroll=scroller.scrollHeight>scroller.clientHeight+4;
+      scroller.classList.toggle("scroll-needed",needsScroll);
+      scroller.classList.toggle("no-scroll-needed",!needsScroll);
+      if(!needsScroll)scroller.scrollTop=0;
+    }
+    function scheduleQuizContentScrollState(){
+      if(quizContentScrollFrame)cancelAnimationFrame(quizContentScrollFrame);
+      quizContentScrollFrame=requestAnimationFrame(()=>{
+        quizContentScrollFrame=0;
+        updateQuizContentScrollState();
+      });
+    }
     function enableQuizContentTouchScroll(){
       const scroller=document.getElementById("quiz-content");
       if(!scroller||scroller.dataset.touchScrollInit==="1")return;
@@ -2168,6 +2198,7 @@ const EXAM_ID = "exam1";
       requestAnimationFrame(()=>{
         fitQuestionText();
         fitOptionsText();
+        scheduleQuizContentScrollState();
       });
       document.querySelectorAll(".nav-btn").forEach((btn,i)=>{
         btn.classList.remove("active","answered");
@@ -2373,6 +2404,7 @@ const EXAM_ID = "exam1";
       quizAutoFitFrame=requestAnimationFrame(()=>{
         fitQuestionText();
         fitOptionsText();
+        scheduleQuizContentScrollState();
         requestAnimationFrame(autoResizeNavGrid);
       });
     }
@@ -2424,6 +2456,7 @@ const EXAM_ID = "exam1";
     });
     optionsDiv.addEventListener("change",e=>{
       requestAnimationFrame(fitOptionsText);
+      scheduleQuizContentScrollState();
       const ans=parseInt(e.target.value);userAnswers[currentQuestionIndex]=ans;saveQuizProgress();
       const btn=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
       if(btn){btn.textContent=`${currentQuestionIndex+1}(${ans})`;btn.classList.add("answered");}
