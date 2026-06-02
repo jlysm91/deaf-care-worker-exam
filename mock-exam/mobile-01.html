@@ -1348,6 +1348,38 @@
     }
   
     /* === 태블릿 가로형: 상단 영상/문제, 하단 1~80번 전체 문항판 === */
+    @media (min-width: 701px) and (orientation: portrait) {
+      #quiz-content {
+        gap: clamp(12px, 1.15vh, 16px) !important;
+        padding: clamp(18px, 1.8vh, 26px) clamp(24px, 3vw, 34px) 0 !important;
+      }
+      #quiz-content h3 {
+        min-height: clamp(72px, 6vh, 96px) !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: clamp(16px, 1.8vh, 22px) clamp(20px, 2.4vw, 28px) !important;
+        font-size: clamp(20px, 2.2vw, 24px) !important;
+      }
+      #options {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        gap: clamp(12px, 1.25vh, 18px) !important;
+        padding-bottom: clamp(18px, 1.9vh, 26px) !important;
+      }
+      #options label {
+        flex: 1 1 0 !important;
+        min-height: clamp(76px, 7vh, 104px) !important;
+        padding: clamp(16px, 1.8vh, 22px) clamp(20px, 2.4vw, 28px) !important;
+        gap: 16px !important;
+        border-radius: 12px !important;
+        font-size: clamp(18px, 2vw, 22px) !important;
+      }
+      #options input[type="radio"] {
+        width: 22px !important;
+        height: 22px !important;
+      }
+    }
+
     @media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
       html,
       body {
