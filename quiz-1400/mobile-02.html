@@ -134,7 +134,7 @@
       color: var(--text-primary);
       background: rgba(255, 255, 255, 0.96);
       border: 2px solid transparent;
-      border-radius: 12px;
+      border-radius: 16px;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -148,7 +148,7 @@
       margin-top: 8px;
       padding: 15px;
       border: none;
-      border-radius: 12px;
+      border-radius: 16px;
       background: #FFFFFF;
       color: var(--primary);
       font-family: inherit;
@@ -326,7 +326,7 @@
       flex: 1 1 auto;
       min-height: 0;
       padding: clamp(9px, 1.1vh, 13px) clamp(12px, 1.3vw, 16px);
-      border-radius: 12px;
+      border-radius: 16px;
       border: 1.5px solid #C8D5E0;
       background: #FFFFFF;
       color: var(--text-primary);
@@ -610,7 +610,7 @@
     .result-actions button {
       min-width: 150px;
       padding: 12px 24px;
-      border-radius: 12px;
+      border-radius: 16px;
       font-size: clamp(13px, 1.2vw, 16px);
       font-weight: 800;
     }
@@ -622,7 +622,7 @@
       box-shadow: 0 7px 18px rgba(0, 93, 122, 0.22);
     }
 
-    #result-complete-btn, .host-complete-btn {
+    .host-complete-btn {
       background: linear-gradient(120deg, #F29A27 0%, #F6AE3B 100%);
       color: #FFFFFF;
       border: none;
@@ -633,24 +633,25 @@
       display: flex;
       justify-content: center;
       gap: 10px;
-      margin-top: clamp(18px, 2.4vh, 28px);
+      margin-top: clamp(24px, 3.2vh, 40px);
     }
     .host-complete-btn {
-      min-height: 46px;
-      padding: 0 28px;
-      border-radius: 12px;
+      min-width: min(420px, 100%);
+      min-height: 62px;
+      padding: 0 46px;
+      border-radius: 16px;
       font-family: inherit;
-      font-size: clamp(14px, 1.25vw, 16px);
+      font-size: clamp(18px, 1.7vw, 22px);
       font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
     }
-    .host-complete-btn:hover, #result-complete-btn:hover {
+    .host-complete-btn:hover {
       filter: brightness(1.03);
       transform: translateY(-1px);
     }
     @media (max-width: 560px) {
-      .host-actions { margin-top: 16px; }
+      .host-actions { margin-top: 20px; }
       .host-complete-btn { width: 100%; }
     }
     ::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -1064,7 +1065,6 @@
     <div class="result-actions">
       <button id="result-chapter-btn">장 선택하기</button>
       <button id="result-return-btn">다시 풀기</button>
-      <button id="result-complete-btn" data-host-complete>학습을 완료합니다</button>
     </div>
   </div>
 
