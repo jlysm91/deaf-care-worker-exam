@@ -734,20 +734,25 @@
         align-items: center !important;
       }
       body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-grid-wrap {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         flex: 1 1 auto !important;
         min-width: 0 !important;
         padding: 0 !important;
       }
       body.mobile-page #quick-nav-grid {
+        width: 100% !important;
         grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
         gap: 4px !important;
       }
       body.mobile-page #quick-nav-grid .nav-btn {
+        --nav-btn-height: var(--quick-nav-btn-height, 26px) !important;
         width: 100% !important;
         min-width: 0 !important;
-        min-height: var(--nav-btn-height, 26px) !important;
-        height: var(--nav-btn-height, 26px) !important;
-        line-height: var(--nav-btn-height, 26px) !important;
+        min-height: var(--quick-nav-btn-height, 26px) !important;
+        height: var(--quick-nav-btn-height, 26px) !important;
+        line-height: var(--quick-nav-btn-height, 26px) !important;
         padding: 0 !important;
         box-sizing: border-box !important;
         border-radius: 6px !important;
@@ -761,8 +766,8 @@
         width: 32px !important;
         min-width: 32px !important;
         max-width: 32px !important;
-        height: var(--nav-btn-height, 26px) !important;
-        min-height: var(--nav-btn-height, 26px) !important;
+        height: var(--quick-nav-btn-height, 26px) !important;
+        min-height: var(--quick-nav-btn-height, 26px) !important;
         padding: 0 !important;
         border-radius: 8px !important;
         font-size: 13px !important;
@@ -2989,6 +2994,11 @@ const chapter1Data=[
     const totalPages = Math.max(1, Math.ceil(TOTAL_QUESTIONS / NAV_PAGE_SIZE));
     currentNavPage = Math.max(0, Math.min(currentNavPage, totalPages - 1));
     const start = currentNavPage * NAV_PAGE_SIZE;
+    const visibleCount = Math.max(0, Math.min(NAV_PAGE_SIZE, TOTAL_QUESTIONS - start));
+    const navCols = isTabletLandscapeLayout() ? 20 : 10;
+    const lastRowCount = visibleCount % navCols;
+    const centeredLastRowStart = lastRowCount ? visibleCount - lastRowCount : -1;
+    const centeredLastRowColumn = lastRowCount ? Math.floor((navCols - lastRowCount) / 2) + 1 : 1;
     for (let i = 0; i < NAV_PAGE_SIZE; i++) {
       const realIdx = start + i;
       const btn = document.createElement("button");
@@ -3003,6 +3013,9 @@ const chapter1Data=[
         btn.dataset.label = realIdx + 1;
         if (realIdx === currentQuestionIndex) btn.classList.add("active");
         if (userAnswers[realIdx] !== null && userAnswers[realIdx] !== undefined) btn.classList.add("answered");
+        if (i === centeredLastRowStart) {
+          btn.style.gridColumnStart = String(centeredLastRowColumn);
+        }
         btn.addEventListener("click", () => {
           updateQuestion(realIdx);
           saveProgress();
@@ -3442,7 +3455,9 @@ const chapter1Data=[
     const portraitBottomNav = !tabletLandscape && window.matchMedia("(orientation: portrait)").matches;
     const cols = tabletLandscape ? 20 : 10;
     const visibleButtons = grid.querySelectorAll(".nav-btn:not(.placeholder)").length || Math.min(NAV_PAGE_SIZE, TOTAL_QUESTIONS || NAV_PAGE_SIZE);
-    const rows = Math.max(1, Math.ceil((portraitBottomNav ? visibleButtons : NAV_PAGE_SIZE) / cols));
+    const visibleRows = Math.max(1, Math.ceil((portraitBottomNav ? visibleButtons : NAV_PAGE_SIZE) / cols));
+    const fullRows = Math.max(visibleRows, Math.ceil(Math.min(NAV_PAGE_SIZE, TOTAL_QUESTIONS || NAV_PAGE_SIZE) / cols));
+    const panelRows = portraitBottomNav ? fullRows : visibleRows;
     const gap = tabletLandscape ? 5 : (portraitBottomNav ? (viewport.width <= 700 ? 4 : 5) : (viewport.width <= 700 ? 4 : 6));
     grid.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0, 1fr))";
     grid.style.gap = gap + "px";
@@ -3458,15 +3473,17 @@ const chapter1Data=[
     const topReserve = tabletLandscape ? 0 : (viewport.width <= 700 ? 10 : 16);
     const wrapMaxH = tabletLandscape ? Math.max(96, wrap.clientHeight || 160) : (portraitBottomNav ? Math.max(150, Math.min(viewport.height * 0.34, viewport.width <= 700 ? 260 : 300)) : Math.max(190, viewport.height - bottomReserve - topReserve));
     const usableHeight = Math.max(140, wrapMaxH - padY);
-    const heightBtnH = Math.floor((usableHeight - gap * (rows - 1)) / rows);
+    const heightBtnH = Math.floor((usableHeight - gap * (panelRows - 1)) / panelRows);
     let btnH = Math.min(widthBtnH, heightBtnH);
     if (tabletLandscape) btnH = Math.max(24, Math.min(btnH, 34)); else if (portraitBottomNav) btnH = Math.max(viewport.width <= 700 ? 22 : 24, Math.min(btnH, viewport.width <= 700 ? 26 : 28)); else btnH = Math.max(viewport.width <= 700 ? 22 : 24, Math.min(btnH, viewport.width <= 700 ? 34 : 36));
-    const gridHeight = rows * btnH + (rows - 1) * gap;
-    const wrapHeight = gridHeight + padY;
+    const gridHeight = visibleRows * btnH + (visibleRows - 1) * gap;
+    const wrapGridHeight = panelRows * btnH + (panelRows - 1) * gap;
     document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
+    document.documentElement.style.setProperty("--quick-nav-btn-height", btnH + "px");
+    grid.style.setProperty("--quick-nav-btn-height", btnH + "px", "important");
     grid.style.setProperty("height", gridHeight + "px", "important");
-    wrap.style.setProperty("height", wrapHeight + "px", "important");
-    wrap.style.setProperty("max-height", wrapHeight + "px", "important");
+    wrap.style.setProperty("height", wrapGridHeight + "px", "important");
+    wrap.style.setProperty("max-height", wrapGridHeight + "px", "important");
     wrap.style.setProperty("overflow-y", "hidden", "important");
   }
 
