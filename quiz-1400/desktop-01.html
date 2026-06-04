@@ -2874,7 +2874,6 @@ const chapter1Data=[
       chapterLabel: getChapterLabel()
     };
     lastResultData = resultData;
-    postToLearningHost({ ...resultData, action: "result", source: "github-quiz-1400" });
     showPage(resultPage);
     showResult({ total: correct, totalQ: TOTAL_QUESTIONS, answers: userAnswers, name: currentUserName });
     alert("제출 완료하였습니다!");
