@@ -800,6 +800,11 @@
         max-width: 36px !important;
       }
     }
+    body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"]:not(.open) #quick-nav-wrapper,
+    body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"]:not(.open) #quick-nav-wrapper * {
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
 
     /* === 1400제 1부: 1회 모의고사 모바일 스크롤 방식 재적용 === */
     html:not(.quiz-active),
@@ -853,41 +858,33 @@
         min-height: 0 !important;
         height: auto !important;
         max-height: none !important;
-        overflow-y: hidden !important;
-        overflow-x: hidden !important;
-        -webkit-overflow-scrolling: auto !important;
-        overscroll-behavior: none !important;
-        touch-action: manipulation !important;
-      }
-      body.mobile-page #quiz-content.content-scroll-needed {
         overflow-y: auto !important;
+        overflow-x: hidden !important;
         -webkit-overflow-scrolling: touch !important;
         overscroll-behavior: contain !important;
         touch-action: pan-y !important;
+      }
+      body.mobile-page #quiz-content.scroll-needed {
+        overflow-y: auto !important;
+        overscroll-behavior: contain !important;
+        touch-action: pan-y !important;
+      }
+      body.mobile-page #quiz-content.no-scroll-needed {
+        overflow-y: hidden !important;
+        overscroll-behavior: none !important;
+        touch-action: none !important;
+        -webkit-overflow-scrolling: auto !important;
       }
       body.mobile-page #options {
-        flex: 1 1 auto !important;
-        min-height: 0 !important;
+        flex: 0 0 auto !important;
+        min-height: auto !important;
         max-height: none !important;
-        overflow-y: hidden !important;
-        overflow-x: hidden !important;
-        -webkit-overflow-scrolling: auto !important;
-        overscroll-behavior: none !important;
-        touch-action: manipulation !important;
-      }
-      body.mobile-page #options.options-scroll-needed {
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        overscroll-behavior: contain !important;
+        overflow: visible !important;
         touch-action: pan-y !important;
       }
-      body.mobile-page #options.options-scroll-needed label,
-      body.mobile-page #options.options-scroll-needed label span,
-      body.mobile-page #options.options-scroll-needed input[type="radio"],
-      body.mobile-page #quiz-content.content-scroll-needed #options,
-      body.mobile-page #quiz-content.content-scroll-needed #options label,
-      body.mobile-page #quiz-content.content-scroll-needed #options label span,
-      body.mobile-page #quiz-content.content-scroll-needed #options input[type="radio"] {
+      body.mobile-page #options label,
+      body.mobile-page #options label span,
+      body.mobile-page #options input[type="radio"] {
         touch-action: pan-y !important;
       }
     }
@@ -3271,25 +3268,32 @@ const chapter1Data=[
     h3.style.setProperty("--question-font-size", size + "px");
   }
 
-  function updatePhonePortraitScrollState() {
-    const quizContent = document.getElementById("quiz-content");
+  let quizContentScrollFrame = 0;
+  function updateQuizContentScrollState() {
+    const scroller = document.getElementById("quiz-content");
     const optionsWrap = document.getElementById("options");
-    if (!quizContent) return;
-    quizContent.classList.remove("content-scroll-needed");
+    if (!scroller) return;
     if (optionsWrap) {
       optionsWrap.classList.remove("options-scroll-needed");
       optionsWrap.scrollTop = 0;
     }
     if (!isPhonePortraitLayout()) {
+      scroller.classList.remove("scroll-needed", "no-scroll-needed", "content-scroll-needed");
       return;
     }
-    quizContent.scrollTop = 0;
-    if (quizContent.scrollHeight > quizContent.clientHeight + 2) {
-      quizContent.classList.add("content-scroll-needed");
-    }
-    if (optionsWrap && optionsWrap.scrollHeight > optionsWrap.clientHeight + 2) {
-      optionsWrap.classList.add("options-scroll-needed");
-    }
+    scroller.classList.remove("content-scroll-needed");
+    const overflow = scroller.scrollHeight - scroller.clientHeight;
+    const needsScroll = overflow > 8;
+    scroller.classList.toggle("scroll-needed", needsScroll);
+    scroller.classList.toggle("no-scroll-needed", !needsScroll);
+    if (!needsScroll) scroller.scrollTop = 0;
+  }
+  function scheduleQuizContentScrollState() {
+    if (quizContentScrollFrame) cancelAnimationFrame(quizContentScrollFrame);
+    quizContentScrollFrame = requestAnimationFrame(() => {
+      quizContentScrollFrame = 0;
+      updateQuizContentScrollState();
+    });
   }
 
   function fitOptionsText() {
@@ -3385,7 +3389,7 @@ const chapter1Data=[
     optionsWrap.style.setProperty("--option-font-size", size + "px");
     optionsWrap.style.removeProperty("--option-card-min-height");
     labels.forEach(label => { label.style.removeProperty("padding-top"); label.style.removeProperty("padding-bottom"); });
-    requestAnimationFrame(updatePhonePortraitScrollState);
+    scheduleQuizContentScrollState();
   }
 
   function enableQuizContentTouchScroll() {
@@ -3399,8 +3403,12 @@ const chapter1Data=[
       moved = false;
     }, { passive: true });
     scroller.addEventListener("touchmove", event => {
-      if (isPhonePortraitLayout()) return;
-      if (event.touches.length !== 1 || scroller.scrollHeight <= scroller.clientHeight + 1) return;
+      if (event.touches.length !== 1) return;
+      if (scroller.classList.contains("no-scroll-needed") || scroller.scrollHeight <= scroller.clientHeight + 1) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
       const y = event.touches[0].clientY;
       const delta = lastY - y;
       if (Math.abs(delta) <= 1) return;

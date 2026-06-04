@@ -179,15 +179,17 @@
 
 - 사용자 요청에 따라 `quiz-1400/mobile-01.html`만 수정했다. 로그인 코드, 데스크톱용 코드, 문제 데이터, 정답, `videoId`, Firebase `examId`, 제출/장 선택 흐름은 바꾸지 않았다.
 - 스마트폰/태블릿 세로 화면에서 빠른 문항 이동 패널이 과도하게 크게 뜨지 않도록 하단 팝업 폭, 화살표, 버튼 높이, 마지막 페이지 빈 칸 표시를 조정했다.
-- 스마트폰 세로 화면의 스크롤 판정을 문제 내용과 5지선다 실제 높이에 따라 다시 조정했다.
-  - 문제 내용과 5지선다가 한 화면에 맞으면 `content-scroll-needed`, `options-scroll-needed`가 붙지 않고 상하 스크롤이 작동하지 않는다.
-  - 5지선다 내용이 넘치면 `#options.options-scroll-needed`가 붙어 5지선다 영역이 상하 스크롤된다.
-  - 전체 문제 영역 자체가 넘치는 예외 상황에서는 `#quiz-content.content-scroll-needed`도 함께 허용한다.
+- 스마트폰 세로 화면의 스크롤 판정을 1회 모의고사 모바일 방식과 맞춰 `#quiz-content.scroll-needed/no-scroll-needed` 기준으로 다시 조정했다.
+  - 문제 내용과 5지선다가 한 화면에 맞으면 `#quiz-content.no-scroll-needed`가 붙고 상하 스크롤이 작동하지 않는다.
+  - 내용이 넘치면 `#quiz-content.scroll-needed`가 붙어 문제 내용과 5지선다가 함께 상하 스크롤된다.
+  - `#options`는 별도 스크롤 컨테이너로 만들지 않고 모의고사처럼 `#quiz-content` 안에서 함께 움직인다.
+- 닫힌 상태의 빠른 문항 이동 그리드가 보기 카드 위에 투명하게 남아 터치를 가로막지 않도록 `visibility`와 `pointer-events`를 차단했다.
 - OneDrive `02. 합격!! 1400題/1부/2. (★삭제 주의) 최종 코드/02. 개선판/3. ★★★ 1부 코드 - 모바일용.html`에도 동일 변경을 반영했고 SHA-256 해시 일치를 확인했다.
 - 검증:
   - `git diff --check` 통과.
   - `quiz-1400/mobile-01.html` 인라인 스크립트 문법 파싱 통과.
-  - headless Chrome 390x844 스마트폰 세로 화면에서 1장 1번 기준 `#quiz-content`, `#options` 모두 `scrollHeight == clientHeight`, `overflowY: hidden`, 문서/보기/문제 영역 스크롤값 모두 0임을 확인했다.
-  - headless Chrome 390x640 스마트폰 세로 화면에서 오버플로 발생 시 `#options.options-scroll-needed`가 적용되고, `#options.scrollTop`만 증가하며 `#quiz-content.scrollTop`과 문서 스크롤은 0임을 확인했다.
-  - 1부 전체 229문항을 390x844와 390x640 스마트폰 세로 화면으로 스캔해 오버플로 여부와 `content-scroll-needed`, `options-scroll-needed` 적용 여부가 어긋나는 문항이 없음을 확인했다.
+  - headless Chrome 390x844 스마트폰 세로 화면에서 1장 1번 기준 `#quiz-content.no-scroll-needed`, `overflowY: hidden`, 문서/보기/문제 영역 스크롤값 모두 0임을 확인했다.
+  - headless Chrome 390x640 스마트폰 세로 화면에서 오버플로 발생 시 `#quiz-content.scroll-needed`가 적용되고, 보기 카드 위 터치 드래그로 `#quiz-content.scrollTop`이 증가하며 문서 스크롤은 0임을 확인했다.
+  - 닫힌 빠른 문항 이동 그리드는 `visibility: hidden`, `pointer-events: none`이고, 열린 상태에서는 `visible/auto`로 돌아오는 것을 확인했다.
+  - 1부 전체 229문항을 390x844와 390x640 스마트폰 세로 화면으로 스캔해 오버플로 여부와 `scroll-needed`, `no-scroll-needed` 적용 여부가 어긋나는 문항이 없음을 확인했다.
   - headless Chrome 390x844 및 768x1024 세로 화면에서 빠른 문항 이동 패널의 2장 1번/103번 표시 높이를 확인했다.
