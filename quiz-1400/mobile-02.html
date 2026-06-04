@@ -630,11 +630,12 @@
     }
     .host-actions {
       width: 100%;
-      display: flex;
+      display: none;
       justify-content: center;
       gap: 10px;
       margin-top: clamp(24px, 3.2vh, 40px);
     }
+    .host-actions.is-visible { display: flex; }
     .host-complete-btn {
       min-width: min(420px, 100%);
       min-height: 62px;
@@ -1011,7 +1012,7 @@
       </button>
       </div>
       <div class="host-actions">
-        <button type="button" class="host-complete-btn" data-host-complete>학습을 완료합니다</button>
+        <button type="button" class="host-complete-btn" data-host-complete>아이디·이름 입력 화면에서 학습 완료하기</button>
       </div>
     </div>
   </div>
@@ -2729,98 +2730,46 @@ const chapter5Data=[
   }
 
 
-  let lastResultData = null;
 
-  function getLearningHostTargets() {
-    const targets = [];
-    const add = target => {
-      if (!target || target === window || targets.includes(target)) return;
-      targets.push(target);
-    };
-    try {
-      if (window.opener && !window.opener.closed) add(window.opener);
-    } catch (e) {}
-    try { add(window.parent); } catch (e) {}
-    try { add(window.top); } catch (e) {}
-    return targets;
-  }
-
-  function postToLearningHost(payload) {
-    let sent = false;
-    getLearningHostTargets().forEach(target => {
-      try {
-        target.postMessage(payload, "*");
-        sent = true;
-      } catch (e) {}
+  function updateCompletionActions(isVisible) {
+    document.querySelectorAll(".host-actions").forEach(actions => {
+      actions.classList.toggle("is-visible", isVisible);
     });
-    return sent;
   }
 
-  function clickHostCompleteButton() {
-    const targets = getLearningHostTargets();
-    for (const target of targets) {
+  function getRequiredExamIds() {
+    const chapterExamIds = chapterMeta
+      .filter(meta => !meta.sectionSelect)
+      .map(meta => chapterToExamId[meta.id])
+      .filter(Boolean);
+    return [...chapterExamIds, ...Object.values(sectionToExamId).filter(Boolean)];
+  }
+
+  async function refreshCompletionActions() {
+    updateCompletionActions(false);
+    if (!currentUserId) return;
+    const examIds = getRequiredExamIds();
+    if (!examIds.length) return;
+    for (const examId of examIds) {
       try {
-        const doc = target.document;
-        if (!doc) continue;
-        const controls = Array.from(doc.querySelectorAll("button, a, input[type='button'], input[type='submit']"));
-        const completeButton = controls.find(el => {
-          const text = (el.innerText || el.textContent || el.value || "").replace(/\s+/g, " ").trim();
-          return text.includes("학습을 완료합니다");
-        });
-        if (completeButton) {
-          completeButton.click();
-          return true;
-        }
-      } catch (e) {}
+        const snap = await database.ref(`exams/${examId}/users/${currentUserId}/result`).once("value");
+        if (!snap.val()) return;
+      } catch (e) {
+        return;
+      }
     }
-    return false;
-  }
-
-  function getHostContext() {
-    return {
-      source: "github-quiz-1400",
-      action: "complete",
-      completed: true,
-      completionStatus: "completed",
-      status: "completed",
-      uid: currentUserId,
-      name: currentUserName,
-      examId: EXAM_ID,
-      chapterLabel: getChapterLabel(),
-      partLabel: (document.querySelector("#chapter-select-page .cs-badge") || {}).textContent || "1400?",
-      totalQuestions: TOTAL_QUESTIONS,
-      href: location.href,
-      timestamp: new Date().toISOString()
-    };
+    updateCompletionActions(true);
   }
 
   function sendLearningComplete() {
-    const clicked = clickHostCompleteButton();
-    const context = getHostContext();
-    const messages = [
-      { ...context, type: "learningComplete1400" },
-      { ...context, type: "examComplete1400" },
-      { ...context, type: "lessonComplete" },
-      { ...context, type: "learningComplete" },
-      { ...context, type: "courseComplete" }
-    ];
-    if (lastResultData) {
-      messages.push({ ...lastResultData, action: "complete", completed: true, completionStatus: "completed", source: "github-quiz-1400" });
-    }
-    let sent = false;
-    messages.forEach(message => {
-      if (postToLearningHost(message)) sent = true;
-    });
+    const message = "이 창을 닫고 아이디·이름 입력 화면 하단의 '학습을 완료합니다' 버튼을 눌러주세요.";
     try {
       if (window.opener && !window.opener.closed) window.opener.focus();
     } catch (e) {}
-    if (clicked) {
-      alert("올리사이트의 학습 완료 버튼을 실행했습니다.");
-    } else if (sent) {
-      alert("학습 완료 신호를 올리사이트로 보냈습니다. 반영되지 않으면 올리사이트 화면의 완료 버튼을 한 번 눌러주세요.");
-    } else {
-      alert("연결된 올리사이트 창을 찾지 못했습니다.");
-    }
+    try { window.close(); } catch (e) {}
+    setTimeout(() => {
+      if (!window.closed) alert(message);
+    }, 250);
   }
   document.getElementById("start-quiz-btn").addEventListener("click", () => {
     const uid = document.getElementById("start-uid").value.trim();
@@ -3074,7 +3023,6 @@ const chapter5Data=[
       examId: EXAM_ID,
       chapterLabel: getChapterLabel()
     };
-    lastResultData = resultData;
     showPage(resultPage);
     showResult({ total: correct, totalQ: TOTAL_QUESTIONS, answers: userAnswers, name: currentUserName });
     alert("제출 완료하였습니다!");
@@ -3195,6 +3143,7 @@ const chapter5Data=[
   });
 
   async function loadChapterResults() {
+    updateCompletionActions(false);
     if (!currentUserId) return;
     for (const meta of chapterMeta) {
       const el = document.getElementById(`result-ch${meta.id}`);
@@ -3217,9 +3166,11 @@ const chapter5Data=[
         } catch (e) {}
       }
     }
+    await refreshCompletionActions();
   }
 
   async function loadSectionResults() {
+    updateCompletionActions(false);
     if (!currentUserId) return;
     for (const meta of sectionMeta) {
       const el = document.getElementById(`result-sec${meta.id}`);
@@ -3231,6 +3182,7 @@ const chapter5Data=[
         el.textContent = data ? `(${data.total}점 / ${data.totalQuestions}문항)` : "";
       } catch (e) {}
     }
+    await refreshCompletionActions();
   }
 
   function applyResponsiveLayout() {
