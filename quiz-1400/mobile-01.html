@@ -2994,11 +2994,6 @@ const chapter1Data=[
     const totalPages = Math.max(1, Math.ceil(TOTAL_QUESTIONS / NAV_PAGE_SIZE));
     currentNavPage = Math.max(0, Math.min(currentNavPage, totalPages - 1));
     const start = currentNavPage * NAV_PAGE_SIZE;
-    const visibleCount = Math.max(0, Math.min(NAV_PAGE_SIZE, TOTAL_QUESTIONS - start));
-    const navCols = isTabletLandscapeLayout() ? 20 : 10;
-    const lastRowCount = visibleCount % navCols;
-    const centeredLastRowStart = lastRowCount ? visibleCount - lastRowCount : -1;
-    const centeredLastRowColumn = lastRowCount ? Math.floor((navCols - lastRowCount) / 2) + 1 : 1;
     for (let i = 0; i < NAV_PAGE_SIZE; i++) {
       const realIdx = start + i;
       const btn = document.createElement("button");
@@ -3013,9 +3008,6 @@ const chapter1Data=[
         btn.dataset.label = realIdx + 1;
         if (realIdx === currentQuestionIndex) btn.classList.add("active");
         if (userAnswers[realIdx] !== null && userAnswers[realIdx] !== undefined) btn.classList.add("answered");
-        if (i === centeredLastRowStart) {
-          btn.style.gridColumnStart = String(centeredLastRowColumn);
-        }
         btn.addEventListener("click", () => {
           updateQuestion(realIdx);
           saveProgress();
