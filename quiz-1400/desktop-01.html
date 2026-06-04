@@ -621,103 +621,6 @@
       border: none;
       box-shadow: 0 7px 18px rgba(0, 93, 122, 0.22);
     }
-    /* === 1400제 1부 결과 페이지: 모의고사 학습 요약 UX 적용 === */
-    #quick-nav-container-result {
-      width: min(100%, 760px) !important;
-      max-width: 760px !important;
-      overflow: visible !important;
-      padding: clamp(10px, 1.5vw, 16px) !important;
-    }
-    #quick-nav-grid-result {
-      display: block !important;
-      width: 100% !important;
-      min-width: 0 !important;
-      max-width: 100% !important;
-      overflow: visible !important;
-    }
-    #result-grid-nav { display: none !important; }
-    .result-grid-title { margin-bottom: 8px !important; }
-    .result-insight-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .result-mini-card {
-      border: 1px solid #D8E3ED;
-      background: #FFFFFF;
-      border-radius: 14px;
-      padding: 9px 8px;
-      text-align: center;
-      box-shadow: 0 5px 14px rgba(22,34,48,.05);
-    }
-    .result-mini-label {
-      display: block;
-      color: #71839A;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .04em;
-      margin-bottom: 3px;
-    }
-    .result-mini-value {
-      display: block;
-      color: #162230;
-      font-size: clamp(18px, 2.2vw, 26px);
-      font-weight: 900;
-      line-height: 1;
-    }
-    .result-mini-card.correct .result-mini-value { color: #0F8A4C; }
-    .result-mini-card.wrong .result-mini-value { color: #C13C36; }
-    .result-mini-card.empty .result-mini-value { color: #A05A00; }
-    .result-section-list {
-      border: 1px solid #D8E3ED;
-      border-radius: 14px;
-      background: #FFFFFF;
-      padding: 10px;
-      margin-top: 8px;
-      text-align: left;
-    }
-    .result-section-title {
-      margin: 0 0 6px;
-      color: #162230;
-      font-size: clamp(13px, 1.25vw, 16px);
-      font-weight: 900;
-    }
-    .result-chip-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .result-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 9px;
-      border-radius: 999px;
-      border: 1px solid #D8E3ED;
-      background: #F8FBFD;
-      color: #506273;
-      font-size: clamp(10px, 0.92vw, 12px);
-      font-weight: 800;
-      line-height: 1.1;
-      white-space: nowrap;
-      font-variant-numeric: tabular-nums;
-    }
-    .result-chip .chip-no { display: inline-flex; align-items: center; justify-content: center; min-width: 4.3em; flex-shrink: 0; }
-    .result-chip .chip-meta { display: inline-flex; align-items: center; justify-content: center; min-width: 7.8em; }
-    .result-chip.correct { border-color: #A7E2C1; background: #F1FCF5; color: #0F8A4C; }
-    .result-chip.wrong { border-color: #F3B2B0; background: #FFF4F4; color: #C13C36; }
-    .result-chip.empty { border-color: #F3D6A8; background: #FFF8EA; color: #A05A00; }
-    .result-empty-note {
-      margin: 0;
-      color: #71839A;
-      font-size: 13px;
-      font-weight: 700;
-    }
-    @media (max-width: 560px) {
-      .result-insight-grid { grid-template-columns: 1fr; }
-      .result-chip { width: 100%; justify-content: space-between; border-radius: 12px; }
-    }
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
@@ -2881,60 +2784,43 @@ const chapter1Data=[
     requestAnimationFrame(fitResultGrid);
   }
 
-  function makeResultChip(item, type) {
-    const no = String(item.no).padStart(2, "0") + "번";
-    return `<span class="result-chip ${type}"><span class="chip-no">${no}</span><span class="chip-meta">C:${item.correct} / M:${item.mine}</span></span>`;
-  }
-
-  function renderResultGrid() {
-    resultPageIdx = 0;
+  function renderResultGrid(pageIdx) {
+    resultPageIdx = pageIdx;
     const grid = document.getElementById("quick-nav-grid-result");
     const nav = document.getElementById("result-grid-nav");
-    const title = document.querySelector(".result-grid-title");
     if (!grid) return;
-    if (nav) nav.style.display = "none";
-    if (title) title.textContent = "학습 요약";
-
     const total = currentResultAnswers.length || TOTAL_QUESTIONS;
     currentResultAnswers = toAnswersArray(currentResultAnswers, total);
-    const solved = [];
-    const wrong = [];
-    const empty = [];
-
-    for (let i = 0; i < total; i++) {
-      const raw = currentResultAnswers[i];
-      const unanswered = raw === null || raw === undefined || raw === "";
-      const mine = unanswered ? "-" : raw;
-      const correct = quizData[i] ? quizData[i].correctAnswer : "-";
-      const ok = !unanswered && parseInt(mine, 10) === parseInt(correct, 10);
-      const item = { no: i + 1, correct, mine };
-      if (ok) solved.push(item);
-      else if (unanswered) empty.push(item);
-      else wrong.push(item);
+    const totalPages = Math.max(1, Math.ceil(total / RESULT_PAGE_SIZE));
+    const start = pageIdx * RESULT_PAGE_SIZE;
+    const end = Math.min(start + RESULT_PAGE_SIZE, total);
+    if (total > RESULT_PAGE_SIZE) {
+      nav.style.display = "flex";
+      document.getElementById("result-page-info").textContent = `${start + 1}~${end} / ${total}문항`;
+      document.getElementById("result-prev-btn").disabled = pageIdx === 0;
+      document.getElementById("result-next-btn").disabled = pageIdx >= totalPages - 1;
+    } else {
+      nav.style.display = "none";
     }
-
-    const wrongHtml = wrong.length ? wrong.map(item => makeResultChip(item, "wrong")).join("") : '<p class="result-empty-note">오답 문항이 없습니다.</p>';
-    const emptyHtml = empty.length ? empty.map(item => makeResultChip(item, "empty")).join("") : '<p class="result-empty-note">미응답 문항이 없습니다.</p>';
-    const solvedHtml = solved.length ? solved.map(item => makeResultChip(item, "correct")).join("") : '<p class="result-empty-note">정답 문항이 없습니다.</p>';
-
-    grid.innerHTML = `
-      <div class="result-insight-grid">
-        <div class="result-mini-card correct"><span class="result-mini-label">정답</span><span class="result-mini-value">${solved.length}</span></div>
-        <div class="result-mini-card wrong"><span class="result-mini-label">오답</span><span class="result-mini-value">${wrong.length}</span></div>
-        <div class="result-mini-card empty"><span class="result-mini-label">미응답</span><span class="result-mini-value">${empty.length}</span></div>
-      </div>
-      <section class="result-section-list">
-        <h3 class="result-section-title">틀린 문항</h3>
-        <div class="result-chip-wrap">${wrongHtml}</div>
-      </section>
-      <section class="result-section-list">
-        <h3 class="result-section-title">미응답 문항</h3>
-        <div class="result-chip-wrap">${emptyHtml}</div>
-      </section>
-      <section class="result-section-list">
-        <h3 class="result-section-title">정답 문항</h3>
-        <div class="result-chip-wrap">${solvedHtml}</div>
-      </section>`;
+    grid.innerHTML = "";
+    for (let i = 0; i < RESULT_PAGE_SIZE; i++) {
+      const idx = start + i;
+      const cell = document.createElement("div");
+      cell.className = "nav-btn";
+      if (idx >= total) {
+        cell.classList.add("placeholder");
+      } else {
+        const uaRaw = currentResultAnswers[idx];
+        const unanswered = uaRaw === null || uaRaw === undefined || uaRaw === "";
+        const ua = unanswered ? "-" : uaRaw;
+        const ca = quizData[idx] ? quizData[idx].correctAnswer : "-";
+        const ok = !unanswered && parseInt(ua, 10) === parseInt(ca, 10);
+        cell.classList.add(unanswered ? "unanswered" : (ok ? "correct" : "incorrect"));
+        cell.innerHTML = `<span class="number">${idx + 1}</span><span class="detail">C:${ca} / M:${ua}</span>`;
+      }
+      grid.appendChild(cell);
+    }
+    requestAnimationFrame(fitResultGrid);
   }
 
   document.getElementById("result-prev-btn").addEventListener("click", () => {
