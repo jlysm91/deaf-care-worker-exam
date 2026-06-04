@@ -866,12 +866,24 @@
         touch-action: pan-y !important;
       }
       body.mobile-page #options {
-        flex: 0 0 auto !important;
-        min-height: auto !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
         max-height: none !important;
-        overflow: visible !important;
+        overflow-y: hidden !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: auto !important;
+        overscroll-behavior: none !important;
         touch-action: manipulation !important;
       }
+      body.mobile-page #options.options-scroll-needed {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        touch-action: pan-y !important;
+      }
+      body.mobile-page #options.options-scroll-needed label,
+      body.mobile-page #options.options-scroll-needed label span,
+      body.mobile-page #options.options-scroll-needed input[type="radio"],
       body.mobile-page #quiz-content.content-scroll-needed #options,
       body.mobile-page #quiz-content.content-scroll-needed #options label,
       body.mobile-page #quiz-content.content-scroll-needed #options label span,
@@ -3259,21 +3271,24 @@ const chapter1Data=[
     h3.style.setProperty("--question-font-size", size + "px");
   }
 
-  function updatePhonePortraitContentScrollState() {
+  function updatePhonePortraitScrollState() {
     const quizContent = document.getElementById("quiz-content");
     const optionsWrap = document.getElementById("options");
     if (!quizContent) return;
-    if (optionsWrap) optionsWrap.classList.remove("options-scroll-needed");
+    quizContent.classList.remove("content-scroll-needed");
+    if (optionsWrap) {
+      optionsWrap.classList.remove("options-scroll-needed");
+      optionsWrap.scrollTop = 0;
+    }
     if (!isPhonePortraitLayout()) {
-      quizContent.classList.remove("content-scroll-needed");
       return;
     }
-    quizContent.classList.remove("content-scroll-needed");
     quizContent.scrollTop = 0;
     if (quizContent.scrollHeight > quizContent.clientHeight + 2) {
       quizContent.classList.add("content-scroll-needed");
-    } else {
-      quizContent.scrollTop = 0;
+    }
+    if (optionsWrap && optionsWrap.scrollHeight > optionsWrap.clientHeight + 2) {
+      optionsWrap.classList.add("options-scroll-needed");
     }
   }
 
@@ -3370,7 +3385,7 @@ const chapter1Data=[
     optionsWrap.style.setProperty("--option-font-size", size + "px");
     optionsWrap.style.removeProperty("--option-card-min-height");
     labels.forEach(label => { label.style.removeProperty("padding-top"); label.style.removeProperty("padding-bottom"); });
-    requestAnimationFrame(updatePhonePortraitContentScrollState);
+    requestAnimationFrame(updatePhonePortraitScrollState);
   }
 
   function enableQuizContentTouchScroll() {
