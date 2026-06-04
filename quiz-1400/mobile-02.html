@@ -772,12 +772,12 @@
 
     @media (orientation: portrait) {
       body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper {
-        width: min(680px, calc(100vw - 28px)) !important;
-        max-width: calc(100vw - 28px) !important;
-        bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
-        padding: 8px 10px !important;
-        border-radius: 16px !important;
-        gap: 7px !important;
+        width: min(720px, calc(100vw - 20px)) !important;
+        max-width: calc(100vw - 20px) !important;
+        bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
+        padding: 10px 12px !important;
+        border-radius: 18px !important;
+        gap: 8px !important;
         align-items: center !important;
       }
       body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-grid-wrap {
@@ -791,65 +791,69 @@
       body.mobile-page #quick-nav-grid {
         width: 100% !important;
         grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
-        gap: 4px !important;
+        gap: 7px !important;
       }
       body.mobile-page #quick-nav-grid .nav-btn {
-        --nav-btn-height: var(--quick-nav-btn-height, 26px) !important;
+        --nav-btn-height: var(--quick-nav-btn-height, 34px) !important;
         width: 100% !important;
         min-width: 0 !important;
-        min-height: var(--quick-nav-btn-height, 26px) !important;
-        height: var(--quick-nav-btn-height, 26px) !important;
-        line-height: var(--quick-nav-btn-height, 26px) !important;
+        min-height: var(--quick-nav-btn-height, 34px) !important;
+        height: var(--quick-nav-btn-height, 34px) !important;
+        line-height: var(--quick-nav-btn-height, 34px) !important;
         padding: 0 !important;
         box-sizing: border-box !important;
-        border-radius: 6px !important;
-        font-size: clamp(10px, 2.2vw, 12px) !important;
+        border-radius: 8px !important;
+        font-size: clamp(13px, 3.9vw, 17px) !important;
+        font-weight: 800 !important;
       }
       body.mobile-page #quick-nav-grid .nav-btn.placeholder {
         display: none !important;
       }
       body.mobile-page .nav-arrow {
-        flex: 0 0 32px !important;
-        width: 32px !important;
-        min-width: 32px !important;
-        max-width: 32px !important;
-        height: var(--quick-nav-btn-height, 26px) !important;
-        min-height: var(--quick-nav-btn-height, 26px) !important;
+        flex: 0 0 36px !important;
+        width: 36px !important;
+        min-width: 36px !important;
+        max-width: 36px !important;
+        height: var(--quick-nav-btn-height, 34px) !important;
+        min-height: var(--quick-nav-btn-height, 34px) !important;
         padding: 0 !important;
-        border-radius: 8px !important;
-        font-size: 13px !important;
+        border-radius: 10px !important;
+        font-size: 15px !important;
       }
     }
     @media (max-width: 700px) and (orientation: portrait) {
       body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper {
-        width: calc(100vw - 18px) !important;
-        max-width: calc(100vw - 18px) !important;
-        padding: 8px !important;
-        gap: 6px !important;
+        width: calc(100vw - 12px) !important;
+        max-width: calc(100vw - 12px) !important;
+        padding: 10px !important;
+        gap: 8px !important;
       }
       body.mobile-page .nav-arrow {
-        flex-basis: 30px !important;
-        width: 30px !important;
-        min-width: 30px !important;
-        max-width: 30px !important;
+        flex-basis: 34px !important;
+        width: 34px !important;
+        min-width: 34px !important;
+        max-width: 34px !important;
       }
     }
     @media (min-width: 701px) and (orientation: portrait) {
       body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper {
-        width: min(760px, calc(100vw - 72px)) !important;
-        max-width: calc(100vw - 72px) !important;
-        bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
-        padding: 10px 12px !important;
-        gap: 8px !important;
+        width: min(820px, calc(100vw - 48px)) !important;
+        max-width: calc(100vw - 48px) !important;
+        bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+        padding: 12px 14px !important;
+        gap: 10px !important;
       }
       body.mobile-page #quick-nav-grid {
-        gap: 5px !important;
+        gap: 8px !important;
+      }
+      body.mobile-page #quick-nav-grid .nav-btn {
+        font-size: clamp(15px, 2.1vw, 18px) !important;
       }
       body.mobile-page .nav-arrow {
-        flex-basis: 36px !important;
-        width: 36px !important;
-        min-width: 36px !important;
-        max-width: 36px !important;
+        flex-basis: 40px !important;
+        width: 40px !important;
+        min-width: 40px !important;
+        max-width: 40px !important;
       }
     }
     body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"]:not(.open) #quick-nav-wrapper,
@@ -3542,28 +3546,45 @@ const chapter5Data=[
     const viewport = getViewportSize();
     const tabletLandscape = isTabletLandscapeLayout();
     const portraitBottomNav = !tabletLandscape && window.matchMedia("(orientation: portrait)").matches;
-    const cols = tabletLandscape ? 20 : 10;
     const visibleButtons = grid.querySelectorAll(".nav-btn:not(.placeholder)").length || Math.min(NAV_PAGE_SIZE, TOTAL_QUESTIONS || NAV_PAGE_SIZE);
+    let cols = tabletLandscape ? 20 : 10;
+    if (portraitBottomNav) {
+      if (visibleButtons <= 40) cols = viewport.width <= 700 ? 5 : 6;
+      else if (visibleButtons <= 60) cols = viewport.width <= 700 ? 6 : 8;
+      else cols = 10;
+    }
     const visibleRows = Math.max(1, Math.ceil((portraitBottomNav ? visibleButtons : NAV_PAGE_SIZE) / cols));
     const panelRows = visibleRows;
-    const gap = tabletLandscape ? 5 : (portraitBottomNav ? (viewport.width <= 700 ? 4 : 5) : (viewport.width <= 700 ? 4 : 6));
+    const compactPortrait = portraitBottomNav && viewport.height < 640;
+    const gap = tabletLandscape ? 5 : (portraitBottomNav ? (viewport.width <= 700 ? (cols <= 5 ? 7 : 6) : (cols <= 6 ? 9 : 7)) : (viewport.width <= 700 ? 4 : 6));
     grid.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0, 1fr))";
     grid.style.gap = gap + "px";
     const wrapStyles = getComputedStyle(wrap);
     const padX = (parseFloat(wrapStyles.paddingLeft) || 0) + (parseFloat(wrapStyles.paddingRight) || 0);
     const padY = (parseFloat(wrapStyles.paddingTop) || 0) + (parseFloat(wrapStyles.paddingBottom) || 0);
-    const wrapWidth = Math.max(portraitBottomNav ? 220 : 280, wrap.clientWidth || (viewport.width - (viewport.width <= 700 ? 10 : 16)));
+    const wrapWidth = Math.max(portraitBottomNav ? (viewport.width <= 700 ? 300 : 420) : 280, wrap.clientWidth || (viewport.width - (viewport.width <= 700 ? 10 : 16)));
     const usableWidth = Math.max(220, wrapWidth - padX);
     const widthBtnH = Math.floor((usableWidth - gap * (cols - 1)) / cols);
     const nav = document.getElementById("navigation-buttons");
     const navH = nav ? Math.ceil(nav.getBoundingClientRect().height) : 64;
     const bottomReserve = tabletLandscape ? 0 : Math.max(74, navH + 12);
     const topReserve = tabletLandscape ? 0 : (viewport.width <= 700 ? 10 : 16);
-    const wrapMaxH = tabletLandscape ? Math.max(96, wrap.clientHeight || 160) : (portraitBottomNav ? Math.max(150, Math.min(viewport.height * 0.34, viewport.width <= 700 ? 260 : 300)) : Math.max(190, viewport.height - bottomReserve - topReserve));
+    const portraitMaxH = Math.min(viewport.height * (compactPortrait ? 0.44 : 0.5), viewport.width <= 700 ? 390 : 460);
+    const portraitMinH = viewport.width <= 700 ? (compactPortrait ? 220 : 250) : 300;
+    const wrapMaxH = tabletLandscape ? Math.max(96, wrap.clientHeight || 160) : (portraitBottomNav ? Math.max(portraitMinH, portraitMaxH) : Math.max(190, viewport.height - bottomReserve - topReserve));
     const usableHeight = Math.max(140, wrapMaxH - padY);
     const heightBtnH = Math.floor((usableHeight - gap * (panelRows - 1)) / panelRows);
     let btnH = Math.min(widthBtnH, heightBtnH);
-    if (tabletLandscape) btnH = Math.max(24, Math.min(btnH, 34)); else if (portraitBottomNav) btnH = Math.max(viewport.width <= 700 ? 22 : 24, Math.min(btnH, viewport.width <= 700 ? 26 : 28)); else btnH = Math.max(viewport.width <= 700 ? 22 : 24, Math.min(btnH, viewport.width <= 700 ? 34 : 36));
+    if (tabletLandscape) {
+      btnH = Math.max(24, Math.min(btnH, 34));
+    } else if (portraitBottomNav) {
+      const minPortraitBtn = viewport.width <= 700 ? (cols <= 5 ? 34 : 30) : (cols <= 6 ? 38 : 32);
+      const maxPortraitBtn = viewport.width <= 700 ? (cols <= 5 ? 42 : 36) : (cols <= 6 ? 50 : 44);
+      const compactOffset = compactPortrait ? 4 : 0;
+      btnH = Math.max(minPortraitBtn - compactOffset, Math.min(btnH, maxPortraitBtn - compactOffset));
+    } else {
+      btnH = Math.max(viewport.width <= 700 ? 22 : 24, Math.min(btnH, viewport.width <= 700 ? 34 : 36));
+    }
     const gridHeight = visibleRows * btnH + (visibleRows - 1) * gap;
     const wrapGridHeight = panelRows * btnH + (panelRows - 1) * gap;
     document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
