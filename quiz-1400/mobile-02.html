@@ -681,7 +681,6 @@
       .result-actions button { width: 100%; }
     }
 
-
     /* === 1400제 모바일/태블릿: 모의고사 모바일 UI 기준 보정 === */
     html { height: 100% !important; min-height: 100% !important; overflow: hidden !important; overscroll-behavior: none !important; }
     html.quiz-active, html.quiz-active body.mobile-page { height: var(--quiz-vh, 100dvh) !important; min-height: var(--quiz-vh, 100dvh) !important; max-height: var(--quiz-vh, 100dvh) !important; overflow: hidden !important; }
@@ -723,6 +722,214 @@
     @media (max-width: 700px) { body.mobile-page { overflow: hidden !important; } body.mobile-page #navigation-buttons { width: 100% !important; grid-template-columns: minmax(74px, 1fr) minmax(112px, 1fr) minmax(74px, 1fr) !important; gap: 8px !important; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)) !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper { width: calc(100vw - 10px) !important; bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important; } body.mobile-page #quick-nav-grid .nav-btn { height: var(--nav-btn-height, 24px) !important; line-height: var(--nav-btn-height, 24px) !important; } }
     @media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) { html, body.mobile-page { background: #FFFFFF !important; overflow: hidden !important; } body.mobile-page #quiz-page { display: grid !important; grid-template-rows: minmax(0, 1fr) auto !important; padding: 14px !important; gap: 12px !important; background: #FFFFFF !important; } body.mobile-page #quiz-page .quiz-top { display: grid !important; grid-template-columns: minmax(0, 7fr) minmax(340px, 3fr) !important; grid-template-rows: minmax(0, 1fr) !important; align-items: stretch !important; gap: 12px !important; height: 100% !important; max-height: 100% !important; } body.mobile-page #video-container { grid-column: 1 !important; grid-row: 1 !important; align-self: stretch !important; border: 1px solid #CDD9E3 !important; border-radius: 16px !important; box-shadow: 0 14px 30px rgba(22,34,48,.12) !important; } body.mobile-page #quiz-container { grid-column: 2 !important; grid-row: 1 !important; align-self: stretch !important; border: 1px solid #D3DEE7 !important; border-radius: 16px !important; background: #FFFFFF !important; box-shadow: 0 16px 34px rgba(22,34,48,.10) !important; } body.mobile-page #quiz-content { padding: 12px 14px 0 !important; gap: 8px !important; background: #FFFFFF !important; overflow: hidden !important; } body.mobile-page #quiz-content h3 { font-size: var(--question-font-size, 16px) !important; line-height: 1.45 !important; padding: 10px 12px !important; } body.mobile-page #options { flex: 1 1 0 !important; min-height: 0 !important; gap: var(--tablet-option-gap, 7px) !important; padding-bottom: 10px !important; overflow: hidden !important; } body.mobile-page #options label { flex: 1 1 0 !important; min-height: 0 !important; height: auto !important; padding: var(--tablet-option-padding-y, 10px) 12px !important; font-size: var(--option-font-size, 14px) !important; line-height: 1.4 !important; } body.mobile-page #options label span { overflow: hidden !important; text-overflow: clip !important; } body.mobile-page #navigation-buttons { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) !important; gap: 8px !important; } body.mobile-page #navigation-buttons #question-counter, body.mobile-page #navigation-buttons #quick-nav-container { display: none !important; } body.mobile-page #navigation-buttons > button { min-height: 42px !important; font-size: 13px !important; border-radius: 10px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] { grid-row: 2 !important; display: flex !important; flex-direction: column !important; width: 100% !important; padding: 10px 12px !important; border: 1px solid #D3DEE7 !important; border-radius: 16px !important; background: #FFFFFF !important; box-shadow: 0 12px 26px rgba(22,34,48,.10) !important; overflow: hidden !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] .nav-header { display: none !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] #quick-nav-wrapper { display: flex !important; width: 100% !important; gap: 6px !important; align-items: center !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] #quick-nav-grid { grid-template-columns: repeat(20, minmax(0, 1fr)) !important; gap: 5px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="tablet"] #quick-nav-grid .nav-btn { height: var(--nav-btn-height, 30px) !important; line-height: var(--nav-btn-height, 30px) !important; border-radius: 7px !important; font-size: 12px !important; } }
     @media (max-width: 899px) and (orientation: landscape) { body.mobile-page #quiz-page { display: flex !important; flex-direction: column !important; padding: 8px !important; overflow: hidden !important; } body.mobile-page #quiz-page .quiz-top { flex: 1 1 auto !important; display: grid !important; grid-template-columns: minmax(0, 58fr) minmax(300px, 42fr) !important; grid-template-rows: minmax(0, 1fr) !important; gap: 8px !important; height: 100% !important; min-height: 0 !important; overflow: hidden !important; } body.mobile-page #video-container { grid-column: 1 !important; grid-row: 1 !important; align-self: start !important; border-radius: 12px !important; border: 1px solid #CDD9E3 !important; box-shadow: 0 10px 22px rgba(22,34,48,.10) !important; } body.mobile-page #quiz-container { grid-column: 2 !important; grid-row: 1 !important; height: 100% !important; border: 1px solid #D3DEE7 !important; border-radius: 12px !important; background: #FFFFFF !important; box-shadow: 0 10px 22px rgba(22,34,48,.08) !important; } body.mobile-page #quiz-content { padding: 8px 10px 0 !important; gap: 6px !important; background: #FFFFFF !important; overflow: hidden !important; } body.mobile-page #quiz-content h3 { padding: 8px 10px !important; font-size: var(--question-font-size, 14px) !important; line-height: 1.35 !important; } body.mobile-page #options { flex: 1 1 0 !important; min-height: 0 !important; gap: var(--tablet-option-gap, 6px) !important; padding-bottom: 8px !important; overflow: hidden !important; } body.mobile-page #options label { flex: 1 1 0 !important; min-height: 0 !important; height: auto !important; padding: var(--tablet-option-padding-y, 8px) 10px !important; gap: 8px !important; font-size: var(--option-font-size, 13px) !important; line-height: 1.35 !important; border-radius: 8px !important; } body.mobile-page #navigation-buttons { grid-template-columns: minmax(68px, 1fr) minmax(116px, 1fr) minmax(68px, 1fr) !important; padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)) !important; gap: 6px !important; } body.mobile-page #navigation-buttons > button, body.mobile-page #navigation-buttons #quick-nav-container .nav-section-label { min-height: 38px !important; border-radius: 8px !important; font-size: 12px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper { bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important; width: min(620px, calc(100vw - 16px)) !important; } }
+
+    @media (orientation: portrait) {
+      body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper {
+        width: min(680px, calc(100vw - 28px)) !important;
+        max-width: calc(100vw - 28px) !important;
+        bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+        padding: 8px 10px !important;
+        border-radius: 16px !important;
+        gap: 7px !important;
+        align-items: center !important;
+      }
+      body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-grid-wrap {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+      }
+      body.mobile-page #quick-nav-grid {
+        width: 100% !important;
+        grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
+        gap: 4px !important;
+      }
+      body.mobile-page #quick-nav-grid .nav-btn {
+        --nav-btn-height: var(--quick-nav-btn-height, 26px) !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: var(--quick-nav-btn-height, 26px) !important;
+        height: var(--quick-nav-btn-height, 26px) !important;
+        line-height: var(--quick-nav-btn-height, 26px) !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        border-radius: 6px !important;
+        font-size: clamp(10px, 2.2vw, 12px) !important;
+      }
+      body.mobile-page #quick-nav-grid .nav-btn.placeholder {
+        display: none !important;
+      }
+      body.mobile-page .nav-arrow {
+        flex: 0 0 32px !important;
+        width: 32px !important;
+        min-width: 32px !important;
+        max-width: 32px !important;
+        height: var(--quick-nav-btn-height, 26px) !important;
+        min-height: var(--quick-nav-btn-height, 26px) !important;
+        padding: 0 !important;
+        border-radius: 8px !important;
+        font-size: 13px !important;
+      }
+    }
+    @media (max-width: 700px) and (orientation: portrait) {
+      body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper {
+        width: calc(100vw - 18px) !important;
+        max-width: calc(100vw - 18px) !important;
+        padding: 8px !important;
+        gap: 6px !important;
+      }
+      body.mobile-page .nav-arrow {
+        flex-basis: 30px !important;
+        width: 30px !important;
+        min-width: 30px !important;
+        max-width: 30px !important;
+      }
+    }
+    @media (min-width: 701px) and (orientation: portrait) {
+      body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper {
+        width: min(760px, calc(100vw - 72px)) !important;
+        max-width: calc(100vw - 72px) !important;
+        bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
+        padding: 10px 12px !important;
+        gap: 8px !important;
+      }
+      body.mobile-page #quick-nav-grid {
+        gap: 5px !important;
+      }
+      body.mobile-page .nav-arrow {
+        flex-basis: 36px !important;
+        width: 36px !important;
+        min-width: 36px !important;
+        max-width: 36px !important;
+      }
+    }
+    body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"]:not(.open) #quick-nav-wrapper,
+    body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"]:not(.open) #quick-nav-wrapper * {
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    /* === 1400제 1부: 1회 모의고사 모바일 스크롤 방식 재적용 === */
+    html:not(.quiz-active),
+    html:not(.quiz-active) body.mobile-page {
+      height: auto !important;
+      min-height: 100% !important;
+      max-height: none !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      overscroll-behavior: auto !important;
+    }
+    body.mobile-page .select-page {
+      height: var(--quiz-vh, 100dvh) !important;
+      min-height: var(--quiz-vh, 100dvh) !important;
+      max-height: var(--quiz-vh, 100dvh) !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-y !important;
+    }
+    body.mobile-page .select-shell {
+      min-height: max-content !important;
+    }
+    @media (orientation: portrait) {
+      body.mobile-page #quiz-content {
+        height: auto !important;
+        max-height: none !important;
+        overflow-y: scroll !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        touch-action: pan-y !important;
+      }
+      body.mobile-page #options {
+        flex: 0 0 auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        touch-action: pan-y !important;
+      }
+      body.mobile-page #options label,
+      body.mobile-page #options label span,
+      body.mobile-page #options input[type="radio"] {
+        touch-action: pan-y !important;
+        -webkit-user-select: auto !important;
+        user-select: auto !important;
+      }
+    }
+    @media (max-width: 700px) and (orientation: portrait) {
+      body.mobile-page #quiz-content {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        touch-action: pan-y !important;
+      }
+      body.mobile-page #quiz-content.scroll-needed {
+        overflow-y: auto !important;
+        overscroll-behavior: contain !important;
+        touch-action: pan-y !important;
+      }
+      body.mobile-page #quiz-content.no-scroll-needed {
+        overflow-y: hidden !important;
+        overscroll-behavior: none !important;
+        touch-action: none !important;
+        -webkit-overflow-scrolling: auto !important;
+      }
+      body.mobile-page #options {
+        flex: 0 0 auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        touch-action: pan-y !important;
+      }
+      body.mobile-page #options label,
+      body.mobile-page #options label span,
+      body.mobile-page #options input[type="radio"] {
+        touch-action: pan-y !important;
+      }
+    }
+    @media (min-width: 701px) and (orientation: portrait) {
+      body.mobile-page #quiz-content {
+        gap: clamp(12px, 1.15vh, 16px) !important;
+        padding: clamp(18px, 1.8vh, 26px) clamp(24px, 3vw, 34px) 0 !important;
+      }
+      body.mobile-page #quiz-content h3 {
+        min-height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: clamp(13px, 1.45vh, 18px) clamp(20px, 2.4vw, 28px) !important;
+        font-size: var(--tablet-portrait-question-font-size, clamp(18px, 2vw, 22px)) !important;
+      }
+      body.mobile-page #options {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        gap: var(--tablet-portrait-option-gap, clamp(10px, 1vh, 14px)) !important;
+        padding-bottom: var(--tablet-portrait-option-padding-bottom, clamp(12px, 1.35vh, 18px)) !important;
+        overflow: hidden !important;
+      }
+      body.mobile-page #options label {
+        flex: 0 0 var(--tablet-portrait-option-height, 88px) !important;
+        height: var(--tablet-portrait-option-height, 88px) !important;
+        min-height: 0 !important;
+        max-height: var(--tablet-portrait-option-height, 88px) !important;
+        padding: var(--tablet-portrait-option-padding-y, 12px) clamp(18px, 2.4vw, 28px) !important;
+        gap: var(--tablet-portrait-option-inner-gap, 14px) !important;
+        border-radius: 12px !important;
+        font-size: var(--tablet-portrait-option-font-size, clamp(16px, 1.8vw, 20px)) !important;
+      }
+      body.mobile-page #options input[type="radio"] {
+        width: var(--tablet-portrait-radio-size, 20px) !important;
+        height: var(--tablet-portrait-radio-size, 20px) !important;
+      }
+    }
+    html:not(.quiz-active) body.mobile-page #quiz-page {
+      display: none !important;
+    }
 
   </style>
 </head>
@@ -2378,6 +2585,14 @@ const chapter5Data=[
     return window.matchMedia("(max-width: 899px) and (orientation: landscape)").matches;
   }
 
+  function isPhonePortraitLayout() {
+    return window.matchMedia("(max-width: 700px) and (orientation: portrait)").matches;
+  }
+
+  function isTabletPortraitLayout() {
+    return window.matchMedia("(min-width: 701px) and (orientation: portrait)").matches;
+  }
+
   function closeQuickNavPanel() {
     if (quickNavContainer) quickNavContainer.classList.remove("open");
   }
@@ -2620,7 +2835,6 @@ const chapter5Data=[
       span.textContent = option;
       label.appendChild(input);
       label.appendChild(span);
-      bindOptionTouchScroll(label);
       optionsDiv.appendChild(label);
     });
     prevBtn.disabled = currentQuestionIndex === 0;
@@ -2775,7 +2989,9 @@ const chapter5Data=[
     resultPageIdx = pageIdx;
     const grid = document.getElementById("quick-nav-grid-result");
     const nav = document.getElementById("result-grid-nav");
+    if (!grid) return;
     const total = currentResultAnswers.length || TOTAL_QUESTIONS;
+    currentResultAnswers = toAnswersArray(currentResultAnswers, total);
     const totalPages = Math.max(1, Math.ceil(total / RESULT_PAGE_SIZE));
     const start = pageIdx * RESULT_PAGE_SIZE;
     const end = Math.min(start + RESULT_PAGE_SIZE, total);
@@ -2914,8 +3130,40 @@ const chapter5Data=[
       }
     } else if (isPhoneLandscapeLayout()) {
       size = Math.max(13, Math.min(16, Math.min(panelRect.width * 0.05, panelRect.height * 0.06)));
+    } else if (isTabletPortraitLayout()) {
+      size = Math.max(18, Math.min(22, Math.min(panelRect.width * 0.02, panelRect.height * 0.055)));
     }
+    if (isTabletPortraitLayout()) h3.style.setProperty("--tablet-portrait-question-font-size", size + "px");
+    else h3.style.removeProperty("--tablet-portrait-question-font-size");
     h3.style.setProperty("--question-font-size", size + "px");
+  }
+
+  let quizContentScrollFrame = 0;
+  function updateQuizContentScrollState() {
+    const scroller = document.getElementById("quiz-content");
+    const optionsWrap = document.getElementById("options");
+    if (!scroller) return;
+    if (optionsWrap) {
+      optionsWrap.classList.remove("options-scroll-needed");
+      optionsWrap.scrollTop = 0;
+    }
+    if (!isPhonePortraitLayout()) {
+      scroller.classList.remove("scroll-needed", "no-scroll-needed", "content-scroll-needed");
+      return;
+    }
+    scroller.classList.remove("content-scroll-needed");
+    const overflow = scroller.scrollHeight - scroller.clientHeight;
+    const needsScroll = overflow > 8;
+    scroller.classList.toggle("scroll-needed", needsScroll);
+    scroller.classList.toggle("no-scroll-needed", !needsScroll);
+    if (!needsScroll) scroller.scrollTop = 0;
+  }
+  function scheduleQuizContentScrollState() {
+    if (quizContentScrollFrame) cancelAnimationFrame(quizContentScrollFrame);
+    quizContentScrollFrame = requestAnimationFrame(() => {
+      quizContentScrollFrame = 0;
+      updateQuizContentScrollState();
+    });
   }
 
   function fitOptionsText() {
@@ -2926,9 +3174,39 @@ const chapter5Data=[
     const viewport = getViewportSize();
     const optionsRect = optionsWrap.getBoundingClientRect();
     const tabletLandscape = isTabletLandscapeLayout();
+    const tabletPortrait = isTabletPortraitLayout();
     const phoneLandscape = isPhoneLandscapeLayout();
     let size = Math.max(14, Math.min(16, viewport.width * 0.036));
-    if (tabletLandscape || phoneLandscape) {
+    if (tabletPortrait) {
+      optionsWrap.style.removeProperty("--tablet-option-gap");
+      optionsWrap.style.removeProperty("--tablet-option-padding-y");
+      const nav = document.getElementById("navigation-buttons");
+      const navRect = nav ? nav.getBoundingClientRect() : null;
+      const navTop = (navRect && navRect.top > 0) ? navRect.top : viewport.height;
+      const availableHeight = Math.max(180, navTop - optionsRect.top - 10);
+      const gap = Math.max(8, Math.min(14, availableHeight * 0.018));
+      const rawCardHeight = (availableHeight - gap * (labels.length - 1)) / labels.length;
+      const minCardHeight = Math.max(48, Math.min(58, viewport.height * 0.035));
+      const maxCardHeight = Math.max(86, Math.min(108, viewport.height * 0.06));
+      const cardHeight = Math.max(minCardHeight, Math.min(maxCardHeight, rawCardHeight));
+      const paddingY = Math.max(9, Math.min(14, cardHeight * 0.13));
+      const radioSize = Math.max(18, Math.min(22, cardHeight * 0.22));
+      size = Math.max(15, Math.min(20, Math.min(optionsRect.width * 0.018, cardHeight * 0.22)));
+      optionsWrap.style.setProperty("--tablet-portrait-option-gap", gap + "px");
+      optionsWrap.style.setProperty("--tablet-portrait-option-height", cardHeight + "px");
+      optionsWrap.style.setProperty("--tablet-portrait-option-padding-y", paddingY + "px");
+      optionsWrap.style.setProperty("--tablet-portrait-option-padding-bottom", Math.max(10, Math.min(16, gap + 2)) + "px");
+      optionsWrap.style.setProperty("--tablet-portrait-option-inner-gap", Math.max(12, Math.min(16, radioSize * 0.7)) + "px");
+      optionsWrap.style.setProperty("--tablet-portrait-option-font-size", size + "px");
+      optionsWrap.style.setProperty("--tablet-portrait-radio-size", radioSize + "px");
+    } else if (tabletLandscape || phoneLandscape) {
+      optionsWrap.style.removeProperty("--tablet-portrait-option-gap");
+      optionsWrap.style.removeProperty("--tablet-portrait-option-height");
+      optionsWrap.style.removeProperty("--tablet-portrait-option-padding-y");
+      optionsWrap.style.removeProperty("--tablet-portrait-option-padding-bottom");
+      optionsWrap.style.removeProperty("--tablet-portrait-option-inner-gap");
+      optionsWrap.style.removeProperty("--tablet-portrait-option-font-size");
+      optionsWrap.style.removeProperty("--tablet-portrait-radio-size");
       const minGap = phoneLandscape ? 5 : 7;
       const maxGap = phoneLandscape ? 8 : 12;
       const gap = Math.max(minGap, Math.min(maxGap, optionsRect.height * 0.018));
@@ -2968,68 +3246,20 @@ const chapter5Data=[
         });
       }
     } else {
+      optionsWrap.style.removeProperty("--tablet-portrait-option-gap");
+      optionsWrap.style.removeProperty("--tablet-portrait-option-height");
+      optionsWrap.style.removeProperty("--tablet-portrait-option-padding-y");
+      optionsWrap.style.removeProperty("--tablet-portrait-option-padding-bottom");
+      optionsWrap.style.removeProperty("--tablet-portrait-option-inner-gap");
+      optionsWrap.style.removeProperty("--tablet-portrait-option-font-size");
+      optionsWrap.style.removeProperty("--tablet-portrait-radio-size");
       optionsWrap.style.removeProperty("--tablet-option-gap");
       optionsWrap.style.removeProperty("--tablet-option-padding-y");
     }
     optionsWrap.style.setProperty("--option-font-size", size + "px");
     optionsWrap.style.removeProperty("--option-card-min-height");
     labels.forEach(label => { label.style.removeProperty("padding-top"); label.style.removeProperty("padding-bottom"); });
-  }
-
-  function scrollQuizContentBy(delta) {
-    const scroller = document.getElementById("quiz-content");
-    if (!scroller || scroller.scrollHeight <= scroller.clientHeight + 1) return false;
-    scroller.scrollTop += delta;
-    return true;
-  }
-
-  function bindOptionTouchScroll(label) {
-    if (!label || label.dataset.optionTouchScroll === "1") return;
-    let startY = 0;
-    let lastY = 0;
-    let moved = false;
-    let suppressClick = false;
-
-    label.addEventListener("touchstart", event => {
-      if (event.touches.length !== 1) return;
-      startY = event.touches[0].clientY;
-      lastY = startY;
-      moved = false;
-    }, { passive: true });
-
-    label.addEventListener("touchmove", event => {
-      if (event.touches.length !== 1) return;
-      const y = event.touches[0].clientY;
-      const delta = lastY - y;
-      if (Math.abs(delta) <= 1) return;
-      const didScroll = scrollQuizContentBy(delta);
-      lastY = y;
-      if (Math.abs(y - startY) > 5) moved = true;
-      if (didScroll) {
-        if (event.cancelable) event.preventDefault();
-        event.stopPropagation();
-      }
-    }, { passive: false });
-
-    label.addEventListener("touchend", () => {
-      if (!moved) return;
-      suppressClick = true;
-      setTimeout(() => { suppressClick = false; }, 120);
-    }, { passive: true });
-
-    label.addEventListener("touchcancel", () => {
-      moved = false;
-      suppressClick = false;
-    }, { passive: true });
-
-    label.addEventListener("click", event => {
-      if (!suppressClick) return;
-      event.preventDefault();
-      event.stopPropagation();
-      suppressClick = false;
-    }, true);
-
-    label.dataset.optionTouchScroll = "1";
+    scheduleQuizContentScrollState();
   }
 
   function enableQuizContentTouchScroll() {
@@ -3043,14 +3273,19 @@ const chapter5Data=[
       moved = false;
     }, { passive: true });
     scroller.addEventListener("touchmove", event => {
-      if (event.touches.length !== 1 || scroller.scrollHeight <= scroller.clientHeight + 1) return;
+      if (event.touches.length !== 1) return;
+      if (scroller.classList.contains("no-scroll-needed") || scroller.scrollHeight <= scroller.clientHeight + 1) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
       const y = event.touches[0].clientY;
       const delta = lastY - y;
       if (Math.abs(delta) <= 1) return;
       scroller.scrollTop += delta;
       lastY = y;
       moved = true;
-      if (event.cancelable) event.preventDefault();
+      event.preventDefault();
       event.stopPropagation();
     }, { passive: false });
     scroller.addEventListener("click", event => {
@@ -3074,33 +3309,38 @@ const chapter5Data=[
     if (!wrap || !grid) return;
     const viewport = getViewportSize();
     const tabletLandscape = isTabletLandscapeLayout();
+    const portraitBottomNav = !tabletLandscape && window.matchMedia("(orientation: portrait)").matches;
     const cols = tabletLandscape ? 20 : 10;
-    const rows = Math.ceil(NAV_PAGE_SIZE / cols);
-    const gap = tabletLandscape ? 5 : (viewport.width <= 700 ? 4 : 6);
+    const visibleButtons = grid.querySelectorAll(".nav-btn:not(.placeholder)").length || Math.min(NAV_PAGE_SIZE, TOTAL_QUESTIONS || NAV_PAGE_SIZE);
+    const visibleRows = Math.max(1, Math.ceil((portraitBottomNav ? visibleButtons : NAV_PAGE_SIZE) / cols));
+    const panelRows = visibleRows;
+    const gap = tabletLandscape ? 5 : (portraitBottomNav ? (viewport.width <= 700 ? 4 : 5) : (viewport.width <= 700 ? 4 : 6));
     grid.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0, 1fr))";
     grid.style.gap = gap + "px";
     const wrapStyles = getComputedStyle(wrap);
     const padX = (parseFloat(wrapStyles.paddingLeft) || 0) + (parseFloat(wrapStyles.paddingRight) || 0);
     const padY = (parseFloat(wrapStyles.paddingTop) || 0) + (parseFloat(wrapStyles.paddingBottom) || 0);
-    const wrapWidth = Math.max(280, wrap.clientWidth || (viewport.width - (viewport.width <= 700 ? 10 : 16)));
+    const wrapWidth = Math.max(portraitBottomNav ? 220 : 280, wrap.clientWidth || (viewport.width - (viewport.width <= 700 ? 10 : 16)));
     const usableWidth = Math.max(220, wrapWidth - padX);
     const widthBtnH = Math.floor((usableWidth - gap * (cols - 1)) / cols);
     const nav = document.getElementById("navigation-buttons");
     const navH = nav ? Math.ceil(nav.getBoundingClientRect().height) : 64;
     const bottomReserve = tabletLandscape ? 0 : Math.max(74, navH + 12);
     const topReserve = tabletLandscape ? 0 : (viewport.width <= 700 ? 10 : 16);
-    const wrapMaxH = tabletLandscape ? Math.max(96, wrap.clientHeight || 160) : Math.max(190, viewport.height - bottomReserve - topReserve);
+    const wrapMaxH = tabletLandscape ? Math.max(96, wrap.clientHeight || 160) : (portraitBottomNav ? Math.max(150, Math.min(viewport.height * 0.34, viewport.width <= 700 ? 260 : 300)) : Math.max(190, viewport.height - bottomReserve - topReserve));
     const usableHeight = Math.max(140, wrapMaxH - padY);
-    const heightBtnH = Math.floor((usableHeight - gap * (rows - 1)) / rows);
+    const heightBtnH = Math.floor((usableHeight - gap * (panelRows - 1)) / panelRows);
     let btnH = Math.min(widthBtnH, heightBtnH);
-    if (tabletLandscape) btnH = Math.max(24, Math.min(btnH, 34)); else btnH = Math.max(viewport.width <= 700 ? 22 : 24, Math.min(btnH, viewport.width <= 700 ? 34 : 36));
-    const gridHeight = rows * btnH + (rows - 1) * gap;
-    const wrapHeight = gridHeight + padY;
+    if (tabletLandscape) btnH = Math.max(24, Math.min(btnH, 34)); else if (portraitBottomNav) btnH = Math.max(viewport.width <= 700 ? 22 : 24, Math.min(btnH, viewport.width <= 700 ? 26 : 28)); else btnH = Math.max(viewport.width <= 700 ? 22 : 24, Math.min(btnH, viewport.width <= 700 ? 34 : 36));
+    const gridHeight = visibleRows * btnH + (visibleRows - 1) * gap;
+    const wrapGridHeight = panelRows * btnH + (panelRows - 1) * gap;
     document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
-    grid.style.height = gridHeight + "px";
-    wrap.style.height = wrapHeight + "px";
-    wrap.style.maxHeight = wrapHeight + "px";
-    wrap.style.overflowY = "hidden";
+    document.documentElement.style.setProperty("--quick-nav-btn-height", btnH + "px");
+    grid.style.setProperty("--quick-nav-btn-height", btnH + "px", "important");
+    grid.style.setProperty("height", gridHeight + "px", "important");
+    wrap.style.setProperty("height", wrapGridHeight + "px", "important");
+    wrap.style.setProperty("max-height", wrapGridHeight + "px", "important");
+    wrap.style.setProperty("overflow-y", "hidden", "important");
   }
 
   function fitResultGrid() {
