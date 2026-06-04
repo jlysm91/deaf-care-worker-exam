@@ -621,6 +621,38 @@
       border: none;
       box-shadow: 0 7px 18px rgba(0, 93, 122, 0.22);
     }
+
+    #result-complete-btn, .host-complete-btn {
+      background: linear-gradient(120deg, #F29A27 0%, #F6AE3B 100%);
+      color: #FFFFFF;
+      border: none;
+      box-shadow: 0 7px 18px rgba(242, 154, 39, 0.24);
+    }
+    .host-actions {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: clamp(18px, 2.4vh, 28px);
+    }
+    .host-complete-btn {
+      min-height: 46px;
+      padding: 0 28px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: clamp(14px, 1.25vw, 16px);
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .host-complete-btn:hover, #result-complete-btn:hover {
+      filter: brightness(1.03);
+      transform: translateY(-1px);
+    }
+    @media (max-width: 560px) {
+      .host-actions { margin-top: 16px; }
+      .host-complete-btn { width: 100%; }
+    }
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
@@ -733,6 +765,9 @@
         <div class="ch-result" id="result-ch4"></div>
       </button>
       </div>
+      <div class="host-actions">
+        <button type="button" class="host-complete-btn" data-host-complete>학습을 완료합니다</button>
+      </div>
     </div>
   </div>
 
@@ -785,6 +820,7 @@
     <div class="result-actions">
       <button id="result-chapter-btn">장 선택하기</button>
       <button id="result-return-btn">다시 풀기</button>
+      <button id="result-complete-btn" data-host-complete>학습을 완료합니다</button>
     </div>
   </div>
 
@@ -2498,6 +2534,100 @@ const chapter1Data=[
     document.getElementById("result-badge").textContent = label;
   }
 
+
+  let lastResultData = null;
+
+  function getLearningHostTargets() {
+    const targets = [];
+    const add = target => {
+      if (!target || target === window || targets.includes(target)) return;
+      targets.push(target);
+    };
+    try {
+      if (window.opener && !window.opener.closed) add(window.opener);
+    } catch (e) {}
+    try { add(window.parent); } catch (e) {}
+    try { add(window.top); } catch (e) {}
+    return targets;
+  }
+
+  function postToLearningHost(payload) {
+    let sent = false;
+    getLearningHostTargets().forEach(target => {
+      try {
+        target.postMessage(payload, "*");
+        sent = true;
+      } catch (e) {}
+    });
+    return sent;
+  }
+
+  function clickHostCompleteButton() {
+    const targets = getLearningHostTargets();
+    for (const target of targets) {
+      try {
+        const doc = target.document;
+        if (!doc) continue;
+        const controls = Array.from(doc.querySelectorAll("button, a, input[type='button'], input[type='submit']"));
+        const completeButton = controls.find(el => {
+          const text = (el.innerText || el.textContent || el.value || "").replace(/\s+/g, " ").trim();
+          return text.includes("학습을 완료합니다");
+        });
+        if (completeButton) {
+          completeButton.click();
+          return true;
+        }
+      } catch (e) {}
+    }
+    return false;
+  }
+
+  function getHostContext() {
+    return {
+      source: "github-quiz-1400",
+      action: "complete",
+      completed: true,
+      completionStatus: "completed",
+      status: "completed",
+      uid: currentUserId,
+      name: currentUserName,
+      examId: EXAM_ID,
+      chapterLabel: getChapterLabel(),
+      partLabel: (document.querySelector("#chapter-select-page .cs-badge") || {}).textContent || "1400?",
+      totalQuestions: TOTAL_QUESTIONS,
+      href: location.href,
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  function sendLearningComplete() {
+    const clicked = clickHostCompleteButton();
+    const context = getHostContext();
+    const messages = [
+      { ...context, type: "learningComplete1400" },
+      { ...context, type: "examComplete1400" },
+      { ...context, type: "lessonComplete" },
+      { ...context, type: "learningComplete" },
+      { ...context, type: "courseComplete" }
+    ];
+    if (lastResultData) {
+      messages.push({ ...lastResultData, action: "complete", completed: true, completionStatus: "completed", source: "github-quiz-1400" });
+    }
+    let sent = false;
+    messages.forEach(message => {
+      if (postToLearningHost(message)) sent = true;
+    });
+    try {
+      if (window.opener && !window.opener.closed) window.opener.focus();
+    } catch (e) {}
+    if (clicked) {
+      alert("올리사이트의 학습 완료 버튼을 실행했습니다.");
+    } else if (sent) {
+      alert("학습 완료 신호를 올리사이트로 보냈습니다. 반영되지 않으면 올리사이트 화면의 완료 버튼을 한 번 눌러주세요.");
+    } else {
+      alert("연결된 올리사이트 창을 찾지 못했습니다.");
+    }
+  }
   document.getElementById("start-quiz-btn").addEventListener("click", () => {
     const uid = document.getElementById("start-uid").value.trim();
     const uname = document.getElementById("start-uname").value.trim();
@@ -2743,13 +2873,11 @@ const chapter1Data=[
       examId: EXAM_ID,
       chapterLabel: getChapterLabel()
     };
-    try {
-      if (window.opener && !window.opener.closed) window.opener.postMessage(resultData, "*");
-    } catch (e) {}
+    lastResultData = resultData;
+    postToLearningHost({ ...resultData, action: "result", source: "github-quiz-1400" });
     showPage(resultPage);
     showResult({ total: correct, totalQ: TOTAL_QUESTIONS, answers: userAnswers, name: currentUserName });
     alert("제출 완료하였습니다!");
-    try { window.close(); } catch (e) {}
   }
 
   function showResult(data) {
@@ -2831,6 +2959,10 @@ const chapter1Data=[
     const total = currentResultAnswers.length || TOTAL_QUESTIONS;
     const totalPages = Math.ceil(total / RESULT_PAGE_SIZE);
     if (resultPageIdx < totalPages - 1) renderResultGrid(resultPageIdx + 1);
+  });
+
+  document.querySelectorAll("[data-host-complete]").forEach(btn => {
+    btn.addEventListener("click", sendLearningComplete);
   });
 
   document.getElementById("result-return-btn").addEventListener("click", () => {
