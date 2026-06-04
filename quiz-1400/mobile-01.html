@@ -3456,8 +3456,7 @@ const chapter1Data=[
     const cols = tabletLandscape ? 20 : 10;
     const visibleButtons = grid.querySelectorAll(".nav-btn:not(.placeholder)").length || Math.min(NAV_PAGE_SIZE, TOTAL_QUESTIONS || NAV_PAGE_SIZE);
     const visibleRows = Math.max(1, Math.ceil((portraitBottomNav ? visibleButtons : NAV_PAGE_SIZE) / cols));
-    const fullRows = Math.max(visibleRows, Math.ceil(Math.min(NAV_PAGE_SIZE, TOTAL_QUESTIONS || NAV_PAGE_SIZE) / cols));
-    const panelRows = portraitBottomNav ? fullRows : visibleRows;
+    const panelRows = visibleRows;
     const gap = tabletLandscape ? 5 : (portraitBottomNav ? (viewport.width <= 700 ? 4 : 5) : (viewport.width <= 700 ? 4 : 6));
     grid.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0, 1fr))";
     grid.style.gap = gap + "px";
