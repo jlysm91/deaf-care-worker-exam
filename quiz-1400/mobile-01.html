@@ -880,6 +880,87 @@
     body.mobile-page .select-shell {
       min-height: max-content !important;
     }
+    body.mobile-page .select-page {
+      --select-edge-x: 18px;
+      --select-pad-y: 24px;
+      --select-card-gap: 12px;
+      --select-card-min-h: 132px;
+      --select-card-pad-y: 18px;
+      --select-card-pad-x: 16px;
+      --select-card-radius: 18px;
+      --select-grid-cols: 2;
+      --select-grid-max: 760px;
+      --select-badge-size: 13px;
+      --select-title-size: 36px;
+      --select-sub-size: 15px;
+      --select-num-size: 19px;
+      --select-name-size: 19px;
+      --select-total-size: 15px;
+      --select-button-height: 56px;
+      --select-button-font-size: 16px;
+      padding: var(--select-pad-y) var(--select-edge-x) calc(var(--select-pad-y) + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    body.mobile-page .select-shell {
+      max-width: min(var(--select-grid-max), 100%) !important;
+    }
+    body.mobile-page .cs-badge {
+      padding: 6px 16px !important;
+      margin-bottom: 10px !important;
+      font-size: var(--select-badge-size) !important;
+    }
+    body.mobile-page .cs-title {
+      margin-bottom: 9px !important;
+      font-size: var(--select-title-size) !important;
+      line-height: 1.12 !important;
+    }
+    body.mobile-page .cs-sub {
+      margin-bottom: var(--select-card-gap) !important;
+      font-size: var(--select-sub-size) !important;
+      line-height: 1.35 !important;
+    }
+    body.mobile-page .chapter-grid,
+    body.mobile-page .chapter-grid.cols3,
+    body.mobile-page .chapter-grid.cols4 {
+      grid-template-columns: repeat(var(--select-grid-cols), minmax(0, 1fr)) !important;
+      gap: var(--select-card-gap) !important;
+      max-width: min(var(--select-grid-max), 100%) !important;
+    }
+    body.mobile-page .chapter-btn {
+      min-height: var(--select-card-min-h) !important;
+      padding: var(--select-card-pad-y) var(--select-card-pad-x) !important;
+      border-radius: var(--select-card-radius) !important;
+    }
+    body.mobile-page .ch-num {
+      margin-bottom: 8px !important;
+      font-size: var(--select-num-size) !important;
+    }
+    body.mobile-page .ch-name {
+      font-size: var(--select-name-size) !important;
+      line-height: 1.32 !important;
+    }
+    body.mobile-page .ch-total {
+      margin-top: 9px !important;
+      font-size: var(--select-total-size) !important;
+    }
+    body.mobile-page .ch-result {
+      min-height: 20px !important;
+      margin-top: 8px !important;
+      font-size: var(--select-total-size) !important;
+    }
+    body.mobile-page .host-actions {
+      margin-top: var(--select-card-gap) !important;
+    }
+    body.mobile-page .host-complete-btn {
+      width: min(100%, 560px) !important;
+      min-width: 0 !important;
+      min-height: var(--select-button-height) !important;
+      padding: 8px 18px !important;
+      font-size: var(--select-button-font-size) !important;
+      line-height: 1.25 !important;
+      white-space: normal !important;
+      word-break: keep-all !important;
+      overflow-wrap: break-word !important;
+    }
     @media (orientation: portrait) {
       body.mobile-page #quiz-content {
         height: auto !important;
@@ -2821,6 +2902,57 @@ const chapter1Data=[
     return { width: (vv && vv.width) || window.innerWidth || document.documentElement.clientWidth || 390, height: (vv && vv.height) || window.innerHeight || document.documentElement.clientHeight || 844 };
   }
 
+  function clampValue(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function fitSelectionPageLayout() {
+    if (!document.body || !document.body.classList.contains("mobile-page")) return;
+    const activePage = [chapterSelectPage, sectionSelectPage].find(page => page && page.style.display !== "none");
+    if (!activePage) return;
+    const viewport = getViewportSize();
+    const portrait = viewport.height >= viewport.width;
+    const cards = activePage.querySelectorAll(".chapter-btn").length || 1;
+    const root = activePage;
+    if (!portrait) {
+      root.style.removeProperty("--select-grid-cols");
+      return;
+    }
+
+    let columns = viewport.width < 340 ? 1 : 2;
+    if (viewport.width >= 720 && (cards === 3 || cards >= 6)) columns = 3;
+    if (viewport.width >= 980 && cards >= 4) columns = Math.min(4, cards);
+    const rows = Math.ceil(cards / columns);
+    const edgeX = clampValue(viewport.width * 0.045, 14, 34);
+    const padY = clampValue(viewport.height * 0.028, 18, 38);
+    const gap = clampValue(Math.min(viewport.width, viewport.height) * 0.03, 10, 22);
+    const headerReserve = clampValue(viewport.height * 0.15, 104, viewport.width >= 720 ? 170 : 138);
+    const buttonVisible = !!activePage.querySelector(".host-actions.is-visible");
+    const buttonHeight = buttonVisible ? clampValue(viewport.height * 0.066, 54, 70) : 0;
+    const available = viewport.height - (padY * 2) - headerReserve - (gap * Math.max(rows, 1)) - buttonHeight;
+    const cardHeight = clampValue(available / rows, viewport.width < 340 ? 112 : 122, viewport.width >= 720 ? 190 : 158);
+    const titleSize = clampValue(Math.min(viewport.width * 0.085, viewport.height * 0.05), viewport.width >= 720 ? 42 : 30, viewport.width >= 720 ? 58 : 40);
+    const nameSize = clampValue(Math.min(viewport.width / (columns * 10.5), cardHeight * 0.17), viewport.width < 340 ? 17 : 18, viewport.width >= 720 ? 25 : 22);
+
+    root.style.setProperty("--select-edge-x", edgeX.toFixed(1) + "px");
+    root.style.setProperty("--select-pad-y", padY.toFixed(1) + "px");
+    root.style.setProperty("--select-card-gap", gap.toFixed(1) + "px");
+    root.style.setProperty("--select-card-min-h", cardHeight.toFixed(1) + "px");
+    root.style.setProperty("--select-card-pad-y", clampValue(cardHeight * 0.12, 14, 24).toFixed(1) + "px");
+    root.style.setProperty("--select-card-pad-x", clampValue(edgeX * 0.9, 12, 24).toFixed(1) + "px");
+    root.style.setProperty("--select-card-radius", clampValue(cardHeight * 0.12, 14, 22).toFixed(1) + "px");
+    root.style.setProperty("--select-grid-cols", columns);
+    root.style.setProperty("--select-grid-max", Math.min(viewport.width - edgeX * 2, columns * 250 + (columns - 1) * gap).toFixed(1) + "px");
+    root.style.setProperty("--select-badge-size", clampValue(titleSize * 0.34, 12, 16).toFixed(1) + "px");
+    root.style.setProperty("--select-title-size", titleSize.toFixed(1) + "px");
+    root.style.setProperty("--select-sub-size", clampValue(titleSize * 0.4, 14, 18).toFixed(1) + "px");
+    root.style.setProperty("--select-num-size", clampValue(nameSize * 0.98, 18, 24).toFixed(1) + "px");
+    root.style.setProperty("--select-name-size", nameSize.toFixed(1) + "px");
+    root.style.setProperty("--select-total-size", clampValue(nameSize * 0.76, 14, 18).toFixed(1) + "px");
+    root.style.setProperty("--select-button-height", clampValue(viewport.height * 0.068, 54, 70).toFixed(1) + "px");
+    root.style.setProperty("--select-button-font-size", clampValue(viewport.width / 24, 15, 20).toFixed(1) + "px");
+  }
+
 
   function toAnswersArray(raw, total) {
     if (!raw) return new Array(total).fill(null);
@@ -2861,7 +2993,10 @@ const chapter1Data=[
 
   function showPage(page, display = "flex") {
     hideAllPages();
-    if (page) page.style.display = display;
+    if (page) {
+      page.style.display = display;
+      if (page === chapterSelectPage || page === sectionSelectPage) requestAnimationFrame(fitSelectionPageLayout);
+    }
   }
 
   function makePlayableData(data) {
@@ -2883,6 +3018,7 @@ const chapter1Data=[
     document.querySelectorAll(".host-actions").forEach(actions => {
       actions.classList.toggle("is-visible", isVisible);
     });
+    requestAnimationFrame(fitSelectionPageLayout);
   }
 
   function getRequiredExamIds() {
@@ -3592,6 +3728,7 @@ const chapter1Data=[
 
   window.addEventListener("resize", () => {
     updateQuizViewportHeight();
+    fitSelectionPageLayout();
     initQuickNavBottomBar();
     applyResponsiveLayout();
     scheduleQuizAutoFit();
@@ -3601,6 +3738,7 @@ const chapter1Data=[
   if (window.visualViewport) {
     window.visualViewport.addEventListener("resize", () => {
       updateQuizViewportHeight();
+      fitSelectionPageLayout();
       initQuickNavBottomBar();
       fitResultGrid();
       scheduleQuizAutoFit();
@@ -3609,6 +3747,7 @@ const chapter1Data=[
 
   window.addEventListener("orientationchange", () => setTimeout(() => {
     updateQuizViewportHeight();
+    fitSelectionPageLayout();
     initQuickNavBottomBar();
     fitResultGrid();
     scheduleQuizAutoFit();
