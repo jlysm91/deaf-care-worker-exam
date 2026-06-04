@@ -183,17 +183,27 @@
       max-width: min(1480px, 94vw);
       text-align: center;
     }
-    .cs-badge { margin-bottom: 16px; }
+    .cs-badge {
+      padding: 8px 22px;
+      margin-bottom: 20px;
+      font-size: clamp(15px, 1.15vw, 18px);
+      letter-spacing: 0.06em;
+    }
     .cs-title {
-      font-size: clamp(34px, 4vw, 58px);
+      font-size: clamp(42px, 4.7vw, 68px);
       font-weight: 800;
       color: #FFFFFF;
-      letter-spacing: -0.5px;
+      letter-spacing: 0;
       line-height: 1.25;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
       text-shadow: 0 2px 16px rgba(0, 0, 0, 0.16);
     }
-    .cs-sub { margin-bottom: clamp(34px, 5vh, 58px); }
+    .cs-sub {
+      margin-bottom: clamp(40px, 5.6vh, 66px);
+      color: rgba(237, 250, 255, 0.88);
+      font-size: clamp(16px, 1.35vw, 20px);
+      font-weight: 700;
+    }
     .chapter-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -675,6 +685,9 @@
       .start-wrapper::before { padding-top: 76%; }
       .start-card { width: min(94vw, 430px); padding: 24px 18px 22px; }
       .select-page { justify-content: flex-start; padding: 22px 14px; }
+      .cs-badge { padding: 7px 18px; margin-bottom: 14px; font-size: 14px; }
+      .cs-title { margin-bottom: 12px; font-size: 38px; line-height: 1.12; }
+      .cs-sub { margin-bottom: 28px; font-size: 16px; }
       .chapter-grid, .chapter-grid.cols3, .chapter-grid.cols4 { grid-template-columns: 1fr; max-width: min(430px, 94vw); }
       .chapter-btn { min-height: 150px; padding: 28px 22px; border-radius: 18px; }
       .ch-num { font-size: 22px; }
@@ -740,7 +753,7 @@
     <div class="select-shell">
       <div class="cs-badge">1400題 4부</div>
       <h2 class="cs-title">1400題 4부 - 장 선택</h2>
-      <p class="cs-sub">학습할 장을 선택해주세요.</p>
+      <p class="cs-sub">학습할 장을 선택해 주세요.</p>
       <div class="chapter-grid cols4">
       <button class="chapter-btn" data-chapter="12">
         <div class="ch-num">12장</div>
