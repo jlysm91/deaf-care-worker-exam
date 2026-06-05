@@ -803,7 +803,7 @@
         padding: 0 !important;
         box-sizing: border-box !important;
         border-radius: 7px !important;
-        font-size: clamp(12px, 3.4vw, 15px) !important;
+        font-size: var(--quick-nav-font-size, clamp(12px, 3.4vw, 15px)) !important;
         font-weight: 800 !important;
       }
       body.mobile-page #quick-nav-grid .nav-btn.placeholder {
@@ -3546,17 +3546,20 @@ const chapter5Data=[
     const viewport = getViewportSize();
     const tabletLandscape = isTabletLandscapeLayout();
     const portraitBottomNav = !tabletLandscape && window.matchMedia("(orientation: portrait)").matches;
-    const visibleButtons = grid.querySelectorAll(".nav-btn:not(.placeholder)").length || Math.min(NAV_PAGE_SIZE, TOTAL_QUESTIONS || NAV_PAGE_SIZE);
+    const visibleNavButtons = Array.from(grid.querySelectorAll(".nav-btn:not(.placeholder)"));
+    const visibleButtons = visibleNavButtons.length || Math.min(NAV_PAGE_SIZE, TOTAL_QUESTIONS || NAV_PAGE_SIZE);
+    const maxLabelLength = visibleNavButtons.reduce((max, btn) => Math.max(max, String(btn.dataset.label || btn.textContent || "").trim().length), 0);
+    const hasWideLabels = portraitBottomNav && maxLabelLength >= 3;
     let cols = tabletLandscape ? 20 : 10;
     if (portraitBottomNav) {
       if (visibleButtons <= 40) cols = viewport.width <= 700 ? 5 : 6;
       else if (visibleButtons <= 60) cols = 8;
-      else cols = 10;
+      else cols = hasWideLabels && viewport.width <= 700 ? 9 : 10;
     }
     const visibleRows = Math.max(1, Math.ceil((portraitBottomNav ? visibleButtons : NAV_PAGE_SIZE) / cols));
     const panelRows = visibleRows;
     const compactPortrait = portraitBottomNav && viewport.height < 640;
-    const gap = tabletLandscape ? 5 : (portraitBottomNav ? (viewport.width <= 700 ? 5 : (cols <= 6 ? 7 : 6)) : (viewport.width <= 700 ? 4 : 6));
+    const gap = tabletLandscape ? 5 : (portraitBottomNav ? (viewport.width <= 700 ? (hasWideLabels ? 4 : 5) : (cols <= 6 ? 7 : 6)) : (viewport.width <= 700 ? 4 : 6));
     grid.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0, 1fr))";
     grid.style.gap = gap + "px";
     const wrapStyles = getComputedStyle(wrap);
@@ -3565,6 +3568,12 @@ const chapter5Data=[
     const wrapWidth = Math.max(portraitBottomNav ? (viewport.width <= 700 ? 300 : 420) : 280, wrap.clientWidth || (viewport.width - (viewport.width <= 700 ? 10 : 16)));
     const usableWidth = Math.max(220, wrapWidth - padX);
     const widthBtnH = Math.floor((usableWidth - gap * (cols - 1)) / cols);
+    if (hasWideLabels) {
+      const fontSize = Math.max(10.5, Math.min(viewport.width <= 700 ? 12 : 14, widthBtnH / Math.max(1.9, maxLabelLength * 0.68)));
+      grid.style.setProperty("--quick-nav-font-size", fontSize.toFixed(1) + "px", "important");
+    } else {
+      grid.style.removeProperty("--quick-nav-font-size");
+    }
     const nav = document.getElementById("navigation-buttons");
     const navH = nav ? Math.ceil(nav.getBoundingClientRect().height) : 64;
     const bottomReserve = tabletLandscape ? 0 : Math.max(74, navH + 12);
@@ -3578,15 +3587,16 @@ const chapter5Data=[
     if (tabletLandscape) {
       btnH = Math.max(24, Math.min(btnH, 34));
     } else if (portraitBottomNav) {
-      const minPortraitBtn = viewport.width <= 700 ? (cols <= 5 ? 30 : 28) : (cols <= 6 ? 34 : 30);
-      const maxPortraitBtn = viewport.width <= 700 ? (cols <= 5 ? 36 : 32) : (cols <= 6 ? 42 : 38);
+      const minPortraitBtn = hasWideLabels && viewport.width <= 700 ? 25 : (viewport.width <= 700 ? (cols <= 5 ? 30 : 28) : (cols <= 6 ? 34 : 30));
+      const maxPortraitBtn = hasWideLabels && viewport.width <= 700 ? 30 : (viewport.width <= 700 ? (cols <= 5 ? 36 : 32) : (cols <= 6 ? 42 : 38));
       const compactOffset = compactPortrait ? 3 : 0;
       btnH = Math.max(minPortraitBtn - compactOffset, Math.min(btnH, maxPortraitBtn - compactOffset));
     } else {
       btnH = Math.max(viewport.width <= 700 ? 22 : 24, Math.min(btnH, viewport.width <= 700 ? 34 : 36));
     }
-    const gridHeight = visibleRows * btnH + (visibleRows - 1) * gap;
-    const wrapGridHeight = panelRows * btnH + (panelRows - 1) * gap;
+    const heightPad = portraitBottomNav ? 4 : 0;
+    const gridHeight = visibleRows * btnH + (visibleRows - 1) * gap + heightPad;
+    const wrapGridHeight = panelRows * btnH + (panelRows - 1) * gap + heightPad;
     document.documentElement.style.setProperty("--nav-btn-height", btnH + "px");
     document.documentElement.style.setProperty("--quick-nav-btn-height", btnH + "px");
     grid.style.setProperty("--quick-nav-btn-height", btnH + "px", "important");
