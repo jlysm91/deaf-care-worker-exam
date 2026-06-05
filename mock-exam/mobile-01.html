@@ -1257,7 +1257,9 @@
     }
     #quick-nav-grid-wrap {
       bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important;
-      width: min(1120px, calc(100vw - 12px)) !important;
+      width: min(1120px, calc(100vw - 8px)) !important;
+      padding: 8px !important;
+      border-radius: 16px !important;
       z-index: 41 !important;
     }
     @media (min-width: 601px) {
@@ -1349,8 +1351,16 @@
         padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)) !important;
       }
       #quick-nav-grid-wrap {
-        width: calc(100vw - 10px) !important;
+        width: calc(100vw - 8px) !important;
         bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important;
+        padding: 8px !important;
+      }
+      #quick-nav-grid {
+        gap: 5px !important;
+      }
+      #quick-nav-grid .nav-btn {
+        border-radius: 8px !important;
+        font-size: clamp(12px, 3.2vw, 14px) !important;
       }
     }
   
@@ -2651,7 +2661,7 @@ const EXAM_ID = "exam1";
       const tabletLandscape=isTabletLandscapeLayout();
       const cols=tabletLandscape?20:10;
       const rows=Math.ceil(80/cols);
-      const gap=tabletLandscape?5:(vw<=700?4:6);
+      const gap=tabletLandscape?5:(vw<=700?5:6);
 
       grid.style.gridTemplateColumns=`repeat(${cols}, minmax(0, 1fr))`;
       grid.style.gap=gap+"px";
@@ -2674,10 +2684,10 @@ const EXAM_ID = "exam1";
 
       let btnH=Math.min(widthBtnH,heightBtnH);
       if(tabletLandscape) btnH=Math.max(24,Math.min(btnH,34));
-      else btnH=Math.max(vw<=700?22:24,Math.min(btnH,vw<=700?34:36));
+      else btnH=Math.max(vw<=700?26:24,Math.min(btnH,vw<=700?36:38));
 
       const gridHeight=rows*btnH+(rows-1)*gap;
-      const wrapHeight=gridHeight+padY;
+      const wrapHeight=gridHeight+padY+4;
 
       document.documentElement.style.setProperty("--nav-btn-height",btnH+"px");
       grid.style.height=gridHeight+"px";

@@ -134,7 +134,7 @@
       color: var(--text-primary);
       background: rgba(255, 255, 255, 0.96);
       border: 2px solid transparent;
-      border-radius: 16px;
+      border-radius: 12px;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -148,7 +148,7 @@
       margin-top: 8px;
       padding: 15px;
       border: none;
-      border-radius: 16px;
+      border-radius: 12px;
       background: #FFFFFF;
       color: var(--primary);
       font-family: inherit;
@@ -336,7 +336,7 @@
       flex: 1 1 auto;
       min-height: 0;
       padding: clamp(9px, 1.1vh, 13px) clamp(12px, 1.3vw, 16px);
-      border-radius: 16px;
+      border-radius: 12px;
       border: 1.5px solid #C8D5E0;
       background: #FFFFFF;
       color: var(--text-primary);
@@ -620,7 +620,7 @@
     .result-actions button {
       min-width: 150px;
       padding: 12px 24px;
-      border-radius: 16px;
+      border-radius: 12px;
       font-size: clamp(13px, 1.2vw, 16px);
       font-weight: 800;
     }
@@ -764,6 +764,21 @@
     body.mobile-page #quick-nav-grid .nav-btn::after { content: attr(data-label); position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
     body.mobile-page #quick-nav-grid .nav-btn.active::after { color: #FFFFFF; }
     body.mobile-page #quick-nav-grid .nav-btn.answered::after { color: var(--success); }
+    body.mobile-page #quick-nav-grid .nav-btn[data-answer]::after { z-index: 1; transform: translateX(-0.66em); }
+    body.mobile-page #quick-nav-grid .nav-btn[data-answer]::before {
+      content: attr(data-answer);
+      position: absolute;
+      left: calc(50% + 0.50em);
+      top: 50%;
+      transform: translateY(-48%);
+      color: var(--success);
+      z-index: 2;
+      font-size: 0.74em;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    body.mobile-page #quick-nav-grid .nav-btn.active[data-answer]::before { color: #FFFFFF; }
     body.mobile-page .nav-arrow { width: 30px !important; height: var(--nav-btn-height, 28px) !important; min-height: var(--nav-btn-height, 28px) !important; border-radius: 8px !important; flex: 0 0 30px !important; }
     @media (min-width: 601px) { body.mobile-page #quiz-content { padding: 16px 18px 0 !important; gap: 10px !important; } body.mobile-page #quiz-content h3 { font-size: var(--question-font-size, 17px) !important; padding: 14px 16px !important; } body.mobile-page #options { gap: 10px !important; padding-bottom: 16px !important; } body.mobile-page #options label { min-height: 56px !important; padding: 14px 18px !important; font-size: var(--option-font-size, 16px) !important; } body.mobile-page #navigation-buttons { padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px)) !important; gap: 12px !important; } body.mobile-page #navigation-buttons > button, body.mobile-page #navigation-buttons #quick-nav-container .nav-section-label { min-height: 48px !important; font-size: 15px !important; border-radius: 12px !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper { bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important; } }
     @media (max-width: 700px) { body.mobile-page { overflow: hidden !important; } body.mobile-page #navigation-buttons { width: 100% !important; grid-template-columns: minmax(74px, 1fr) minmax(112px, 1fr) minmax(74px, 1fr) !important; gap: 8px !important; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)) !important; } body.mobile-page #quick-nav-container[data-quick-nav-mode="bottom"] #quick-nav-wrapper { width: calc(100vw - 10px) !important; bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important; } body.mobile-page #quick-nav-grid .nav-btn { height: var(--nav-btn-height, 24px) !important; line-height: var(--nav-btn-height, 24px) !important; } }
@@ -3017,7 +3032,6 @@ const chapter1Data=[
   }
 
 
-
   function updateCompletionActions(isVisible) {
     document.querySelectorAll(".host-actions").forEach(actions => {
       actions.classList.toggle("is-visible", isVisible);
@@ -3236,10 +3250,19 @@ const chapter1Data=[
         btn.dataset.label = "";
         btn.tabIndex = -1;
       } else {
+        const answer = userAnswers[realIdx];
+        const hasAnswer = answer !== null && answer !== undefined && answer !== "";
         btn.textContent = realIdx + 1;
         btn.dataset.label = realIdx + 1;
+        if (hasAnswer) {
+          btn.dataset.answer = `(${answer})`;
+          btn.setAttribute("aria-label", `${realIdx + 1}번, 선택 ${answer}번`);
+        } else {
+          btn.removeAttribute("data-answer");
+          btn.setAttribute("aria-label", `${realIdx + 1}번`);
+        }
         if (realIdx === currentQuestionIndex) btn.classList.add("active");
-        if (userAnswers[realIdx] !== null && userAnswers[realIdx] !== undefined) btn.classList.add("answered");
+        if (hasAnswer) btn.classList.add("answered");
         btn.addEventListener("click", () => {
           updateQuestion(realIdx);
           saveProgress();
