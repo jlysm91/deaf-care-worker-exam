@@ -442,6 +442,30 @@
       user-select: none;
       -webkit-user-select: none;
     }
+    .nav-btn .nav-number,
+    .nav-btn .nav-answer {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      line-height: 1;
+    }
+    .nav-btn .nav-answer {
+      margin-left: 3px;
+      min-width: 16px;
+      height: 14px;
+      padding: 0 3px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.74);
+      font-size: 0.76em;
+      font-weight: 900;
+      vertical-align: middle;
+    }
+    .nav-btn:not(.answered) .nav-answer { display: none; }
+    .nav-btn.active .nav-answer {
+      background: rgba(255, 255, 255, 0.22);
+      color: #FFFFFF;
+    }
     .nav-btn:hover {
       background: #E9F7FD;
       border-color: #97D4E8;
@@ -2348,6 +2372,16 @@ const EXAM_ID = "exam9";
       database.ref(`exams/${EXAM_ID}/users/${currentUserId}/progress`).set({currentQuestion:currentQuestionIndex,answers:userAnswers});
     }
 
+    function setQuickNavButtonLabel(btn,no,answer){
+      const hasAnswer=answer!==null&&answer!==undefined&&answer!=="";
+      const numberText=String(no);
+      const answerText=hasAnswer?String(answer):"";
+      const label=hasAnswer?numberText+" ["+answerText+"]":numberText;
+      btn.dataset.label=label;
+      btn.innerHTML=hasAnswer?'<span class="nav-number">'+numberText+'</span><span class="nav-answer">['+answerText+']</span>':'<span class="nav-number">'+numberText+'</span>';
+      btn.setAttribute("aria-label",label);
+    }
+
     function updateQuestion(index){
       currentQuestionIndex=index;
       const question=quizData[currentQuestionIndex];
@@ -2379,7 +2413,7 @@ const EXAM_ID = "exam9";
       document.querySelectorAll(".nav-btn").forEach((btn,i)=>{
         btn.classList.remove("active","answered");
         const ans=userAnswers[i];
-        btn.textContent=ans?`${i+1}(${ans})`:i+1;
+        setQuickNavButtonLabel(btn,i+1,ans);
         if(ans)btn.classList.add("answered");
       });
       const cur=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
@@ -2397,7 +2431,7 @@ const EXAM_ID = "exam9";
         const btn=document.createElement("div");
         btn.classList.add("nav-btn");
         if(i<TOTAL_QUESTIONS){
-          btn.textContent=i+1;btn.dataset.q=i;
+          setQuickNavButtonLabel(btn,i+1,null);btn.dataset.q=i;
           btn.draggable=false;btn.addEventListener("mousedown",e=>e.preventDefault());
         } else {
           btn.style.opacity="0";
@@ -2635,7 +2669,7 @@ const EXAM_ID = "exam9";
       scheduleQuizContentScrollState();
       const ans=parseInt(e.target.value);userAnswers[currentQuestionIndex]=ans;saveQuizProgress();
       const btn=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
-      if(btn){btn.textContent=`${currentQuestionIndex+1}(${ans})`;btn.classList.add("answered");}
+      if(btn){setQuickNavButtonLabel(btn,currentQuestionIndex+1,ans);btn.classList.add("answered");}
     });
     document.getElementById("result-return-btn").addEventListener("click",resetQuiz);
 
