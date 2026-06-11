@@ -452,19 +452,23 @@
     }
     .nav-btn .nav-answer {
       margin-left: 3px;
-      min-width: 16px;
-      height: 14px;
-      padding: 0 3px;
+      min-width: 18px;
+      height: 15px;
+      padding: 0 4px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(22, 111, 70, 0.28);
+      background: #FFFFFF;
+      color: var(--success);
+      box-sizing: border-box;
       font-size: 0.76em;
       font-weight: 900;
       vertical-align: middle;
     }
     .nav-btn:not(.answered) .nav-answer { display: none; }
     .nav-btn.active .nav-answer {
-      background: rgba(255, 255, 255, 0.22);
-      color: #FFFFFF;
+      background: #FFFFFF;
+      color: var(--primary);
+      border-color: rgba(0, 93, 122, 0.35);
     }
     .nav-btn:hover {
       background: #E9F7FD;

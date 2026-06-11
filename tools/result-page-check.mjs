@@ -294,13 +294,13 @@ function buildMockResultHtml(device) {
 }
 
 function buildQuiz1400ResultHtml() {
-  const wrong = Array.from({ length: 14 }, (_, i) => ({
-    no: i * 4 + 5,
+  const wrong = Array.from({ length: 49 }, (_, i) => ({
+    no: i * 2 + 2,
     correct: (i % 5) + 1,
     mine: ((i + 2) % 5) + 1,
   }));
   const wrongItem = (entry) =>
-    `<div class="result-review-item wrong"><span class="review-no">${entry.no}번</span><span class="review-answers"><span>정답 ${entry.correct}번</span><span>내 답 ${entry.mine}번</span></span></div>`;
+    `<div class="result-review-item wrong"><span class="review-no">${entry.no}번</span><span class="review-answers"><span>정답 ${entry.correct}번</span><span>선택 ${entry.mine}번</span></span></div>`;
 
   return `
     <div id="result-page" style="display:flex">
@@ -316,9 +316,9 @@ function buildQuiz1400ResultHtml() {
             <div class="result-status-note">기준 통과, 복습 권장</div>
           </div>
           <div class="result-stats">
-            <div class="result-stat"><strong>72.8%</strong><span>정답률</span></div>
-            <div class="result-stat"><strong>75 / 103</strong><span>정답</span></div>
-            <div class="result-stat"><strong>14</strong><span>오답</span></div>
+            <div class="result-stat"><strong>38.8%</strong><span>정답률</span></div>
+            <div class="result-stat"><strong>40 / 103</strong><span>정답</span></div>
+            <div class="result-stat"><strong>49</strong><span>오답</span></div>
             <div class="result-stat"><strong>14</strong><span>미응답</span></div>
           </div>
         </div>
@@ -335,7 +335,7 @@ function buildQuiz1400ResultHtml() {
           <section class="result-review-section result-review-primary">
             <div class="result-review-section-head">
               <h3 class="result-review-title">틀린 문항</h3>
-              <span class="result-review-count">14문항</span>
+              <span class="result-review-count">49문항</span>
             </div>
             <div class="result-review-list">${wrong.map((entry) => wrongItem(entry)).join("")}</div>
           </section>
@@ -356,7 +356,7 @@ function buildHarness(relativePath, sourceHtml) {
   const mode = kind === "mock" ? "mock" : "quiz1400";
   const expected = kind === "mock"
     ? { chips: 80, miniValues: ["56", "16", "8"] }
-    : { reviewSections: 1, wrongItems: 14 };
+    : { reviewSections: 1, wrongItems: 49 };
 
   return `<!doctype html>
 <html lang="ko">
@@ -489,6 +489,13 @@ function layoutCheck() {
     }
     if (resultText.includes("C:") || resultText.includes("M:")) {
       errors.push("Quiz result review board still contains C:/M: notation");
+    }
+    if (resultText.includes("내 답")) {
+      errors.push("Quiz result review board still contains my-answer wording");
+    }
+    const reviewList = document.querySelector(".result-review-list");
+    if (reviewList && wrongItems.length > 35 && reviewList.scrollHeight <= reviewList.clientHeight + tolerance) {
+      errors.push("Quiz wrong review list should scroll when more than seven rows are present");
     }
   }
 
