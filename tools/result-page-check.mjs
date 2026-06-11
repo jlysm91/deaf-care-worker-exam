@@ -304,10 +304,10 @@ function buildQuiz1400ResultHtml() {
     correct: (i % 5) + 1,
     mine: "-",
   }));
-  const item = (entry, type) => {
-    const mineText = entry.mine === "-" ? "내 답 없음" : `내 답 ${entry.mine}번`;
-    return `<div class="result-review-item ${type}"><span class="review-no">${entry.no}번</span><span class="review-answers"><span>정답 ${entry.correct}번</span><span>${mineText}</span></span></div>`;
-  };
+  const wrongItem = (entry) =>
+    `<div class="result-review-item wrong"><span class="review-no">${entry.no}번</span><span class="review-answers"><span>정답 ${entry.correct}번</span><span>내 답 ${entry.mine}번</span></span></div>`;
+  const emptyChip = (entry) =>
+    `<span class="result-unanswered-chip" aria-label="${entry.no}번, 정답 ${entry.correct}번">${entry.no}번</span>`;
 
   return `
     <div id="result-page" style="display:flex">
@@ -332,26 +332,30 @@ function buildQuiz1400ResultHtml() {
         <div class="result-standard">장별 학습 기준: <strong>60% 이상</strong> · 합격 기준 정답 <strong>62문항 이상</strong></div>
       </div>
       <div id="quick-nav-container-result">
-        <p class="result-grid-title">복습이 필요한 문항</p>
+        <p class="result-grid-title">오답 중심 복습</p>
         <div id="result-grid-nav" style="display:none">
           <button id="result-prev-btn">← 이전</button>
           <span id="result-page-info"></span>
           <button id="result-next-btn" disabled>다음 →</button>
         </div>
-        <div id="quick-nav-grid-result" class="result-review-board">
-          <div class="result-review-overview">
-            <div class="result-review-card correct"><span>정답</span><strong>75</strong></div>
-            <div class="result-review-card wrong"><span>오답</span><strong>14</strong></div>
-            <div class="result-review-card empty"><span>미응답</span><strong>14</strong></div>
-          </div>
-          <section class="result-review-section wrong">
-            <h3 class="result-review-title">틀린 문항</h3>
-            <div class="result-review-list">${wrong.map((entry) => item(entry, "wrong")).join("")}</div>
+        <div id="quick-nav-grid-result" class="result-review-board result-review-compact">
+          <section class="result-review-section result-review-primary">
+            <div class="result-review-section-head">
+              <h3 class="result-review-title">틀린 문항</h3>
+              <span class="result-review-count">14문항</span>
+            </div>
+            <div class="result-review-list">${wrong.map((entry) => wrongItem(entry)).join("")}</div>
           </section>
-          <section class="result-review-section empty">
-            <h3 class="result-review-title">미응답 문항</h3>
-            <div class="result-review-list">${empty.map((entry) => item(entry, "empty")).join("")}</div>
-          </section>
+          <details class="result-review-section result-review-collapsible">
+            <summary>
+              <span class="result-review-summary-main">
+                <span class="result-review-summary-title">미응답 문항</span>
+                <span class="result-review-summary-note">필요할 때만 펼쳐서 확인</span>
+              </span>
+              <strong class="result-review-summary-count">14문항</strong>
+            </summary>
+            <div class="result-unanswered-grid">${empty.map((entry) => emptyChip(entry)).join("")}</div>
+          </details>
         </div>
       </div>
       <div class="result-actions">
@@ -369,7 +373,7 @@ function buildHarness(relativePath, sourceHtml) {
   const mode = kind === "mock" ? "mock" : "quiz1400";
   const expected = kind === "mock"
     ? { chips: 80, miniValues: ["56", "16", "8"] }
-    : { reviewCards: 3, reviewSections: 2, wrongItems: 14, emptyItems: 14 };
+    : { reviewSections: 2, wrongItems: 14, emptyChips: 14 };
 
   return `<!doctype html>
 <html lang="ko">
@@ -468,7 +472,7 @@ function layoutCheck() {
     errors.push(`Body has horizontal overflow: scrollWidth=${document.body.scrollWidth}, viewport=${winW}`);
   }
 
-  visibleElements("#result-page, #result-shell, .result-heading, #score, #quick-nav-container-result, #quick-nav-grid-result, #result-grid-nav, .result-review-overview, .result-review-card, .result-review-section, .result-review-list, .result-review-item, .result-actions, #result-return-btn").forEach((el) => {
+  visibleElements("#result-page, #result-shell, .result-heading, #score, #quick-nav-container-result, #quick-nav-grid-result, #result-grid-nav, .result-review-section, .result-review-section-head, .result-review-list, .result-review-item, .result-review-collapsible, .result-unanswered-grid, .result-unanswered-chip, .result-actions, #result-return-btn").forEach((el) => {
     checkHorizontalBounds(el);
     checkScrollWidth(el);
   });
@@ -491,16 +495,17 @@ function layoutCheck() {
     }
   } else if (mode === "quiz1400") {
     const reviewBoard = document.querySelector("#quick-nav-grid-result.result-review-board");
-    const reviewCards = document.querySelectorAll(".result-review-card");
     const reviewSections = document.querySelectorAll(".result-review-section");
     const wrongItems = document.querySelectorAll(".result-review-item.wrong");
-    const emptyItems = document.querySelectorAll(".result-review-item.empty");
+    const unansweredDetails = document.querySelector(".result-review-collapsible");
+    const emptyChips = document.querySelectorAll(".result-unanswered-chip");
     const resultText = resultContainer?.textContent || "";
     if (!reviewBoard) errors.push("Quiz result review board is missing");
-    if (reviewCards.length !== expected.reviewCards) errors.push(`Expected ${expected.reviewCards} quiz review cards, found ${reviewCards.length}`);
     if (reviewSections.length !== expected.reviewSections) errors.push(`Expected ${expected.reviewSections} quiz review sections, found ${reviewSections.length}`);
     if (wrongItems.length !== expected.wrongItems) errors.push(`Expected ${expected.wrongItems} wrong quiz review items, found ${wrongItems.length}`);
-    if (emptyItems.length !== expected.emptyItems) errors.push(`Expected ${expected.emptyItems} unanswered quiz review items, found ${emptyItems.length}`);
+    if (!unansweredDetails) errors.push("Quiz unanswered details section is missing");
+    if (unansweredDetails?.open) errors.push("Quiz unanswered details section should be collapsed by default");
+    if (emptyChips.length !== expected.emptyChips) errors.push(`Expected ${expected.emptyChips} unanswered quiz chips, found ${emptyChips.length}`);
     if (resultText.includes("C:") || resultText.includes("M:")) {
       errors.push("Quiz result review board still contains C:/M: notation");
     }
