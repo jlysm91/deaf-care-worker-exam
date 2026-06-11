@@ -458,6 +458,10 @@
       vertical-align: middle;
     }
     .nav-btn:not(.answered) .nav-answer { display: none; }
+    .nav-btn.answered .nav-answer,
+    .nav-btn.active.answered .nav-answer {
+      color: var(--success);
+    }
     .nav-btn:hover {
       background: #E9F7FD;
       border-color: #97D4E8;
@@ -470,6 +474,11 @@
       border-color: #0B7FA1;
     }
     .nav-btn.answered {
+      background: var(--success-subtle);
+      color: var(--success);
+      border-color: #83D5A8;
+    }
+    .nav-btn.active.answered {
       background: var(--success-subtle);
       color: var(--success);
       border-color: #83D5A8;

@@ -472,9 +472,14 @@
       vertical-align: middle;
     }
     .nav-btn:not(.answered) .nav-answer { display: none; }
+    .nav-btn.answered .nav-answer,
+    .nav-btn.active.answered .nav-answer {
+      color: var(--success);
+    }
     .nav-btn:hover { background: #E7F5FA; border-color: #85C9DE; color: var(--primary); }
     .nav-btn.active { background: linear-gradient(120deg, var(--primary) 0%, #0E8FB2 100%); color: #FFFFFF; border-color: var(--primary); }
     .nav-btn.answered { background: var(--success-subtle); color: var(--success); border-color: #84D7AC; }
+    .nav-btn.active.answered { background: var(--success-subtle); color: var(--success); border-color: #84D7AC; }
     .nav-btn.correct { background: var(--success-subtle) !important; color: var(--success) !important; border-color: #84D7AC !important; }
     .nav-btn.incorrect { background: var(--danger-subtle) !important; color: var(--danger) !important; border-color: #EBA29D !important; }
     .nav-btn.unanswered { background: #F1F5F9 !important; color: #64748B !important; border-color: #CBD5E1 !important; }
@@ -485,6 +490,8 @@
     }
     body.mobile-page #quick-nav-grid .nav-btn.answered { color: var(--success) !important; }
     body.mobile-page #quick-nav-grid .nav-btn.active { color: #FFFFFF !important; }
+    body.mobile-page #quick-nav-grid .nav-btn.active.answered { color: var(--success) !important; }
+    body.mobile-page #quick-nav-grid .nav-btn.active.answered .nav-answer { color: var(--success) !important; }
     body.mobile-page #quick-nav-grid .nav-btn::after {
       content: none !important;
       display: none !important;
