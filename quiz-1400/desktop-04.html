@@ -466,24 +466,12 @@
     }
     .nav-btn .nav-answer {
       margin-left: 3px;
-      min-width: 18px;
-      height: 15px;
-      padding: 0 4px;
-      border-radius: 999px;
-      border: 1px solid rgba(22, 111, 70, 0.28);
-      background: #FFFFFF;
-      color: var(--success);
-      box-sizing: border-box;
-      font-size: 0.76em;
+      color: currentColor;
+      font-size: 0.78em;
       font-weight: 900;
       vertical-align: middle;
     }
     .nav-btn:not(.answered) .nav-answer { display: none; }
-    .nav-btn.active .nav-answer {
-      background: #FFFFFF;
-      color: var(--primary);
-      border-color: rgba(0, 93, 122, 0.35);
-    }
     .nav-btn:hover { background: #E7F5FA; border-color: #85C9DE; color: var(--primary); }
     .nav-btn.active { background: linear-gradient(120deg, var(--primary) 0%, #0E8FB2 100%); color: #FFFFFF; border-color: var(--primary); }
     .nav-btn.answered { background: var(--success-subtle); color: var(--success); border-color: #84D7AC; }
@@ -731,6 +719,10 @@
       text-align: right;
       word-break: keep-all;
       overflow-wrap: anywhere;
+    }
+    .review-answer-correct {
+      color: var(--success);
+      font-weight: 900;
     }
     .result-review-empty {
       margin: 0;
@@ -3119,7 +3111,7 @@ const chapter12Data=[
   }
 
   function makeWrongReviewItem(item) {
-    return '<div class="result-review-item wrong"><span class="review-no">' + item.no + '\uBC88</span><span class="review-answers"><span>\uC815\uB2F5 ' + item.correct + '\uBC88</span><span>\uC120\uD0DD ' + item.mine + '\uBC88</span></span></div>';
+    return '<div class="result-review-item wrong"><span class="review-no">' + item.no + '\uBC88</span><span class="review-answers"><span class="review-answer-correct">\uC815\uB2F5 ' + item.correct + '\uBC88</span><span>\uC120\uD0DD ' + item.mine + '\uBC88</span></span></div>';
   }
 
   function renderWrongReviewSection(items) {

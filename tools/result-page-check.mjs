@@ -300,7 +300,7 @@ function buildQuiz1400ResultHtml() {
     mine: ((i + 2) % 5) + 1,
   }));
   const wrongItem = (entry) =>
-    `<div class="result-review-item wrong"><span class="review-no">${entry.no}번</span><span class="review-answers"><span>정답 ${entry.correct}번</span><span>선택 ${entry.mine}번</span></span></div>`;
+    `<div class="result-review-item wrong"><span class="review-no">${entry.no}번</span><span class="review-answers"><span class="review-answer-correct">정답 ${entry.correct}번</span><span>선택 ${entry.mine}번</span></span></div>`;
 
   return `
     <div id="result-page" style="display:flex">
@@ -492,6 +492,21 @@ function layoutCheck() {
     }
     if (resultText.includes("내 답")) {
       errors.push("Quiz result review board still contains my-answer wording");
+    }
+    const correctAnswerLabels = document.querySelectorAll(".review-answer-correct");
+    if (correctAnswerLabels.length !== wrongItems.length) {
+      errors.push("Quiz wrong review correct-answer labels should be marked separately");
+    }
+    if (correctAnswerLabels.length) {
+      const successProbe = document.createElement("span");
+      successProbe.style.color = "var(--success)";
+      document.body.appendChild(successProbe);
+      const expectedSuccessColor = getComputedStyle(successProbe).color;
+      successProbe.remove();
+      const firstCorrectColor = getComputedStyle(correctAnswerLabels[0]).color;
+      if (firstCorrectColor !== expectedSuccessColor) {
+        errors.push("Quiz wrong review correct-answer label should use success color");
+      }
     }
     const reviewList = document.querySelector(".result-review-list");
     if (reviewList && wrongItems.length > 35 && reviewList.scrollHeight <= reviewList.clientHeight + tolerance) {
