@@ -208,9 +208,11 @@ async function createPageClient(browserWsUrl) {
 }
 
 function extractStyle(sourceHtml, relativePath) {
-  const match = sourceHtml.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
-  if (!match) throw new Error(`No <style> block found in ${relativePath}`);
-  return match[1];
+  const matches = [...sourceHtml.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)];
+  if (!matches.length) throw new Error(`No <style> block found in ${relativePath}`);
+  return matches
+    .map((match) => match[1])
+    .sort((a, b) => b.length - a.length)[0];
 }
 
 function getKind(relativePath) {
@@ -292,18 +294,20 @@ function buildMockResultHtml(device) {
 }
 
 function buildQuiz1400ResultHtml() {
-  const cells = [];
-  for (let i = 0; i < 80; i++) {
-    const no = 81 + i;
-    if (i >= 23) {
-      cells.push(`<div class="nav-btn placeholder"></div>`);
-      continue;
-    }
-    const correct = (i % 5) + 1;
-    const mine = i % 7 === 0 ? "-" : i % 4 === 0 ? ((correct % 5) + 1) : correct;
-    const state = mine === "-" ? "unanswered" : mine === correct ? "correct" : "incorrect";
-    cells.push(`<div class="nav-btn ${state}"><span class="number">${no}</span><span class="detail">C:${correct} / M:${mine}</span></div>`);
-  }
+  const wrong = Array.from({ length: 14 }, (_, i) => ({
+    no: i * 4 + 5,
+    correct: (i % 5) + 1,
+    mine: ((i + 2) % 5) + 1,
+  }));
+  const empty = Array.from({ length: 14 }, (_, i) => ({
+    no: i * 7 + 1,
+    correct: (i % 5) + 1,
+    mine: "-",
+  }));
+  const item = (entry, type) => {
+    const mineText = entry.mine === "-" ? "내 답 없음" : `내 답 ${entry.mine}번`;
+    return `<div class="result-review-item ${type}"><span class="review-no">${entry.no}번</span><span class="review-answers"><span>정답 ${entry.correct}번</span><span>${mineText}</span></span></div>`;
+  };
 
   return `
     <div id="result-page" style="display:flex">
@@ -322,19 +326,33 @@ function buildQuiz1400ResultHtml() {
             <div class="result-stat"><strong>72.8%</strong><span>정답률</span></div>
             <div class="result-stat"><strong>75 / 103</strong><span>정답</span></div>
             <div class="result-stat"><strong>14</strong><span>오답</span></div>
-            <div class="result-stat"><strong>14</strong><span>미답</span></div>
+            <div class="result-stat"><strong>14</strong><span>미응답</span></div>
           </div>
         </div>
         <div class="result-standard">장별 학습 기준: <strong>60% 이상</strong> · 합격 기준 정답 <strong>62문항 이상</strong></div>
       </div>
       <div id="quick-nav-container-result">
-        <p class="result-grid-title">문항별 결과 (C: 정답 / M: 내 답)</p>
-        <div id="result-grid-nav" style="display:flex">
+        <p class="result-grid-title">복습이 필요한 문항</p>
+        <div id="result-grid-nav" style="display:none">
           <button id="result-prev-btn">← 이전</button>
-          <span id="result-page-info">81~103 / 103문항</span>
+          <span id="result-page-info"></span>
           <button id="result-next-btn" disabled>다음 →</button>
         </div>
-        <div id="quick-nav-grid-result">${cells.join("")}</div>
+        <div id="quick-nav-grid-result" class="result-review-board">
+          <div class="result-review-overview">
+            <div class="result-review-card correct"><span>정답</span><strong>75</strong></div>
+            <div class="result-review-card wrong"><span>오답</span><strong>14</strong></div>
+            <div class="result-review-card empty"><span>미응답</span><strong>14</strong></div>
+          </div>
+          <section class="result-review-section wrong">
+            <h3 class="result-review-title">틀린 문항</h3>
+            <div class="result-review-list">${wrong.map((entry) => item(entry, "wrong")).join("")}</div>
+          </section>
+          <section class="result-review-section empty">
+            <h3 class="result-review-title">미응답 문항</h3>
+            <div class="result-review-list">${empty.map((entry) => item(entry, "empty")).join("")}</div>
+          </section>
+        </div>
       </div>
       <div class="result-actions">
         <button id="result-chapter-btn">장 선택하기</button>
@@ -351,7 +369,7 @@ function buildHarness(relativePath, sourceHtml) {
   const mode = kind === "mock" ? "mock" : "quiz1400";
   const expected = kind === "mock"
     ? { chips: 80, miniValues: ["56", "16", "8"] }
-    : { navButtons: 80, realCells: 23, placeholders: 57 };
+    : { reviewCards: 3, reviewSections: 2, wrongItems: 14, emptyItems: 14 };
 
   return `<!doctype html>
 <html lang="ko">
@@ -361,7 +379,7 @@ function buildHarness(relativePath, sourceHtml) {
   <title>Result page check - ${escapeHtml(relativePath)}</title>
   <style>${css}</style>
 </head>
-<body data-result-mode="${mode}" data-expected="${escapeHtml(JSON.stringify(expected))}">
+<body class="${device}-page" data-result-mode="${mode}" data-expected="${escapeHtml(JSON.stringify(expected))}">
   ${resultHtml}
 </body>
 </html>`;
@@ -418,10 +436,16 @@ function layoutCheck() {
     return x > tolerance && y > tolerance;
   }
 
+  function isIntentionalOverlay(el) {
+    const position = getComputedStyle(el).position;
+    return position === "fixed" || position === "sticky";
+  }
+
   function checkSiblingOverlap(selector) {
     const elements = visibleElements(selector);
     for (let i = 0; i < elements.length; i++) {
       for (let j = i + 1; j < elements.length; j++) {
+        if (isIntentionalOverlay(elements[i]) || isIntentionalOverlay(elements[j])) continue;
         if (overlap(elements[i], elements[j])) {
           errors.push(`Sibling overlap: ${labelOf(elements[i])} and ${labelOf(elements[j])}`);
         }
@@ -444,7 +468,7 @@ function layoutCheck() {
     errors.push(`Body has horizontal overflow: scrollWidth=${document.body.scrollWidth}, viewport=${winW}`);
   }
 
-  visibleElements("#result-page, #result-shell, .result-heading, #score, #quick-nav-container-result, #quick-nav-grid-result, #result-grid-nav, .result-actions, #result-return-btn").forEach((el) => {
+  visibleElements("#result-page, #result-shell, .result-heading, #score, #quick-nav-container-result, #quick-nav-grid-result, #result-grid-nav, .result-review-overview, .result-review-card, .result-review-section, .result-review-list, .result-review-item, .result-actions, #result-return-btn").forEach((el) => {
     checkHorizontalBounds(el);
     checkScrollWidth(el);
   });
@@ -466,14 +490,19 @@ function layoutCheck() {
       errors.push(`Unexpected mock mini-card values: ${miniValues.join(", ")}`);
     }
   } else if (mode === "quiz1400") {
-    const navButtons = document.querySelectorAll("#quick-nav-grid-result .nav-btn");
-    const realCells = document.querySelectorAll("#quick-nav-grid-result .nav-btn:not(.placeholder)");
-    const placeholders = document.querySelectorAll("#quick-nav-grid-result .nav-btn.placeholder");
-    if (navButtons.length !== expected.navButtons) errors.push(`Expected ${expected.navButtons} quiz result cells, found ${navButtons.length}`);
-    if (realCells.length !== expected.realCells) errors.push(`Expected ${expected.realCells} real quiz result cells, found ${realCells.length}`);
-    if (placeholders.length !== expected.placeholders) errors.push(`Expected ${expected.placeholders} quiz placeholders, found ${placeholders.length}`);
-    if (!document.getElementById("result-page-info")?.textContent.includes("81~103")) {
-      errors.push("Quiz result page info did not show the expected last-page range");
+    const reviewBoard = document.querySelector("#quick-nav-grid-result.result-review-board");
+    const reviewCards = document.querySelectorAll(".result-review-card");
+    const reviewSections = document.querySelectorAll(".result-review-section");
+    const wrongItems = document.querySelectorAll(".result-review-item.wrong");
+    const emptyItems = document.querySelectorAll(".result-review-item.empty");
+    const resultText = resultContainer?.textContent || "";
+    if (!reviewBoard) errors.push("Quiz result review board is missing");
+    if (reviewCards.length !== expected.reviewCards) errors.push(`Expected ${expected.reviewCards} quiz review cards, found ${reviewCards.length}`);
+    if (reviewSections.length !== expected.reviewSections) errors.push(`Expected ${expected.reviewSections} quiz review sections, found ${reviewSections.length}`);
+    if (wrongItems.length !== expected.wrongItems) errors.push(`Expected ${expected.wrongItems} wrong quiz review items, found ${wrongItems.length}`);
+    if (emptyItems.length !== expected.emptyItems) errors.push(`Expected ${expected.emptyItems} unanswered quiz review items, found ${emptyItems.length}`);
+    if (resultText.includes("C:") || resultText.includes("M:")) {
+      errors.push("Quiz result review board still contains C:/M: notation");
     }
   }
 

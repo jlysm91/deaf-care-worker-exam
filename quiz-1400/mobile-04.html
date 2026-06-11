@@ -616,6 +616,117 @@
     #quick-nav-grid-result .nav-btn:hover { transform: none; }
     #quick-nav-grid-result .nav-btn .number { font-size: clamp(11px, 1.1vw, 15px); font-weight: 800; }
     #quick-nav-grid-result .nav-btn .detail { font-size: clamp(8px, 0.8vw, 11px); line-height: 1.25; opacity: 0.92; }
+    #quick-nav-grid-result.result-review-board {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(10px, 1.2vw, 16px);
+      align-items: start;
+    }
+    .result-review-overview {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(7px, 0.9vw, 11px);
+    }
+    .result-review-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 0;
+      min-height: 58px;
+      padding: 11px 13px;
+      border-radius: 10px;
+      border: 1px solid #D8E2EB;
+      background: #F8FBFD;
+      color: var(--text-secondary);
+      font-weight: 800;
+    }
+    .result-review-card strong {
+      color: var(--text-primary);
+      font-size: clamp(22px, 2vw, 30px);
+      font-weight: 900;
+      line-height: 1;
+    }
+    .result-review-card.correct { border-color: #A7E3CF; background: #F0FBF7; }
+    .result-review-card.wrong { border-color: #F0B8B4; background: #FFF5F4; }
+    .result-review-card.empty { border-color: #F4D38D; background: #FFF9EA; }
+    .result-review-section {
+      min-width: 0;
+      border: 1px solid #D8E2EB;
+      border-radius: 12px;
+      background: #FFFFFF;
+      overflow: hidden;
+    }
+    .result-review-title {
+      margin: 0;
+      padding: 10px 12px;
+      border-bottom: 1px solid #E2EAF1;
+      background: #F8FBFD;
+      color: var(--text-primary);
+      font-size: clamp(13px, 1vw, 15px);
+      font-weight: 900;
+    }
+    .result-review-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      gap: 7px;
+      max-height: min(34vh, 360px);
+      padding: 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+    .result-review-item {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 9px 10px;
+      border-radius: 9px;
+      border: 1px solid #D8E2EB;
+      background: #FFFFFF;
+      color: var(--text-secondary);
+      font-weight: 800;
+      line-height: 1.25;
+    }
+    .result-review-item.wrong { border-color: #E9ABA7; background: #FFF7F6; }
+    .result-review-item.empty { border-color: #EDCC86; background: #FFFAED; }
+    .review-no {
+      flex: 0 0 auto;
+      color: var(--text-primary);
+      font-size: clamp(13px, 1vw, 15px);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .review-answers {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      font-size: clamp(11px, 0.9vw, 13px);
+      text-align: right;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+    .result-review-empty {
+      margin: 0;
+      padding: 18px 12px;
+      color: var(--text-muted);
+      font-size: clamp(12px, 0.95vw, 14px);
+      font-weight: 800;
+      text-align: center;
+    }
+    @media (max-width: 700px) {
+      #quick-nav-grid-result.result-review-board { grid-template-columns: 1fr; gap: 10px; }
+      .result-review-overview { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .result-review-card { min-height: 52px; padding: 9px 10px; flex-direction: column; justify-content: center; }
+      .result-review-card strong { font-size: 22px; }
+      .result-review-list { grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); max-height: 260px; }
+    }
+
     .result-actions { display: flex; justify-content: center; gap: 12px; }
     .result-actions button {
       min-width: 150px;
@@ -1159,7 +1270,7 @@
     </div>
     <div id="score" class="result-summary"></div>
     <div id="quick-nav-container-result">
-      <p class="result-grid-title">문항별 결과 (C: 정답 / M: 내 답)</p>
+      <p class="result-grid-title">복습이 필요한 문항</p>
       <div id="result-grid-nav">
         <button id="result-prev-btn">← 이전</button>
         <span id="result-page-info"></span>
@@ -3320,10 +3431,13 @@ const chapter12Data=[
         btn.dataset.label = "";
         btn.tabIndex = -1;
       } else {
+        const hasAnswer = userAnswers[realIdx] !== null && userAnswers[realIdx] !== undefined && userAnswers[realIdx] !== "";
         btn.textContent = realIdx + 1;
         btn.dataset.label = realIdx + 1;
+        btn.removeAttribute("data-answer");
+        btn.setAttribute("aria-label", hasAnswer ? realIdx + 1 + "\uBC88, \uB2F5\uBCC0 \uC644\uB8CC" : realIdx + 1 + "\uBC88");
         if (realIdx === currentQuestionIndex) btn.classList.add("active");
-        if (userAnswers[realIdx] !== null && userAnswers[realIdx] !== undefined) btn.classList.add("answered");
+        if (hasAnswer) btn.classList.add("answered");
         btn.addEventListener("click", () => {
           updateQuestion(realIdx);
           saveProgress();
@@ -3423,7 +3537,7 @@ const chapter12Data=[
           <div class="result-stat"><strong>${rate.toFixed(1)}%</strong><span>정답률</span></div>
           <div class="result-stat"><strong>${correctCount} / ${totalQ}</strong><span>정답</span></div>
           <div class="result-stat"><strong>${wrongCount}</strong><span>오답</span></div>
-          <div class="result-stat"><strong>${unansweredCount}</strong><span>미답</span></div>
+          <div class="result-stat"><strong>${unansweredCount}</strong><span>미응답</span></div>
         </div>
       </div>
       <div class="result-standard">장별 학습 기준: <strong>60% 이상</strong> · 합격 기준 정답 <strong>${passCount}문항 이상</strong></div>
@@ -3432,42 +3546,59 @@ const chapter12Data=[
     requestAnimationFrame(fitResultGrid);
   }
 
+  function makeResultReviewItem(item, type) {
+    const mineText = item.mine === "-" ? "\uB0B4 \uB2F5 \uC5C6\uC74C" : "\uB0B4 \uB2F5 " + item.mine + "\uBC88";
+    return '<div class="result-review-item ' + type + '"><span class="review-no">' + item.no + '\uBC88</span><span class="review-answers"><span>\uC815\uB2F5 ' + item.correct + '\uBC88</span><span>' + mineText + '</span></span></div>';
+  }
+
+  function renderResultReviewSection(title, items, type, emptyText) {
+    const body = items.length
+      ? '<div class="result-review-list">' + items.map(item => makeResultReviewItem(item, type)).join("") + '</div>'
+      : '<p class="result-review-empty">' + emptyText + '</p>';
+    return '<section class="result-review-section ' + type + '"><h3 class="result-review-title">' + title + '</h3>' + body + '</section>';
+  }
+
   function renderResultGrid(pageIdx) {
-    resultPageIdx = pageIdx;
+    resultPageIdx = 0;
     const grid = document.getElementById("quick-nav-grid-result");
     const nav = document.getElementById("result-grid-nav");
+    const title = document.querySelector(".result-grid-title");
+    const pageInfo = document.getElementById("result-page-info");
     if (!grid) return;
+    if (nav) nav.style.display = "none";
+    if (pageInfo) pageInfo.textContent = "";
+    if (title) title.textContent = "\uBCF5\uC2B5\uC774 \uD544\uC694\uD55C \uBB38\uD56D";
+
     const total = currentResultAnswers.length || TOTAL_QUESTIONS;
     currentResultAnswers = toAnswersArray(currentResultAnswers, total);
-    const totalPages = Math.max(1, Math.ceil(total / RESULT_PAGE_SIZE));
-    const start = pageIdx * RESULT_PAGE_SIZE;
-    const end = Math.min(start + RESULT_PAGE_SIZE, total);
-    if (total > RESULT_PAGE_SIZE) {
-      nav.style.display = "flex";
-      document.getElementById("result-page-info").textContent = `${start + 1}~${end} / ${total}문항`;
-      document.getElementById("result-prev-btn").disabled = pageIdx === 0;
-      document.getElementById("result-next-btn").disabled = pageIdx >= totalPages - 1;
-    } else {
-      nav.style.display = "none";
-    }
-    grid.innerHTML = "";
-    for (let i = 0; i < RESULT_PAGE_SIZE; i++) {
-      const idx = start + i;
-      const cell = document.createElement("div");
-      cell.className = "nav-btn";
-      if (idx >= total) {
-        cell.classList.add("placeholder");
+    const wrong = [];
+    const empty = [];
+    let correct = 0;
+
+    for (let idx = 0; idx < total; idx++) {
+      const uaRaw = currentResultAnswers[idx];
+      const unanswered = uaRaw === null || uaRaw === undefined || uaRaw === "";
+      const ua = unanswered ? "-" : uaRaw;
+      const ca = quizData[idx] ? quizData[idx].correctAnswer : "-";
+      const ok = !unanswered && parseInt(ua, 10) === parseInt(ca, 10);
+      if (ok) {
+        correct++;
+      } else if (unanswered) {
+        empty.push({ no: idx + 1, correct: ca, mine: "-" });
       } else {
-        const uaRaw = currentResultAnswers[idx];
-        const unanswered = uaRaw === null || uaRaw === undefined || uaRaw === "";
-        const ua = unanswered ? "-" : uaRaw;
-        const ca = quizData[idx] ? quizData[idx].correctAnswer : "-";
-        const ok = !unanswered && parseInt(ua, 10) === parseInt(ca, 10);
-        cell.classList.add(unanswered ? "unanswered" : (ok ? "correct" : "incorrect"));
-        cell.innerHTML = `<span class="number">${idx + 1}</span><span class="detail">C:${ca} / M:${ua}</span>`;
+        wrong.push({ no: idx + 1, correct: ca, mine: ua });
       }
-      grid.appendChild(cell);
     }
+
+    grid.className = "result-review-board";
+    grid.innerHTML =
+      '<div class="result-review-overview">' +
+        '<div class="result-review-card correct"><span>\uC815\uB2F5</span><strong>' + correct + '</strong></div>' +
+        '<div class="result-review-card wrong"><span>\uC624\uB2F5</span><strong>' + wrong.length + '</strong></div>' +
+        '<div class="result-review-card empty"><span>\uBBF8\uC751\uB2F5</span><strong>' + empty.length + '</strong></div>' +
+      '</div>' +
+      renderResultReviewSection("\uD2C0\uB9B0 \uBB38\uD56D", wrong, "wrong", "\uD2C0\uB9B0 \uBB38\uD56D\uC774 \uC5C6\uC2B5\uB2C8\uB2E4.") +
+      renderResultReviewSection("\uBBF8\uC751\uB2F5 \uBB38\uD56D", empty, "empty", "\uBBF8\uC751\uB2F5 \uBB38\uD56D\uC774 \uC5C6\uC2B5\uB2C8\uB2E4.");
     requestAnimationFrame(fitResultGrid);
   }
 
