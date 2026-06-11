@@ -415,3 +415,21 @@
   - `node tools/result-page-check.mjs`로 전체 28개 파일 x 7개 화면 크기, 총 196개 결과 페이지 조합을 검사했고 통과했다.
   - 정적 검사로 28개 HTML에서 `.nav-answer`가 `font-size: inherit`, `vertical-align: baseline`을 사용하고 배지형 배경/테두리 스타일이 없음을 확인했다.
   - Chrome DevTools Protocol로 `quiz-1400/mobile-01.html`을 열어 5번 답 선택 후 `1`과 `[5]`의 글자 크기, 줄 높이, 상단 위치, 높이가 동일함을 확인했다.
+
+## 22. 2026-06-11 모의고사 모바일 빠른 문항 이동 40문항 페이지 적용
+
+- 사용자 피드백에 따라 모의고사 1~10회 모바일 HTML의 빠른 문항 이동을 80문항 일괄 표시에서 40문항 단위 페이지 구조로 변경했다.
+  - `NAV_PAGE_SIZE=40`을 추가하고, 1~40번 / 41~80번을 좌우 화살표로 이동하도록 했다.
+  - 스마트폰 세로 화면에서는 5열 x 8줄로 표시되도록 자동 크기 계산을 조정했다.
+  - 선택 답 표시는 기존 `1 [5]` 형식을 유지하고, 선택된 답 표시가 초록색으로 유지되도록 했다.
+  - 데스크톱 모의고사 파일은 요청 범위 밖이므로 수정하지 않았다.
+- 문제 데이터, 정답, `videoId`, Firebase 저장/제출 흐름은 변경하지 않았다.
+- OneDrive 원본 관리 폴더의 모의고사 1~10회 `2-2. ★★★ n회 모의고사 코드 - 모바일용.html`에도 동일 변경을 반영했다.
+  - `-DESKTOP-N9UCJ8E` 충돌 파일은 수정하지 않았다.
+  - 로컬 `mock-exam/mobile-01.html`~`mobile-10.html`과 OneDrive 대응 파일 10개 SHA-256 해시 일치를 확인했다.
+- 검증:
+  - `git diff --check` 통과.
+  - `node --check tools/result-page-check.mjs` 통과.
+  - 모의고사 모바일 10개 HTML의 inline script 20개 문법 파싱 통과.
+  - 정적 검사로 모바일 10개 파일 모두 `NAV_PAGE_SIZE=40`, `nav-prev/nav-next`, `updateNavDisplay()`가 1회씩 존재하고, `FIXED_SIZE=80` 및 `Math.ceil(80/cols)`가 남아 있지 않음을 확인했다.
+  - 로컬 Chrome + Playwright로 `mock-exam/mobile-01.html`을 390x844 모바일 viewport에서 열어 확인했다: 1페이지 1~40번, 2페이지 41~80번, 각 페이지 40개 버튼, 5열 배치, 좌우 화살표 활성/비활성 상태 정상, 선택 답 `[5]` 초록색 표시 정상.

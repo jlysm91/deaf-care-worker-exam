@@ -416,11 +416,50 @@
       letter-spacing: 0.3px;
       text-align: center;
     }
-    #quick-nav-grid-wrap { overflow: hidden; }
+    #quick-nav-grid-wrap {
+      display: flex;
+      align-items: center;
+      gap: clamp(6px, 0.8vw, 10px);
+      overflow: hidden;
+    }
     #quick-nav-grid {
       display: grid;
+      flex: 1 1 auto;
+      min-width: 0;
       grid-template-columns: repeat(10, minmax(0, 1fr));
       gap: clamp(3px, 0.35vw, 5px);
+    }
+    #quick-nav-grid-wrap .nav-arrow {
+      flex: 0 0 34px !important;
+      width: 34px !important;
+      min-width: 34px !important;
+      max-width: 34px !important;
+      height: var(--quick-nav-btn-height, var(--nav-btn-height, 34px)) !important;
+      min-height: var(--quick-nav-btn-height, var(--nav-btn-height, 34px)) !important;
+      padding: 0 !important;
+      border: none;
+      border-radius: 9px;
+      background: linear-gradient(120deg, var(--primary) 0%, #0E8FB2 100%);
+      color: #FFFFFF;
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    #quick-nav-grid-wrap .nav-arrow:hover:not(:disabled) { transform: scale(1.06); }
+    #quick-nav-grid-wrap .nav-arrow:disabled { opacity: 0.35; cursor: not-allowed; }
+    @media (max-width: 700px) {
+      #quick-nav-grid-wrap { gap: 6px !important; }
+      #quick-nav-grid-wrap .nav-arrow {
+        flex-basis: 30px !important;
+        width: 30px !important;
+        min-width: 30px !important;
+        max-width: 30px !important;
+        border-radius: 9px !important;
+      }
     }
 
     .nav-btn {
@@ -1831,7 +1870,9 @@
         <p class="nav-section-label">빠른 문항 이동</p>
       </div>
       <div id="quick-nav-grid-wrap">
+        <button type="button" class="nav-arrow" id="nav-prev">&#9664;</button>
         <div id="quick-nav-grid"></div>
+        <button type="button" class="nav-arrow" id="nav-next">&#9654;</button>
       </div>
     </div>
   </div>
@@ -1882,6 +1923,8 @@ const EXAM_ID = "exam8";
     const database = firebase.database();
 
     const startPage=document.getElementById("start-page"),quizPage=document.getElementById("quiz-page"),startQuizBtn=document.getElementById("start-quiz-btn"),userIdInput=document.getElementById("user-id"),userNameInput=document.getElementById("user-name"),resultPage=document.getElementById("result-page"),scoreSpan=document.getElementById("score"),questionNumberSpan=document.getElementById("question-number"),questionTextSpan=document.getElementById("question-text"),optionsDiv=document.getElementById("options"),videoWrapper=document.querySelector("#video-container .video-wrapper"),currentQuestionSpan=document.getElementById("current-question"),totalQuestionsSpan=document.getElementById("total-questions"),prevBtn=document.getElementById("prev-btn"),nextBtn=document.getElementById("next-btn"),quickNavGrid=document.getElementById("quick-nav-grid");
+    const navPrevBtn=document.getElementById("nav-prev"),navNextBtn=document.getElementById("nav-next");
+    const NAV_PAGE_SIZE=40;
 
     
     const quickNavContainer=document.getElementById("quick-nav-container");
@@ -2332,6 +2375,7 @@ const EXAM_ID = "exam8";
     const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
     let currentQuestionIndex=0,currentUserId="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+    let currentNavPage=0;
 
     function startQuiz(uid,userName){
       currentUserId=uid;
@@ -2412,35 +2456,46 @@ const EXAM_ID = "exam8";
         fitOptionsText();
         scheduleQuizContentScrollState();
       });
-      document.querySelectorAll(".nav-btn").forEach((btn,i)=>{
-        btn.classList.remove("active","answered");
-        const ans=userAnswers[i];
-        setQuickNavButtonLabel(btn,i+1,ans);
-        if(ans)btn.classList.add("answered");
-      });
-      const cur=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
-      if(cur)cur.classList.add("active");
+      currentNavPage=Math.floor(currentQuestionIndex/NAV_PAGE_SIZE);
+      updateNavDisplay();
       prevBtn.disabled=currentQuestionIndex===0;
       nextBtn.textContent=currentQuestionIndex===TOTAL_QUESTIONS-1?"제출하기":"다음 →";
       if(currentQuestionIndex===TOTAL_QUESTIONS-1)nextBtn.classList.add("submit-mode");
       else nextBtn.classList.remove("submit-mode");
     }
 
-    function createQuickNavButtons(){
+    function updateNavDisplay(){
       quickNavGrid.innerHTML="";
-      const FIXED_SIZE=80;
-      for(let i=0;i<FIXED_SIZE;i++){
+      const totalPages=Math.max(1,Math.ceil(TOTAL_QUESTIONS/NAV_PAGE_SIZE));
+      currentNavPage=Math.max(0,Math.min(currentNavPage,totalPages-1));
+      const start=currentNavPage*NAV_PAGE_SIZE;
+      for(let i=0;i<NAV_PAGE_SIZE;i++){
+        const realIndex=start+i;
         const btn=document.createElement("div");
         btn.classList.add("nav-btn");
-        if(i<TOTAL_QUESTIONS){
-          setQuickNavButtonLabel(btn,i+1,null);btn.dataset.q=i;
-          btn.draggable=false;btn.addEventListener("mousedown",e=>e.preventDefault());
-        } else {
+        if(realIndex<TOTAL_QUESTIONS){
+          const ans=userAnswers[realIndex];
+          const hasAnswer=ans!==null&&ans!==undefined&&ans!=="";
+          setQuickNavButtonLabel(btn,realIndex+1,ans);
+          btn.dataset.q=realIndex;
+          if(realIndex===currentQuestionIndex)btn.classList.add("active");
+          if(hasAnswer)btn.classList.add("answered");
+          btn.draggable=false;
+          btn.addEventListener("mousedown",e=>e.preventDefault());
+        }else{
+          btn.classList.add("placeholder");
           btn.style.opacity="0";
           btn.style.pointerEvents="none";
         }
         quickNavGrid.appendChild(btn);
       }
+      const showArrows=totalPages>1;
+      if(navPrevBtn){navPrevBtn.style.display=showArrows?"flex":"none";navPrevBtn.disabled=currentNavPage===0;}
+      if(navNextBtn){navNextBtn.style.display=showArrows?"flex":"none";navNextBtn.disabled=currentNavPage>=totalPages-1;}
+    }
+
+    function createQuickNavButtons(){
+      updateNavDisplay();
     }
 
     function disableAnswers(){
@@ -2664,14 +2719,23 @@ const EXAM_ID = "exam8";
       if(currentQuestionIndex>0){updateQuestion(currentQuestionIndex-1);saveQuizProgress();}
     });
     quickNavGrid.addEventListener("click",e=>{
-      if(e.target.classList.contains("nav-btn")){updateQuestion(parseInt(e.target.dataset.q));saveQuizProgress();closeQuickNavPanel();}
+      const btn=e.target.closest(".nav-btn");
+      if(btn&&btn.dataset.q){updateQuestion(parseInt(btn.dataset.q,10));saveQuizProgress();closeQuickNavPanel();}
+    });
+    if(navPrevBtn)navPrevBtn.addEventListener("click",e=>{
+      e.preventDefault();e.stopPropagation();
+      if(currentNavPage>0){currentNavPage--;updateNavDisplay();autoResizeNavGrid();}
+    });
+    if(navNextBtn)navNextBtn.addEventListener("click",e=>{
+      e.preventDefault();e.stopPropagation();
+      const totalPages=Math.max(1,Math.ceil(TOTAL_QUESTIONS/NAV_PAGE_SIZE));
+      if(currentNavPage<totalPages-1){currentNavPage++;updateNavDisplay();autoResizeNavGrid();}
     });
     optionsDiv.addEventListener("change",e=>{
       requestAnimationFrame(fitOptionsText);
       scheduleQuizContentScrollState();
       const ans=parseInt(e.target.value);userAnswers[currentQuestionIndex]=ans;saveQuizProgress();
-      const btn=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
-      if(btn){setQuickNavButtonLabel(btn,currentQuestionIndex+1,ans);btn.classList.add("answered");}
+      updateNavDisplay();
     });
     document.getElementById("result-return-btn").addEventListener("click",resetQuiz);
 
@@ -2685,18 +2749,22 @@ const EXAM_ID = "exam8";
       const vh=(vv&&vv.height)||window.innerHeight||844;
 
       const tabletLandscape=isTabletLandscapeLayout();
-      const cols=tabletLandscape?20:10;
-      const rows=Math.ceil(80/cols);
-      const gap=tabletLandscape?5:(vw<=700?4:6);
+      const portraitBottomNav=!tabletLandscape&&window.matchMedia("(orientation: portrait)").matches;
+      const phonePortrait=portraitBottomNav&&vw<=700;
+      const visibleButtons=quickNavGrid.querySelectorAll(".nav-btn:not(.placeholder)").length||Math.min(NAV_PAGE_SIZE,TOTAL_QUESTIONS);
+      let cols=tabletLandscape?20:10;
+      if(portraitBottomNav)cols=phonePortrait?5:6;
+      const rows=Math.max(1,Math.ceil(visibleButtons/cols));
+      const gap=tabletLandscape?5:(portraitBottomNav?(phonePortrait?5:6):(vw<=700?5:6));
 
-      grid.style.gridTemplateColumns=`repeat(${cols}, minmax(0, 1fr))`;
-      grid.style.gap=gap+"px";
+      grid.style.setProperty("grid-template-columns",`repeat(${cols}, minmax(0, 1fr))`,"important");
+      grid.style.setProperty("gap",gap+"px","important");
 
       const wrapStyles=getComputedStyle(wrap);
       const padX=(parseFloat(wrapStyles.paddingLeft)||0)+(parseFloat(wrapStyles.paddingRight)||0);
       const padY=(parseFloat(wrapStyles.paddingTop)||0)+(parseFloat(wrapStyles.paddingBottom)||0);
 
-      const wrapWidth=Math.max(280,wrap.clientWidth||(vw-(vw<=700?10:16)));
+      const wrapWidth=Math.max(phonePortrait?320:280,wrap.clientWidth||(vw-(vw<=700?8:16)));
       const usableWidth=Math.max(220,wrapWidth-padX);
       const widthBtnH=Math.floor((usableWidth-gap*(cols-1))/cols);
 
@@ -2710,16 +2778,18 @@ const EXAM_ID = "exam8";
 
       let btnH=Math.min(widthBtnH,heightBtnH);
       if(tabletLandscape) btnH=Math.max(24,Math.min(btnH,34));
-      else btnH=Math.max(vw<=700?22:24,Math.min(btnH,vw<=700?34:36));
+      else if(portraitBottomNav) btnH=Math.max(phonePortrait?30:32,Math.min(btnH,phonePortrait?36:40));
+      else btnH=Math.max(vw<=700?26:24,Math.min(btnH,vw<=700?36:38));
 
       const gridHeight=rows*btnH+(rows-1)*gap;
       const wrapHeight=gridHeight+padY;
 
       document.documentElement.style.setProperty("--nav-btn-height",btnH+"px");
-      grid.style.height=gridHeight+"px";
-      wrap.style.height=wrapHeight+"px";
-      wrap.style.maxHeight=wrapHeight+"px";
-      wrap.style.overflowY="hidden";
+      document.documentElement.style.setProperty("--quick-nav-btn-height",btnH+"px");
+      grid.style.setProperty("height",gridHeight+"px","important");
+      wrap.style.setProperty("height",wrapHeight+"px","important");
+      wrap.style.setProperty("max-height",wrapHeight+"px","important");
+      wrap.style.setProperty("overflow-y","hidden","important");
     }
 
     window.addEventListener("resize",()=>{
