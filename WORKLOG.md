@@ -515,3 +515,27 @@
   - 모의고사 1~10회 데스크톱/모바일 HTML 20개 인라인 스크립트 문법 파싱 통과.
   - 정적 검사로 모의고사 20개 파일 모두 `openQuizLaunchWindow(uid,name)` 시작 버튼 연결, `window.open(buildQuizLaunchUrl(...), "_blank")`, 쿼리값 자동 시작 `startQuiz(uid,name)`이 각각 1회씩 존재함을 확인했다.
   - 앱 내 브라우저는 `file://` 직접 접근이 정책상 차단되어, 로컬 HTTP 서버(`127.0.0.1:8765`)로 `mock-exam/desktop-01.html?uid=...&name=...`를 열어 `quiz-page`가 표시되고 `uid/name`이 반영되는 것을 확인했다.
+
+## 27. 2026-06-12 모의고사 본창 유지 + 새 창 결과 표시 보정
+
+- 사용자 재설명에 따라 원하는 흐름을 다시 정리했다.
+  - 올리사이트 본 창은 아이디/이름 입력 화면을 그대로 유지한다.
+  - 문제풀이와 학습 결과는 새 GitHub Pages 창에서만 표시한다.
+  - 기존 결과가 있어도 본 창에서 결과 화면으로 바꾸지 않고, 새 창을 열어 GitHub Pages 결과/풀이 화면을 보여 준다.
+- OneDrive 원본 관리 폴더의 모의고사 1~10회 `1. ★★★ n회 모의고사 로그인 코드.html`을 보정했다.
+  - `olGo()`에서 Firebase 기존 결과 조회 후 본 창 결과 화면을 표시하던 흐름을 제거했다.
+  - 버튼 클릭 즉시 `olGetExamUrl(uid, uname)`을 `_blank` 새 창으로 열도록 변경해 팝업 차단 가능성을 줄였다.
+  - 새 창에서 오는 `examResult` 메시지는 더 이상 `olShowResult(e.data)`로 본 창을 바꾸지 않도록 했다.
+- GitHub Pages용 모의고사 1~10회 데스크톱/모바일 HTML 20개에서도 `window.opener.postMessage(resultData, "*")` 결과 전달을 제거했다.
+  - 새 창 안에서 문제풀이와 학습 결과가 계속 표시되는 흐름은 유지했다.
+  - Firebase 저장, Google Forms 제출, 문제 데이터, 정답, 빠른 문항 이동, 결과 UI는 변경하지 않았다.
+- OneDrive 원본 관리 폴더의 모의고사 1~10회 `02. 개선판 (完)` 데스크톱/모바일 최종 HTML 20개에도 동일 변경을 반영했다.
+  - 로컬 모의고사 HTML 20개와 OneDrive 대응 파일 20개 SHA-256 해시 일치를 확인했다.
+  - `-DESKTOP-N9UCJ8E` 충돌 파일은 수정하지 않았다.
+- 검증:
+  - `git diff --check` 통과.
+  - `node tools/result-page-check.mjs`로 전체 28개 파일 x 7개 화면 크기, 총 196개 결과 페이지 조합을 검사했고 통과했다.
+  - 모의고사 1~10회 데스크톱/모바일 HTML 20개 인라인 스크립트 문법 파싱 통과.
+  - OneDrive 모의고사 로그인 코드 10개 인라인 스크립트 문법 파싱 통과.
+  - 정적 검사로 로그인 코드 10개에서 `olGo()`가 새 창을 직접 열고, `fetch(dbURL)` 기존 결과 조회와 `olShowResult(e.data)` 본창 결과 표시가 남아 있지 않음을 확인했다.
+  - 정적 검사로 GitHub Pages용 모의고사 20개 파일에 `postMessage(resultData)` 결과 전달이 남아 있지 않음을 확인했다.
