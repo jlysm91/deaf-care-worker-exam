@@ -915,6 +915,51 @@
       .result-insight-grid { grid-template-columns: 1fr; }
       .result-chip { width: 100%; justify-content: space-between; border-radius: 12px; }
     }
+
+
+    /* === 1400? ?? ?? UI: ???? ?? === */
+    #result-page > .result-heading,
+    #result-page > #score,
+    #result-page > #quick-nav-container-result,
+    #result-page > .result-actions { width: min(100%, 1120px) !important; }
+    .result-heading { display:flex!important; align-items:center!important; justify-content:center!important; gap:10px!important; flex-wrap:nowrap!important; white-space:nowrap!important; margin:0!important; }
+    .result-badge { display:inline-flex!important; align-items:center!important; justify-content:center!important; padding:5px 16px!important; border-radius:999px!important; background:linear-gradient(120deg,var(--primary) 0%,#0E8FB2 100%)!important; color:#fff!important; font-size:clamp(11px,0.95vw,13px)!important; font-weight:800!important; line-height:1!important; letter-spacing:0.04em!important; flex-shrink:0!important; }
+    .result-heading h2 { text-align:center!important; font-size:clamp(18px,1.9vw,28px)!important; color:var(--text-primary)!important; font-weight:800!important; letter-spacing:0!important; margin:0!important; }
+    .result-user-name { margin:0!important; color:#64748B!important; font-size:clamp(12px,1vw,14px)!important; font-weight:700!important; flex-shrink:0!important; }
+    #score.result-summary { display:flex!important; flex-direction:column!important; gap:clamp(10px,1.3vh,14px)!important; margin:0!important; color:var(--text-primary)!important; padding:clamp(12px,1.6vh,18px) clamp(14px,2.2vw,24px)!important; border-radius:var(--radius-lg)!important; background:rgba(255,255,255,0.94)!important; border:1px solid #D8E2EB!important; box-shadow:var(--shadow-card)!important; text-align:initial!important; font-size:inherit!important; font-weight:inherit!important; word-break:keep-all!important; }
+    .result-summary-main { display:grid; grid-template-columns:minmax(170px,0.7fr) minmax(0,1.3fr); gap:clamp(10px,1.4vw,16px); align-items:stretch; }
+    .result-status-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; min-height:120px; border-radius:15px; padding:16px; color:#fff; text-align:center; box-shadow:0 12px 24px rgba(15,23,42,0.13); }
+    #score.pass .result-status-card { background:linear-gradient(135deg,#009C72 0%,#06B585 100%); }
+    #score.fail .result-status-card { background:linear-gradient(135deg,#C13C36 0%,#E0645A 100%); }
+    .result-status-label { font-size:clamp(26px,3vw,40px); font-weight:900; line-height:1; }
+    .result-status-note { font-size:clamp(13px,1vw,15px); font-weight:800; opacity:0.94; }
+    .result-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(7px,0.8vw,10px); }
+    .result-stat { display:flex; flex-direction:column; justify-content:center; min-height:82px; padding:12px 10px; border-radius:13px; background:#F8FBFD; border:1px solid #D8E2EB; text-align:center; }
+    .result-stat strong { color:var(--text-primary); font-size:clamp(18px,1.8vw,28px); font-weight:900; line-height:1.1; }
+    .result-stat span { margin-top:6px; color:#64748B; font-size:clamp(11px,0.9vw,13px); font-weight:800; }
+    .result-standard { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; color:#64748B; font-size:clamp(12px,1vw,14px); font-weight:800; text-align:center; }
+    .result-standard strong { color:var(--primary); }
+    #quick-nav-container-result { display:flex!important; flex-direction:column!important; background:rgba(255,255,255,0.94)!important; border:1px solid #D8E2EB!important; border-radius:var(--radius-lg)!important; box-shadow:var(--shadow-card)!important; padding:clamp(10px,1.3vh,16px) clamp(10px,1.6vw,18px)!important; overflow-x:hidden!important; }
+    .result-grid-title { text-align:center!important; color:var(--text-muted)!important; font-size:clamp(10px,0.9vw,12px)!important; font-weight:800!important; letter-spacing:0.7px!important; text-transform:uppercase!important; margin:0 0 clamp(8px,1vh,12px)!important; }
+    #result-grid-nav { display:none; align-items:center; justify-content:center; gap:12px; margin-bottom:12px; }
+    #result-page-info { color:var(--text-secondary); font-size:clamp(12px,1vw,14px); font-weight:700; }
+    #quick-nav-grid-result.result-review-board { display:grid!important; grid-template-columns:minmax(0,1fr)!important; gap:clamp(10px,1.2vw,16px)!important; align-items:start!important; width:100%!important; margin:0!important; }
+    .result-review-section { min-width:0; border:1px solid #D8E2EB; border-radius:12px; background:#fff; overflow:hidden; }
+    .result-review-section.result-review-primary { border-color:#F0B8B4; }
+    .result-review-section-head { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; border-bottom:1px solid #E2EAF1; background:#F8FBFD; }
+    .result-review-title { margin:0; color:var(--text-primary); font-size:clamp(13px,1vw,15px); font-weight:900; }
+    .result-review-count { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; min-width:54px; padding:4px 9px; border-radius:999px; background:#FFF5F4; color:#C13C36; font-size:clamp(11px,0.9vw,13px); font-weight:900; white-space:nowrap; }
+    .result-review-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px; max-height:446px; padding:10px; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
+    .result-review-item { min-width:0; display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:54px; padding:10px 11px; box-sizing:border-box; border-radius:9px; border:1px solid #D8E2EB; background:#fff; color:var(--text-secondary); font-weight:800; line-height:1.25; }
+    .result-review-item.wrong { border-color:#E9ABA7; background:#FFF7F6; }
+    .review-no { flex:0 0 auto; color:var(--text-primary); font-size:clamp(14px,1vw,16px); font-weight:900; white-space:nowrap; }
+    .review-answers { min-width:0; display:flex; flex-direction:column; align-items:flex-end; gap:2px; font-size:clamp(11px,0.9vw,13px); text-align:right; word-break:keep-all; overflow-wrap:anywhere; }
+    .review-answer-correct { color:var(--success); font-weight:900; }
+    .result-review-empty { margin:0; padding:18px 12px; color:var(--text-muted); font-size:clamp(12px,0.95vw,14px); font-weight:800; text-align:center; }
+    .result-actions { display:flex!important; justify-content:center!important; gap:12px!important; }
+    .result-actions button { min-width:150px!important; padding:12px 24px!important; border-radius:16px!important; font-family:inherit!important; font-size:clamp(13px,1.2vw,16px)!important; font-weight:800!important; cursor:pointer!important; }
+    .result-actions #result-return-btn { position:static!important; width:auto!important; margin:0!important; background:linear-gradient(120deg,var(--primary) 0%,#0E8FB2 100%)!important; color:#fff!important; border:none!important; box-shadow:0 7px 18px rgba(0,93,122,0.22)!important; }
+    @media (max-width:860px) { .result-heading { flex-wrap:wrap!important; white-space:normal!important; } .result-user-name { width:100%; text-align:center; } .result-summary-main { grid-template-columns:1fr; } .result-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } #quick-nav-grid-result.result-review-board { gap:10px!important; } .result-review-list { grid-template-columns:1fr; max-height:446px; } .result-review-item { padding:9px 10px; } .result-actions { flex-direction:column!important; width:min(100%,1120px)!important; } .result-actions button { width:100%!important; } }
 </style>
 </head>
 <body>
@@ -952,15 +997,22 @@
   <div id="result-page">
     <div class="result-heading">
       <span class="result-badge">4회 모의고사</span>
-      <h2>시험 결과</h2>
+      <h2>학습 결과</h2>
       <p id="result-user-name" class="result-user-name"></p>
     </div>
-    <p id="score"></p>
+    <div id="score" class="result-summary"></div>
     <div id="quick-nav-container-result">
-      <p class="result-grid-title">문항별 결과 (C: 정답 / M: 내 답)</p>
+      <p class="result-grid-title">오답 중심 복습</p>
+      <div id="result-grid-nav">
+        <button id="result-prev-btn">&#8592; 이전</button>
+        <span id="result-page-info"></span>
+        <button id="result-next-btn">다음 &#8594;</button>
+      </div>
       <div id="quick-nav-grid-result"></div>
     </div>
-    <button id="result-return-btn">다시 풀기</button>
+    <div class="result-actions">
+      <button id="result-return-btn">다시 풀기</button>
+    </div>
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
@@ -1313,60 +1365,97 @@
       return arr;
     }
 
-
-    function makeResultChip(item,type){
-      const no=String(item.no).padStart(2,"0")+"번";
-      return `<span class="result-chip ${type}"><span class="chip-no">${no}</span><span class="chip-meta">C:${item.correct} / M:${item.mine}</span></span>`;
-    }
-
-    function renderResultNav(){
-      const grid=document.getElementById("quick-nav-grid-result");
-      const title=document.querySelector(".result-grid-title");
-      if(!grid)return;
-      if(title)title.textContent="학습 요약";
+    function analyzeExamResultAnswers(){
       userAnswers=normalizeResultAnswers(userAnswers);
-
-      let correct=0;
-      const solved=[];
-      const wrong=[];
-      const empty=[];
+      const stats={written:0,practical:0,correct:0,wrong:[],empty:[]};
       quizData.forEach(function(q,i){
         const raw=userAnswers[i];
         const mine=(raw===null||raw===undefined||raw==="")?"-":raw;
         const ok=mine!=="-"&&parseInt(mine,10)===parseInt(q.correctAnswer,10);
         if(ok){
-          correct++;
-          solved.push({no:i+1,correct:q.correctAnswer,mine:mine});
+          stats.correct++;
+          if(i<35)stats.written++;
+          else stats.practical++;
+        }else if(mine==="-"){
+          stats.empty.push({no:i+1,correct:q.correctAnswer,mine:mine});
+        }else{
+          stats.wrong.push({no:i+1,correct:q.correctAnswer,mine:mine});
         }
-        else if(mine==="-")empty.push({no:i+1,correct:q.correctAnswer,mine:mine});
-        else wrong.push({no:i+1,correct:q.correctAnswer,mine:mine});
       });
-
-      const wrongHtml=wrong.length?wrong.map(function(item){return makeResultChip(item,"wrong");}).join(""):'<p class="result-empty-note">오답 문항이 없습니다.</p>';
-      const emptyHtml=empty.length?empty.map(function(item){return makeResultChip(item,"empty");}).join(""):'<p class="result-empty-note">미응답 문항이 없습니다.</p>';
-      const solvedHtml=solved.length?solved.map(function(item){return makeResultChip(item,"correct");}).join(""):'<p class="result-empty-note">정답 문항이 없습니다.</p>';
-
-      grid.innerHTML=`
-        <div class="result-insight-grid">
-          <div class="result-mini-card correct"><span class="result-mini-label">정답</span><span class="result-mini-value">${correct}</span></div>
-          <div class="result-mini-card wrong"><span class="result-mini-label">오답</span><span class="result-mini-value">${wrong.length}</span></div>
-          <div class="result-mini-card empty"><span class="result-mini-label">미응답</span><span class="result-mini-value">${empty.length}</span></div>
-        </div>
-        <section class="result-section-list">
-          <h3 class="result-section-title">틀린 문항</h3>
-          <div class="result-chip-wrap">${wrongHtml}</div>
-        </section>
-        <section class="result-section-list">
-          <h3 class="result-section-title">미응답 문항</h3>
-          <div class="result-chip-wrap">${emptyHtml}</div>
-        </section>
-        <section class="result-section-list">
-          <h3 class="result-section-title">정답 문항</h3>
-          <div class="result-chip-wrap">${solvedHtml}</div>
-        </section>`;
+      return stats;
     }
 
-    function fitResultGrid(){}
+    function renderResultSummary(){
+      const scoreEl=document.getElementById("score");
+      if(!scoreEl)return;
+      const stats=analyzeExamResultAnswers();
+      const total=TOTAL_QUESTIONS;
+      const rate=total?(stats.correct/total)*100:0;
+      const isPassed=stats.written>=21&&stats.practical>=27;
+      const statusNote=isPassed?"기준 통과":"재학습 필요";
+      const resultUserName=document.getElementById("result-user-name");
+      if(resultUserName){
+        const name=(userNameInput&&userNameInput.value?userNameInput.value.trim():"");
+        resultUserName.textContent=name?("응시자 : "+name):"";
+      }
+      scoreEl.className="result-summary "+(isPassed?"pass":"fail");
+      scoreEl.innerHTML=''
+        + '<div class="result-summary-main">'
+        + '<div class="result-status-card">'
+        + '<div class="result-status-label">'+(isPassed?"합격":"불합격")+'</div>'
+        + '<div class="result-status-note">'+statusNote+'</div>'
+        + '</div>'
+        + '<div class="result-stats">'
+        + '<div class="result-stat"><strong>'+rate.toFixed(1)+'%</strong><span>정답률</span></div>'
+        + '<div class="result-stat"><strong>'+stats.correct+' / '+total+'</strong><span>정답</span></div>'
+        + '<div class="result-stat"><strong>'+stats.wrong.length+'</strong><span>오답</span></div>'
+        + '<div class="result-stat"><strong>'+stats.empty.length+'</strong><span>미응답</span></div>'
+        + '</div>'
+        + '</div>'
+        + '<div class="result-standard">필기 <strong>'+stats.written+' / 35</strong> · 실기 <strong>'+stats.practical+' / 45</strong> · 합격 기준 <strong>필기 21문항 이상</strong> · <strong>실기 27문항 이상</strong></div>';
+    }
+
+    function makeWrongReviewItem(item){
+      return '<div class="result-review-item wrong"><span class="review-no">'+item.no+'번</span><span class="review-answers"><span class="review-answer-correct">정답 '+item.correct+'번</span><span>선택 '+item.mine+'번</span></span></div>';
+    }
+
+    function renderWrongReviewSection(items){
+      const body=items.length?'<div class="result-review-list">'+items.map(makeWrongReviewItem).join("")+'</div>':'<p class="result-review-empty">복습할 오답 문항이 없습니다.</p>';
+      return '<section class="result-review-section result-review-primary"><div class="result-review-section-head"><h3 class="result-review-title">틀린 문항</h3><span class="result-review-count">'+items.length+'문항</span></div>'+body+'</section>';
+    }
+
+    function renderResultNav(){
+      const grid=document.getElementById("quick-nav-grid-result");
+      const title=document.querySelector(".result-grid-title");
+      const nav=document.getElementById("result-grid-nav");
+      const pageInfo=document.getElementById("result-page-info");
+      if(!grid)return;
+      renderResultSummary();
+      if(title)title.textContent="오답 중심 복습";
+      if(nav)nav.style.display="none";
+      if(pageInfo)pageInfo.textContent="";
+      const stats=analyzeExamResultAnswers();
+      grid.className="result-review-board result-review-compact";
+      grid.innerHTML=renderWrongReviewSection(stats.wrong);
+      requestAnimationFrame(fitResultGrid);
+    }
+
+    function fitResultGrid(){
+      const grid=document.getElementById("quick-nav-grid-result");
+      if(!grid)return;
+      const cells=grid.querySelectorAll(".nav-btn:not(.placeholder)");
+      cells.forEach(function(cell){
+        const detail=cell.querySelector(".detail");
+        if(!detail)return;
+        detail.style.fontSize="";
+        let size=parseFloat(getComputedStyle(detail).fontSize);
+        while((detail.scrollWidth>cell.clientWidth-4||detail.scrollHeight>cell.clientHeight/2)&&size>8){
+          size-=0.5;
+          detail.style.fontSize=size+"px";
+        }
+      });
+    }
+
     (function(){
       const params=new URLSearchParams(window.location.search);
       const uid=params.get('uid')||'';
