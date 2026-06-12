@@ -1871,7 +1871,7 @@
     .result-stat span { margin-top:6px; color:#64748B; font-size:clamp(11px,0.9vw,13px); font-weight:800; }
     .result-standard { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; color:#64748B; font-size:clamp(12px,1vw,14px); font-weight:800; text-align:center; }
     .result-standard strong { color:var(--primary); }
-    #quick-nav-container-result { display:flex!important; flex-direction:column!important; background:rgba(255,255,255,0.94)!important; border:1px solid #D8E2EB!important; border-radius:var(--radius-lg)!important; box-shadow:var(--shadow-card)!important; padding:clamp(10px,1.3vh,16px) clamp(10px,1.6vw,18px)!important; overflow-x:hidden!important; }
+    #quick-nav-container-result { display:flex!important; flex-direction:column!important; width:min(100%,1120px)!important; max-width:1120px!important; background:rgba(255,255,255,0.94)!important; border:1px solid #D8E2EB!important; border-radius:var(--radius-lg)!important; box-shadow:var(--shadow-card)!important; padding:clamp(10px,1.3vh,16px) clamp(10px,1.6vw,18px)!important; overflow-x:hidden!important; }
     .result-grid-title { text-align:center!important; color:var(--text-muted)!important; font-size:clamp(10px,0.9vw,12px)!important; font-weight:800!important; letter-spacing:0.7px!important; text-transform:uppercase!important; margin:0 0 clamp(8px,1vh,12px)!important; }
     #result-grid-nav { display:none; align-items:center; justify-content:center; gap:12px; margin-bottom:12px; }
     #result-page-info { color:var(--text-secondary); font-size:clamp(12px,1vw,14px); font-weight:700; }
@@ -1882,6 +1882,7 @@
     .result-review-title { margin:0; color:var(--text-primary); font-size:clamp(13px,1vw,15px); font-weight:900; }
     .result-review-count { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; min-width:54px; padding:4px 9px; border-radius:999px; background:#FFF5F4; color:#C13C36; font-size:clamp(11px,0.9vw,13px); font-weight:900; white-space:nowrap; }
     .result-review-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px; max-height:446px; padding:10px; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
+    .result-review-list.result-review-single { grid-template-columns:minmax(220px,360px); }
     .result-review-item { min-width:0; display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:54px; padding:10px 11px; box-sizing:border-box; border-radius:9px; border:1px solid #D8E2EB; background:#fff; color:var(--text-secondary); font-weight:800; line-height:1.25; }
     .result-review-item.wrong { border-color:#E9ABA7; background:#FFF7F6; }
     .review-no { flex:0 0 auto; color:var(--text-primary); font-size:clamp(14px,1vw,16px); font-weight:900; white-space:nowrap; }
@@ -1891,7 +1892,7 @@
     .result-actions { display:flex!important; justify-content:center!important; gap:12px!important; }
     .result-actions button { min-width:150px!important; padding:12px 24px!important; border-radius:16px!important; font-family:inherit!important; font-size:clamp(13px,1.2vw,16px)!important; font-weight:800!important; cursor:pointer!important; }
     .result-actions #result-return-btn { position:static!important; width:auto!important; margin:0!important; background:linear-gradient(120deg,var(--primary) 0%,#0E8FB2 100%)!important; color:#fff!important; border:none!important; box-shadow:0 7px 18px rgba(0,93,122,0.22)!important; }
-    @media (max-width:860px) { .result-heading { flex-wrap:wrap!important; white-space:normal!important; } .result-user-name { width:100%; text-align:center; } .result-summary-main { grid-template-columns:1fr; } .result-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } #quick-nav-grid-result.result-review-board { gap:10px!important; } .result-review-list { grid-template-columns:1fr; max-height:446px; } .result-review-item { padding:9px 10px; } .result-actions { flex-direction:column!important; width:min(100%,1120px)!important; } .result-actions button { width:100%!important; } }
+    @media (max-width:860px) { .result-heading { flex-wrap:wrap!important; white-space:normal!important; } .result-user-name { width:100%; text-align:center; } .result-summary-main { grid-template-columns:1fr; } .result-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } #quick-nav-grid-result.result-review-board { gap:10px!important; } .result-review-list { grid-template-columns:1fr; max-height:446px; } .result-review-list.result-review-single { grid-template-columns:1fr; } .result-review-item { padding:9px 10px; } .result-actions { flex-direction:column!important; width:min(100%,1120px)!important; } .result-actions button { width:100%!important; } }
 </style>
 </head>
 <body>
@@ -2668,7 +2669,7 @@ const EXAM_ID = "exam1";
     }
 
     function renderWrongReviewSection(items){
-      const body=items.length?'<div class="result-review-list">'+items.map(makeWrongReviewItem).join("")+'</div>':'<p class="result-review-empty">복습할 오답 문항이 없습니다.</p>';
+      const body=items.length?'<div class="result-review-list' + (items.length === 1 ? ' result-review-single' : '') + '">'+items.map(makeWrongReviewItem).join("")+'</div>':'<p class="result-review-empty">복습할 오답 문항이 없습니다.</p>';
       return '<section class="result-review-section result-review-primary"><div class="result-review-section-head"><h3 class="result-review-title">틀린 문항</h3><span class="result-review-count">'+items.length+'문항</span></div>'+body+'</section>';
     }
 

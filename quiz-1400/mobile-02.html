@@ -703,6 +703,7 @@
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
     }
+    .result-review-list.result-review-single { grid-template-columns: minmax(220px, 360px); }
     .result-review-item {
       min-width: 0;
       display: flex;
@@ -753,6 +754,7 @@
     @media (max-width: 700px) {
       #quick-nav-grid-result.result-review-board { gap: 10px; }
       .result-review-list { grid-template-columns: 1fr; max-height: 446px; }
+      .result-review-list.result-review-single { grid-template-columns: 1fr; }
       .result-review-item { padding: 9px 10px; }
     }
 
@@ -3387,7 +3389,7 @@ const chapter5Data=[
 
   function renderWrongReviewSection(items) {
     const body = items.length
-      ? '<div class="result-review-list">' + items.map(makeWrongReviewItem).join("") + '</div>'
+      ? '<div class="result-review-list' + (items.length === 1 ? ' result-review-single' : '') + '">' + items.map(makeWrongReviewItem).join("") + '</div>'
       : '<p class="result-review-empty">\uD2C0\uB9B0 \uBB38\uD56D\uC774 \uC5C6\uC2B5\uB2C8\uB2E4.</p>';
     return '<section class="result-review-section result-review-primary"><div class="result-review-section-head"><h3 class="result-review-title">\uD2C0\uB9B0 \uBB38\uD56D</h3><span class="result-review-count">' + items.length + '\uBB38\uD56D</span></div>' + body + '</section>';
   }
