@@ -2449,6 +2449,27 @@ const EXAM_ID = "exam5";
       });
     }
 
+
+    function buildQuizLaunchUrl(uid,userName){
+      const target=new URL(window.location.href);
+      target.searchParams.set("uid",uid);
+      target.searchParams.set("name",userName);
+      return target.href;
+    }
+
+    function hasQuizLaunchParams(){
+      const params=new URLSearchParams(window.location.search);
+      return Boolean(params.get("uid")&&params.get("name"));
+    }
+
+    function openQuizLaunchWindow(uid,userName){
+      if(hasQuizLaunchParams()){startQuiz(uid,userName);return;}
+      const opened=window.open(buildQuizLaunchUrl(uid,userName),"_blank");
+      if(!opened){
+        alert("\uC0C8 \uCC3D\uC774 \uCC28\uB2E8\uB418\uC5C8\uC2B5\uB2C8\uB2E4. \uBE0C\uB77C\uC6B0\uC800\uC758 \uD31D\uC5C5 \uCC28\uB2E8\uC744 \uD574\uC81C\uD55C \uB4A4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574\uC8FC\uC138\uC694.");
+      }
+    }
+
     function showQuizPage(){
       startPage.style.display="none";quizPage.style.display="flex";
       updateQuizViewportHeight();
@@ -2747,7 +2768,7 @@ const EXAM_ID = "exam5";
     startQuizBtn.addEventListener("click",()=>{
       const uid=userIdInput.value.trim(),name=userNameInput.value.trim();
       if(!uid||!name){alert("아이디와 이름을 입력해주세요.");return;}
-      startQuiz(uid,name);
+      openQuizLaunchWindow(uid,name);
     });
     nextBtn.addEventListener("click",()=>{
       if(currentQuestionIndex===TOTAL_QUESTIONS-1)submitQuiz();

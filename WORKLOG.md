@@ -496,3 +496,22 @@
   - 모의고사 1~10회와 1400題 1~4부 데스크톱/모바일 HTML 28개 인라인 스크립트 문법 파싱 통과.
   - 로컬 Chrome + Playwright로 `mock-exam/desktop-01.html` 결과 화면을 2560x720에서 재현했고, 요약 카드와 오답 복습 박스가 모두 1120px, 단일 오답 카드가 360px로 계산됨을 확인했다.
   - 로컬 Chrome + Playwright로 `quiz-1400/desktop-01.html`의 결과 복습 DOM에 단일 오답 카드 규칙을 적용해 1120px 박스 안에서 카드가 360px로 계산됨을 확인했다.
+
+## 26. 2026-06-12 모의고사 시작 시 새 창 실행 복구
+
+- 사용자 확인에 따라 1~10회 모의고사에서 아이디/이름 입력 후 GitHub Pages 시험 창이 새로 뜨지 않고, 이후 `다시 풀기` 버튼을 눌러야 시험 화면이 보이는 흐름을 점검했다.
+  - 모의고사 데스크톱/모바일 HTML 20개에는 `window.open()` 흐름이 없고, 숨겨진 `start-quiz-btn` 호출 시 현재 창에서 바로 `startQuiz(uid, name)`만 실행하고 있음을 확인했다.
+  - `uid/name` 쿼리값이 이미 붙어 새 창으로 열린 경우에는 기존처럼 자동으로 `startQuiz()`를 실행하도록 유지했다.
+  - `uid/name` 쿼리값이 없는 상태에서 시작 버튼이 호출되는 경우에는 현재 모의고사 URL에 `uid/name`을 붙여 `_blank` 새 창으로 열도록 `openQuizLaunchWindow()` 흐름을 추가했다.
+  - 브라우저 팝업 차단으로 새 창이 열리지 않는 경우에는 팝업 차단 해제 안내를 표시하도록 했다.
+- 문제 데이터, 정답, `videoId`, Firebase 저장/제출, 결과 UI, 빠른 문항 이동 UI는 변경하지 않았다.
+- OneDrive 원본 관리 폴더의 모의고사 1~10회 `02. 개선판 (完)` 데스크톱/모바일 최종 HTML 20개에도 동일 변경을 반영했다.
+  - `-DESKTOP-N9UCJ8E` 충돌 파일은 수정하지 않았다.
+  - 로컬 모의고사 HTML 20개와 OneDrive 대응 파일 20개 SHA-256 해시 일치를 확인했다.
+- 검증:
+  - `git diff --check` 통과.
+  - `node --check tools/result-page-check.mjs` 통과.
+  - `node tools/result-page-check.mjs`로 전체 28개 파일 x 7개 화면 크기, 총 196개 결과 페이지 조합을 검사했고 통과했다.
+  - 모의고사 1~10회 데스크톱/모바일 HTML 20개 인라인 스크립트 문법 파싱 통과.
+  - 정적 검사로 모의고사 20개 파일 모두 `openQuizLaunchWindow(uid,name)` 시작 버튼 연결, `window.open(buildQuizLaunchUrl(...), "_blank")`, 쿼리값 자동 시작 `startQuiz(uid,name)`이 각각 1회씩 존재함을 확인했다.
+  - 앱 내 브라우저는 `file://` 직접 접근이 정책상 차단되어, 로컬 HTTP 서버(`127.0.0.1:8765`)로 `mock-exam/desktop-01.html?uid=...&name=...`를 열어 `quiz-page`가 표시되고 `uid/name`이 반영되는 것을 확인했다.
