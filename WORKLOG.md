@@ -555,3 +555,21 @@
   - `node tools/result-page-check.mjs`로 전체 28개 파일 x 7개 화면 크기, 총 196개 결과 페이지 조합을 검사했고 통과했다.
   - 모의고사 모바일 10개 HTML 인라인 스크립트 문법 파싱 통과.
   - 정적 검사로 모의고사 모바일 10개 파일 모두 `result-standard-line` 2줄 기준 문구가 들어가고, `.result-user-name { width:100%; ... }` 강제 줄바꿈 규칙이 남아 있지 않음을 확인했다.
+## 29. 2026-06-12 1회 모의고사 학습 완료 안내 샘플 적용
+
+- 1회 모의고사만 대상으로, GitHub Pages 문제풀이 창과 올리사이트 로그인 코드 사이에 학습 완료 안내 흐름을 샘플로 추가했다.
+  - `mock-exam/desktop-01.html`, `mock-exam/mobile-01.html`의 `submitQuiz()`에서 결과 화면을 표시한 뒤 `mockExamComplete` 완료 신호만 opener로 보내도록 했다.
+  - 점수, 정답, 선택 답안 같은 결과 데이터는 opener로 보내지 않고, 완료 여부와 1회 모의고사 식별 정보만 전달한다.
+  - OneDrive 1회 로그인 코드에는 `ol_done_notice` 안내 영역과 `mockExamComplete` 수신 처리를 추가했다.
+  - 올리사이트 본 창은 아이디/이름 입력 화면을 유지하고, 완료 신호를 받으면 "문제풀이가 완료되었습니다. 올리사이트의 학습 완료하기 버튼을 눌러주세요." 안내만 표시한다.
+  - 학습 완료하기 버튼 자동 클릭은 적용하지 않았다.
+- OneDrive 원본 관리 폴더 동기화:
+  - 1회 모의고사 데스크톱 최종 코드와 `mock-exam/desktop-01.html`의 SHA-256 일치를 확인했다.
+  - 1회 모의고사 모바일 최종 코드와 `mock-exam/mobile-01.html`의 SHA-256 일치를 확인했다.
+  - 1회 모의고사 로그인 코드는 OneDrive 최종 코드 파일에 직접 반영했다.
+- 검증:
+  - `git diff --check` 통과.
+  - `node --check tools/result-page-check.mjs` 통과.
+  - `node tools/result-page-check.mjs` 통과: 28개 파일 x 7개 화면 크기, 총 196개 결과 페이지 조합.
+  - 1회 데스크톱/모바일 HTML과 OneDrive 1회 로그인 코드의 인라인 스크립트 문법 검사 통과.
+  - 로컬 HTTP 미리보기에서 `mockExamComplete` 메시지 수신 후 완료 안내가 `display: block`으로 표시됨을 확인했다.
