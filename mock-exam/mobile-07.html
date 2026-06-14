@@ -2462,23 +2462,88 @@ const EXAM_ID = "exam7";
 
     const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
-    let currentQuestionIndex=0,currentUserId="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+    let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+
+    function syncResultUserName(name){
+      const resultUserName=document.getElementById("result-user-name");
+      if(resultUserName)resultUserName.textContent=name?("\uC751\uC2DC\uC790 : "+name):"";
+    }
+
+    function normalizeUserNameForIdentity(name){
+      return String(name||"").trim().replace(/\s+/g," ");
+    }
+
+    function getCurrentUserName(){
+      return normalizeUserNameForIdentity((userNameInput&&userNameInput.value)||currentUserName||"");
+    }
+
+    function getStoredUserName(data){
+      if(!data)return "";
+      return normalizeUserNameForIdentity(
+        (data.profile&&data.profile.name)||
+        data.name||
+        (data.result&&data.result.name)||
+        (data.progress&&data.progress.name)||
+        ""
+      );
+    }
+
+    function hasStoredNameMismatch(data,name){
+      const stored=getStoredUserName(data);
+      return Boolean(stored&&stored!==normalizeUserNameForIdentity(name));
+    }
+
+    function showIdentityMismatch(){
+      alert("\uC544\uC774\uB514\uC640 \uC774\uB984\uC774 \uC800\uC7A5\uB41C \uC815\uBCF4\uC640 \uC77C\uCE58\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4. \uB2E4\uC2DC \uD655\uC778\uD574 \uC8FC\uC138\uC694.");
+      startPage.style.display="flex";
+      quizPage.style.display="none";
+      resultPage.style.display="none";
+      currentUserId="";
+      currentUserName="";
+    }
+
+    function saveUserIdentity(userRef,uid,name,data){
+      const normalized=normalizeUserNameForIdentity(name);
+      const updates={
+        uid:String(uid||""),
+        name:normalized,
+        "profile/uid":String(uid||""),
+        "profile/name":normalized,
+        "profile/updatedAt":firebase.database.ServerValue.TIMESTAMP
+      };
+      if(data&&data.result&&!data.result.name){
+        updates["result/uid"]=String(uid||"");
+        updates["result/name"]=normalized;
+      }
+      if(data&&data.progress&&!data.progress.name){
+        updates["progress/uid"]=String(uid||"");
+        updates["progress/name"]=normalized;
+      }
+      return userRef.update(updates);
+    }
+
     let currentNavPage=0;
 
     function startQuiz(uid,userName){
       currentUserId=uid;
+      currentUserName=normalizeUserNameForIdentity(userName||userNameInput.value.trim()||"");
+      if(userNameInput)userNameInput.value=currentUserName;
+      syncResultUserName(currentUserName);
       const userRef=database.ref(`exams/${EXAM_ID}/users/${uid}`);
       userRef.once("value").then(snapshot=>{
         const data=snapshot.val();
-        if(data&&data.result){
-          startPage.style.display="none";resultPage.style.display="flex";
-          if(data.result.answers)userAnswers=data.result.answers;
-          document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
-        }else if(data&&data.progress){
-          currentQuestionIndex=data.progress.currentQuestion||0;
-          userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
-        }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
-      });
+        if(hasStoredNameMismatch(data,currentUserName)){showIdentityMismatch();return;}
+        saveUserIdentity(userRef,uid,currentUserName,data).then(()=>{
+          if(data&&data.result){
+            startPage.style.display="none";resultPage.style.display="flex";
+            if(data.result.answers)userAnswers=data.result.answers;
+            document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
+          }else if(data&&data.progress){
+            currentQuestionIndex=data.progress.currentQuestion||0;
+            userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
+          }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
+        }).catch(()=>{alert("\uC0AC\uC6A9\uC790 \uC815\uBCF4\uB97C \uC800\uC7A5\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");});
+      }).catch(()=>{alert("\uC0AC\uC6A9\uC790 \uC815\uBCF4\uB97C \uD655\uC778\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");});
     }
 
 
@@ -2523,7 +2588,8 @@ const EXAM_ID = "exam7";
 
     function saveQuizProgress(){
       if(!currentUserId)return;
-      database.ref(`exams/${EXAM_ID}/users/${currentUserId}/progress`).set({currentQuestion:currentQuestionIndex,answers:userAnswers});
+      currentUserName=getCurrentUserName();
+      database.ref(`exams/${EXAM_ID}/users/${currentUserId}/progress`).set({uid:currentUserId,name:currentUserName,currentQuestion:currentQuestionIndex,answers:userAnswers});
     }
 
     function setQuickNavButtonLabel(btn,no,answer){
@@ -2642,9 +2708,11 @@ const EXAM_ID = "exam7";
       const 총점=필기+실기;
       const 합격여부 = (필기 >= 21 && 실기 >= 27) ? "합격" : "불합격";
       quizPage.style.display="none";resultPage.style.display="flex";
+      currentUserName=getCurrentUserName();
+      syncResultUserName(currentUserName);
       if(currentUserId){
         const ref=database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
-        ref.child("result").set({total:총점,필기,실기,answers:userAnswers});
+        ref.child("result").set({uid:currentUserId,name:getCurrentUserName(),total:총점,필기,실기,totalQuestions:TOTAL_QUESTIONS,answers:userAnswers});
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();notifyMockExamComplete();alert("제출 완료하였습니다!");
@@ -2752,7 +2820,7 @@ const EXAM_ID = "exam7";
       const statusNote=isPassed?"기준 통과":"재학습 필요";
       const resultUserName=document.getElementById("result-user-name");
       if(resultUserName){
-        const name=(userNameInput&&userNameInput.value?userNameInput.value.trim():"");
+        const name=getCurrentUserName();
         resultUserName.textContent=name?("응시자 : "+name):"";
       }
       scoreEl.className="result-summary "+(isPassed?"pass":"fail");
