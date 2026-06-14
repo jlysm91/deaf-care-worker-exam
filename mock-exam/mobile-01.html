@@ -2593,13 +2593,24 @@ const EXAM_ID = "exam1";
     }
 
     function notifyMockExamComplete(){
+      const state=getExamCompletionState();
+      if(!state.eligible)return;
       try{
         if(!window.opener||window.opener.closed)return;
         window.opener.postMessage({
           type:"mockExamComplete",
           examId:EXAM_ID,
           uid:String(currentUserId||userIdInput.value.trim()||""),
-          name:String(userNameInput.value.trim()||currentUserName||"")
+          name:String(userNameInput.value.trim()||currentUserName||""),
+          completed:state.completed,
+          passed:state.passed,
+          eligible:state.eligible,
+          total:state.stats.correct,
+          written:state.stats.written,
+          practical:state.stats.practical,
+          totalQuestions:TOTAL_QUESTIONS,
+          answers:userAnswers.slice(),
+          correctAnswers:quizData.map(item=>item.correctAnswer)
         },"*");
       }catch(e){}
     }
@@ -2633,6 +2644,12 @@ const EXAM_ID = "exam1";
     }
 
     function completeLearning(){
+      const state=getExamCompletionState();
+      if(!state.eligible){
+        updateResultCompleteButton(state);
+        alert(getCompletionBlockedMessage(state));
+        return;
+      }
       notifyMockExamComplete();
       try{ if(window.opener&&!window.opener.closed)window.opener.focus(); }catch(e){}
       try{ window.close(); }catch(e){}
@@ -2683,6 +2700,29 @@ const EXAM_ID = "exam1";
       return stats;
     }
 
+    function getExamCompletionState(){
+      const stats=analyzeExamResultAnswers();
+      const completed=stats.empty.length===0;
+      const passed=stats.written>=21&&stats.practical>=27;
+      return {stats,completed,passed,eligible:completed&&passed};
+    }
+
+    function updateResultCompleteButton(state){
+      const btn=document.getElementById("result-complete-btn");
+      if(!btn)return;
+      const currentState=state||getExamCompletionState();
+      btn.style.display=currentState.eligible?"block":"none";
+      btn.disabled=!currentState.eligible;
+      btn.setAttribute("aria-hidden",currentState.eligible?"false":"true");
+    }
+
+    function getCompletionBlockedMessage(state){
+      const currentState=state||getExamCompletionState();
+      if(!currentState.completed)return "모든 문항을 풀고 합격해야 학습 완료를 할 수 있습니다.";
+      if(!currentState.passed)return "합격 기준을 충족해야 학습 완료를 할 수 있습니다.";
+      return "학습 완료 조건을 확인할 수 없습니다.";
+    }
+
     function renderResultSummary(){
       const scoreEl=document.getElementById("score");
       if(!scoreEl)return;
@@ -2711,6 +2751,7 @@ const EXAM_ID = "exam1";
         + '</div>'
         + '</div>'
         + '<div class="result-standard"><span class="result-standard-line">필기 <strong>'+stats.written+' / 35</strong> · 실기 <strong>'+stats.practical+' / 45</strong></span><span class="result-standard-line">합격 기준 <strong>필기 21문항 이상</strong> · <strong>실기 27문항 이상</strong></span></div>';
+      updateResultCompleteButton();
     }
 
     function makeWrongReviewItem(item){
