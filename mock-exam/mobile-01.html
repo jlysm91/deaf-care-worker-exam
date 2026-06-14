@@ -2628,8 +2628,8 @@ const EXAM_ID = "exam1";
     function getLearningCompleteMessage(){
       const isMobile=window.matchMedia&&window.matchMedia("(max-width: 700px), (pointer: coarse)").matches;
       return isMobile
-        ? "↓ 이 창을 닫고 올리사이트 화면 아래의 '학습을 완료합니다' 버튼을 눌러주세요."
-        : "↘ 이 창을 닫고 올리사이트 화면 오른쪽 아래의 '학습을 완료합니다' 버튼을 눌러주세요.";
+        ? "화면 아래의 '학습을 완료합니다.' 버튼을 누르세요.\n↓"
+        : "화면 아래의 '학습을 완료합니다.' 버튼을 누르세요. ↘";
     }
 
     function completeLearning(){
