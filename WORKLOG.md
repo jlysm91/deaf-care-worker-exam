@@ -1,5 +1,25 @@
 # WORKLOG
 
+## 40. 2026-06-14 2~10회 모의고사 결과 UI 및 로그인 코드 1회 기준 일괄 적용
+
+- 사용자 요청에 따라 1회 모의고사에 먼저 적용했던 학습 결과 UI와 동작을 2~10회 모의고사 전체에 동일하게 반영했다.
+- 로컬 `mock-exam/desktop-02.html`~`desktop-10.html`, `mock-exam/mobile-02.html`~`mobile-10.html`을 수정했다.
+  - 각 회차의 `quizRawData`, 정답, `EXAM_ID`, 회차명은 해당 회차 값으로 유지했다.
+  - 결과 화면 UI, `학습 완료` 버튼, 합격/미응답 완료 조건, 오답 문항 hover/focus 상세 팝업, 1400제 기준 모바일 결과 UI를 1회 기준으로 맞췄다.
+- OneDrive 대응 파일 동기화:
+  - 2~10회 `2-1. ★★★ n회 모의고사 코드 - 데스크톱용.html`과 `2-2. ★★★ n회 모의고사 코드 - 모바일용.html`에 로컬 변경을 반영했다.
+  - 2~10회 `1. ★★★ n회 모의고사 로그인 코드.html`을 별도 로그인 코드로 갱신했다.
+  - 로그인 코드의 `examN`, 데스크톱/모바일 GitHub Pages URL, `olCorrectAnswers`가 각 회차 로컬 문제 데이터와 일치함을 확인했다.
+  - `-DESKTOP-N9UCJ8E` 충돌/임시 파일은 수정하지 않았다.
+- 검증:
+  - `git diff --check` 통과.
+  - `node --check tools/result-page-check.mjs` 통과.
+  - `node tools/result-page-check.mjs` 통과: 28개 파일, 196개 결과 화면 viewport 케이스 확인.
+  - 2~10회 로컬 데스크톱/모바일 18개 HTML과 OneDrive 로그인 코드 9개 inline script 문법 검사 통과.
+  - 2~10회 로컬 데스크톱/모바일 정답 80개 및 OneDrive 로그인 코드 `olCorrectAnswers` 80개 일치 확인.
+  - OneDrive 2~10회 데스크톱/모바일 최종 코드 파일이 로컬 파일과 SHA-256 해시 일치함을 확인했다.
+  - 로컬 HTTP 미리보기에서 2회 데스크톱/모바일 대표 페이지를 열어 회차 표기, 결과 페이지 요소, 학습 완료 버튼, 모바일 빠른 문항 이동 영역과 콘솔 오류 없음 확인.
+
 ## 39. 2026-06-14 1회 모의고사 오답 문항 hover 상세 팝업 추가
 
 - 사용자 요청에 따라 1회 모의고사 결과 화면의 `틀린 문항` 카드에 hover/focus 상세 팝업을 추가했다.

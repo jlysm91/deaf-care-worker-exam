@@ -957,9 +957,29 @@
     .review-answers { min-width:0; display:flex; flex-direction:column; align-items:flex-end; gap:2px; font-size:clamp(11px,0.9vw,13px); text-align:right; word-break:keep-all; overflow-wrap:anywhere; }
     .review-answer-correct { color:var(--success); font-weight:900; }
     .result-review-empty { margin:0; padding:18px 12px; color:var(--text-muted); font-size:clamp(12px,0.95vw,14px); font-weight:800; text-align:center; }
-    .result-actions { display:flex!important; justify-content:center!important; gap:12px!important; }
-    .result-actions button { min-width:150px!important; padding:12px 24px!important; border-radius:16px!important; font-family:inherit!important; font-size:clamp(13px,1.2vw,16px)!important; font-weight:800!important; cursor:pointer!important; }
-    .result-actions #result-return-btn { position:static!important; width:auto!important; margin:0!important; background:linear-gradient(120deg,var(--primary) 0%,#0E8FB2 100%)!important; color:#fff!important; border:none!important; box-shadow:0 7px 18px rgba(0,93,122,0.22)!important; }
+    .result-review-item[data-review-no] { cursor:help; }
+    .result-review-tooltip { position:fixed; left:0; top:0; z-index:9999; width:min(430px,calc(100vw - 24px)); max-height:min(70vh,520px); overflow:auto; padding:14px; border:1px solid #BFD0DE; border-radius:12px; background:#fff; box-shadow:0 16px 38px rgba(15,23,42,0.2); color:var(--text-primary); font-family:inherit; font-size:13px; line-height:1.45; pointer-events:none; opacity:0; visibility:hidden; transform:translateY(6px); transition:opacity .12s ease,transform .12s ease,visibility .12s ease; }
+    .result-review-tooltip.visible { opacity:1; visibility:visible; transform:translateY(0); }
+    .result-review-tooltip-head { display:flex; align-items:center; justify-content:space-between; gap:10px; padding-bottom:8px; margin-bottom:10px; border-bottom:1px solid #E2EAF1; }
+    .result-review-tooltip-head strong { font-size:16px; font-weight:900; color:#0F172A; }
+    .result-review-tooltip-head span { color:var(--text-muted); font-size:12px; font-weight:800; }
+    .result-review-tooltip-question { margin:0 0 10px; color:#1E293B; font-size:14px; font-weight:900; word-break:keep-all; overflow-wrap:anywhere; }
+    .result-review-tooltip-summary { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+    .result-review-tooltip-summary span { display:inline-flex; align-items:center; min-height:24px; padding:3px 8px; border-radius:999px; background:#F1F5F9; color:#334155; font-size:12px; font-weight:900; }
+    .result-review-tooltip-summary .correct { background:#EAF8F0; color:var(--success); }
+    .result-review-tooltip-summary .selected { background:#FFF1F0; color:var(--danger); }
+    .result-review-tooltip-options { display:grid; gap:6px; }
+    .result-review-tooltip-option { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:start; gap:7px; padding:7px 8px; border:1px solid #E2EAF1; border-radius:8px; background:#F8FBFD; }
+    .result-review-tooltip-option.correct { border-color:#9FD8B7; background:#F0FBF5; }
+    .result-review-tooltip-option.selected { border-color:#E9ABA7; background:#FFF7F6; }
+    .result-review-tooltip-option.correct.selected { border-color:#6FCF97; background:#ECFDF3; }
+    .result-review-tooltip-option-no { display:inline-flex; align-items:center; justify-content:center; min-width:22px; height:22px; border-radius:999px; background:#E2EAF1; color:#334155; font-size:12px; font-weight:900; }
+    .result-review-tooltip-option-text { min-width:0; color:#334155; font-size:12px; font-weight:800; word-break:keep-all; overflow-wrap:anywhere; }
+    .result-review-tooltip-badge { color:#0F8A4C; font-size:11px; font-weight:900; white-space:nowrap; }
+    .result-actions { display:flex!important; flex-direction:column!important; align-items:center!important; justify-content:center!important; gap:12px!important; }
+    .result-actions button { width:min(100%,360px)!important; min-width:150px!important; padding:12px 24px!important; border-radius:16px!important; font-family:inherit!important; font-size:clamp(13px,1.2vw,16px)!important; font-weight:800!important; cursor:pointer!important; }
+    .result-actions #result-return-btn { position:static!important; margin:0!important; background:linear-gradient(120deg,var(--primary) 0%,#0E8FB2 100%)!important; color:#fff!important; border:none!important; box-shadow:0 7px 18px rgba(0,93,122,0.22)!important; }
+    .result-actions #result-complete-btn { background:linear-gradient(120deg,#F29A27 0%,#F6AE3B 100%)!important; color:#fff!important; border:none!important; box-shadow:0 7px 18px rgba(242,154,39,0.24)!important; }
     @media (max-width:860px) { .result-heading { flex-wrap:wrap!important; white-space:normal!important; } .result-user-name { width:100%; text-align:center; } .result-summary-main { grid-template-columns:1fr; } .result-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } #quick-nav-grid-result.result-review-board { gap:10px!important; } .result-review-list { grid-template-columns:1fr; max-height:446px; } .result-review-list.result-review-single { grid-template-columns:1fr; } .result-review-item { padding:9px 10px; } .result-actions { flex-direction:column!important; width:min(100%,1120px)!important; } .result-actions button { width:100%!important; } }
 </style>
 </head>
@@ -1013,6 +1033,7 @@
     </div>
     <div class="result-actions">
       <button id="result-return-btn">다시 풀기</button>
+      <button id="result-complete-btn">학습 완료</button>
     </div>
   </div>
 
@@ -1335,6 +1356,29 @@
       quickNavGrid.style.pointerEvents="none";
     }
 
+    function notifyMockExamComplete(){
+      const state=getExamCompletionState();
+      if(!state.eligible)return;
+      try{
+        if(!window.opener||window.opener.closed)return;
+        window.opener.postMessage({
+          type:"mockExamComplete",
+          examId:EXAM_ID,
+          uid:String(currentUserId||userIdInput.value.trim()||""),
+          name:String(userNameInput.value.trim()||currentUserName||""),
+          completed:state.completed,
+          passed:state.passed,
+          eligible:state.eligible,
+          total:state.stats.correct,
+          written:state.stats.written,
+          practical:state.stats.practical,
+          totalQuestions:TOTAL_QUESTIONS,
+          answers:userAnswers.slice(),
+          correctAnswers:quizData.map(item=>item.correctAnswer)
+        },"*");
+      }catch(e){}
+    }
+
     function submitQuiz(){
       let 필기=0,실기=0;
       quizData.forEach((item,i)=>{
@@ -1349,13 +1393,33 @@
         ref.child("result").set({total:총점,필기,실기,answers:userAnswers});
         ref.child("progress").remove();
       }
-      renderResultNav();disableAnswers();alert("제출 완료하였습니다!");
+      renderResultNav();disableAnswers();notifyMockExamComplete();alert("제출 완료하였습니다!");
       const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
       const fd=new FormData();
       fd.append("entry.295783163",userNameInput.value.trim());
       fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
       fd.append("entry.516661777", 합격여부);
       fetch(googleFormURL,{method:"POST",body:fd,mode:"no-cors", keepalive: true }).catch(console.error);
+    }
+
+    function getLearningCompleteMessage(){
+      const isMobile=window.matchMedia&&window.matchMedia("(max-width: 700px), (pointer: coarse)").matches;
+      return isMobile
+        ? "화면 아래의 '학습을 완료합니다.' 버튼을 누르세요.\n↓"
+        : "화면 아래의 '학습을 완료합니다.' 버튼을 누르세요. ↘";
+    }
+
+    function completeLearning(){
+      const state=getExamCompletionState();
+      if(!state.eligible){
+        updateResultCompleteButton(state);
+        alert(getCompletionBlockedMessage(state));
+        return;
+      }
+      notifyMockExamComplete();
+      try{ if(window.opener&&!window.opener.closed)window.opener.focus(); }catch(e){}
+      try{ window.close(); }catch(e){}
+      setTimeout(()=>{ if(!window.closed)alert(getLearningCompleteMessage()); },250);
     }
 
     function resetQuiz(){
@@ -1402,6 +1466,29 @@
       return stats;
     }
 
+    function getExamCompletionState(){
+      const stats=analyzeExamResultAnswers();
+      const completed=stats.empty.length===0;
+      const passed=stats.written>=21&&stats.practical>=27;
+      return {stats,completed,passed,eligible:completed&&passed};
+    }
+
+    function updateResultCompleteButton(state){
+      const btn=document.getElementById("result-complete-btn");
+      if(!btn)return;
+      const currentState=state||getExamCompletionState();
+      btn.style.display=currentState.eligible?"block":"none";
+      btn.disabled=!currentState.eligible;
+      btn.setAttribute("aria-hidden",currentState.eligible?"false":"true");
+    }
+
+    function getCompletionBlockedMessage(state){
+      const currentState=state||getExamCompletionState();
+      if(!currentState.completed)return "모든 문항을 풀고 합격해야 학습 완료를 할 수 있습니다.";
+      if(!currentState.passed)return "합격 기준을 충족해야 학습 완료를 할 수 있습니다.";
+      return "학습 완료 조건을 확인할 수 없습니다.";
+    }
+
     function renderResultSummary(){
       const scoreEl=document.getElementById("score");
       if(!scoreEl)return;
@@ -1430,10 +1517,93 @@
         + '</div>'
         + '</div>'
         + '<div class="result-standard">필기 <strong>'+stats.written+' / 35</strong> · 실기 <strong>'+stats.practical+' / 45</strong> · 합격 기준 <strong>필기 21문항 이상</strong> · <strong>실기 27문항 이상</strong></div>';
+      updateResultCompleteButton();
     }
 
+    function escapeResultReviewHtml(value){
+      return String(value??"").replace(/[&<>"']/g,function(ch){
+        return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch];
+      });
+    }
+
+    function buildResultReviewTooltipHtml(no,correct,mine){
+      const q=quizData[no-1];
+      if(!q)return "";
+      const correctNo=parseInt(correct,10);
+      const mineNo=parseInt(mine,10);
+      const options=(q.options||[]).map(function(option,idx){
+        const optionNo=idx+1;
+        const isCorrect=optionNo===correctNo;
+        const isSelected=optionNo===mineNo;
+        const cls="result-review-tooltip-option"+(isCorrect?" correct":"")+(isSelected?" selected":"");
+        const badge=isCorrect&&isSelected?"정답/선택":(isCorrect?"정답":(isSelected?"선택":""));
+        return '<div class="'+cls+'"><span class="result-review-tooltip-option-no">'+optionNo+'</span><span class="result-review-tooltip-option-text">'+escapeResultReviewHtml(option)+'</span>'+(badge?'<span class="result-review-tooltip-badge">'+badge+'</span>':'')+'</div>';
+      }).join("");
+      return '<div class="result-review-tooltip-head"><strong>'+no+'번</strong><span>'+escapeResultReviewHtml(q.number||"")+'</span></div>'
+        + '<p class="result-review-tooltip-question">'+escapeResultReviewHtml(q.question)+'</p>'
+        + '<div class="result-review-tooltip-summary"><span class="correct">정답 '+escapeResultReviewHtml(correct)+'번</span><span class="selected">선택 '+escapeResultReviewHtml(mine)+'번</span></div>'
+        + '<div class="result-review-tooltip-options">'+options+'</div>';
+    }
+
+    function ensureResultReviewTooltip(){
+      let tooltip=document.getElementById("result-review-tooltip");
+      if(!tooltip){
+        tooltip=document.createElement("div");
+        tooltip.id="result-review-tooltip";
+        tooltip.className="result-review-tooltip";
+        tooltip.setAttribute("role","tooltip");
+        document.body.appendChild(tooltip);
+      }
+      return tooltip;
+    }
+
+    function positionResultReviewTooltip(tooltip,target){
+      const margin=12;
+      const rect=target.getBoundingClientRect();
+      const tipRect=tooltip.getBoundingClientRect();
+      let left=Math.min(Math.max(rect.left,margin),window.innerWidth-tipRect.width-margin);
+      let top=rect.bottom+8;
+      if(top+tipRect.height+margin>window.innerHeight)top=rect.top-tipRect.height-8;
+      top=Math.min(Math.max(top,margin),window.innerHeight-tipRect.height-margin);
+      tooltip.style.left=left+"px";
+      tooltip.style.top=top+"px";
+    }
+
+    function showResultReviewTooltip(target){
+      const no=parseInt(target.dataset.reviewNo,10);
+      if(!no)return;
+      const tooltip=ensureResultReviewTooltip();
+      tooltip.innerHTML=buildResultReviewTooltipHtml(no,target.dataset.reviewCorrect,target.dataset.reviewMine);
+      if(!tooltip.innerHTML)return;
+      tooltip.classList.add("visible");
+      positionResultReviewTooltip(tooltip,target);
+    }
+
+    function hideResultReviewTooltip(){
+      const tooltip=document.getElementById("result-review-tooltip");
+      if(tooltip)tooltip.classList.remove("visible");
+    }
+
+    function bindResultReviewTooltips(){
+      document.querySelectorAll(".result-review-item[data-review-no]").forEach(function(item){
+        item.addEventListener("mouseenter",function(){showResultReviewTooltip(item);});
+        item.addEventListener("mousemove",function(){const tooltip=document.getElementById("result-review-tooltip");if(tooltip&&tooltip.classList.contains("visible"))positionResultReviewTooltip(tooltip,item);});
+        item.addEventListener("mouseleave",hideResultReviewTooltip);
+        item.addEventListener("focus",function(){showResultReviewTooltip(item);});
+        item.addEventListener("blur",hideResultReviewTooltip);
+      });
+      if(!window.__resultReviewTooltipScrollBound){
+        window.__resultReviewTooltipScrollBound=true;
+        window.addEventListener("scroll",hideResultReviewTooltip,true);
+        window.addEventListener("resize",hideResultReviewTooltip);
+      }
+    }
+
+    window.showResultReviewTooltip=showResultReviewTooltip;
+    window.hideResultReviewTooltip=hideResultReviewTooltip;
+
     function makeWrongReviewItem(item){
-      return '<div class="result-review-item wrong"><span class="review-no">'+item.no+'번</span><span class="review-answers"><span class="review-answer-correct">정답 '+item.correct+'번</span><span>선택 '+item.mine+'번</span></span></div>';
+      return '<div class="result-review-item wrong" tabindex="0" data-review-no="'+item.no+'" data-review-correct="'+escapeResultReviewHtml(item.correct)+'" data-review-mine="'+escapeResultReviewHtml(item.mine)+'" aria-label="'+item.no+'번 오답 상세 보기" onmouseenter="showResultReviewTooltip(this)" onmousemove="showResultReviewTooltip(this)" onmouseleave="hideResultReviewTooltip()" onfocus="showResultReviewTooltip(this)" onblur="hideResultReviewTooltip()"><span class="review-no">'+item.no+'번</span><span class="review-answers"><span class="review-answer-correct">정답 '+item.correct+'번</span><span>선택 '+item.mine+'번</span></span></div>';
     }
 
     function renderWrongReviewSection(items){
@@ -1454,6 +1624,7 @@
       const stats=analyzeExamResultAnswers();
       grid.className="result-review-board result-review-compact";
       grid.innerHTML=renderWrongReviewSection(stats.wrong);
+      bindResultReviewTooltips();
       requestAnimationFrame(fitResultGrid);
     }
 
@@ -1504,6 +1675,7 @@
       if(btn){setQuickNavButtonLabel(btn,currentQuestionIndex+1,ans);btn.classList.add("answered");}
     });
     document.getElementById("result-return-btn").addEventListener("click",resetQuiz);
+    document.getElementById("result-complete-btn").addEventListener("click",completeLearning);
 
     function autoResizeNavGrid(){
       const navCont=document.getElementById("quick-nav-container");
