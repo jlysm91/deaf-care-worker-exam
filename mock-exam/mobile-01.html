@@ -1891,10 +1891,10 @@
     .review-answers { min-width:0; display:flex; flex-direction:column; align-items:flex-end; gap:2px; font-size:clamp(11px,0.9vw,13px); text-align:right; word-break:keep-all; overflow-wrap:anywhere; }
     .review-answer-correct { color:var(--success); font-weight:900; }
     .result-review-empty { margin:0; padding:18px 12px; color:var(--text-muted); font-size:clamp(12px,0.95vw,14px); font-weight:800; text-align:center; }
-    .result-actions { display:flex!important; justify-content:center!important; gap:12px!important; }
-    .result-actions button { min-width:150px!important; padding:12px 24px!important; border-radius:12px!important; font-family:inherit!important; font-size:clamp(13px,1.2vw,16px)!important; font-weight:800!important; cursor:pointer!important; }
-    .result-actions #result-chapter-btn { background:#fff!important; color:var(--text-secondary)!important; border:1.5px solid var(--border)!important; box-shadow:none!important; }
-    .result-actions #result-return-btn { position:static!important; width:auto!important; margin:0!important; background:linear-gradient(120deg,var(--primary) 0%,#0E8FB2 100%)!important; color:#fff!important; border:none!important; box-shadow:0 7px 18px rgba(0,93,122,0.22)!important; }
+    .result-actions { display:flex!important; flex-direction:column!important; align-items:center!important; justify-content:center!important; gap:12px!important; }
+    .result-actions button { width:min(100%,360px)!important; min-width:150px!important; padding:12px 24px!important; border-radius:12px!important; font-family:inherit!important; font-size:clamp(13px,1.2vw,16px)!important; font-weight:800!important; cursor:pointer!important; }
+    .result-actions #result-return-btn { position:static!important; margin:0!important; background:linear-gradient(120deg,var(--primary) 0%,#0E8FB2 100%)!important; color:#fff!important; border:none!important; box-shadow:0 7px 18px rgba(0,93,122,0.22)!important; }
+    .result-actions #result-complete-btn { background:linear-gradient(120deg,#F29A27 0%,#F6AE3B 100%)!important; color:#fff!important; border:none!important; box-shadow:0 7px 18px rgba(242,154,39,0.24)!important; }
     @media (max-width:700px) { #quick-nav-grid-result.result-review-board { gap:10px!important; } .result-review-list { grid-template-columns:1fr; max-height:446px; } .result-review-list.result-review-single { grid-template-columns:1fr; } .result-review-item { padding:9px 10px; } }
     @media (max-width:860px) { .result-heading { flex-wrap:wrap!important; white-space:normal!important; } .result-summary-main { grid-template-columns:1fr; } .result-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .result-actions { flex-direction:column!important; width:min(100%,1120px)!important; } .result-actions button { width:100%!important; } }
 </style>
@@ -1952,8 +1952,8 @@
       <div id="quick-nav-grid-result"></div>
     </div>
     <div class="result-actions">
-      <button id="result-chapter-btn">회 선택하기</button>
       <button id="result-return-btn">다시 풀기</button>
+      <button id="result-complete-btn">학습 완료</button>
     </div>
   </div>
 
@@ -2625,10 +2625,18 @@ const EXAM_ID = "exam1";
       fd.append("entry.516661777", 합격여부);
       fetch(googleFormURL,{method:"POST",body:fd,mode:"no-cors", keepalive: true }).catch(console.error);
     }
-    function returnToExamSelection(){
+    function getLearningCompleteMessage(){
+      const isMobile=window.matchMedia&&window.matchMedia("(max-width: 700px), (pointer: coarse)").matches;
+      return isMobile
+        ? "↓ 이 창을 닫고 올리사이트 화면 아래의 '학습을 완료합니다' 버튼을 눌러주세요."
+        : "↘ 이 창을 닫고 올리사이트 화면 오른쪽 아래의 '학습을 완료합니다' 버튼을 눌러주세요.";
+    }
+
+    function completeLearning(){
+      notifyMockExamComplete();
       try{ if(window.opener&&!window.opener.closed)window.opener.focus(); }catch(e){}
       try{ window.close(); }catch(e){}
-      if(!window.closed)alert("올리사이트 본 창에서 회차를 선택해주세요.");
+      setTimeout(()=>{ if(!window.closed)alert(getLearningCompleteMessage()); },250);
     }
 
     function resetQuiz(){
@@ -2824,8 +2832,8 @@ const EXAM_ID = "exam1";
       const ans=parseInt(e.target.value);userAnswers[currentQuestionIndex]=ans;saveQuizProgress();
       updateNavDisplay();
     });
-    document.getElementById("result-chapter-btn").addEventListener("click",returnToExamSelection);
     document.getElementById("result-return-btn").addEventListener("click",resetQuiz);
+    document.getElementById("result-complete-btn").addEventListener("click",completeLearning);
 
     function autoResizeNavGrid(){
       const wrap=document.getElementById("quick-nav-grid-wrap");
