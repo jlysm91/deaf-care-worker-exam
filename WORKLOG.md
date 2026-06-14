@@ -1,5 +1,31 @@
 # WORKLOG
 
+## 43. 2026-06-15 관리자 등록 페이지 및 authorizedUsers 입장 검증
+
+- 로컬 전용 관리자 HTML을 OneDrive 관리 폴더에 추가했다.
+  - `00. 관리자용 학습자 등록.html`
+  - 관리자 비밀번호, 아이디, 이름, 사용 상태, 모의고사 1~10회, 1400제 1~4부 적용 범위를 입력해 `authorizedUsers/{uid}`에 저장한다.
+  - 기본값은 전체 모의고사 및 전체 1400제 허용이며, 필요 시 회차/부별 체크박스로 제한할 수 있다.
+- Firebase 기준 명단 구조를 `authorizedUsers/{uid}`로 정했다.
+  - `name`, `enabled`, `allowedScopes.mockExam`, `allowedScopes.quiz1400`를 저장한다.
+  - 진행/결과 데이터는 기존 `exams/{examId}/users/{uid}` 구조를 유지한다.
+- 로컬 `mock-exam/desktop-01.html`~`desktop-10.html`, `mock-exam/mobile-01.html`~`mobile-10.html`에 등록 명단 기반 입장 검증을 적용했다.
+  - 등록되지 않은 아이디, 이름 불일치, 사용 중지, 해당 회차 미허용 상태를 차단한다.
+  - 통과한 경우 기존 진행 저장 및 학습 결과를 그대로 불러온다.
+- 로컬 `quiz-1400/login.html`, `quiz-1400/desktop-01.html`~`desktop-04.html`, `quiz-1400/mobile-01.html`~`mobile-04.html`에 1400제 부별 권한 검증을 적용했다.
+  - `quiz1400.all` 또는 `quiz1400.partN` 권한이 있어야 해당 부에 입장할 수 있다.
+  - 1400제 결과 UI 디자인은 이번 작업에서 수정하지 않았다.
+- OneDrive 동기화:
+  - 모의고사 1~10회 데스크톱/모바일 최종 코드 파일을 로컬과 동기화했다.
+  - 1400제 1~4부 데스크톱/모바일 최종 코드 파일을 로컬과 동기화했다.
+  - 모의고사 1~10회 OneDrive 로그인 코드도 `authorizedUsers` 검증 기준으로 갱신했다.
+- 검증:
+  - `git diff --check` 통과.
+  - `node tools/result-page-check.mjs` 통과: 28개 파일, 196개 결과 화면 viewport 케이스 확인.
+  - 로컬 모의고사 20개, 로컬 1400제 9개, OneDrive 모의고사 로그인 10개, 관리자 HTML 1개 inline script 문법 검사 통과.
+  - OneDrive 모의고사 1~10회 및 1400제 1~4부 데스크톱/모바일 최종 코드가 로컬 파일과 SHA-256 해시 일치함을 확인했다.
+  - 브라우저 도구의 `file://` 접근은 보안 정책상 차단되어 우회하지 않았다.
+
 ## 42. 2026-06-15 모의고사 아이디/이름 일치 검증 추가
 
 - 사용자 요청에 따라 1~10회 모의고사에서 아이디만 맞고 이름이 틀려도 기존 진행/결과가 열리는 문제를 보완했다.

@@ -2493,6 +2493,44 @@ const EXAM_ID = "exam1";
       return Boolean(stored&&stored!==normalizeUserNameForIdentity(name));
     }
 
+    function getMockExamScopeKey(){
+      return EXAM_ID;
+    }
+
+    function getAuthorizationErrorMessage(error){
+      if(error&&error.code==="invalid-uid")return "아이디에는 . # $ [ ] / 문자를 사용할 수 없습니다.";
+      if(error&&error.code==="not-registered")return "등록되지 않은 아이디입니다. 관리자에게 문의해 주세요.";
+      if(error&&error.code==="disabled")return "사용이 중지된 아이디입니다. 관리자에게 문의해 주세요.";
+      if(error&&error.code==="name-mismatch")return "아이디와 이름이 등록 정보와 일치하지 않습니다. 다시 확인해 주세요.";
+      if(error&&error.code==="scope-denied")return "이 학습자는 해당 모의고사에 등록되어 있지 않습니다. 관리자에게 문의해 주세요.";
+      return "등록 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.";
+    }
+
+    function showAuthorizationDenied(message){
+      alert(message);
+      currentUserId="";
+      currentUserName="";
+      document.body.innerHTML='<main style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#EFF6F8;font-family:Arial, sans-serif;"><section style="width:min(520px,100%);background:#fff;border:1px solid #D9E3EA;border-radius:12px;padding:28px;text-align:center;box-shadow:0 18px 42px rgba(15,54,74,.14);"><h1 style="margin:0 0 12px;font-size:24px;color:#17202A;">입장할 수 없습니다</h1><p style="margin:0;color:#475569;font-size:16px;line-height:1.6;font-weight:700;">'+message+'</p></section></main>';
+    }
+
+    function hasAuthorizedMockScope(data){
+      const scopes=(data&&data.allowedScopes&&data.allowedScopes.mockExam)||{};
+      return Boolean(data&&data.enabled!==false&&(scopes.all===true||scopes[getMockExamScopeKey()]===true));
+    }
+
+    function verifyAuthorizedUser(uid,name){
+      const normalized=normalizeUserNameForIdentity(name);
+      if(/[.#$\[\]\/]/.test(String(uid||""))){const err=new Error("invalid uid");err.code="invalid-uid";return Promise.reject(err);}
+      return database.ref('authorizedUsers/'+uid).once("value").then(snapshot=>{
+        const data=snapshot.val();
+        if(!data){const err=new Error("not registered");err.code="not-registered";throw err;}
+        if(data.enabled===false){const err=new Error("disabled");err.code="disabled";throw err;}
+        if(normalizeUserNameForIdentity(data.name)!==normalized){const err=new Error("name mismatch");err.code="name-mismatch";throw err;}
+        if(!hasAuthorizedMockScope(data)){const err=new Error("scope denied");err.code="scope-denied";throw err;}
+        return data;
+      });
+    }
+
     function showIdentityMismatch(){
       alert("\uC544\uC774\uB514\uC640 \uC774\uB984\uC774 \uC800\uC7A5\uB41C \uC815\uBCF4\uC640 \uC77C\uCE58\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4. \uB2E4\uC2DC \uD655\uC778\uD574 \uC8FC\uC138\uC694.");
       startPage.style.display="flex";
@@ -2511,11 +2549,11 @@ const EXAM_ID = "exam1";
         "profile/name":normalized,
         "profile/updatedAt":firebase.database.ServerValue.TIMESTAMP
       };
-      if(data&&data.result&&!data.result.name){
+      if(data&&data.result){
         updates["result/uid"]=String(uid||"");
         updates["result/name"]=normalized;
       }
-      if(data&&data.progress&&!data.progress.name){
+      if(data&&data.progress){
         updates["progress/uid"]=String(uid||"");
         updates["progress/name"]=normalized;
       }
@@ -2530,20 +2568,21 @@ const EXAM_ID = "exam1";
       if(userNameInput)userNameInput.value=currentUserName;
       syncResultUserName(currentUserName);
       const userRef=database.ref(`exams/${EXAM_ID}/users/${uid}`);
-      userRef.once("value").then(snapshot=>{
-        const data=snapshot.val();
-        if(hasStoredNameMismatch(data,currentUserName)){showIdentityMismatch();return;}
-        saveUserIdentity(userRef,uid,currentUserName,data).then(()=>{
-          if(data&&data.result){
-            startPage.style.display="none";resultPage.style.display="flex";
-            if(data.result.answers)userAnswers=data.result.answers;
-            document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
-          }else if(data&&data.progress){
-            currentQuestionIndex=data.progress.currentQuestion||0;
-            userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
-          }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
-        }).catch(()=>{alert("\uC0AC\uC6A9\uC790 \uC815\uBCF4\uB97C \uC800\uC7A5\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");});
-      }).catch(()=>{alert("\uC0AC\uC6A9\uC790 \uC815\uBCF4\uB97C \uD655\uC778\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");});
+      verifyAuthorizedUser(uid,currentUserName).then(()=>{
+        userRef.once("value").then(snapshot=>{
+          const data=snapshot.val();
+          saveUserIdentity(userRef,uid,currentUserName,data).then(()=>{
+            if(data&&data.result){
+              startPage.style.display="none";resultPage.style.display="flex";
+              if(data.result.answers)userAnswers=data.result.answers;
+              document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
+            }else if(data&&data.progress){
+              currentQuestionIndex=data.progress.currentQuestion||0;
+              userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
+            }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
+          }).catch(()=>{alert("사용자 정보를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");});
+        }).catch(()=>{alert("사용자 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.");});
+      }).catch(error=>{showAuthorizationDenied(getAuthorizationErrorMessage(error));});
     }
 
 

@@ -208,6 +208,8 @@
     </section>
   </main>
 
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
   <script>
     const PARTS = {
       1: "1부. 요양보호와 인권",
@@ -215,6 +217,18 @@
       3: "3부. 요양보호와 생활지원",
       4: "4부. 상황별 요양보호 기술"
     };
+    const firebaseConfig = {
+      apiKey: "AIzaSyBHGrV9HdcT49KUYcEUn_VVZJVpRAfFdqc",
+      authDomain: "deaf-for-database-develo-59bf8.firebaseapp.com",
+      databaseURL: "https://deaf-for-database-develo-59bf8-default-rtdb.firebaseio.com",
+      projectId: "deaf-for-database-develo-59bf8",
+      storageBucket: "deaf-for-database-develo-59bf8.appspot.com",
+      messagingSenderId: "736560751604",
+      appId: "1:736560751604:web:4c79c46dff876a6187af8c"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
     const params = new URLSearchParams(location.search);
     const pathPartMatch = location.pathname.match(/login-(\d{1,2})\.html$/);
@@ -251,6 +265,37 @@
       return uaMobile || touchTablet;
     }
 
+    function normalizeUserNameForIdentity(name) {
+      return String(name || "").trim().replace(/\s+/g, " ");
+    }
+
+    function getAuthorizationErrorMessage(error) {
+      if (error && error.code === "invalid-uid") return "아이디에는 . # $ [ ] / 문자를 사용할 수 없습니다.";
+      if (error && error.code === "not-registered") return "등록되지 않은 아이디입니다. 관리자에게 문의해 주세요.";
+      if (error && error.code === "disabled") return "사용이 중지된 아이디입니다. 관리자에게 문의해 주세요.";
+      if (error && error.code === "name-mismatch") return "아이디와 이름이 등록 정보와 일치하지 않습니다. 다시 확인해 주세요.";
+      if (error && error.code === "scope-denied") return "이 학습자는 해당 1400제 부에 등록되어 있지 않습니다. 관리자에게 문의해 주세요.";
+      return "등록 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.";
+    }
+
+    function hasAuthorizedQuiz1400Scope(data) {
+      const scopes = (data && data.allowedScopes && data.allowedScopes.quiz1400) || {};
+      return Boolean(data && data.enabled !== false && (scopes.all === true || scopes["part" + selectedPart] === true));
+    }
+
+    function verifyAuthorizedUser(uid, name) {
+      const normalized = normalizeUserNameForIdentity(name);
+      if (/[.#$\[\]\/]/.test(String(uid || ""))) { const err = new Error("invalid uid"); err.code = "invalid-uid"; return Promise.reject(err); }
+      return database.ref("authorizedUsers/" + uid).once("value").then(snapshot => {
+        const data = snapshot.val();
+        if (!data) { const err = new Error("not registered"); err.code = "not-registered"; throw err; }
+        if (data.enabled === false) { const err = new Error("disabled"); err.code = "disabled"; throw err; }
+        if (normalizeUserNameForIdentity(data.name) !== normalized) { const err = new Error("name mismatch"); err.code = "name-mismatch"; throw err; }
+        if (!hasAuthorizedQuiz1400Scope(data)) { const err = new Error("scope denied"); err.code = "scope-denied"; throw err; }
+        return data;
+      });
+    }
+
     function buildTargetUrl(uid, name) {
       const device = isMobileOrTablet() ? "mobile" : "desktop";
       const fileName = `${device}-${String(selectedPart).padStart(2, "0")}.html`;
@@ -275,7 +320,18 @@
         alert("아이디와 이름을 입력해주세요.");
         return;
       }
-      location.href = buildTargetUrl(uid, name);
+      const button = document.getElementById("start-btn");
+      button.disabled = true;
+      verifyAuthorizedUser(uid, name)
+        .then(() => {
+          location.href = buildTargetUrl(uid, normalizeUserNameForIdentity(name));
+        })
+        .catch(error => {
+          alert(getAuthorizationErrorMessage(error));
+        })
+        .then(() => {
+          button.disabled = false;
+        });
     }
 
     document.getElementById("start-btn").addEventListener("click", goToQuiz);
@@ -292,7 +348,9 @@
     renderPartState();
 
     if (selectedPart && uid && name) {
-      location.replace(buildTargetUrl(uid, name));
+      verifyAuthorizedUser(uid, name)
+        .then(() => location.replace(buildTargetUrl(uid, normalizeUserNameForIdentity(name))))
+        .catch(error => alert(getAuthorizationErrorMessage(error)));
     }
   </script>
 </body>

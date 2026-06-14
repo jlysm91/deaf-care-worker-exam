@@ -2601,6 +2601,7 @@ const chapter1Data=[
 
   const chapterToExamId = {"1":"exam11","2":"exam12","3":"exam13","4":"exam14"};
   const sectionToExamId = {};
+  const QUIZ_1400_PART = 1;
   const allChapterData = {"1":chapter1Data,"2":chapter2Data,"3":chapter3Data,"4":chapter4Data};
   const allSectionData = {};
   const chapterMeta = [{"id": 1, "num": "1장", "name": "요양보호 대상자 이해", "total": "33문항"}, {"id": 2, "num": "2장", "name": "노인복지와 장기요양 제도", "total": "103문항"}, {"id": 3, "num": "3장", "name": "노인의 인권과 보호", "total": "29문항"}, {"id": 4, "num": "4장", "name": "요양보호사의 인권보호와 자기계발", "total": "64문항"}];
@@ -2665,6 +2666,51 @@ const chapter1Data=[
     if (page) page.style.display = display;
   }
 
+  function normalizeUserNameForIdentity(name){
+    return String(name || "").trim().replace(/\s+/g, " ");
+  }
+
+  function getQuiz1400ScopeKey(){
+    return "part" + QUIZ_1400_PART;
+  }
+
+  function getAuthorizationErrorMessage(error){
+    if(error&&error.code==="invalid-uid")return "아이디에는 . # $ [ ] / 문자를 사용할 수 없습니다.";
+      if(error&&error.code==="not-registered")return "등록되지 않은 아이디입니다. 관리자에게 문의해 주세요.";
+    if(error&&error.code==="disabled")return "사용이 중지된 아이디입니다. 관리자에게 문의해 주세요.";
+    if(error&&error.code==="name-mismatch")return "아이디와 이름이 등록 정보와 일치하지 않습니다. 다시 확인해 주세요.";
+    if(error&&error.code==="scope-denied")return "이 학습자는 해당 1400제 부에 등록되어 있지 않습니다. 관리자에게 문의해 주세요.";
+    return "등록 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.";
+  }
+
+  function hasAuthorizedQuiz1400Scope(data){
+    const scopes=(data&&data.allowedScopes&&data.allowedScopes.quiz1400)||{};
+    return Boolean(data&&data.enabled!==false&&(scopes.all===true||scopes[getQuiz1400ScopeKey()]===true));
+  }
+
+  function verifyAuthorizedUser(uid,name){
+    const normalized=normalizeUserNameForIdentity(name);
+    if(/[.#$\[\]\/]/.test(String(uid||""))){const err=new Error("invalid uid");err.code="invalid-uid";return Promise.reject(err);}
+    return database.ref('authorizedUsers/'+uid).once("value").then(snapshot=>{
+      const data=snapshot.val();
+      if(!data){const err=new Error("not registered");err.code="not-registered";throw err;}
+      if(data.enabled===false){const err=new Error("disabled");err.code="disabled";throw err;}
+      if(normalizeUserNameForIdentity(data.name)!==normalized){const err=new Error("name mismatch");err.code="name-mismatch";throw err;}
+      if(!hasAuthorizedQuiz1400Scope(data)){const err=new Error("scope denied");err.code="scope-denied";throw err;}
+      return data;
+    });
+  }
+
+  function showAuthorizationDenied(message){
+    alert(message);
+    currentUserId="";
+    currentUserName="";
+    document.getElementById("user-id").value="";
+    document.getElementById("user-name").value="";
+    showPage(startPage);
+  }
+
+
   function makePlayableData(data) {
     return data.map(item => ({ ...item, videoEmbed: getVideoEmbed(item.videoId, item.number) }));
   }
@@ -2724,15 +2770,18 @@ const chapter1Data=[
     const uid = document.getElementById("start-uid").value.trim();
     const uname = document.getElementById("start-uname").value.trim();
     if (!uid || !uname) {
-      alert("아이디와 이름을 입력해주세요.");
+      alert("아이디와 이름을 입력해 주세요.");
       return;
     }
-    currentUserId = uid;
-    currentUserName = uname;
-    document.getElementById("user-id").value = uid;
-    document.getElementById("user-name").value = uname;
-    showPage(chapterSelectPage);
-    loadChapterResults();
+    verifyAuthorizedUser(uid, uname).then(() => {
+      currentUserId = uid;
+      currentUserName = normalizeUserNameForIdentity(uname);
+      document.getElementById("user-id").value = uid;
+      document.getElementById("user-name").value = currentUserName;
+      document.getElementById("start-uname").value = currentUserName;
+      showPage(chapterSelectPage);
+      loadChapterResults();
+    }).catch(error => showAuthorizationDenied(getAuthorizationErrorMessage(error)));
   });
 
   document.querySelectorAll("#chapter-select-page .chapter-btn").forEach(btn => {
@@ -2827,6 +2876,8 @@ const chapter1Data=[
   function saveProgress() {
     if (!currentUserId || !EXAM_ID) return;
     database.ref(`exams/${EXAM_ID}/users/${currentUserId}/progress`).set({
+      uid: currentUserId,
+      name: currentUserName,
       currentQuestion: currentQuestionIndex,
       answers: userAnswers
     });
@@ -2963,7 +3014,7 @@ const chapter1Data=[
     });
     if (currentUserId && EXAM_ID) {
       const ref = database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
-      ref.child("result").set({ total: correct, totalQuestions: TOTAL_QUESTIONS, answers: userAnswers });
+      ref.child("result").set({ uid: currentUserId, name: currentUserName, examId: EXAM_ID, total: correct, totalQuestions: TOTAL_QUESTIONS, answers: userAnswers });
       ref.child("progress").remove();
     }
     const resultData = {
@@ -3237,30 +3288,32 @@ const chapter1Data=[
     const chapterParam = params.get("chapter");
     const sectionParam = params.get("section");
     if (uid && name) {
-      document.getElementById("user-id").value = uid;
-      document.getElementById("user-name").value = name;
-      document.getElementById("start-uid").value = uid;
-      document.getElementById("start-uname").value = name;
-      currentUserId = uid;
-      currentUserName = name;
-      if (sectionParam && allSectionData[parseInt(sectionParam, 10)]) {
-        startSection(parseInt(sectionParam, 10));
-        return;
-      }
-      if (chapterParam) {
-        const ch = parseInt(chapterParam, 10);
-        if (ch === 10 && sectionSelectPage) {
-          showPage(sectionSelectPage);
-          loadSectionResults();
+      verifyAuthorizedUser(uid, name).then(() => {
+        document.getElementById("user-id").value = uid;
+        document.getElementById("user-name").value = name;
+        document.getElementById("start-uid").value = uid;
+        document.getElementById("start-uname").value = name;
+        currentUserId = uid;
+        currentUserName = normalizeUserNameForIdentity(name);
+        if (sectionParam && allSectionData[parseInt(sectionParam, 10)]) {
+          startSection(parseInt(sectionParam, 10));
           return;
         }
-        if (allChapterData[ch]) {
-          startChapter(ch);
-          return;
+        if (chapterParam) {
+          const ch = parseInt(chapterParam, 10);
+          if (ch === 10 && sectionSelectPage) {
+            showPage(sectionSelectPage);
+            loadSectionResults();
+            return;
+          }
+          if (allChapterData[ch]) {
+            startChapter(ch);
+            return;
+          }
         }
-      }
-      showPage(chapterSelectPage);
-      loadChapterResults();
+        showPage(chapterSelectPage);
+        loadChapterResults();
+      }).catch(error => showAuthorizationDenied(getAuthorizationErrorMessage(error)));
     } else {
       showPage(startPage);
     }
