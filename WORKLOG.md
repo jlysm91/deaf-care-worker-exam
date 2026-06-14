@@ -1,5 +1,20 @@
 # WORKLOG
 
+## 33. 2026-06-14 1회 모의고사 모바일 결과 복습 박스 스크롤 보정
+
+- 사용자 요청에 따라 1회 모의고사 모바일 학습 결과 화면만 대상으로 확인했다.
+- `mock-exam/mobile-01.html`의 결과 화면에서 `#quick-nav-container-result`에 남아 있던 `overflow-x:hidden` 때문에 바깥 복습 카드가 세로 스크롤 영역처럼 계산되는 문제를 보정했다.
+- 바깥 복습 카드는 1400제 결과 UI처럼 `overflow:visible`로 두고, 실제 상하 스크롤은 내부 `.result-review-list`의 `overflow-y:auto`에만 남도록 한 줄만 수정했다.
+- OneDrive 대응 파일 `01회 모의고사/02. 개선판 (完)/02. (★삭제 주의) 최종 코드/2-2. ★★★ 1회 모의고사 코드 - 모바일용.html`에도 동일 변경을 반영했다.
+- 로컬 파일과 OneDrive 대응 파일의 SHA-256 해시가 일치함을 확인했다.
+- 검증:
+  - `git diff --check` 통과.
+  - `node --check tools/result-page-check.mjs` 통과.
+  - `node tools/result-page-check.mjs` 통과: 28개 파일, 196개 결과 화면 viewport 케이스 확인.
+  - Chrome/Playwright 모바일 390x844 렌더링에서 바깥 복습 카드 `overflow-y: visible`, 내부 틀린 문항 목록 `overflow-y: auto` 확인.
+- 남은 주의사항:
+  - 이번 작업은 사용자 요청대로 1회 모의고사 모바일 결과 UI만 수정했고, 2~10회 모의고사 및 1400제 파일은 수정하지 않았다.
+
 ## 32. 2026-06-14 OneDrive 우선 확인 흐름을 AGENTS 고정 규칙으로 승격
 
 - 사용자가 매번 요청하지 않아도 같은 방식으로 처리되도록 `AGENTS.md`에 고정 작업 규칙을 추가했다.
