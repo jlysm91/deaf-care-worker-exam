@@ -2637,6 +2637,17 @@ const chapter5Data=[
     return [...chapterExamIds, ...Object.values(sectionToExamId).filter(Boolean)];
   }
 
+  function isStoredResultEligible(result) {
+    if (!result) return false;
+    const totalQ = parseInt(result.totalQuestions, 10) || 0;
+    if (!totalQ) return false;
+    const answers = toAnswersArray(result.answers, totalQ);
+    const completed = answers.every(answer => answer !== null && answer !== undefined && answer !== "");
+    const total = parseInt(result.total, 10);
+    const passCount = Math.ceil(totalQ * 0.6);
+    return completed && !Number.isNaN(total) && total >= passCount;
+  }
+
   async function refreshCompletionActions() {
     updateCompletionActions(false);
     if (!currentUserId) return;
@@ -2645,7 +2656,7 @@ const chapter5Data=[
     for (const examId of examIds) {
       try {
         const snap = await database.ref(`exams/${examId}/users/${currentUserId}/result`).once("value");
-        if (!snap.val()) return;
+        if (!isStoredResultEligible(snap.val())) return;
       } catch (e) {
         return;
       }
@@ -2653,7 +2664,23 @@ const chapter5Data=[
     updateCompletionActions(true);
   }
 
+  function notifyQuiz1400Complete() {
+    try {
+      if (!window.opener || window.opener.closed) return;
+      window.opener.postMessage({
+        type: "quiz1400Complete",
+        part: QUIZ_1400_PART,
+        uid: String(currentUserId || ""),
+        name: String(currentUserName || ""),
+        completed: true,
+        eligible: true,
+        examIds: getRequiredExamIds()
+      }, "*");
+    } catch (e) {}
+  }
+
   function sendLearningComplete() {
+    notifyQuiz1400Complete();
     const message = "이 창을 닫고 아이디·이름 입력 화면 하단의 '학습을 완료합니다' 버튼을 눌러주세요.";
     try {
       if (window.opener && !window.opener.closed) window.opener.focus();
@@ -2663,6 +2690,7 @@ const chapter5Data=[
       if (!window.closed) alert(message);
     }, 250);
   }
+
   document.getElementById("start-quiz-btn").addEventListener("click", () => {
     const uid = document.getElementById("start-uid").value.trim();
     const uname = document.getElementById("start-uname").value.trim();
