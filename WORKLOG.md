@@ -1,5 +1,19 @@
 # WORKLOG
 
+## 47. 2026-06-17 모의고사 권한 거부 화면 올리사이트 내부 표시로 재조정
+
+- 사용자 재요청에 따라 OneDrive 모의고사 1~10회 로그인 코드의 `scope-denied` 흐름을 다시 조정했다.
+  - 권한 범위 미등록 시 GitHub 모의고사 페이지를 열지 않는다.
+  - `입력하신 정보는 해당 모의고사에 등록되어 있지 않습니다. 관리자에게 문의해 주세요.` 안내창을 먼저 표시한다.
+  - 안내창을 닫으면 올리사이트 메인페이지 코드 영역 안에 `입장할 수 없습니다` 카드와 안내 문구가 표시된다.
+  - 이전에 추가했던 GitHub 입장 불가 페이지 열기 및 올리사이트 닫기 시도 함수는 제거했다.
+- 수정 대상:
+  - OneDrive `01. 합격!! 모의고사` 1~10회 `1. ★★★ n회 모의고사 로그인 코드.html`
+- 검증:
+  - OneDrive 모의고사 로그인 코드 10개 inline script 문법 검사 통과.
+  - 10개 파일 모두 `alert(message)` 후 `olShowScopeDeniedNotice(message)` 흐름 포함 확인.
+  - 10개 파일 모두 `olOpenDeniedExamPageAndCloseHost`, `olTryCloseHostPage`, `olIsHostCloseControlText` 제거 확인.
+
 ## 46. 2026-06-17 모의고사 권한 거부 시 GitHub 입장 불가 화면 유지
 
 - 사용자 요청에 따라 OneDrive 모의고사 1~10회 로그인 코드의 `scope-denied` 처리 흐름을 변경했다.
