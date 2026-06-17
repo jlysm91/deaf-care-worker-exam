@@ -1,5 +1,24 @@
 # WORKLOG
 
+## 52. 2026-06-17 1400제 GitHub 페이지 권한 확인 방식 통일
+
+- 사용자 확인 화면에서 GitHub 1400제 페이지가 `등록 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.` 알림을 띄우는 문제를 점검했다.
+  - Firebase REST로 `authorizedUsers/jlysm91` 조회는 정상이라 등록 데이터 문제보다는 GitHub 학습 페이지 내부 권한 조회 방식 문제로 판단했다.
+  - 기존 데스크톱 1400제는 Firebase SDK `database.ref('authorizedUsers/...')`로 등록 명단을 다시 읽어 SDK 조회 실패 시 fallback 문구가 나올 수 있었다.
+  - 모바일 1400제에는 권한 확인 함수 정의가 누락된 상태라 데스크톱/모바일 간 동작 차이 위험이 있었다.
+- 로컬 `quiz-1400` 1~4부 데스크톱/모바일 8개 파일의 등록 명단 확인을 올리사이트 로그인 코드와 같은 REST `fetch()` 방식으로 통일했다.
+  - `authorizedUsers/{uid}.json`을 직접 읽고, 등록 없음/사용 중지/이름 불일치/부별 권한 없음은 기존 안내 문구로 분기한다.
+  - 진행 저장과 결과 저장에 사용하는 Firebase Database SDK 흐름은 변경하지 않았다.
+- OneDrive 동기화:
+  - `02. 합격!! 1400題` 1~4부 `02. 개선판` 데스크톱/모바일 최종 코드 8개를 로컬과 동기화했다.
+  - 8개 OneDrive 대응 파일과 로컬 파일의 SHA-256 해시 일치를 확인했다.
+- 검증:
+  - 로컬 1400제 1~4부 데스크톱/모바일 8개 inline script 문법 검사 통과.
+  - OneDrive 1400제 1~4부 데스크톱/모바일 8개 inline script 문법 검사 통과.
+  - 정적 검사로 8개 파일 모두 `verifyAuthorizedUser`, `getAuthorizedUserDbUrl`, `showAuthorizationDenied`가 1회씩 존재하고 SDK 기반 `authorizedUsers` 조회가 제거된 것을 확인했다.
+  - `node tools/result-page-check.mjs` 통과: 28개 파일, 196개 결과 화면 viewport 케이스.
+  - `git diff --check` 통과.
+
 ## 51. 2026-06-17 1400제 로그인 거부 화면 부제목 유지
 
 - 사용자 요청에 따라 OneDrive `02. 합격!! 1400題` 1~4부 올리사이트 복사용 로그인 코드의 입장 거부 화면에서도 부제목을 유지하도록 보정했다.

@@ -3051,6 +3051,55 @@ const chapter5Data=[
 
 
 
+  function normalizeUserNameForIdentity(name){
+    return String(name||"").trim().replace(/\s+/g," ");
+  }
+
+  function getQuiz1400ScopeKey(){
+    return "part" + QUIZ_1400_PART;
+  }
+
+  function getAuthorizationErrorMessage(error){
+    if(error&&error.code==="invalid-uid")return "아이디에는 . # $ [ ] / 문자를 사용할 수 없습니다.";
+    if(error&&error.code==="not-registered")return "등록되지 않은 아이디입니다. 관리자에게 문의해 주세요.";
+    if(error&&error.code==="disabled")return "사용이 중지된 아이디입니다. 관리자에게 문의해 주세요.";
+    if(error&&error.code==="name-mismatch")return "아이디와 이름이 등록 정보와 일치하지 않습니다. 다시 확인해 주세요.";
+    if(error&&error.code==="scope-denied")return "입력하신 정보는 해당 1400제 부에 등록되어 있지 않습니다. 관리자에게 문의해 주세요.";
+    return "등록 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.";
+  }
+
+  function hasAuthorizedQuiz1400Scope(data){
+    const scopes=(data&&data.allowedScopes&&data.allowedScopes.quiz1400)||{};
+    return Boolean(data&&data.enabled!==false&&(scopes.all===true||scopes[getQuiz1400ScopeKey()]===true));
+  }
+
+  function getAuthorizedUserDbUrl(uid){
+    return "https://deaf-for-database-develo-59bf8-default-rtdb.firebaseio.com/authorizedUsers/" + encodeURIComponent(uid) + ".json";
+  }
+
+  function verifyAuthorizedUser(uid,name){
+    const normalized=normalizeUserNameForIdentity(name);
+    if(/[.#$\[\]\/]/.test(String(uid||""))){const err=new Error("invalid uid");err.code="invalid-uid";return Promise.reject(err);}
+    return fetch(getAuthorizedUserDbUrl(uid),{cache:"no-store"}).then(response=>{
+      if(!response.ok){const err=new Error("authorization fetch failed");err.code="fetch-failed";throw err;}
+      return response.json();
+    }).then(data=>{
+      if(!data){const err=new Error("not registered");err.code="not-registered";throw err;}
+      if(data.enabled===false){const err=new Error("disabled");err.code="disabled";throw err;}
+      if(normalizeUserNameForIdentity(data.name)!==normalized){const err=new Error("name mismatch");err.code="name-mismatch";throw err;}
+      if(!hasAuthorizedQuiz1400Scope(data)){const err=new Error("scope denied");err.code="scope-denied";throw err;}
+      return data;
+    });
+  }
+
+  function showAuthorizationDenied(message){
+    alert(message);
+    currentUserId="";
+    currentUserName="";
+    ["user-id","user-name","start-uid","start-uname"].forEach(id=>{const input=document.getElementById(id);if(input)input.value="";});
+    showPage(startPage);
+  }
+
   function updateCompletionActions(isVisible) {
     document.querySelectorAll(".host-actions").forEach(actions => {
       actions.classList.toggle("is-visible", isVisible);

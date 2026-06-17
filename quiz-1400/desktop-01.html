@@ -2695,7 +2695,7 @@ const chapter1Data=[
   }
 
   function normalizeUserNameForIdentity(name){
-    return String(name || "").trim().replace(/\s+/g, " ");
+    return String(name||"").trim().replace(/\s+/g," ");
   }
 
   function getQuiz1400ScopeKey(){
@@ -2704,7 +2704,7 @@ const chapter1Data=[
 
   function getAuthorizationErrorMessage(error){
     if(error&&error.code==="invalid-uid")return "아이디에는 . # $ [ ] / 문자를 사용할 수 없습니다.";
-      if(error&&error.code==="not-registered")return "등록되지 않은 아이디입니다. 관리자에게 문의해 주세요.";
+    if(error&&error.code==="not-registered")return "등록되지 않은 아이디입니다. 관리자에게 문의해 주세요.";
     if(error&&error.code==="disabled")return "사용이 중지된 아이디입니다. 관리자에게 문의해 주세요.";
     if(error&&error.code==="name-mismatch")return "아이디와 이름이 등록 정보와 일치하지 않습니다. 다시 확인해 주세요.";
     if(error&&error.code==="scope-denied")return "입력하신 정보는 해당 1400제 부에 등록되어 있지 않습니다. 관리자에게 문의해 주세요.";
@@ -2716,11 +2716,17 @@ const chapter1Data=[
     return Boolean(data&&data.enabled!==false&&(scopes.all===true||scopes[getQuiz1400ScopeKey()]===true));
   }
 
+  function getAuthorizedUserDbUrl(uid){
+    return "https://deaf-for-database-develo-59bf8-default-rtdb.firebaseio.com/authorizedUsers/" + encodeURIComponent(uid) + ".json";
+  }
+
   function verifyAuthorizedUser(uid,name){
     const normalized=normalizeUserNameForIdentity(name);
     if(/[.#$\[\]\/]/.test(String(uid||""))){const err=new Error("invalid uid");err.code="invalid-uid";return Promise.reject(err);}
-    return database.ref('authorizedUsers/'+uid).once("value").then(snapshot=>{
-      const data=snapshot.val();
+    return fetch(getAuthorizedUserDbUrl(uid),{cache:"no-store"}).then(response=>{
+      if(!response.ok){const err=new Error("authorization fetch failed");err.code="fetch-failed";throw err;}
+      return response.json();
+    }).then(data=>{
       if(!data){const err=new Error("not registered");err.code="not-registered";throw err;}
       if(data.enabled===false){const err=new Error("disabled");err.code="disabled";throw err;}
       if(normalizeUserNameForIdentity(data.name)!==normalized){const err=new Error("name mismatch");err.code="name-mismatch";throw err;}
@@ -2733,11 +2739,9 @@ const chapter1Data=[
     alert(message);
     currentUserId="";
     currentUserName="";
-    document.getElementById("user-id").value="";
-    document.getElementById("user-name").value="";
+    ["user-id","user-name","start-uid","start-uname"].forEach(id=>{const input=document.getElementById(id);if(input)input.value="";});
     showPage(startPage);
   }
-
 
   function makePlayableData(data) {
     return data.map(item => ({ ...item, videoEmbed: getVideoEmbed(item.videoId, item.number) }));
