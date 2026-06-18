@@ -1875,8 +1875,6 @@
     .result-standard strong { color:var(--primary); }
     #quick-nav-container-result { display:flex!important; flex-direction:column!important; width:min(100%,1120px)!important; max-width:1120px!important; background:rgba(255,255,255,0.94)!important; border:1px solid #D8E2EB!important; border-radius:var(--radius-lg)!important; box-shadow:var(--shadow-card)!important; padding:clamp(10px,1.3vh,16px) clamp(10px,1.6vw,18px)!important; overflow:visible!important; }
     .result-grid-title { text-align:center!important; color:var(--text-muted)!important; font-size:clamp(10px,0.9vw,12px)!important; font-weight:800!important; letter-spacing:0.7px!important; text-transform:uppercase!important; margin:0 0 clamp(8px,1vh,12px)!important; }
-    #result-grid-nav { display:none; align-items:center; justify-content:center; gap:12px; margin-bottom:12px; }
-    #result-page-info { color:var(--text-secondary); font-size:clamp(12px,1vw,14px); font-weight:700; }
     #quick-nav-grid-result.result-review-board { display:grid!important; grid-template-columns:minmax(0,1fr)!important; gap:clamp(10px,1.2vw,16px)!important; align-items:start!important; width:100%!important; margin:0!important; }
     .result-review-section { min-width:0; border:1px solid #D8E2EB; border-radius:12px; background:#fff; overflow:hidden; }
     .result-review-section.result-review-primary { border-color:#F0B8B4; }
@@ -1963,11 +1961,6 @@
     <div id="score" class="result-summary"></div>
     <div id="quick-nav-container-result">
       <p class="result-grid-title">오답 중심 복습</p>
-      <div id="result-grid-nav">
-        <button id="result-prev-btn">&#8592; 이전</button>
-        <span id="result-page-info"></span>
-        <button id="result-next-btn">다음 &#8594;</button>
-      </div>
       <div id="quick-nav-grid-result"></div>
     </div>
     <div class="result-actions">
@@ -2974,13 +2967,9 @@ const EXAM_ID = "exam10";
     function renderResultNav(){
       const grid=document.getElementById("quick-nav-grid-result");
       const title=document.querySelector(".result-grid-title");
-      const nav=document.getElementById("result-grid-nav");
-      const pageInfo=document.getElementById("result-page-info");
       if(!grid)return;
       renderResultSummary();
       if(title)title.textContent="오답 중심 복습";
-      if(nav)nav.style.display="none";
-      if(pageInfo)pageInfo.textContent="";
       const stats=analyzeExamResultAnswers();
       grid.className="result-review-board result-review-compact";
       grid.innerHTML=renderWrongReviewSection(stats.wrong);

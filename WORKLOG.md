@@ -1,5 +1,19 @@
 # WORKLOG
 
+## 74. 2026-06-18 모의고사 결과 페이지 이전/다음 버튼 제거
+
+- 사용자 확인에 따라 GitHub Pages 모의고사 1~10회 학습결과 페이지에서 의도치 않게 표시된 결과 화면 전용 `이전`/`다음` 버튼을 제거했다.
+- 로컬 `mock-exam/desktop-01.html`~`desktop-10.html`, `mock-exam/mobile-01.html`~`mobile-10.html`에서 결과 영역의 `result-grid-nav`, `result-prev-btn`, `result-next-btn`, `result-page-info` 관련 HTML/CSS/JS 잔여물을 제거했다.
+- OneDrive 모의고사 1~10회 최종 코드 데스크톱/모바일 20개 파일에도 같은 제거를 동기화했다.
+- 문제 풀이 중 사용하는 `navigation-buttons`, `prev-btn`, `next-btn`, 빠른 문항 이동, 점수/오답 복습/다시 풀기/학습 완료 로직은 변경하지 않았다.
+- 1400제, 문제 데이터, 정답, Firebase 저장 로직은 변경하지 않았다.
+- 검증
+  - 로컬 저장소와 OneDrive 최종 코드에서 `result-prev-btn`, `result-next-btn`, `result-grid-nav`, `result-page-info` 잔존 0건 확인.
+  - 로컬 모의고사 문제 풀이용 `prev-btn`/`next-btn`/`navigation-buttons` 유지 확인.
+  - 로컬 모의고사 20개 HTML 인라인 스크립트 문법 파싱 통과.
+  - OneDrive 모의고사 최종 코드 20개 HTML 인라인 스크립트 문법 파싱 통과.
+  - `git diff --check` 통과.
+
 ## 73. 2026-06-18 모의고사 1~10회 로그인 UI 1400제 기준 동기화
 
 - 사용자 요청에 따라 OneDrive 모의고사 1~10회 최종 로그인 코드의 로그인 UI를 1400제 1~4부 기준과 동일하게 맞췄다.
