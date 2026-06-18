@@ -2566,7 +2566,7 @@ const EXAM_ID = "exam1";
           const data=snapshot.val();
           saveUserIdentity(userRef,uid,currentUserName,data).then(()=>{
             if(data&&data.result){
-              startPage.style.display="none";resultPage.style.display="flex";
+              startPage.style.display="none";quizPage.style.setProperty("display","none","important");resultPage.style.display="flex";
               if(data.result.answers)userAnswers=data.result.answers;
               document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
             }else if(data&&data.progress){
@@ -2739,7 +2739,7 @@ const EXAM_ID = "exam1";
       });
       const 총점=필기+실기;
       const 합격여부 = (필기 >= 21 && 실기 >= 27) ? "합격" : "불합격";
-      quizPage.style.display="none";resultPage.style.display="flex";
+      quizPage.style.setProperty("display","none","important");resultPage.style.display="flex";
       currentUserName=getCurrentUserName();
       syncResultUserName(currentUserName);
       if(currentUserId){
