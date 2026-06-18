@@ -1,5 +1,19 @@
 # WORKLOG
 
+## 65. 2026-06-18 1400제 태블릿 높이 맞춤 자동 축소
+
+- 사용자 확인 화면 기준으로 태블릿 OlliSite 화면에서 1400제 로그인 카드가 세로 높이에 맞지 않아 버튼 하단이 잘리는 문제를 보정했다.
+- OneDrive 1400제 1~4부 최종 로그인 코드의 `fitLoginLayout()`을 높이 기반으로 강화했다.
+  - `visibleLoginHeight()`로 현재 viewport와 overflow 부모 컨테이너의 실제 보이는 높이를 계산하도록 했다.
+  - 높이가 부족하면 배지, 제목, 부제, 입력창, 버튼, 안내 박스의 여백과 크기를 더 압축하도록 했다.
+  - 그래도 부족하면 `scaleLoginToVisibleHeight()`로 카드 전체를 보이는 높이에 맞춰 축소하고 wrapper 높이를 함께 조정하도록 했다.
+  - 초기 렌더링 뒤 OlliSite 레이아웃이 늦게 잡히는 경우를 위해 300ms/900ms 지연 재계산과 `visualViewport.resize` 재계산을 추가했다.
+- 모의고사 로그인 코드, 로컬 `mock-exam`/`quiz-1400` 문제 페이지, 문제 데이터, 정답, Firebase 저장, GitHub Pages 결과 UI는 변경하지 않았다.
+- 검증:
+  - OneDrive 1400제 최종 로그인 코드 4개에 `visibleLoginHeight`, `scaleLoginToVisibleHeight`, `visualViewport.resize`, 지연 재계산 마커 반영 확인.
+  - OneDrive 1400제 로그인 코드 4개 인라인 스크립트 문법 파싱 통과.
+  - 로컬 Node 환경에 Playwright 패키지가 없어 실제 브라우저 렌더링 검증은 실행하지 못했다.
+
 ## 64. 2026-06-18 미완료 안내 문구 오해 소지 보정
 
 - 사용자 판단에 따라 미완료 안내의 두 번째 줄을 모의고사와 1400제 모두 동일하게 보정했다.
