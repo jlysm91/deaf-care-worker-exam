@@ -1,5 +1,16 @@
 # WORKLOG
 
+## 75. 2026-06-18 1회 모의고사 로그인 입장 후 입력 영역 숨김 테스트
+
+- 사용자 요청에 따라 OneDrive `01. 합격!! 모의고사\01회 모의고사\02. 개선판 (完)\02. (★삭제 주의) 최종 코드\1. ★★★ 1회 모의고사 로그인 코드.html`만 테스트 대상으로 수정했다.
+- 아이디/이름 검증 전과 오류/다시 입력 상태는 기존처럼 입력 영역을 유지하고, 사용자가 `모의고사 시작하기`를 눌러 시험 창에 입장한 뒤의 진행/미완료/완료 안내 상태에서는 `olSetEntryFieldsVisible(false)`로 `[시작하기 전에 아이디와 이름을 입력해 주세요.]`, 입력 폼, 시작 버튼을 숨기도록 바꿨다.
+- 로컬 `mock-exam/desktop-01.html`, `mock-exam/mobile-01.html` 문제 파일은 수정하지 않았다.
+- 검증:
+  - OneDrive 1회 모의고사 로그인 코드 HTML inline script 문법 검사 통과.
+  - `olShowProgressNotice`, `olShowIncompleteNotice`, `olShowCompletionNotice`, `olFinishLearning` 함수가 입장 후 입력 영역을 숨기도록 정적 확인했다.
+  - headless Edge 로컬 미리보기에서 `olShowProgressNotice()` 실행 후 `ol-sub`/`ol-form`은 `display:none`, `ol_done_notice`는 `display:block`이며 카드 높이가 276px로 줄어드는 것을 확인했다.
+  - 수정된 OneDrive 로그인 코드 SHA-256: `66E2EC4BB290AFDDFA36E4680BA7641CB0D3F7311549348B7C0D062DE75E0BD8`.
+
 ## 74. 2026-06-18 모의고사 결과 페이지 이전/다음 버튼 제거
 
 - 사용자 확인에 따라 GitHub Pages 모의고사 1~10회 학습결과 페이지에서 의도치 않게 표시된 결과 화면 전용 `이전`/`다음` 버튼을 제거했다.
@@ -193,7 +204,6 @@
   - OneDrive 모의고사 최종 로그인 코드 10개에서 새 짧은 문구 반영 및 기존 긴 문구 제거를 확인했다.
   - OneDrive 1400제 최종 로그인 코드 4개에서 `hideLeakedWrapperCode()`와 새 짧은 문구 반영을 확인했다.
   - OneDrive 로그인 코드 14개 인라인 스크립트 문법 파싱 통과.
-
 ## 59. 2026-06-18 1400제 로그인 코드 차시목록 숨김 추가
 
 - 사용자 요청에 따라 OneDrive 1400제 1~4부 로그인 코드에서 올리사이트 상단 `차시목록` 버튼을 항상 숨기도록 `isHostAlwaysHiddenControlText()`와 host guard 분기를 추가했다.
