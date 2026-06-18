@@ -1,5 +1,16 @@
 # WORKLOG
 
+## 76. 2026-06-18 1회 모의고사 안내 카드 재맞춤 고정 보정
+
+- 사용자 제보에 따라 OneDrive 1회 모의고사 로그인 코드에서 토론방을 열고 닫은 뒤 진행/미완료 안내 카드가 작게 다시 맞춰지는 문제를 보정했다.
+- `olIsNoticeOnlyLoginState()`, `olUseStableNoticeLayout()`, `olApplyStableNoticeLayout()`을 추가해 입력 영역이 숨겨지고 안내만 보이는 데스크톱 화면에서는 카드가 원래 큰 16:9 비율과 중앙 정렬을 유지하도록 했다.
+- 모바일·터치·짧은 화면에서는 기존 자동 맞춤 흐름을 그대로 사용하도록 조건을 제한했다.
+- 로컬 `mock-exam/desktop-01.html`, `mock-exam/mobile-01.html` 문제 파일은 수정하지 않았다.
+- 검증:
+  - OneDrive 1회 모의고사 로그인 코드 HTML inline script 문법 검사 통과.
+  - headless Edge 1120px 폭 미리보기에서 `olShowProgressNotice()` 후 반복 `olResize()`/`resize` 이벤트를 실행해도 카드가 약 1080x608, `aspect-ratio:16/9`, `justify-content:center`, 높이 변화 0px로 유지됨을 확인했다.
+  - 수정된 OneDrive 로그인 코드 SHA-256: `F5DDF3A206255E9B38D0B893A09A0A8C07C8E99F772E04B4572CFAC637E303D7`.
+
 ## 75. 2026-06-18 1회 모의고사 로그인 입장 후 입력 영역 숨김 테스트
 
 - 사용자 요청에 따라 OneDrive `01. 합격!! 모의고사\01회 모의고사\02. 개선판 (完)\02. (★삭제 주의) 최종 코드\1. ★★★ 1회 모의고사 로그인 코드.html`만 테스트 대상으로 수정했다.
