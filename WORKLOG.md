@@ -1384,3 +1384,19 @@
   - Git diff 기준 `mock-exam/mobile-01.html`의 결과 화면 전환 2줄만 변경됨을 확인했다.
   - 로컬/OneDrive 1회 모바일 HTML 인라인 스크립트 문법 파싱 통과.
   - Edge headless 검증에서 결과 상태는 `quizDisplay:none`, `navRendered:false`이고, 퀴즈 상태로 되돌리면 `navRendered:true`로 복구됨을 확인했다.
+
+## 34. 2026-06-18 모의고사 태블릿 문항판과 로그인 안내 표시 보정
+
+- 사용자 요청 세 가지에 한정해 모의고사 모바일 코드와 OneDrive 로그인 최종 코드만 보정했다.
+  - `mock-exam/mobile-01.html`~`mock-exam/mobile-10.html`의 태블릿 가로 문항판에서 모의고사는 80문항 전체가 한 화면에 나오도록 `getNavPageSize()`를 추가했다.
+  - 1400제처럼 40문항씩 나뉘는 흐름은 모의고사 태블릿 가로 화면에는 적용하지 않고, 휴대폰/비태블릿 문항판은 기존 40문항 페이지 흐름을 유지했다.
+  - OneDrive 모의고사 1~10회 로그인 최종 코드의 입장 차단 안내 문구를 `입력하신 정보는 해당 모의고사에 등록되어 있지 않습니다.` / `관리자에게 문의해 주세요.` 두 줄로 보이도록 `white-space:pre-line`과 줄바꿈 문자를 반영했다.
+  - 1회 모의고사 로그인 코드의 기본 학습 완료 안내 카드만 `min-height`를 `400px`에서 `430px`로, 패딩을 `36px`에서 `38px`로 소폭 늘려 세로로 눌려 보이는 느낌을 줄였다.
+- 1400제, 데스크톱 문제풀이, 문제 데이터, 정답, Firebase 저장/제출, 결과 화면 로직은 변경하지 않았다.
+- OneDrive 원본 관리 폴더의 모의고사 1~10회 모바일 최종 코드 파일에 로컬 모바일 파일과 동일한 내용을 동기화했다.
+- 검증:
+  - `git diff --check` 통과.
+  - 로컬 `mock-exam/mobile-01.html`~`mock-exam/mobile-10.html`과 OneDrive 대응 모바일 최종 코드 SHA-256 일치 확인.
+  - Edge headless 태블릿 가로 검증에서 1회 모바일 문항판이 `pageSize:80`, 버튼 `1`~`80`, 좌우 화살표 `display:none`, 20열 렌더링으로 확인됐다.
+  - 로컬 모바일 HTML 10개와 OneDrive 로그인 HTML 10개 인라인 스크립트 문법 파싱 통과.
+  - OneDrive 로그인 HTML 10개에서 안내 문구 줄바꿈, `white-space:pre-line`, 1회 카드 `min-height:430px` 반영을 확인했다.

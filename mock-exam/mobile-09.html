@@ -2015,6 +2015,10 @@ const EXAM_ID = "exam9";
       return window.matchMedia("(min-width: 900px) and (min-height: 560px) and (orientation: landscape)").matches;
     }
 
+    function getNavPageSize(){
+      return isTabletLandscapeLayout()?TOTAL_QUESTIONS:NAV_PAGE_SIZE;
+    }
+
     function closeQuickNavPanel(){
       if(quickNavContainer) quickNavContainer.classList.remove("open");
     }
@@ -2662,7 +2666,7 @@ const EXAM_ID = "exam9";
         fitOptionsText();
         scheduleQuizContentScrollState();
       });
-      currentNavPage=Math.floor(currentQuestionIndex/NAV_PAGE_SIZE);
+      currentNavPage=Math.floor(currentQuestionIndex/getNavPageSize());
       updateNavDisplay();
       prevBtn.disabled=currentQuestionIndex===0;
       nextBtn.textContent=currentQuestionIndex===TOTAL_QUESTIONS-1?"제출하기":"다음 →";
@@ -2672,10 +2676,10 @@ const EXAM_ID = "exam9";
 
     function updateNavDisplay(){
       quickNavGrid.innerHTML="";
-      const totalPages=Math.max(1,Math.ceil(TOTAL_QUESTIONS/NAV_PAGE_SIZE));
+      const totalPages=Math.max(1,Math.ceil(TOTAL_QUESTIONS/getNavPageSize()));
       currentNavPage=Math.max(0,Math.min(currentNavPage,totalPages-1));
-      const start=currentNavPage*NAV_PAGE_SIZE;
-      for(let i=0;i<NAV_PAGE_SIZE;i++){
+      const start=currentNavPage*getNavPageSize();
+      for(let i=0,pageSize=getNavPageSize();i<pageSize;i++){
         const realIndex=start+i;
         const btn=document.createElement("div");
         btn.classList.add("nav-btn");
@@ -3062,7 +3066,7 @@ const EXAM_ID = "exam9";
     });
     if(navNextBtn)navNextBtn.addEventListener("click",e=>{
       e.preventDefault();e.stopPropagation();
-      const totalPages=Math.max(1,Math.ceil(TOTAL_QUESTIONS/NAV_PAGE_SIZE));
+      const totalPages=Math.max(1,Math.ceil(TOTAL_QUESTIONS/getNavPageSize()));
       if(currentNavPage<totalPages-1){currentNavPage++;updateNavDisplay();autoResizeNavGrid();}
     });
     optionsDiv.addEventListener("change",e=>{
@@ -3086,7 +3090,7 @@ const EXAM_ID = "exam9";
       const tabletLandscape=isTabletLandscapeLayout();
       const portraitBottomNav=!tabletLandscape&&window.matchMedia("(orientation: portrait)").matches;
       const phonePortrait=portraitBottomNav&&vw<=700;
-      const visibleButtons=quickNavGrid.querySelectorAll(".nav-btn:not(.placeholder)").length||Math.min(NAV_PAGE_SIZE,TOTAL_QUESTIONS);
+      const visibleButtons=quickNavGrid.querySelectorAll(".nav-btn:not(.placeholder)").length||Math.min(getNavPageSize(),TOTAL_QUESTIONS);
       let cols=tabletLandscape?20:10;
       if(portraitBottomNav)cols=phonePortrait?5:6;
       const rows=Math.max(1,Math.ceil(visibleButtons/cols));
