@@ -1,5 +1,32 @@
 # WORKLOG
 
+## 91. 2026-06-19 실전 모의시험 결과 초기화 버튼 제거
+
+- 사용자 요청에 따라 실전 모의시험 결과 유지를 위해 결과 화면의 `다시 풀기` 버튼과 결과 초기화 경로를 제거했다.
+  - 대상 로컬/GitHub 파일:
+    - `mock-exam/desktop-trial.html`
+    - `mock-exam/mobile-trial.html`
+    - `online-class/trial-exam/desktop-trial.html`
+    - `online-class/trial-exam/mobile-trial.html`
+  - 대상 OneDrive 최종 관리 파일:
+    - `03. 모의시험\1. ★★★ 실전 모의시험 로그인 코드.html`
+    - `03. 모의시험\2-1. ★★★ 실전 모의시험 코드 - 데스크톱용.html`
+    - `03. 모의시험\2-2. ★★★ 실전 모의시험 코드 - 모바일용.html`
+- 변경 내용:
+  - 실전 모의시험 결과 페이지에서 `result-return-btn` 버튼과 전용 CSS를 제거했다.
+  - `resetQuiz()` 함수와 `result-return-btn` 클릭 이벤트 연결을 제거해 `progress`/`result`를 삭제하고 문제풀이로 되돌아가는 경로를 없앴다.
+  - OneDrive 로그인 코드의 `ol-retry-btn` 버튼과 `olRetry()` 함수를 제거해 `/result.json`, `/progress.json` DELETE 요청 경로를 없앴다.
+  - 입장 거부/입력 오류 상태의 `다시 입력하기` 버튼은 결과 초기화 기능이 아니므로 유지했다.
+- 검증:
+  - 실전 모의시험 로컬/온라인 학습반용 데스크톱·모바일 HTML에서 `result-return-btn`, `resetQuiz`, `초기화되었습니다`, `child("result").remove` 잔여 문자열 0건 확인.
+  - OneDrive 로그인 코드에서 `ol-retry-btn`, `olRetry`, `/result.json`, `/progress.json`, `다시 풀기` 잔여 문자열 0건 확인.
+  - 실전 모의시험 로컬/온라인 학습반용 데스크톱·모바일 HTML과 OneDrive 로그인 코드 inline script 문법 파싱 통과.
+  - 로컬 `mock-exam`, 온라인 학습반 `online-class/trial-exam`, OneDrive 최종 데스크톱·모바일 파일 SHA-256 일치 확인.
+  - SHA-256:
+    - 데스크톱 로컬/온라인 학습반/OneDrive: `FCA244C2AF506EE8E57383F13044D2D58E48A895B0D20718ABE9DCED20AD7E49`
+    - 모바일 로컬/온라인 학습반/OneDrive: `1BDCDF6BB2E4E3A61709DB98635A1FAA448953A4FE94C929D5187529821E5FBF`
+    - OneDrive 로그인: `1F15D047AA247E0060D20E7003D86EF768B9933A09D8AFE32CFD25A3916B3633`
+
 ## 90. 2026-06-19 실전 모의시험 제출 결과를 올리사이트 본창에 표시
 
 - 사용자 요청에 따라 실전 모의시험 1~80번 제출 직후 올리사이트 메인 로그인 창에서도 합격/불합격 여부와 필기/실기 점수를 요약 표시하도록 수정했다.
