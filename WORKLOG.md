@@ -1,5 +1,32 @@
 # WORKLOG
 
+## 89. 2026-06-19 실전 모의시험 관리자 등록 없이 즉시 입장 허용
+
+- 사용자 요청에 따라 실전 모의시험은 관리자용 학습자 등록(`authorizedUsers`)에 포함하지 않아도 되도록 입장 흐름을 수정했다.
+  - 대상 로컬/GitHub 파일:
+    - `mock-exam/desktop-trial.html`
+    - `mock-exam/mobile-trial.html`
+    - `online-class/trial-exam/desktop-trial.html`
+    - `online-class/trial-exam/mobile-trial.html`
+  - 대상 OneDrive 최종 관리 파일:
+    - `03. 모의시험\1. ★★★ 실전 모의시험 로그인 코드.html`
+    - `03. 모의시험\2-1. ★★★ 실전 모의시험 코드 - 데스크톱용.html`
+    - `03. 모의시험\2-2. ★★★ 실전 모의시험 코드 - 모바일용.html`
+- 변경 내용:
+  - 실전 모의시험 데스크톱/모바일 페이지의 `verifyAuthorizedUser()`에서 `authorizedUsers/{uid}` 조회와 `allowedScopes.mockExam` 검사를 제거했다.
+  - 아이디에 Firebase key 금지 문자 `. # $ [ ] /`가 있는 경우만 막고, 그 외에는 입력한 아이디와 이름으로 바로 `examTrial` 사용자 데이터를 생성/갱신하게 했다.
+  - OneDrive 로그인 코드는 `online-class/trial-exam` GitHub Pages 경로를 열도록 변경했다.
+  - 로그인 버튼 진행 문구를 `등록 정보 확인 중...`에서 `입장 준비 중...`으로 변경했다.
+- 검증:
+  - 실전 모의시험 로컬/온라인 학습반용 데스크톱·모바일 HTML과 OneDrive 로그인 코드 inline script 문법 파싱 통과.
+  - 실전 모의시험 로컬/온라인 학습반용 데스크톱·모바일 HTML `quizRawData` 80문항 파싱 통과.
+  - 실전 모의시험 로컬/온라인 학습반용 데스크톱·모바일 HTML 및 OneDrive 로그인 코드에서 `authorizedUsers`, `allowedScopes`, `등록 정보 확인 중` 잔여 문자열 0건 확인.
+  - Playwright + 로컬 Chrome으로 OneDrive 로그인 코드에 테스트 아이디/이름을 입력했을 때 `online-class/trial-exam/...` 새 창 URL이 열리고, `authorizedUsers` 네트워크 요청 0건임을 확인했다.
+  - SHA-256:
+    - 데스크톱 로컬/온라인 학습반/OneDrive: `77398C602D3020467A74C972BD5E68A5DE2146B190EF34921D7D590EBB8C204A`
+    - 모바일 로컬/온라인 학습반/OneDrive: `9F69073F6DF9CF30CEB65352AE105971A95790E357521981C6F34D04AE5D6877`
+    - OneDrive 로그인: `F8927246FCD50A845025015B7405D34ECC49077CBA943544BB2AFC4C83B21C6E`
+
 ## 88. 2026-06-19 온라인 학습반용 실전 모의시험 GitHub 폴더 추가
 
 - 사용자 요청에 따라 온라인 학습반에서 직접 사용할 수 있도록 실전 모의시험 데스크톱/모바일 파일을 별도 폴더에 배치했다.
