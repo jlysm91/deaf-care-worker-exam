@@ -1,5 +1,31 @@
 # WORKLOG
 
+## 87. 2026-06-19 실전 모의시험 80문항 생성
+
+- 사용자 요청에 따라 실제 시험 전 연습용 `실전 모의시험`을 새로 만들었다.
+  - 운영 예정 시간 맥락: 2026-06-19 금요일, 2026-06-22 월요일 19:00~21:00.
+  - GitHub Pages용 파일: `mock-exam/desktop-trial.html`, `mock-exam/mobile-trial.html`.
+  - Firebase 저장/권한 scope 충돌을 피하기 위해 새 `EXAM_ID`를 `examTrial`로 분리했다.
+  - 로그인 UI는 현재 1회 모의고사 로그인 코드의 디자인/결과 화면 구조를 복제하고, 표시명/URL/scope만 `실전 모의시험` 기준으로 변경했다.
+- 데이터 구성:
+  - 1~10회 모의고사의 기존 데스크톱/모바일 `quizRawData`를 추출해 데스크톱/모바일 원본 데이터가 같은지 먼저 확인했다.
+  - 각 회차에서 정확히 8문항씩, 총 80문항을 고정 시드로 섞어 구성했다.
+  - 필기 35문항, 실기 45문항 구조를 유지했고 기존 합격 기준 `필기 21문항 이상`, `실기 27문항 이상` 로직을 그대로 사용한다.
+  - 각 문항에는 검증용 `sourceExam`, `sourceNumber`, `sourcePosition`, `trialNumber` 메타데이터를 함께 남겼다.
+- OneDrive 대응:
+  - `01. 합격!! 모의고사\실전 모의시험\02. 개선판 (完)\02. (★삭제 주의) 최종 코드` 폴더를 생성했다.
+  - 로그인 코드, 데스크톱용 코드, 모바일용 코드, 퀴즈 문제 데이터 코드 파일을 저장했다.
+- 검증:
+  - 신규 로컬/OneDrive 데스크톱·모바일 코드 및 로그인 코드 inline script 문법 파싱 통과.
+  - 신규 로컬 데스크톱/모바일 파일에서 잔여 `1회 모의고사`, `exam1`, `desktop-01.html`, `mobile-01.html`, `해당 모의고사` 문자열 0건 확인.
+  - Playwright + 로컬 Chrome으로 데스크톱/모바일 신규 파일 렌더링 시 `실전 모의시험`, `examTrial`, `quizRawData 80문항` 표시와 페이지 오류 0건 확인.
+  - Playwright + 로컬 Chrome으로 로그인 코드가 `mock-exam/desktop-trial.html`, `mock-exam/mobile-trial.html`, `examTrial` DB 경로를 생성함을 확인했다.
+  - 로컬과 OneDrive의 데스크톱/모바일 파일 SHA-256 일치 확인.
+  - SHA-256:
+    - 로컬/OneDrive 데스크톱: `C4F47C183E48EE2AD7DDD685F58E82782FD4CA7BD46764B73C3FAFA91C503D4A`
+    - 로컬/OneDrive 모바일: `05B1391D5513F5E1C0BF253A4B36E65B126D65FA7FD02BE303561D3F502F7A00`
+    - OneDrive 로그인: `E5AAFC438B9C36F333A14758CBBFCF752F1BDDE429F2370D4EEB3CF7459D0C13`
+
 ## 86. 2026-06-19 1400제 2~4부 토론방 동적 축소 감지 동일 적용
 
 - 사용자 확인에 따라 1부에서 확정된 토론방 패널 동적 축소 감지 보정을 1400제 2, 3, 4부 최종 로그인 코드에도 동일하게 적용했다.

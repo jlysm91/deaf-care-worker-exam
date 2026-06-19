@@ -1,0 +1,3090 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>청각장애인 요양보호사 자격시험 대비: 실전 모의시험</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+    if(new URLSearchParams(location.search).get('uid')){
+      document.write('<style>#start-page{display:none!important}</style>');
+    }
+  </script>
+  <style>
+    :root {
+      --primary: #005D7A;
+      --primary-light: #0E8FB2;
+      --primary-hover: #004B63;
+      --primary-subtle: #D8F0F8;
+      --success: #0F8A4C;
+      --success-subtle: #EAF8F1;
+      --danger: #C13C36;
+      --danger-subtle: #FCEEEE;
+      --text-primary: #162230;
+      --text-secondary: #4A5D71;
+      --text-muted: #71839A;
+      --border: #C6D3DE;
+      --surface: #F8FBFD;
+      --surface-2: #FFFFFF;
+      --bg: #E8EEF4;
+      --shadow-soft: 0 12px 28px rgba(22, 34, 48, 0.08);
+      --shadow-card: 0 8px 20px rgba(22, 34, 48, 0.07);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 9px;
+      --vw-ratio: 1;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    input { user-select: text; -webkit-user-select: text; }
+    img, iframe, a { -webkit-user-drag: none; pointer-events: auto; }
+
+    html, body {
+      overflow: hidden !important;
+      height: 100% !important;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', -apple-system, sans-serif;
+      color: var(--text-primary);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 14%, rgba(46, 131, 167, 0.20) 0%, transparent 36%),
+        radial-gradient(circle at 88% 84%, rgba(0, 93, 122, 0.14) 0%, transparent 40%),
+        linear-gradient(160deg, #E9EEF4 0%, #D8E2EC 100%);
+    }
+
+    #start-page {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: clamp(16px, 3vw, 34px);
+    }
+    .start-wrapper {
+      width: 100%;
+      max-width: min(1180px, 94vw);
+      position: relative;
+    }
+    .start-wrapper::before {
+      content: '';
+      display: block;
+      padding-top: 55%;
+    }
+    .start-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      overflow: hidden;
+      background:
+        linear-gradient(140deg, #063F57 0%, #005D7A 46%, #0E8FB2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 24px 56px rgba(10, 36, 53, 0.30);
+      border: 1px solid rgba(255, 255, 255, 0.20);
+    }
+    .start-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.16) 0%, transparent 34%),
+        radial-gradient(circle at 80% 74%, rgba(255, 255, 255, 0.12) 0%, transparent 36%);
+      pointer-events: none;
+    }
+    .start-card {
+      position: relative;
+      z-index: 1;
+      width: clamp(330px, 40vw, 520px);
+      text-align: center;
+      padding: clamp(28px, 4vw, 52px) clamp(24px, 4.5vw, 56px);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 24px 58px rgba(4, 24, 39, 0.34);
+    }
+    .start-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      margin-bottom: 20px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      color: #F4FBFF;
+      font-size: clamp(10px, 0.9vw, 12px);
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    #start-page h2 {
+      font-size: clamp(20px, 2.3vw, 30px);
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.45;
+      letter-spacing: -0.4px;
+      margin-bottom: 8px;
+    }
+    .start-subtitle {
+      font-size: clamp(12px, 1.1vw, 15px);
+      font-weight: 400;
+      color: rgba(237, 250, 255, 0.74);
+      margin-bottom: 34px;
+    }
+    .input-group { margin-bottom: 13px; }
+    .input-group input {
+      width: 100%;
+      padding: 15px 18px;
+      font-size: clamp(13px, 1.05vw, 15px);
+      font-family: inherit;
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.96);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-group input::placeholder { color: var(--text-muted); }
+    .input-group input:focus {
+      border-color: rgba(255, 255, 255, 0.86);
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.20);
+    }
+    #start-quiz-btn {
+      width: 100%;
+      margin-top: 8px;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #FFFFFF;
+      color: var(--primary);
+      font-family: inherit;
+      font-size: clamp(13px, 1.15vw, 16px);
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 8px 20px rgba(2, 32, 48, 0.20);
+    }
+    #start-quiz-btn:hover {
+      background: #F3FBFF;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(2, 32, 48, 0.24);
+    }
+
+    #quiz-page {
+      display: none;
+      grid-template-rows: 1fr auto;
+      height: 100vh;
+      padding: clamp(12px, 1.8vh, 22px) clamp(14px, 2vw, 26px);
+      gap: clamp(8px, 1.1vh, 12px);
+      overflow: hidden;
+    }
+    .quiz-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+      gap: clamp(8px, 0.8vw, 12px);
+      min-height: 0;
+      align-items: stretch;
+    }
+    #video-container {
+      min-height: 0;
+      border-radius: var(--radius-lg);
+      background: #000000;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      border: 1px solid #D6E0E9;
+      display: flex;
+      flex-direction: column;
+    }
+    .video-wrapper {
+      width: 100%;
+      flex: 1 1 auto;
+      min-height: 0;
+      position: relative;
+      background: #000000;
+    }
+    .video-wrapper > div {
+      position: absolute !important;
+      inset: 0 !important;
+      padding: 0 !important;
+      background: #000000;
+    }
+    .video-wrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #000000;
+    }
+
+    #quiz-container {
+      min-height: 0;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: var(--radius-lg);
+      border: 1px solid #D8E2EB;
+      box-shadow: var(--shadow-card);
+      padding: clamp(12px, 1.5vh, 18px) clamp(12px, 1.5vw, 18px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    #quiz-content {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+      display: flex;
+      flex-direction: column;
+    }
+    .question-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: clamp(10px, 1.3vh, 14px);
+    }
+    .q-num-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, var(--primary) 0%, #0E8FB2 100%);
+      color: #FFFFFF;
+      font-size: clamp(11px, 0.9vw, 13px);
+      font-weight: 700;
+      letter-spacing: 0.1px;
+    }
+    #quiz-content h3 {
+      font-size: clamp(15px, 1.55vw, 21px);
+      font-weight: 700;
+      line-height: 1.64;
+      color: var(--text-primary);
+      margin-bottom: clamp(10px, 1.2vh, 14px);
+      padding: clamp(12px, 1.4vh, 16px);
+      background: #EDF7FC;
+      border: 1px solid #CAE8F4;
+      border-left: 5px solid var(--primary-light);
+      border-radius: 11px;
+    }
+
+    #options {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 0.7vh, 10px);
+      flex: 1 1 auto;
+    }
+    #options label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: clamp(10px, 1.1vh, 13px) clamp(12px, 1.2vw, 16px);
+      background: #FFFFFF;
+      border: 1.5px solid #CDD8E2;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: clamp(16px, 1.65vw, 23px);
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--text-primary);
+      transition: border-color 0.15s, transform 0.15s, background 0.15s;
+      word-break: keep-all;
+      white-space: normal;
+    }
+    #options label:hover {
+      background: #F2FAFE;
+      border-color: #9ED5E8;
+      transform: translateX(2px);
+    }
+    #options input[type="radio"] {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      accent-color: var(--primary);
+    }
+    #options label:has(input:checked) {
+      background: linear-gradient(135deg, #0A6A87 0%, #0E8FB2 100%);
+      border-color: #0A6A87;
+      color: #FFFFFF;
+      box-shadow: 0 8px 18px rgba(8, 97, 126, 0.24);
+    }
+    #options label:has(input:checked) span {
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    #navigation-buttons {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: clamp(12px, 1.6vh, 18px);
+      padding-top: clamp(12px, 1.6vh, 16px);
+      border-top: 1px solid #D3DEE7;
+    }
+    #navigation-buttons button {
+      min-width: 96px;
+      padding: clamp(8px, 1vh, 11px) clamp(14px, 1.4vw, 20px);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: clamp(12px, 1vw, 14px);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+    #prev-btn {
+      border: 1.5px solid #C7D4DE;
+      background: #FFFFFF;
+      color: var(--text-secondary);
+    }
+    #prev-btn:hover:not(:disabled) {
+      background: #F0F7FB;
+      color: var(--text-primary);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(34, 66, 94, 0.10);
+    }
+    #prev-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+    #next-btn {
+      border: none;
+      background: linear-gradient(120deg, var(--primary) 0%, #0E8FB2 100%);
+      color: #FFFFFF;
+      box-shadow: 0 6px 14px rgba(0, 93, 122, 0.28);
+    }
+    #next-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(0, 93, 122, 0.30);
+    }
+    #next-btn.submit-mode {
+      background: linear-gradient(120deg, #AF342F 0%, #D4574B 100%);
+      box-shadow: 0 6px 14px rgba(175, 52, 47, 0.26);
+    }
+    #next-btn.submit-mode:hover {
+      box-shadow: 0 10px 18px rgba(175, 52, 47, 0.30);
+    }
+
+    #question-counter {
+      font-size: clamp(12px, 1.05vw, 14px);
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+    #total-questions { color: var(--primary); }
+
+    #quick-nav-container {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid #D3DDE6;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: clamp(10px, 1.4vh, 15px) clamp(12px, 1.5vw, 20px);
+      overflow: hidden;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .nav-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: clamp(6px, 0.8vh, 10px);
+    }
+    .nav-section-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 17px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, var(--primary) 0%, #0E8FB2 100%);
+      color: #FFFFFF;
+      font-size: clamp(12px, 1vw, 14px);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-align: center;
+    }
+    #quick-nav-grid-wrap { overflow: visible; padding-bottom: 2px; }
+    #quick-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: clamp(3px, 0.35vw, 5px);
+    }
+
+    .nav-btn {
+      height: var(--nav-btn-height, 28px);
+      line-height: var(--nav-btn-height, 28px);
+      padding: 0;
+      border-radius: 7px;
+      border: 1px solid #C5D1DB;
+      background: #FFFFFF;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: clamp(10px, 0.85vw, 13px);
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s, color 0.12s, transform 0.12s;
+      overflow: hidden;
+      white-space: nowrap;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .nav-btn .nav-number,
+    .nav-btn .nav-answer {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      line-height: 1;
+    }
+    .nav-btn .nav-answer {
+      margin-left: 4px;
+      color: currentColor;
+      font-size: inherit;
+      font-weight: 900;
+      line-height: 1;
+      vertical-align: baseline;
+    }
+    .nav-btn:not(.answered) .nav-answer { display: none; }
+    .nav-btn.answered .nav-answer,
+    .nav-btn.active.answered .nav-answer {
+      color: var(--success);
+    }
+    .nav-btn:hover {
+      background: #E9F7FD;
+      border-color: #97D4E8;
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .nav-btn.active {
+      background: linear-gradient(120deg, var(--primary) 0%, #0E8FB2 100%);
+      color: #FFFFFF;
+      border-color: #0B7FA1;
+    }
+    .nav-btn.answered {
+      background: var(--success-subtle);
+      color: var(--success);
+      border-color: #83D5A8;
+    }
+    .nav-btn.active.answered {
+      background: var(--success-subtle);
+      color: var(--success);
+      border-color: #83D5A8;
+    }
+    .nav-btn.correct {
+      background: var(--success-subtle) !important;
+      color: var(--success) !important;
+      border-color: #83D5A8 !important;
+    }
+    .nav-btn.incorrect {
+      background: var(--danger-subtle) !important;
+      color: var(--danger) !important;
+      border-color: #F0B1AC !important;
+    }
+
+    #result-page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      position: fixed;
+      inset: 0;
+      padding: clamp(10px, 1.5vh, 18px) clamp(10px, 2vw, 24px);
+      background:
+        radial-gradient(circle at 12% 16%, rgba(42, 142, 181, 0.16) 0%, transparent 34%),
+        radial-gradient(circle at 86% 78%, rgba(0, 93, 122, 0.12) 0%, transparent 40%),
+        linear-gradient(180deg, #EEF4FA 0%, #E4ECF4 100%);
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+    #result-page > .result-heading,
+    #result-page > #score,
+    #result-page > #quick-nav-container-result,
+    #result-page > #result-return-btn {
+      width: min(100%, 1120px);
+    }
+    .result-heading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      margin: 0;
+    }
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 16px;
+      border-radius: 999px;
+      background: #2E57D7;
+      color: #FFFFFF;
+      font-size: clamp(11px, 0.95vw, 13px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+    .result-heading h2 {
+      text-align: center;
+      font-size: clamp(18px, 1.9vw, 28px);
+      color: var(--text-primary);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+    .result-user-name {
+      margin: 0;
+      color: #64748B;
+      font-size: clamp(12px, 1vw, 15px);
+      font-weight: 600;
+      line-height: 1.2;
+      flex-shrink: 0;
+    }
+    @media (max-width: 860px) {
+      .result-heading {
+        flex-wrap: wrap;
+        white-space: normal;
+        gap: 6px;
+      }
+      .result-user-name {
+        width: 100%;
+        text-align: center;
+      }
+    }
+    #score {
+      text-align: center;
+      margin: 0;
+      font-size: clamp(13px, 1.3vw, 17px);
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(255, 255, 255, 0.90);
+      border: 1.5px solid #BEE5F3;
+      border-radius: 14px;
+      padding: clamp(8px, 1.2vh, 12px) clamp(14px, 2vw, 28px);
+      box-shadow: var(--shadow-card);
+      word-break: keep-all;
+    }
+
+    #result-shell {
+      width: min(100%, 1120px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+      margin: 0 auto;
+    }
+    .result-summary-card {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid #CFDDE8;
+      border-radius: 16px;
+      box-shadow: var(--shadow-card);
+      padding: clamp(10px, 1.4vh, 14px) clamp(14px, 2vw, 24px);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .result-summary-card .result-heading,
+    .result-summary-card #score {
+      width: 100%;
+    }
+
+    #quick-nav-container-result {
+      width: min(100%, 1120px);
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #CFDDE8;
+      border-radius: 16px;
+      box-shadow: var(--shadow-card);
+      padding: clamp(10px, 1.4vh, 14px) clamp(10px, 1.6vw, 16px);
+      overflow-x: hidden;
+    }
+    .result-grid-title {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: clamp(11px, 1vw, 13px);
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    #quick-nav-grid-result {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: clamp(4px, 0.45vw, 7px);
+      width: 100%;
+      margin-bottom: 0;
+    }
+    #quick-nav-grid-result .nav-btn {
+      height: auto;
+      min-height: 58px;
+      line-height: 1.1;
+      padding: clamp(6px, 0.9vh, 9px) clamp(3px, 0.45vw, 6px);
+      border-radius: 9px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      min-width: 0;
+      overflow: hidden;
+      cursor: default;
+      transform: none;
+    }
+    #quick-nav-grid-result .nav-btn:hover { transform: none; }
+    #quick-nav-grid-result,
+    #quick-nav-grid-result .nav-btn {
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    #quick-nav-grid-result .nav-btn .number {
+      font-size: clamp(11px, 1.2vw, 15px);
+      font-weight: 800;
+      line-height: 1;
+    }
+    #quick-nav-grid-result .nav-btn .detail {
+      font-size: clamp(8.5px, 0.85vw, 10px);
+      line-height: 1.2;
+      opacity: 0.92;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 100%;
+      display: block;
+    }
+    #quick-nav-grid-result .nav-btn .detail-c,
+    #quick-nav-grid-result .nav-btn .detail-m {
+      display: block;
+      line-height: 1.1;
+      white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #quick-nav-grid-result .nav-btn .detail-c { font-weight: 700; }
+    #quick-nav-grid-result .nav-btn .detail-m { font-weight: 600; opacity: 0.9; }
+    #quick-nav-grid-result.compact .nav-btn {
+      min-height: 62px;
+      padding: 9px 5px;
+      gap: 2px;
+    }
+
+    #result-return-btn {
+      width: min(100%, 420px);
+      margin: 2px auto 0;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(120deg, var(--primary) 0%, #0E8FB2 100%);
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: clamp(14px, 1.35vw, 16px);
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0, 93, 122, 0.28);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: sticky;
+      bottom: max(6px, env(safe-area-inset-bottom));
+      z-index: 2;
+    }
+    #result-return-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(0, 93, 122, 0.31);
+    }
+
+    @media (max-width: 1180px) {
+      .quiz-top { grid-template-columns: minmax(0, 1.28fr) minmax(0, 1fr); }
+      #quick-nav-grid-result { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 980px) {
+      #quiz-page {
+        padding: 10px 10px 12px;
+        gap: 8px;
+      }
+      .quiz-top {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      #video-container {
+        min-height: 40vh;
+      }
+      #quick-nav-grid-result { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+      #quick-nav-grid-result .nav-btn .detail {
+        font-size: clamp(9px, 1.3vw, 11px);
+      }
+    }
+
+    @media (max-width: 700px) {
+      #start-page { padding: 10px; }
+      .start-wrapper::before { padding-top: 70%; }
+      .start-card {
+        width: min(94vw, 430px);
+        padding: 24px 18px 22px;
+      }
+      #quiz-page {
+        padding: 8px;
+        gap: 7px;
+      }
+      #video-container {
+        min-height: 34vh;
+        border-radius: 14px;
+      }
+      #quiz-container,
+      #quick-nav-container,
+      #quick-nav-container-result {
+        border-radius: 13px;
+      }
+      #quiz-content h3 {
+        font-size: clamp(15px, 4.2vw, 19px);
+        line-height: 1.6;
+      }
+      #options label {
+        font-size: clamp(15px, 5.3vw, 20px);
+      }
+      #navigation-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+      }
+      #question-counter { order: -1; width: 100%; text-align: center; }
+      #quick-nav-grid { gap: 4px; }
+      .nav-btn {
+        font-size: 11px;
+        border-radius: 8px;
+      }
+      #result-page {
+        padding: 10px 8px calc(12px + env(safe-area-inset-bottom));
+      }
+      #quick-nav-grid-result { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+      #quick-nav-grid-result .nav-btn {
+        min-height: 66px;
+        padding: 9px 4px;
+      }
+      #quick-nav-grid-result .nav-btn .number { font-size: 14px; }
+      #quick-nav-grid-result .nav-btn .detail { font-size: 10.5px; }
+      #result-return-btn {
+        width: 100%;
+        border-radius: 11px;
+        padding: 13px 16px;
+      }
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #A7B7C7; border-radius: 99px; }
+    /* === 결과 그리드 SVG 렌더링: 올리사이트 iframe 폭 잘림 대응 === */
+    #result-page,
+    #result-shell,
+    .result-summary-card,
+    #quick-nav-container-result {
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+    }
+    #quick-nav-container-result {
+      width: min(100%, 1120px) !important;
+      max-width: 1120px !important;
+      overflow: hidden !important;
+    }
+    #quick-nav-grid-result {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+    }
+    #quick-nav-grid-result svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      overflow: visible;
+    }
+
+    /* === 결과 페이지 요약 UX: 올리사이트 폭 제한 대응 === */
+    #quick-nav-container-result {
+      width: min(100%, 760px) !important;
+      max-width: 760px !important;
+      overflow: visible !important;
+      padding: clamp(10px, 1.5vw, 16px) !important;
+    }
+    #quick-nav-grid-result {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      overflow: visible !important;
+    }
+    .result-grid-title { margin-bottom: 8px !important; }
+    .result-insight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .result-mini-card {
+      border: 1px solid #D8E3ED;
+      background: #FFFFFF;
+      border-radius: 14px;
+      padding: 9px 8px;
+      text-align: center;
+      box-shadow: 0 5px 14px rgba(22,34,48,.05);
+    }
+    .result-mini-label {
+      display: block;
+      color: #71839A;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      margin-bottom: 3px;
+    }
+    .result-mini-value {
+      display: block;
+      color: #162230;
+      font-size: clamp(18px, 2.2vw, 26px);
+      font-weight: 900;
+      line-height: 1;
+    }
+    .result-mini-card.correct .result-mini-value { color: #0F8A4C; }
+    .result-mini-card.wrong .result-mini-value { color: #C13C36; }
+    .result-mini-card.empty .result-mini-value { color: #A05A00; }
+    .result-section-list {
+      border: 1px solid #D8E3ED;
+      border-radius: 14px;
+      background: #FFFFFF;
+      padding: 10px;
+      margin-top: 8px;
+      text-align: left;
+    }
+    .result-section-title {
+      margin: 0 0 6px;
+      color: #162230;
+      font-size: clamp(13px, 1.25vw, 16px);
+      font-weight: 900;
+    }
+    .result-chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .result-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid #D8E3ED;
+      background: #F8FBFD;
+      color: #506273;
+      font-size: clamp(10px, 0.92vw, 12px);
+      font-weight: 800;
+      line-height: 1.1;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .result-chip .chip-no { display: inline-flex; align-items: center; justify-content: center; min-width: 4.3em; flex-shrink: 0; }
+    .result-chip .chip-meta { display: inline-flex; align-items: center; justify-content: center; min-width: 7.8em; }
+    .result-chip.correct { border-color: #A7E2C1; background: #F1FCF5; color: #0F8A4C; }
+    .result-chip.wrong { border-color: #F3B2B0; background: #FFF4F4; color: #C13C36; }
+    .result-chip.empty { border-color: #F3D6A8; background: #FFF8EA; color: #A05A00; }
+    .result-empty-note {
+      margin: 0;
+      color: #71839A;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    @media (max-width: 560px) {
+      .result-insight-grid { grid-template-columns: 1fr; }
+      .result-chip { width: 100%; justify-content: space-between; border-radius: 12px; }
+    }
+
+
+    /* === 1400? ?? ?? UI: ???? ?? === */
+    #result-page > .result-heading,
+    #result-page > #score,
+    #result-page > #quick-nav-container-result,
+    #result-page > .result-actions { width: min(100%, 1120px) !important; }
+    .result-heading { display:flex!important; align-items:center!important; justify-content:center!important; gap:10px!important; flex-wrap:nowrap!important; white-space:nowrap!important; margin:0!important; }
+    .result-badge { display:inline-flex!important; align-items:center!important; justify-content:center!important; padding:5px 16px!important; border-radius:999px!important; background:linear-gradient(120deg,var(--primary) 0%,#0E8FB2 100%)!important; color:#fff!important; font-size:clamp(11px,0.95vw,13px)!important; font-weight:800!important; line-height:1!important; letter-spacing:0.04em!important; flex-shrink:0!important; }
+    .result-heading h2 { text-align:center!important; font-size:clamp(18px,1.9vw,28px)!important; color:var(--text-primary)!important; font-weight:800!important; letter-spacing:0!important; margin:0!important; }
+    .result-user-name { margin:0!important; color:#64748B!important; font-size:clamp(12px,1vw,14px)!important; font-weight:700!important; flex-shrink:0!important; }
+    #score.result-summary { display:flex!important; flex-direction:column!important; gap:clamp(10px,1.3vh,14px)!important; margin:0!important; color:var(--text-primary)!important; padding:clamp(12px,1.6vh,18px) clamp(14px,2.2vw,24px)!important; border-radius:var(--radius-lg)!important; background:rgba(255,255,255,0.94)!important; border:1px solid #D8E2EB!important; box-shadow:var(--shadow-card)!important; text-align:initial!important; font-size:inherit!important; font-weight:inherit!important; word-break:keep-all!important; }
+    .result-summary-main { display:grid; grid-template-columns:minmax(170px,0.7fr) minmax(0,1.3fr); gap:clamp(10px,1.4vw,16px); align-items:stretch; }
+    .result-status-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; min-height:120px; border-radius:15px; padding:16px; color:#fff; text-align:center; box-shadow:0 12px 24px rgba(15,23,42,0.13); }
+    #score.pass .result-status-card { background:linear-gradient(135deg,#009C72 0%,#06B585 100%); }
+    #score.fail .result-status-card { background:linear-gradient(135deg,#C13C36 0%,#E0645A 100%); }
+    .result-status-label { font-size:clamp(26px,3vw,40px); font-weight:900; line-height:1; }
+    .result-status-note { font-size:clamp(13px,1vw,15px); font-weight:800; opacity:0.94; }
+    .result-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(7px,0.8vw,10px); }
+    .result-stat { display:flex; flex-direction:column; justify-content:center; min-height:82px; padding:12px 10px; border-radius:13px; background:#F8FBFD; border:1px solid #D8E2EB; text-align:center; }
+    .result-stat strong { color:var(--text-primary); font-size:clamp(18px,1.8vw,28px); font-weight:900; line-height:1.1; }
+    .result-stat span { margin-top:6px; color:#64748B; font-size:clamp(11px,0.9vw,13px); font-weight:800; }
+    .result-standard { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; color:#64748B; font-size:clamp(12px,1vw,14px); font-weight:800; text-align:center; }
+    .result-standard strong { color:var(--primary); }
+    #quick-nav-container-result { display:flex!important; flex-direction:column!important; width:min(100%,1120px)!important; max-width:1120px!important; background:rgba(255,255,255,0.94)!important; border:1px solid #D8E2EB!important; border-radius:var(--radius-lg)!important; box-shadow:var(--shadow-card)!important; padding:clamp(10px,1.3vh,16px) clamp(10px,1.6vw,18px)!important; overflow-x:hidden!important; }
+    .result-grid-title { text-align:center!important; color:var(--text-muted)!important; font-size:clamp(10px,0.9vw,12px)!important; font-weight:800!important; letter-spacing:0.7px!important; text-transform:uppercase!important; margin:0 0 clamp(8px,1vh,12px)!important; }
+    #quick-nav-grid-result.result-review-board { display:grid!important; grid-template-columns:minmax(0,1fr)!important; gap:clamp(10px,1.2vw,16px)!important; align-items:start!important; width:100%!important; margin:0!important; }
+    .result-review-section { min-width:0; border:1px solid #D8E2EB; border-radius:12px; background:#fff; overflow:hidden; }
+    .result-review-section.result-review-primary { border-color:#F0B8B4; }
+    .result-review-section-head { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; border-bottom:1px solid #E2EAF1; background:#F8FBFD; }
+    .result-review-title { margin:0; color:var(--text-primary); font-size:clamp(13px,1vw,15px); font-weight:900; }
+    .result-review-count { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; min-width:54px; padding:4px 9px; border-radius:999px; background:#FFF5F4; color:#C13C36; font-size:clamp(11px,0.9vw,13px); font-weight:900; white-space:nowrap; }
+    .result-review-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px; max-height:446px; padding:10px; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
+    .result-review-list.result-review-single { grid-template-columns:minmax(220px,360px); }
+    .result-review-item { min-width:0; display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:54px; padding:10px 11px; box-sizing:border-box; border-radius:9px; border:1px solid #D8E2EB; background:#fff; color:var(--text-secondary); font-weight:800; line-height:1.25; }
+    .result-review-item.wrong { border-color:#E9ABA7; background:#FFF7F6; }
+    .review-no { flex:0 0 auto; color:var(--text-primary); font-size:clamp(14px,1vw,16px); font-weight:900; white-space:nowrap; }
+    .review-answers { min-width:0; display:flex; flex-direction:column; align-items:flex-end; gap:2px; font-size:clamp(11px,0.9vw,13px); text-align:right; word-break:keep-all; overflow-wrap:anywhere; }
+    .review-answer-correct { color:var(--success); font-weight:900; }
+    .result-review-empty { margin:0; padding:18px 12px; color:var(--text-muted); font-size:clamp(12px,0.95vw,14px); font-weight:800; text-align:center; }
+    .result-review-item[data-review-no] { cursor:help; }
+    .result-review-tooltip { position:fixed; left:0; top:0; z-index:9999; width:min(430px,calc(100vw - 24px)); max-height:min(70vh,520px); overflow:auto; padding:14px; border:1px solid #BFD0DE; border-radius:12px; background:#fff; box-shadow:0 16px 38px rgba(15,23,42,0.2); color:var(--text-primary); font-family:inherit; font-size:13px; line-height:1.45; pointer-events:none; opacity:0; visibility:hidden; transform:translateY(6px); transition:opacity .12s ease,transform .12s ease,visibility .12s ease; }
+    .result-review-tooltip.visible { opacity:1; visibility:visible; transform:translateY(0); }
+    .result-review-tooltip-head { display:flex; align-items:center; justify-content:space-between; gap:10px; padding-bottom:8px; margin-bottom:10px; border-bottom:1px solid #E2EAF1; }
+    .result-review-tooltip-head strong { font-size:16px; font-weight:900; color:#0F172A; }
+    .result-review-tooltip-head span { color:var(--text-muted); font-size:12px; font-weight:800; }
+    .result-review-tooltip-question { margin:0 0 10px; color:#1E293B; font-size:14px; font-weight:900; word-break:keep-all; overflow-wrap:anywhere; }
+    .result-review-tooltip-summary { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+    .result-review-tooltip-summary span { display:inline-flex; align-items:center; min-height:24px; padding:3px 8px; border-radius:999px; background:#F1F5F9; color:#334155; font-size:12px; font-weight:900; }
+    .result-review-tooltip-summary .correct { background:#EAF8F0; color:var(--success); }
+    .result-review-tooltip-summary .selected { background:#FFF1F0; color:var(--danger); }
+    .result-review-tooltip-options { display:grid; gap:6px; }
+    .result-review-tooltip-option { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:start; gap:7px; padding:7px 8px; border:1px solid #E2EAF1; border-radius:8px; background:#F8FBFD; }
+    .result-review-tooltip-option.correct { border-color:#9FD8B7; background:#F0FBF5; }
+    .result-review-tooltip-option.selected { border-color:#E9ABA7; background:#FFF7F6; }
+    .result-review-tooltip-option.correct.selected { border-color:#6FCF97; background:#ECFDF3; }
+    .result-review-tooltip-option-no { display:inline-flex; align-items:center; justify-content:center; min-width:22px; height:22px; border-radius:999px; background:#E2EAF1; color:#334155; font-size:12px; font-weight:900; }
+    .result-review-tooltip-option-text { min-width:0; color:#334155; font-size:12px; font-weight:800; word-break:keep-all; overflow-wrap:anywhere; }
+    .result-review-tooltip-badge { color:#0F8A4C; font-size:11px; font-weight:900; white-space:nowrap; }
+    .result-actions { display:flex!important; flex-direction:column!important; align-items:center!important; justify-content:center!important; gap:12px!important; }
+    .result-actions button { width:min(100%,360px)!important; min-width:150px!important; padding:12px 24px!important; border-radius:16px!important; font-family:inherit!important; font-size:clamp(13px,1.2vw,16px)!important; font-weight:800!important; cursor:pointer!important; }
+    .result-actions #result-return-btn { position:static!important; margin:0!important; background:linear-gradient(120deg,var(--primary) 0%,#0E8FB2 100%)!important; color:#fff!important; border:none!important; box-shadow:0 7px 18px rgba(0,93,122,0.22)!important; }
+    .result-actions #result-complete-btn { background:linear-gradient(120deg,#F29A27 0%,#F6AE3B 100%)!important; color:#fff!important; border:none!important; box-shadow:0 7px 18px rgba(242,154,39,0.24)!important; }
+    @media (max-width:860px) { .result-heading { flex-wrap:wrap!important; white-space:normal!important; } .result-user-name { width:100%; text-align:center; } .result-summary-main { grid-template-columns:1fr; } .result-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } #quick-nav-grid-result.result-review-board { gap:10px!important; } .result-review-list { grid-template-columns:1fr; max-height:446px; } .result-review-list.result-review-single { grid-template-columns:1fr; } .result-review-item { padding:9px 10px; } .result-actions { flex-direction:column!important; width:min(100%,1120px)!important; } .result-actions button { width:100%!important; } }
+</style>
+</head>
+<body>
+  <input type="hidden" id="user-id" />
+  <input type="hidden" id="user-name" />
+  <button id="start-quiz-btn" style="display:none"></button>
+  <div id="start-page" style="display:none"></div>
+
+  <div id="quiz-page">
+    <div class="quiz-top">
+      <div id="video-container"><div class="video-wrapper"></div></div>
+      <div id="quiz-container">
+        <div id="quiz-content">
+          <div class="question-meta"><span class="q-num-badge">문제 <span id="question-number">1</span></span></div>
+          <h3><span id="question-text"></span></h3>
+          <div id="options"></div>
+        </div>
+        <div id="navigation-buttons">
+          <button id="prev-btn">← 이전</button>
+          <span id="question-counter"><span id="current-question">1</span> / <span id="total-questions">80</span></span>
+          <button id="next-btn">다음 →</button>
+        </div>
+      </div>
+    </div>
+    <div id="quick-nav-container">
+      <div class="nav-header">
+        <p class="nav-section-label">빠른 문항 이동</p>
+      </div>
+      <div id="quick-nav-grid-wrap">
+        <div id="quick-nav-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="result-page">
+    <div class="result-heading">
+      <span class="result-badge">실전 모의시험</span>
+      <h2>학습 결과</h2>
+      <p id="result-user-name" class="result-user-name"></p>
+    </div>
+    <div id="score" class="result-summary"></div>
+    <div id="quick-nav-container-result">
+      <p class="result-grid-title">오답 중심 복습</p>
+      <div id="quick-nav-grid-result"></div>
+    </div>
+    <div class="result-actions">
+      <button id="result-return-btn">다시 풀기</button>
+      <button id="result-complete-btn">학습 완료</button>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+  <script>
+    function applyResponsiveLayout() {
+      const wrapper = document.querySelector('.video-wrapper');
+      if (wrapper) {
+        wrapper.style.height = '100%';
+        const inner = wrapper.querySelector('div');
+        if (inner) {
+          inner.style.position = 'relative';
+          inner.style.height = '100%';
+          inner.style.paddingTop = '0';
+        }
+      }
+    }
+
+    window.addEventListener('resize', ()=>{
+      applyResponsiveLayout();
+      fitQuestionText();
+      fitOptionsText();
+      requestAnimationFrame(autoResizeNavGrid);
+      fitResultGrid();
+    });
+
+    const EXAM_ID = "examTrial";
+    const firebaseConfig = {
+      apiKey: "AIzaSyDrff8zRQ6DuPFABxW_-9DPzbdTetDYHDk",
+      authDomain: "deaf-for-database-develo-59bf8.firebaseapp.com",
+      databaseURL: "https://deaf-for-database-develo-59bf8-default-rtdb.firebaseio.com",
+      projectId: "deaf-for-database-develo-59bf8",
+      storageBucket: "deaf-for-database-develo-59bf8.appspot.com",
+      messagingSenderId: "735390767125",
+      appId: "1:735390767125:web:d1df8b89b1b3451bf1161c"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    const startPage=document.getElementById("start-page"),quizPage=document.getElementById("quiz-page"),startQuizBtn=document.getElementById("start-quiz-btn"),userIdInput=document.getElementById("user-id"),userNameInput=document.getElementById("user-name"),resultPage=document.getElementById("result-page"),scoreSpan=document.getElementById("score"),resultUserName=document.getElementById("result-user-name"),questionNumberSpan=document.getElementById("question-number"),questionTextSpan=document.getElementById("question-text"),optionsDiv=document.getElementById("options"),videoWrapper=document.querySelector("#video-container .video-wrapper"),currentQuestionSpan=document.getElementById("current-question"),totalQuestionsSpan=document.getElementById("total-questions"),prevBtn=document.getElementById("prev-btn"),nextBtn=document.getElementById("next-btn"),quickNavGrid=document.getElementById("quick-nav-grid");
+
+    function getVideoEmbed(videoId,title){
+      return `<div style="position:relative;width:100%;height:100%;"><iframe src="https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0&badge=0&autopause=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="${title}"></iframe></div>`;
+    }
+
+    function fitQuestionText(){
+      const h3 = document.querySelector("#quiz-content h3");
+      const container = document.getElementById("quiz-container");
+      if(!h3 || !container) return;
+      const maxSize = Math.min(20, Math.max(12, container.clientWidth * 0.022));
+      let size = maxSize;
+      h3.style.fontSize = size + "px";
+      const maxH = size * 1.7 * 2;
+      while(h3.scrollHeight > maxH + 2 && size > 12){
+        size -= 0.5;
+        h3.style.fontSize = size + "px";
+      }
+    }
+
+    function fitOptionsText(){
+      const quizContent = document.getElementById("quiz-content");
+      const optionsWrap = document.getElementById("options");
+      const labels = document.querySelectorAll("#options label");
+      if(!quizContent || !labels.length) return;
+
+      // 1단계: 기본 크기/패딩으로 초기화
+      labels.forEach(l => { l.style.fontSize = ""; l.style.paddingTop = ""; l.style.paddingBottom = ""; });
+      optionsWrap.style.gap = "";
+      const defaultSize = parseFloat(getComputedStyle(labels[0]).fontSize);
+
+      // 2단계: 두 줄인 선택지만 개별로 최대 8% 이내 조금 축소
+      labels.forEach(label => {
+        label.style.whiteSpace = "nowrap";
+        const oneLineH = label.scrollHeight;
+        label.style.whiteSpace = "";
+        if(label.scrollHeight > oneLineH * 1.3){
+          const minSize = defaultSize * 0.92;
+          let size = defaultSize;
+          while(label.scrollHeight > oneLineH * 1.3 && size > minSize){
+            size -= 0.2;
+            label.style.fontSize = size + "px";
+          }
+        }
+      });
+
+      // 3단계: 전체가 넘치면 → 상하 패딩만 줄이기 (간격/좌우패딩 유지)
+      if(quizContent.scrollHeight > quizContent.clientHeight + 2){
+        let pad = parseFloat(getComputedStyle(labels[0]).paddingTop) || 9;
+        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && pad > 4){
+          pad -= 0.5;
+          labels.forEach(l => { l.style.paddingTop = pad + "px"; l.style.paddingBottom = pad + "px"; });
+        }
+      }
+
+      // 4단계: 그래도 넘치면 → 폰트 최소 15px까지만 축소
+      if(quizContent.scrollHeight > quizContent.clientHeight + 2){
+        let size = parseFloat(getComputedStyle(labels[0]).fontSize);
+        while(quizContent.scrollHeight > quizContent.clientHeight + 2 && size > 15){
+          size -= 0.2;
+          labels.forEach(l => l.style.fontSize = size + "px");
+        }
+      }
+    }
+
+    const quizRawData = [
+      {
+            number: "모0101",
+            question: "노년기의 사회적 특성으로 옳은 것은?",
+            options: [
+                  "의존성의 감소",
+                  "우울증 경향의 감소",
+                  "외향성의 증가",
+                  "유대감의 감소",
+                  "역할의 확대"
+            ],
+            correctAnswer: 4,
+            videoId: "1111492731",
+            sourceExam: 1,
+            sourceNumber: "모0101",
+            sourcePosition: 1,
+            trialNumber: 1
+      },
+      {
+            number: "모0204",
+            question: "노인장기요양보험제도에 대한 설명으로 옳은 것은?",
+            options: [
+                  "급여대상자가 요양병원에 입원했을 때 가족요양비를 지급받는다.",
+                  "장기요양신청자의 의사소견서 발급비용은 공단이 전액 부담한다.",
+                  "장기요양기관은 급여를 제공하고 급여비용을 구청에 청구한다.",
+                  "국민건강보험공단은 장기요양등급판정 업무를 수행한다.",
+                  "장기요양보험료는 국민연금액에 장기요양보험료율을 곱하여 산정한다."
+            ],
+            correctAnswer: 4,
+            videoId: "1115014043",
+            sourceExam: 2,
+            sourceNumber: "모0204",
+            sourcePosition: 4,
+            trialNumber: 2
+      },
+      {
+            number: "모0813",
+            question: "다음 상황에서 요양보호사의 대처방법으로 옳은 것은?",
+            options: [
+                  "직접 구입해서 대상자에게 제공한다.",
+                  "전동침대를 대여해 주고 사례금을 받는다.",
+                  "대상자에게 구입할 수 있는 정보를 제공한다.",
+                  "다른 대상자가 사용했던 중고 전동침대를 가져다준다.",
+                  "평소 알고 있는 업체에서 구매하도록 권유한다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119277903",
+            sourceExam: 8,
+            sourceNumber: "모0813",
+            sourcePosition: 13,
+            trialNumber: 3
+      },
+      {
+            number: "모0905",
+            question: "장기요양기관에서 대상자의 변화 및 서비스 진행 상황을 주기적으로 점검하는 방법은?",
+            options: [
+                  "욕구평가",
+                  "사례 평가",
+                  "모니터링",
+                  "형성평가",
+                  "기능상태평가"
+            ],
+            correctAnswer: 3,
+            videoId: "1119281799",
+            sourceExam: 9,
+            sourceNumber: "모0905",
+            sourcePosition: 5,
+            trialNumber: 4
+      },
+      {
+            number: "모0810",
+            question: "산업재해보상보험법에 따른 산재근로자 보호 내용으로 옳은 것은?",
+            options: [
+                  "보험급여의 유효기간은 1년이다.",
+                  "산업재해를 당했다는 이유로 해고할 수 없다.",
+                  "보험급여는 일정 세금이 부과된다.",
+                  "보험급여는 채권자에게 양도할 수 있다.",
+                  "산업재해로 퇴직하는 경우에는 장해급여가 중단된다."
+            ],
+            correctAnswer: 2,
+            videoId: "1119277764",
+            sourceExam: 8,
+            sourceNumber: "모0810",
+            sourcePosition: 10,
+            trialNumber: 5
+      },
+      {
+            number: "모0821",
+            question: "꽃가루에 의한 천식이 발병하지 않도록 예방하는 방법은?",
+            options: [
+                  "실내 습도를 높게 한다.",
+                  "차가운 음료를 섭취한다.",
+                  "객담검사를 주기적으로 한다.",
+                  "알레르기 물질에 노출되지 않도록 한다.",
+                  "저염식 저콜레스테롤 음식을 섭취한다."
+            ],
+            correctAnswer: 4,
+            videoId: "1119278210",
+            sourceExam: 8,
+            sourceNumber: "모0821",
+            sourcePosition: 21,
+            trialNumber: 6
+      },
+      {
+            number: "모0233",
+            question: "사전연명의료의향서에 대한 설명으로 옳은 것은?",
+            options: [
+                  "말기 환자일 때만 작성할 수 있다.",
+                  "사전연명의료의향서는 가족이 변경할 수 있다.",
+                  "사전연명의료의향서는 작성 후 즉시 효력이 발생한다.",
+                  "연명의료 중단의향을 명시해도 진통제와 산소는 공급된다.",
+                  "등록 여부는 모든 의료기관에서 쉽게 열람할 수 있다."
+            ],
+            correctAnswer: 4,
+            videoId: "1115015704",
+            sourceExam: 2,
+            sourceNumber: "모0233",
+            sourcePosition: 33,
+            trialNumber: 7
+      },
+      {
+            number: "모0516",
+            question: "노인성 질환의 특성으로 옳은 것은?",
+            options: [
+                  "전형적인 증상이 빈번하게 나타난다.",
+                  "재발이 어렵고 경과가 짧다.",
+                  "수분과 전해질 균형이 깨지기 쉽다.",
+                  "급성 퇴행성 질병이다.",
+                  "정상적인 노화과정과 구분하기 쉽다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119257854",
+            sourceExam: 5,
+            sourceNumber: "모0516",
+            sourcePosition: 16,
+            trialNumber: 8
+      },
+      {
+            number: "모0731",
+            question: "요양보호사가 관찰한 내용을 올바르게 기록한 것은?",
+            options: [
+                  "어르신이 평소보다 우유를 많이 섭취함",
+                  "70세 어르신의 피부발적 있음",
+                  "얼마 전에 방에서 300cc 소변을 봄",
+                  "8월 7일 오후 1시, 엉덩이 왼쪽 2cm×3cm 욕창이 생김",
+                  "오랜만에 점심식사로 밥 한 그릇 국 한 그릇을 다 드심"
+            ],
+            correctAnswer: 4,
+            videoId: "1119269415",
+            sourceExam: 7,
+            sourceNumber: "모0731",
+            sourcePosition: 31,
+            trialNumber: 9
+      },
+      {
+            number: "모0102",
+            question: "자녀가 노인 부모와 근거리 살면서 부양을 하는 새로운 가족형태는?",
+            options: [
+                  "이산가족",
+                  "핵가족",
+                  "고령화 가족",
+                  "수정확대가족",
+                  "노인부양가족"
+            ],
+            correctAnswer: 4,
+            videoId: "1111493161",
+            sourceExam: 1,
+            sourceNumber: "모0102",
+            sourcePosition: 2,
+            trialNumber: 10
+      },
+      {
+            number: "모1030",
+            question: "금연으로 나타나는 신체적 변화로 옳은 것은?",
+            options: [
+                  "혈압이 정상보다 높아진다.",
+                  "맥박이 떨어진다.",
+                  "손발 체온이 떨어진다.",
+                  "혈중 일산화탄소량이 정상보다 높아진다.",
+                  "심장병 발병 위험이 줄어든다."
+            ],
+            correctAnswer: 5,
+            videoId: "1119290212",
+            sourceExam: 10,
+            sourceNumber: "모1030",
+            sourcePosition: 30,
+            trialNumber: 11
+      },
+      {
+            number: "모0231",
+            question: "다음 그림 중 노인장기요양급여로 구입이 가능한 복지용구는?",
+            options: [
+                  "보행보조차",
+                  "휠체어",
+                  "전동침대",
+                  "이동변기",
+                  "목욕의자"
+            ],
+            correctAnswer: 5,
+            videoId: "1115015627",
+            sourceExam: 2,
+            sourceNumber: "모0231",
+            sourcePosition: 31,
+            trialNumber: 12
+      },
+      {
+            number: "모0320",
+            question: "퇴행성관절염에 관한 설명으로 옳은 것은?",
+            options: [
+                  "운동하면 호전되고 휴식하면 악화된다.",
+                  "개인이 자각하는 통증 정도는 비슷하다.",
+                  "관절이 뻣뻣해지는 경직현상이 나타난다.",
+                  "통증 완화를 위해 규칙적으로 수영을 한다.",
+                  "체중을 늘려 관절 연골의 탄력성을 증가시킨다."
+            ],
+            correctAnswer: 4,
+            videoId: "1118935813",
+            sourceExam: 3,
+            sourceNumber: "모0320",
+            sourcePosition: 20,
+            trialNumber: 13
+      },
+      {
+            number: "모0616",
+            question: "노화에 따른 소화기계의 변화로 옳은 것은?",
+            options: [
+                  "항문 괄약근의 긴장도가 증가한다.",
+                  "지방의 흡수력이 증가한다.",
+                  "위액의 분비량이 감소한다.",
+                  "직장벽의 탄력성이 증가한다.",
+                  "쓴맛과 단맛을 잘 느끼지 못한다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119261911",
+            sourceExam: 6,
+            sourceNumber: "모0616",
+            sourcePosition: 16,
+            trialNumber: 14
+      },
+      {
+            number: "모0234",
+            question: "몸 밖으로 탈출한 미생물이 직접 접촉의 경로로 다른 사람에게 감염성 질환을 전파하는 경우는?",
+            options: [
+                  "모기에 물렸다.",
+                  "상한 음식을 먹었다.",
+                  "오염된 주사바늘에 손을 찔렸다.",
+                  "침구에 묻은 대변이 몸에 닿았다.",
+                  "감기 대상자가 밀집된 공간에서 기침을 했다."
+            ],
+            correctAnswer: 5,
+            videoId: "1115015755",
+            sourceExam: 2,
+            sourceNumber: "모0234",
+            sourcePosition: 34,
+            trialNumber: 15
+      },
+      {
+            number: "모0318",
+            question: "노화에 따른 심혈관계 변화로 옳은 것은?",
+            options: [
+                  "최대 심박출량이 증가한다.",
+                  "심장근육의 탄력성이 증가한다.",
+                  "심장 근육이 두꺼워진다.",
+                  "기립성 저혈압 발생이 감소한다.",
+                  "말초혈관에서 심장으로의 혈액순환이 증가한다."
+            ],
+            correctAnswer: 3,
+            videoId: "1118935771",
+            sourceExam: 3,
+            sourceNumber: "모0318",
+            sourcePosition: 18,
+            trialNumber: 16
+      },
+      {
+            number: "모0915",
+            question: "다음 상황에서 요양보호사의 대처방법으로 옳은 것은?",
+            options: [
+                  "일단 생각해 보겠다고 말하고 결정을 미룬다.",
+                  "좋은 제안이라며 흔쾌히 수용한다.",
+                  "제안을 수용할 만한 다른 요양보호사를 소개한다.",
+                  "장기요양급여 제공 원칙에 어긋난다며 거절한다.",
+                  "시어머니에게 교차 서비스 제공에 대해 미리 설명한다."
+            ],
+            correctAnswer: 4,
+            videoId: "1119282543",
+            sourceExam: 9,
+            sourceNumber: "모0915",
+            sourcePosition: 15,
+            trialNumber: 17
+      },
+      {
+            number: "모0631",
+            question: "요양보호사가 자신의 업무수행 후 기록지를 작성하는 목적은?",
+            options: [
+                  "동료를 평가하고 감독하기 위해",
+                  "업무에 대한 책임감을 강화하기 위해",
+                  "대상자의 비밀을 동료와 나누기 위해",
+                  "전문가에게 좋은 사례를 제공하기 위해",
+                  "서비스를 제한하고 노인을 평가하기 위해"
+            ],
+            correctAnswer: 2,
+            videoId: "1119262604",
+            sourceExam: 6,
+            sourceNumber: "모0631",
+            sourcePosition: 31,
+            trialNumber: 18
+      },
+      {
+            number: "모0405",
+            question: "장기요양급여 중 재가급여의 장점에 해당한 것은?",
+            options: [
+                  "종합적인 서비스를 받을 수 있다.",
+                  "대상자에게 간병비가 지급된다.",
+                  "새로운 환경에서 지낼 수 있다.",
+                  "개인중심의 생활을 할 수 있다.",
+                  "긴급 상황에서 신속하게 처치할 수 있다."
+            ],
+            correctAnswer: 4,
+            videoId: "1119293578",
+            sourceExam: 4,
+            sourceNumber: "모0405",
+            sourcePosition: 5,
+            trialNumber: 19
+      },
+      {
+            number: "모0332",
+            question: "임종 대상자의 신체변화에 따른 대처방법으로 옳은 것은?",
+            options: [
+                  "실금 - 침상변기를 대어준다.",
+                  "몸이 차가워짐 - 전열기구를 켜준다.",
+                  "섭취량 감소 - 고형음식을 제공한다.",
+                  "가래 축적 - 머리를 낮춰 준다.",
+                  "불안정 - 대상자 곁에 있어 준다."
+            ],
+            correctAnswer: 5,
+            videoId: "1118936217",
+            sourceExam: 3,
+            sourceNumber: "모0332",
+            sourcePosition: 32,
+            trialNumber: 20
+      },
+      {
+            number: "모0602",
+            question: "현대사회의 가족관계 변화로 나타나는 노인부양 방법은?",
+            options: [
+                  "장남이 전적으로 부양을 책임진다.",
+                  "사회와 가족이 협력하여 부양한다.",
+                  "시설 중심의 돌봄 서비스를 제공한다.",
+                  "정서적 부양보다 경제적 부양을 중시한다.",
+                  "획일적인 노인복지서비스 프로그램을 제공한다."
+            ],
+            correctAnswer: 2,
+            videoId: "1119255926",
+            sourceExam: 6,
+            sourceNumber: "모0602",
+            sourcePosition: 2,
+            trialNumber: 21
+      },
+      {
+            number: "모0422",
+            question: "노화에 따른 감각기계 특성으로 옳은 것은?",
+            options: [
+                  "수정체의 황화현상으로 빨강색, 보라색 구분이 어렵다.",
+                  "미각의 감소로 신맛과 쓴맛을 감지하는 기능이 떨어진다.",
+                  "눈부심의 증가와 빛 순응의 어려움이 나타난다.",
+                  "피부탄력성의 상실로 귓바퀴가 작아지고 늘어진다.",
+                  "맛 감지능력 저하로 조미료를 적게 넣은 음식을 좋아한다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119294090",
+            sourceExam: 4,
+            sourceNumber: "모0422",
+            sourcePosition: 22,
+            trialNumber: 22
+      },
+      {
+            number: "모0520",
+            question: "고혈압 대상자의 약물복용 방법으로 옳은 것은?",
+            options: [
+                  "대상자의 컨디션에 따라 용량을 증감한다.",
+                  "몸이 약해지므로 장기간 투약하지 않는다.",
+                  "혈압이 조절되면 복용량을 줄인다.",
+                  "가슴이 답답하거나 숨이 차지 않으면 약 복용을 멈춘다.",
+                  "복용해도 계속 혈압이 상승하면 의사와 상의하여 바꾼다."
+            ],
+            correctAnswer: 5,
+            videoId: "1119258076",
+            sourceExam: 5,
+            sourceNumber: "모0520",
+            sourcePosition: 20,
+            trialNumber: 23
+      },
+      {
+            number: "모0316",
+            question: "대장암 대상자의 식사관리 방법으로 옳은 것은?",
+            options: [
+                  "고칼로리 음식을 제공한다.",
+                  "통곡물로 만든 음식을 제공한다.",
+                  "가공 정제된 저잔여식을 섭취한다.",
+                  "훈연한 음식을 제공한다.",
+                  "식물성 지방 섭취를 제한한다."
+            ],
+            correctAnswer: 2,
+            videoId: "1118935694",
+            sourceExam: 3,
+            sourceNumber: "모0316",
+            sourcePosition: 16,
+            trialNumber: 24
+      },
+      {
+            number: "모0733",
+            question: "임종이 임박한 대상자의 신체적 변화로 옳은 것은?",
+            options: [
+                  "손발이 따뜻해진다.",
+                  "혈압이 상승한다.",
+                  "맥박이 강해진다.",
+                  "실금이나 실변을 한다.",
+                  "피부가 분홍색으로 변한다."
+            ],
+            correctAnswer: 4,
+            videoId: "1119269551",
+            sourceExam: 7,
+            sourceNumber: "모0733",
+            sourcePosition: 33,
+            trialNumber: 25
+      },
+      {
+            number: "모1010",
+            question: "요양시설 채용면접에서 기관장이 종교가 다르다고 채용을 거부하는 경우 요양보호사가 침해받은 권리는?",
+            options: [
+                  "생존권",
+                  "평등권",
+                  "자유권",
+                  "청구권",
+                  "노동권"
+            ],
+            correctAnswer: 2,
+            videoId: "1119289708",
+            sourceExam: 10,
+            sourceNumber: "모1010",
+            sourcePosition: 10,
+            trialNumber: 26
+      },
+      {
+            number: "모0124",
+            question: "낙상으로 인하여 발생하며 서혜부와 대퇴부에 통증이 있고 움직임에 제한이 있는 질환은?",
+            options: [
+                  "통풍",
+                  "골다공증",
+                  "근무력증",
+                  "고관절 골절",
+                  "류마티스 관절염"
+            ],
+            correctAnswer: 4,
+            videoId: "1111498227",
+            sourceExam: 1,
+            sourceNumber: "모0124",
+            sourcePosition: 24,
+            trialNumber: 27
+      },
+      {
+            number: "모0930",
+            question: "노인의 약물사용 방법으로 옳은 것은?",
+            options: [
+                  "응급 시에는 편의점에서 항생제를 구입한다.",
+                  "장용 코팅제는 쪼개서 복용한다.",
+                  "증상이 비슷하면 다른 사람의 약을 복용한다.",
+                  "약 복용을 잊는 경우 다음에 2배 용량을 복용한다.",
+                  "모든 비처방약은 복용 전에 의사와 상담한다."
+            ],
+            correctAnswer: 5,
+            videoId: "1119283614",
+            sourceExam: 9,
+            sourceNumber: "모0930",
+            sourcePosition: 30,
+            trialNumber: 28
+      },
+      {
+            number: "모0529",
+            question: "요양보호사가 요양보호 서비스 내용을 기록하는 목적은?",
+            options: [
+                  "요양급여수가 청구",
+                  "기록하는 습관 유지",
+                  "요양보호사 업무 평가",
+                  "가족과 정보공유를 통한 의사소통",
+                  "사고 발생 시 법적책임 회피"
+            ],
+            correctAnswer: 4,
+            videoId: "1119258590",
+            sourceExam: 5,
+            sourceNumber: "모0529",
+            sourcePosition: 29,
+            trialNumber: 29
+      },
+      {
+            number: "모0116",
+            question: "요양보호사가 업무를 수행할 때 근골격계 질환을 예방하는 방법으로 옳은 것은?",
+            options: [
+                  "무거운 물건을 반복적으로 같은 동작으로 옮긴다.",
+                  "물건을 든 상태에서 허리를 돌려 방향을 바꾼다.",
+                  "몸의 무게중심을 높여서 물건을 들어올린다.",
+                  "물건을 최대한 몸에 가깝게 하여 들어올린다.",
+                  "허리를 굽혀서 물건을 들어올린다."
+            ],
+            correctAnswer: 4,
+            videoId: "1111494404",
+            sourceExam: 1,
+            sourceNumber: "모0116",
+            sourcePosition: 16,
+            trialNumber: 30
+      },
+      {
+            number: "모0728",
+            question: "노인의 성생활 문제에 관한 설명으로 옳은 것은?",
+            options: [
+                  "자궁적출술은 성기능을 감소시킨다.",
+                  "전립선 절제술은 성기능에 영향을 준다.",
+                  "항염증성 약물을 복용하면 성욕이 증가한다.",
+                  "강심제 복용은 성 문제를 유발할 수 있다.",
+                  "알코올을 많이 섭취하면 오르가슴을 빨리 느끼게 한다."
+            ],
+            correctAnswer: 4,
+            videoId: "1119269226",
+            sourceExam: 7,
+            sourceNumber: "모0728",
+            sourcePosition: 28,
+            trialNumber: 31
+      },
+      {
+            number: "모0427",
+            question: "대상자의 운동관리 방법으로 옳은 것은?",
+            options: [
+                  "땀복을 입혀 운동 효과를 극대화한다.",
+                  "운동하는 중간중간에 휴식을 취한다.",
+                  "폐활량을 늘리기 위해 마라톤을 권장한다.",
+                  "운동 효과를 높이기 위해 빠르게 강도를 높인다.",
+                  "체력 소모를 줄이기 위해 마무리 운동을 생략한다."
+            ],
+            correctAnswer: 2,
+            videoId: "1119294199",
+            sourceExam: 4,
+            sourceNumber: "모0427",
+            sourcePosition: 27,
+            trialNumber: 32
+      },
+      {
+            number: "모0404",
+            question: "일상생활을 영위하기 어려운 취약노인에게 안정적인 노후생활 보장과 노인의 기능·건강 유지 및 악화를 예방하기 위한 노인복지사업은?",
+            options: [
+                  "노인맞춤돌봄서비스",
+                  "독거노인 공동생활홈 서비스",
+                  "장애인 응급안전 안심서비스",
+                  "결식우려 노인 무료급식 지원",
+                  "학대피해노인 전용쉼터"
+            ],
+            correctAnswer: 1,
+            videoId: "1119293548",
+            sourceExam: 4,
+            sourceNumber: "모0404",
+            sourcePosition: 4,
+            trialNumber: 33
+      },
+      {
+            number: "모0528",
+            question: "대상자의 약물복용 방법으로 옳은 것은?",
+            options: [
+                  "고혈압약은 자몽주스와 함께 복용한다.",
+                  "서방제는 분쇄하여 복용한다.",
+                  "와파린은 시금치와 함께 복용한다.",
+                  "철분제는 비타민D와 함께 복용한다.",
+                  "삼키기 힘든 약이 분할할 수 없으면 처방을 변경해 달라고 한다."
+            ],
+            correctAnswer: 5,
+            videoId: "1119258529",
+            sourceExam: 5,
+            sourceNumber: "모0528",
+            sourcePosition: 28,
+            trialNumber: 34
+      },
+      {
+            number: "모1013",
+            question: "대상자의 상태가 악화되었다는 이유로 대상자의 가족이 요양보호사 교체를 언급하며 본인일부부담금의 할인을 요청하는 경우 대처방법은?",
+            options: [
+                  "할인 대신 추가 서비스를 제공해 준다.",
+                  "불법행위이므로 할인해 줄 수 없다고 한다.",
+                  "시설장과 상의한 후 알려 주겠다고 한다.",
+                  "할인 대신 다른 요양보호사를 소개해 준다.",
+                  "선지급하면 나중에 일정액을 돌려준다고 한다."
+            ],
+            correctAnswer: 2,
+            videoId: "1119289781",
+            sourceExam: 10,
+            sourceNumber: "모1013",
+            sourcePosition: 13,
+            trialNumber: 35
+      },
+      {
+            number: "모0161",
+            question: "쾌적한 실내 환경을 조성하는 방법으로 옳은 것은?",
+            options: [
+                  "환기 시에는 맞바람이 대상자의 피부에 직접 닿도록 한다.",
+                  "실내 온도는 바깥과의 온도 차가 크도록 유지한다.",
+                  "대상자의 방에 직사광선이 들어오도록 커튼을 없앤다",
+                  "여름에는 가습기, 겨울에는 제습기를 사용한다.",
+                  "계단 높이를 잘 볼 수 있도록 천장에 조명을 설치한다."
+            ],
+            correctAnswer: 5,
+            videoId: "1113808008",
+            sourceExam: 1,
+            sourceNumber: "모0161",
+            sourcePosition: 61,
+            trialNumber: 36
+      },
+      {
+            number: "모0254",
+            question: "대상자의 통 목욕을 돕는 방법으로 옳은 것은?",
+            options: [
+                  "발끝 → 다리 → 회음부 → 팔 → 몸통 순서로 닦는다.",
+                  "머리를 감긴 후 욕조에 들어가게 한다.",
+                  "불편한 쪽 겨드랑이를 잡고 보조한다",
+                  "욕조에 등받이를 길게 대어 중앙에 앉게 한다.",
+                  "욕조부터 다리 방향으로 비눗물을 씻어낸다."
+            ],
+            correctAnswer: 3,
+            videoId: "1117997626",
+            sourceExam: 2,
+            sourceNumber: "모0254",
+            sourcePosition: 54,
+            trialNumber: 37
+      },
+      {
+            number: "모0971",
+            question: "다음에서 설명하는 치매대상자의 문제행동 유형은?",
+            options: [
+                  "파괴적 행동",
+                  "배회",
+                  "석양증후군",
+                  "망상",
+                  "섬망"
+            ],
+            correctAnswer: 1,
+            videoId: "1119287096",
+            sourceExam: 9,
+            sourceNumber: "모0971",
+            sourcePosition: 71,
+            trialNumber: 38
+      },
+      {
+            number: "모1077",
+            question: "대상자에게 다음과 같은 징후들이 보일 때 가장 먼저 해야 할 조치는?",
+            options: [
+                  "기관장에게 연락한다.",
+                  "119에 신고한다.",
+                  "가족에게 연락한다.",
+                  "상황별 응급처치를 실시한다.",
+                  "환자 곁에서 손을 잡고 안심시킨다."
+            ],
+            correctAnswer: 2,
+            videoId: "1119291300",
+            sourceExam: 10,
+            sourceNumber: "모1077",
+            sourcePosition: 77,
+            trialNumber: 39
+      },
+      {
+            number: "모0450",
+            question: "의치를 닦을 때 사용하는 물(가)과 의치를 보관할 때 사용하는 물(나)로 옳은 것은?",
+            options: [
+                  "미온수 / 의치세정제",
+                  "뜨거운 물 / 알코올",
+                  "찬물 / 뜨거운 물",
+                  "뜨거운 물 / 찬물",
+                  "소금물 / 의치세정제"
+            ],
+            correctAnswer: 1,
+            videoId: "1119294831",
+            sourceExam: 4,
+            sourceNumber: "모0450",
+            sourcePosition: 50,
+            trialNumber: 40
+      },
+      {
+            number: "모0652",
+            question: "여성대상자의 침상목욕 돕기 방법으로 옳은 것은?",
+            options: [
+                  "유방은 원을 그리듯이 닦는다.",
+                  "양쪽상지는 팔쪽에서 손목으로 닦는다.",
+                  "양쪽하지는 허벅지에서 발끝으로 닦는다.",
+                  "등과 둔부는 둔부에서 목 뒤까지 닦는다.",
+                  "복부는 배꼽 중앙에서 시계 반대 방향으로 닦는다."
+            ],
+            correctAnswer: 1,
+            videoId: "1119263758",
+            sourceExam: 6,
+            sourceNumber: "모0652",
+            sourcePosition: 52,
+            trialNumber: 41
+      },
+      {
+            number: "모0373",
+            question: "다음 상황에서 치매대상자와 효과적인 의사소통 방법은?",
+            options: [
+                  "\"왜 그러세요, 잠을 못 주무셨나요?\"",
+                  "\"콕콕 찌르고 아픈가요?\"",
+                  "\"언제부터 통증이 있었어요?\"",
+                  "\"많이 아프세요? 병원에 가실까요?\"",
+                  "\"(머리를 짚으며) 여기가 지끈거리세요?\""
+            ],
+            correctAnswer: 5,
+            videoId: "1118944471",
+            sourceExam: 3,
+            sourceNumber: "모0373",
+            sourcePosition: 73,
+            trialNumber: 42
+      },
+      {
+            number: "모0659",
+            question: "우측편마비 대상자가 지팡이를 이용하여 보행할 때 돕는 방법으로 옳은 것은?",
+            options: [
+                  "대상자의 오른쪽 손으로 지팡이를 잡게 한다.",
+                  "지팡이 끝을 발 앞 15cm, 바깥쪽 옆 15cm 지점에 내민다.",
+                  "계단을 내려갈 때는 지팡이 - 왼쪽다리 - 오른쪽다리 순으로 내려간다.",
+                  "계단을 올라갈 때는 지팡이 - 오른쪽다리 - 왼쪽다리 순으로 올라간다.",
+                  "평지를 걸어갈 때는 지팡이 - 왼쪽다리 - 오른쪽다리 순으로 걸어간다."
+            ],
+            correctAnswer: 2,
+            videoId: "1119264236",
+            sourceExam: 6,
+            sourceNumber: "모0659",
+            sourcePosition: 59,
+            trialNumber: 43
+      },
+      {
+            number: "모0954",
+            question: "편마비 대상자를 침대에서 일으켜 앉히는 방법으로 옳은 것은?",
+            options: [
+                  "요양보호사는 대상자의 불편한 쪽에 선다.",
+                  "건강한 손은 요양보호사의 목을 잡는다.",
+                  "마비된 손은 가슴 위에 올려놓는다.",
+                  "양쪽 무릎을 곧게 편다.",
+                  "양손으로 대상자의 어깨를 잡고 앞으로 끌어당긴다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119285931",
+            sourceExam: 9,
+            sourceNumber: "모0954",
+            sourcePosition: 54,
+            trialNumber: 44
+      },
+      {
+            number: "모0447",
+            question: "협조가 가능한 대상자의 침상 배설을 돕는 방법으로 옳은 것은?",
+            options: [
+                  "변기를 차게 하여 대상자의 변의를 자극한다.",
+                  "대상자가 실수를 하면 기저귀를 채운다.",
+                  "요양보호사가 허리를 지지한 후 엉덩이 밑에 방수포를 깔아둔다.",
+                  "요양보호사가 둔부를 들어 올려 변기를 항문 중앙에 놓는다.",
+                  "변을 용이하게 배출할 수 있도록 옆으로 눕혀 준다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119294713",
+            sourceExam: 4,
+            sourceNumber: "모0447",
+            sourcePosition: 47,
+            trialNumber: 45
+      },
+      {
+            number: "모0874",
+            question: "치매 말기 대상자와의 의사소통 방법으로 옳은 것은?",
+            options: [
+                  "대화 내용을 갑자기 바꾸지 않는다.",
+                  "친숙한 활동을 통해 대화를 시도한다.",
+                  "응답하지 않더라도 계속적으로 이야기한다.",
+                  "전달하고자 하는 요점을 구체적으로 전달한다.",
+                  "반응하지 않더라도 한 번 더 질문한다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119280239",
+            sourceExam: 8,
+            sourceNumber: "모0874",
+            sourcePosition: 74,
+            trialNumber: 46
+      },
+      {
+            number: "모0640",
+            question: "요양보호사가 대상자에게 추천한 여가활동의 유형은?",
+            options: [
+                  "소일 활동",
+                  "사교오락 활동",
+                  "자기계발 활동",
+                  "가족중심 활동",
+                  "종교참여 활동"
+            ],
+            correctAnswer: 2,
+            videoId: "1119263060",
+            sourceExam: 6,
+            sourceNumber: "모0640",
+            sourcePosition: 40,
+            trialNumber: 47
+      },
+      {
+            number: "모0180",
+            question: "자동심장충격기를 사용하는 방법으로 옳은 것은?",
+            options: [
+                  "두 개의 패드를 부착한 후 전원을 켠다.",
+                  "심장리듬 분석 중에는 대상자를 붙잡는다.",
+                  "충전 중에는 가슴압박을 실시하지 않는다.",
+                  "쇼크버튼을 누른 후 대상자에게서 손을 뗀다.",
+                  "심장충격이 전달된 즉시 가슴압박을 시작한다."
+            ],
+            correctAnswer: 5,
+            videoId: "1113809785",
+            sourceExam: 1,
+            sourceNumber: "모0180",
+            sourcePosition: 80,
+            trialNumber: 48
+      },
+      {
+            number: "모0765",
+            question: "의치를 낀 치매대상자가 식사를 하지 않으려고 할 때 올바른 대처방법은?",
+            options: [
+                  "음식을 투명한 유리제품에 담아준다.",
+                  "틀니가 잘 맞지 않는지 확인한다.",
+                  "다양한 음식을 식탁에 올려놓는다.",
+                  "한시적으로 금식을 시킨다.",
+                  "사탕이나 팝콘을 간식으로 제공한다."
+            ],
+            correctAnswer: 2,
+            videoId: "1119271437",
+            sourceExam: 7,
+            sourceNumber: "모0765",
+            sourcePosition: 65,
+            trialNumber: 49
+      },
+      {
+            number: "모1075",
+            question: "E. 퀴블러 로스의 임종 적응 단계 설명으로 옳은 것은?",
+            options: [
+                  "분노: \"나는 믿을 수 없어\"하면서 사실로 받아들이려 하지 않는다.",
+                  "부정: \"난 아니야\"하면서 주위로부터 관심을 끌려고 노력한다.",
+                  "수용: 자신의 근심과 슬픔을 더 이상 말로 표현하지 않는다.",
+                  "타협: \"우리 아들 장가갈 때까지만 살게 해주세요.\"라고 원한다.",
+                  "우울: 평화로운 마음속에서 마지막 정리의 시간을 보내기도 한다."
+            ],
+            correctAnswer: 4,
+            videoId: "1119291246",
+            sourceExam: 10,
+            sourceNumber: "모1075",
+            sourcePosition: 75,
+            trialNumber: 50
+      },
+      {
+            number: "모1062",
+            question: "식품을 안전하게 보관하는 방법으로 옳은 것은?",
+            options: [
+                  "냉장실 온도는 10°C 이하로 유지한다.",
+                  "돼지고기는 잘게 썰어서 냉동 보관한다.",
+                  "냉동된 식품은 상온에서 해동한다.",
+                  "조리하다가 남은 음식은 즉시 버린다.",
+                  "조리한 음식은 실온에서 2시간 이상 방치하지 않는다."
+            ],
+            correctAnswer: 5,
+            videoId: "1119290983",
+            sourceExam: 10,
+            sourceNumber: "모1062",
+            sourcePosition: 62,
+            trialNumber: 51
+      },
+      {
+            number: "모0661",
+            question: "대상자의 의복을 관리하는 방법으로 옳은 것은?",
+            options: [
+                  "감염이 의심이 되는 옷은 즉시 버린다.",
+                  "얼룩이 많이 묻은 옷은 한꺼번에 모아서 세탁한다.",
+                  "평소에 입는 옷은 서랍의 앞쪽에 정리해둔다.",
+                  "방충제는 양복장 아래쪽 구석에 넣어둔다.",
+                  "보관으로 의류가 눅눅해지면 2시간 이상 직사광선에 쏘인다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119264387",
+            sourceExam: 6,
+            sourceNumber: "모0661",
+            sourcePosition: 61,
+            trialNumber: 52
+      },
+      {
+            number: "모0165",
+            question: "치매대상자가 갑자기 소변을 가리지 못할 때 돕는 방법으로 옳은 것은?",
+            options: [
+                  "수분 섭취량을 줄여준다.",
+                  "낮에는 기저귀를 채워 준다.",
+                  "보호자와 유치도뇨관 삽입에 대해 의논한다.",
+                  "일정한 시간 간격으로 배뇨하게 한다",
+                  "단추나 벨트가 있는 바지를 입힌다."
+            ],
+            correctAnswer: 4,
+            videoId: "1113808438",
+            sourceExam: 1,
+            sourceNumber: "모0165",
+            sourcePosition: 65,
+            trialNumber: 53
+      },
+      {
+            number: "모1043",
+            question: "경관영양 돕기 방법으로 옳은 것은?",
+            options: [
+                  "무의식 대상자에게는 식사 시작을 알리지 않는다.",
+                  "여름철에는 처방된 영양액을 차게 준비한다.",
+                  "상체를 높이고 오른쪽으로 비스듬히 눕힌다.",
+                  "진한 농도의 영양액은 매우 천천히 주입한다.",
+                  "주입 시 청색증이 나타나면 비위관을 즉시 빼준다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119290492",
+            sourceExam: 10,
+            sourceNumber: "모1043",
+            sourcePosition: 43,
+            trialNumber: 54
+      },
+      {
+            number: "모0751",
+            question: "침상에서 대상자의 머리를 감길 때 돕는 방법으로 옳은 것은?",
+            options: [
+                  "문과 창문을 열어놓는다.",
+                  "머리를 침대 중앙에 오게 한다.",
+                  "방수포를 어깨 밑까지 깐다.",
+                  "수건으로 귀와 눈을 덮어 놓는다.",
+                  "어깨 아래에 목욕담요를 놓아 가슴 위까지 감싼다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119270663",
+            sourceExam: 7,
+            sourceNumber: "모0751",
+            sourcePosition: 51,
+            trialNumber: 55
+      },
+      {
+            number: "모1056",
+            question: "하반신마비 대상자를 침대에서 일으켜 앉히려고 할 때 돕는 순서는?",
+            options: [
+                  "가 → 나 → 다 → 라",
+                  "가 → 나 → 다 → 라",
+                  "가 → 다 → 나 → 라",
+                  "다 → 가 → 나 → 라",
+                  "다 → 가 → 라 → 나"
+            ],
+            correctAnswer: 2,
+            videoId: "1119290826",
+            sourceExam: 10,
+            sourceNumber: "모1056",
+            sourcePosition: 56,
+            trialNumber: 56
+      },
+      {
+            number: "모0852",
+            question: "대상자의 침상 정리하는 방법으로 옳은 것은?",
+            options: [
+                  "시트 중앙선이 침대 우측 부위에 오도록 편다.",
+                  "방수포 밑에는 젖은 시트를 깔지 않는다",
+                  "머리 쪽의 여분의 시트는 각을 만든 후 매트리스 안으로 넣는다.",
+                  "옆으로 늘어진 시트는 양손으로 잡고 밑으로 넣는다",
+                  "침대 커버의 남은 부분은 매트리스 밑에 접어 넣는다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119279401",
+            sourceExam: 8,
+            sourceNumber: "모0852",
+            sourcePosition: 52,
+            trialNumber: 57
+      },
+      {
+            number: "모0538",
+            question: "나-전달법으로 옳은 것은?",
+            options: [
+                  "\"왜 천장만 보고 누워 계시죠?\"",
+                  "\"저에게 불만이 있으신가 봐요.\"",
+                  "\"식사도 않고 말을 안 하려고 하니 제가 힘드네요.\"",
+                  "\"식사를 하지 않으면 산책을 나가지 않을거예요.\"",
+                  "\"어디가 아프신가요?\""
+            ],
+            correctAnswer: 3,
+            videoId: "1119259114",
+            sourceExam: 5,
+            sourceNumber: "모0538",
+            sourcePosition: 38,
+            trialNumber: 58
+      },
+      {
+            number: "모0380",
+            question: "다음 사례와 같이 치매대상자가 헛것을 보는 정신행동증상이 나타날 때 대처방법으로 옳은 것은?",
+            options: [
+                  "\"이상하네요. 어르신하고 나 밖에 없는데, 왜 그러세요?\"",
+                  "\"어르신, 제발 정신 좀 차리세요.\"",
+                  "\"음료수 한잔 마시고, 밖에 나가서 맛있는 것 먹고 올까요?\"",
+                  "\"그 사람이 안 보이게 조명을 어둡게 해드릴게요.\"",
+                  "\"치매가 심해져서 헛것이 보이시나 보네요.\""
+            ],
+            correctAnswer: 3,
+            videoId: "1118944743",
+            sourceExam: 3,
+            sourceNumber: "모0380",
+            sourcePosition: 80,
+            trialNumber: 59
+      },
+      {
+            number: "모0861",
+            question: "대상자가 보행기를 이용할 때 팔꿈치를 굽히는 각도(A)와 보행기 높이(B)로 옳은 것은?",
+            options: [
+                  "각도 - 약 30° / 높이 - 허리",
+                  "각도 - 약 30° / 높이 - 엉덩이",
+                  "각도 - 약 90° / 높이 - 가슴",
+                  "각도 - 약 90° / 높이 - 허리",
+                  "각도 - 약 90° / 높이 - 엉덩이"
+            ],
+            correctAnswer: 2,
+            videoId: "1119279726",
+            sourceExam: 8,
+            sourceNumber: "모0861",
+            sourcePosition: 61,
+            trialNumber: 60
+      },
+      {
+            number: "모0541",
+            question: "대상자의 안전한 식사를 위한 식사 자세로 옳은 것은?",
+            options: [
+                  "바퀴가 달린 의자에 앉게 한다.",
+                  "휠체어에 앉을 때는 식탁과 거리를 둔다.",
+                  "팔걸이가 없는 의자에 앉게 한다.",
+                  "식탁의 높이는 대상자의 가슴과 배꼽 사이에 오게 한다.",
+                  "의자의 앞부분에 걸터앉아 팔꿈치를 식탁에 올리도록 한다."
+            ],
+            correctAnswer: 4,
+            videoId: "1119259303",
+            sourceExam: 5,
+            sourceNumber: "모0541",
+            sourcePosition: 41,
+            trialNumber: 61
+      },
+      {
+            number: "모0773",
+            question: "치매대상자가 문제행동을 보일 때 요양보호사의 대처방법은?",
+            options: [
+                  "대상자 혼자 있게 한다.",
+                  "TV를 끄고 조용하게 해준다.",
+                  "방안에 가둔다.",
+                  "낮 시간에 낮잠을 자게 한다.",
+                  "대상자가 좋아하는 놀이를 함께 한다."
+            ],
+            correctAnswer: 5,
+            videoId: "1119274935",
+            sourceExam: 7,
+            sourceNumber: "모0773",
+            sourcePosition: 73,
+            trialNumber: 62
+      },
+      {
+            number: "모0960",
+            question: "다음 그림과 같은 목욕리프트 선정 시 다리가 불편한 대상자가 목욕할 때 편리하도록 고려되어야 하는 것은?",
+            options: [
+                  "녹이 잘 씻겨지는 재질을 사용한다.",
+                  "등받이 각도는 고정되어야 한다.",
+                  "돌봄자의 무게를 지탱할 수 있어야 한다.",
+                  "높낮이가 자동으로 조정되어야 한다.",
+                  "목욕리프트의 무게는 무거울수록 좋다."
+            ],
+            correctAnswer: 4,
+            videoId: "1119286341",
+            sourceExam: 9,
+            sourceNumber: "모0960",
+            sourcePosition: 60,
+            trialNumber: 63
+      },
+      {
+            number: "모0445",
+            question: "대상자의 귀약 투여 방법으로 옳은 것은?",
+            options: [
+                  "[이미지] 그림1",
+                  "[이미지] 그림2",
+                  "[이미지] 그림3",
+                  "[이미지] 그림4",
+                  "[이미지] 그림5"
+            ],
+            correctAnswer: 2,
+            videoId: "1119294676",
+            sourceExam: 4,
+            sourceNumber: "모0445",
+            sourcePosition: 45,
+            trialNumber: 64
+      },
+      {
+            number: "모0442",
+            question: "대상자가 식사 중 사레 들리지 않도록 예방하는 방법은?",
+            options: [
+                  "가능한 한 누운 자세를 취하게 한다.",
+                  "음식물이 입안에 있을 때 말을 시킨다.",
+                  "수분이 적은 음식을 제공한다.",
+                  "신맛이 강한 음식을 제공한다.",
+                  "상체를 약간 앞으로 숙이고 턱을 당기도록 한다."
+            ],
+            correctAnswer: 5,
+            videoId: "1119294591",
+            sourceExam: 4,
+            sourceNumber: "모0442",
+            sourcePosition: 42,
+            trialNumber: 65
+      },
+      {
+            number: "모0850",
+            question: "대상자의 머리카락이 엉켰을 경우 머리 손질하는 방법으로 옳은 것은?",
+            options: [
+                  "두피 마사지를 해준다.",
+                  "물로 적신 후 손질한다.",
+                  "헤어젤을 발라준다.",
+                  "엉긴 부분을 가위로 잘라준다",
+                  "힘을 주어 빗질한다."
+            ],
+            correctAnswer: 2,
+            videoId: "1119279338",
+            sourceExam: 8,
+            sourceNumber: "모0850",
+            sourcePosition: 50,
+            trialNumber: 66
+      },
+      {
+            number: "모0544",
+            question: "대상자의 경구약 투약을 돕는 방법으로 옳은 것은?",
+            options: [
+                  "알약이 많은 경우에는 2~3번에 나누어 투약한다.",
+                  "가루약은 삼키기 쉽게 국물에 섞어서 투약한다.",
+                  "알약은 약병에 손을 직접 넣어 꺼낸다.",
+                  "금식 중에는 혈압약을 투약하지 않는다.",
+                  "치아착색이 생기는 물약은 계량컵을 사용하여 투약한다."
+            ],
+            correctAnswer: 1,
+            videoId: "1119259498",
+            sourceExam: 5,
+            sourceNumber: "모0544",
+            sourcePosition: 44,
+            trialNumber: 67
+      },
+      {
+            number: "모0351",
+            question: "의치를 보관하는 방법으로 옳은 것은?",
+            options: [
+                  "뜨거운 물",
+                  "차가운 물",
+                  "주방세제",
+                  "알코올",
+                  "건조"
+            ],
+            correctAnswer: 2,
+            videoId: "1118936845",
+            sourceExam: 3,
+            sourceNumber: "모0351",
+            sourcePosition: 51,
+            trialNumber: 68
+      },
+      {
+            number: "모0367",
+            question: "변실금이 있는 치매대상자의 배설 돕기 방법으로 옳은 것은?",
+            options: [
+                  "낮에는 활동이 많으므로 기저귀를 채워준다.",
+                  "식사 전후에는 매번 변기에 앉혀 배변을 유도한다.",
+                  "단추나 벨트가 있는 바지를 입힌다.",
+                  "옷에 배설물이 묻힌 경우 주의를 준다.",
+                  "뒤처리를 손동작으로 보여주어 스스로 하도록 돕는다."
+            ],
+            correctAnswer: 5,
+            videoId: "1118944266",
+            sourceExam: 3,
+            sourceNumber: "모0367",
+            sourcePosition: 67,
+            trialNumber: 69
+      },
+      {
+            number: "모0947",
+            question: "대상자가 이동변기를 사용할 때 돕는 방법으로 옳은 것은?",
+            options: [
+                  "변기 밑에 미끄럼방지 매트를 깔아준다.",
+                  "변기 높이를 침대보다 높게 한다.",
+                  "배설물이 가득차면 한꺼번에 버린다.",
+                  "배설 중 환기를 위해 창문을 열어둔다.",
+                  "변기에 앉힌 후 발바닥은 바닥에 닿지 않게 한다."
+            ],
+            correctAnswer: 1,
+            videoId: "1119285493",
+            sourceExam: 9,
+            sourceNumber: "모0947",
+            sourcePosition: 47,
+            trialNumber: 70
+      },
+      {
+            number: "모0273",
+            question: "주변에 아무도 없는데 치매대상자가 누군가와 대화를 나누거나 손짓을 하는 등 이상한 행동이 보일 때 대처방법으로 옳은 것은?",
+            options: [
+                  "즉시 이상한 행동을 제지한다.",
+                  "조명을 어둡게 해준다.",
+                  "증상이 끝날 때까지 혼자 있게 한다.",
+                  "대상자가 말하는 것에 대해 부정하지 말고 그대로 받아준다.",
+                  "대상자에게 주변에 아무도 없다고 말한다."
+            ],
+            correctAnswer: 4,
+            videoId: "1117998094",
+            sourceExam: 2,
+            sourceNumber: "모0273",
+            sourcePosition: 73,
+            trialNumber: 71
+      },
+      {
+            number: "모0766",
+            question: "치매대상자의 식사 돕기를 할 때 주의해야 할 사항으로 옳은 것은?",
+            options: [
+                  "딱딱한 음식을 제공한다.",
+                  "식탁 위에 소금을 놓아둔다.",
+                  "그릇은 투명한 유리제품을 사용한다.",
+                  "졸고 있는 중에도 식사하도록 한다.",
+                  "사레가 자주 걸리면 더 걸쭉한 액체 음식을 제공한다."
+            ],
+            correctAnswer: 5,
+            videoId: "1119271491",
+            sourceExam: 7,
+            sourceNumber: "모0766",
+            sourcePosition: 66,
+            trialNumber: 72
+      },
+      {
+            number: "모0142",
+            question: "오른손잡이 대상자의 입 안에 음식을 넣어줄 때 돕는 방법으로 옳은 것은?",
+            options: [
+                  "[이미지] 그림1",
+                  "[이미지] 그림2",
+                  "[이미지] 그림3",
+                  "[이미지] 그림4",
+                  "[이미지] 그림5"
+            ],
+            correctAnswer: 3,
+            videoId: "1113806378",
+            sourceExam: 1,
+            sourceNumber: "모0142",
+            sourcePosition: 42,
+            trialNumber: 73
+      },
+      {
+            number: "모0264",
+            question: "주방용품을 위생적으로 관리하는 방법으로 옳은 것은?",
+            options: [
+                  "삶을 수 없는 수세미는 한 번 사용하고 버린다.",
+                  "곰팡이가 있는 찬장은 세척 후 쾌적한 식초를 뿌려준다.",
+                  "젖은 행주는 사용 후 물에 담가둔다.",
+                  "고무장갑은 사용 후 안팎을 뒤집어서 세제로 씻고 건조시킨다.",
+                  "희석한 소독제를 부어 놓는다"
+            ],
+            correctAnswer: 4,
+            videoId: "1117997842",
+            sourceExam: 2,
+            sourceNumber: "모0264",
+            sourcePosition: 64,
+            trialNumber: 74
+      },
+      {
+            number: "모0677",
+            question: "대상자가 화상을 입었을 때 대처하는 방법으로 옳은 것은?",
+            options: [
+                  "화상부위에 된장을 바른다.",
+                  "화상이 경미하면 멸균 드레싱을 실시한다.",
+                  "흐르는 수돗물에 환부를 직접 댄다.",
+                  "장신구는 그대로 둔다.",
+                  "물집을 바늘로 터트린다."
+            ],
+            correctAnswer: 2,
+            videoId: "1119266711",
+            sourceExam: 6,
+            sourceNumber: "모0677",
+            sourcePosition: 77,
+            trialNumber: 75
+      },
+      {
+            number: "모0756",
+            question: "왼쪽 편마비 대상자를 침상에서 일으켜 앉히는 방법으로 옳은 것은?",
+            options: [
+                  "요양보호사는 대상자의 왼쪽에 선다.",
+                  "대상자의 오른쪽 손을 가슴 위에 올려놓는다.",
+                  "대상자의 양쪽 무릎을 곧게 편다.",
+                  "요양보호사 쪽으로 대상자의 오른쪽이 위로 오게 돌려 눕힌다.",
+                  "한쪽 손바닥으로 어깨를 지지하고 반대 손은 넙다리를 지지하여 일으킨다."
+            ],
+            correctAnswer: 5,
+            videoId: "1119270901",
+            sourceExam: 7,
+            sourceNumber: "모0756",
+            sourcePosition: 56,
+            trialNumber: 76
+      },
+      {
+            number: "모0939",
+            question: "치매로 인한 장애가 있는 대상자와의 의사소통 방법으로 옳은 것은?",
+            options: [
+                  "이해력 장애 - 친구처럼 반말을 사용한다.",
+                  "시각 장애 - 여기, 이쪽 등의 지시대명사를 사용하여 설명한다.",
+                  "지남력 장애 - 낮 동안에 기본적인 정보를 자주 인식시킨다.",
+                  "주의력결핍 장애 - 집중할 수 있도록 복잡한 일을 먼저 시킨다.",
+                  "노인성 난청 - 보청기를 착용할 때 입력은 작게 출력은 높게 한다."
+            ],
+            correctAnswer: 3,
+            videoId: "1119284950",
+            sourceExam: 9,
+            sourceNumber: "모0939",
+            sourcePosition: 39,
+            trialNumber: 77
+      },
+      {
+            number: "모0877",
+            question: "대상자가 뜨거운 물에 얼굴이나 입술에 화상을 입었을 때 대처방법은?",
+            options: [
+                  "즉시 병원치료를 받게 한다.",
+                  "따뜻한 물수건을 얼굴에 대 준다.",
+                  "물집이 생기면 터뜨린다.",
+                  "얼굴 부위에 치약을 얇게 바른다.",
+                  "수돗물에 얼굴 부위를 대 준다."
+            ],
+            correctAnswer: 1,
+            videoId: "1119280327",
+            sourceExam: 8,
+            sourceNumber: "모0877",
+            sourcePosition: 77,
+            trialNumber: 78
+      },
+      {
+            number: "모0577",
+            question: "약물의 과다복용으로 대상자가 의식을 잃고 쓰러져 있을 때 대처방법으로 옳은 것은?",
+            options: [
+                  "의식이 없는 경우 옆으로 눕힌다.",
+                  "입안에서 거품이 나오면 천장을 바라보는 자세로 눕힌다.",
+                  "입안에서 토사물이 나온다면 등을 두드려준다.",
+                  "먹고 남은 약과 용기는 용기째 119 대원에게 전달한다.",
+                  "119 구급대원이 올 때까지 팔다리를 마사지 한다."
+            ],
+            correctAnswer: 4,
+            videoId: "1119261489",
+            sourceExam: 5,
+            sourceNumber: "모0577",
+            sourcePosition: 77,
+            trialNumber: 79
+      },
+      {
+            number: "모0269",
+            question: "치매대상자의 옷 입기를 돕는 방법으로 옳은 것은?",
+            options: [
+                  "몸에 꼭 끼는 옷을 제공한다.",
+                  "옷 입는 것이 지체되면 전부 입혀준다.",
+                  "색깔이 화려하고 장식이 달린 옷을 입힌다.",
+                  "옷 입기를 거부하면 기다린 후 다시 시도한다.",
+                  "순서대로 옷을 입을 경우 겉옷을 먼저 위에 놓아준다."
+            ],
+            correctAnswer: 4,
+            videoId: "1117997991",
+            sourceExam: 2,
+            sourceNumber: "모0269",
+            sourcePosition: 69,
+            trialNumber: 80
+      }
+];
+
+    const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
+    const TOTAL_QUESTIONS=quizData.length;
+    let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+
+    function syncResultUserName(name){
+      if(resultUserName)resultUserName.textContent=name?`응시자: ${name}`:"";
+    }
+
+    function normalizeUserNameForIdentity(name){
+      return String(name||"").trim().replace(/\s+/g," ");
+    }
+
+    function getCurrentUserName(){
+      return normalizeUserNameForIdentity((userNameInput&&userNameInput.value)||currentUserName||"");
+    }
+
+    function getStoredUserName(data){
+      if(!data)return "";
+      return normalizeUserNameForIdentity(
+        (data.profile&&data.profile.name)||
+        data.name||
+        (data.result&&data.result.name)||
+        (data.progress&&data.progress.name)||
+        ""
+      );
+    }
+
+    function hasStoredNameMismatch(data,name){
+      const stored=getStoredUserName(data);
+      return Boolean(stored&&stored!==normalizeUserNameForIdentity(name));
+    }
+
+    function getMockExamScopeKey(){
+      return EXAM_ID;
+    }
+
+    function getAuthorizationErrorMessage(error){
+      if(error&&error.code==="invalid-uid")return "아이디에는 . # $ [ ] / 문자를 사용할 수 없습니다.";
+      if(error&&error.code==="not-registered")return "등록되지 않은 아이디입니다. 관리자에게 문의해 주세요.";
+      if(error&&error.code==="disabled")return "사용이 중지된 아이디입니다. 관리자에게 문의해 주세요.";
+      if(error&&error.code==="name-mismatch")return "아이디와 이름이 등록 정보와 일치하지 않습니다. 다시 확인해 주세요.";
+      if(error&&error.code==="scope-denied")return "입력하신 정보는 해당 모의시험에 등록되어 있지 않습니다. 관리자에게 문의해 주세요.";
+      return "등록 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.";
+    }
+
+    function showAuthorizationDenied(message){
+      alert(message);
+      currentUserId="";
+      currentUserName="";
+      document.body.innerHTML='<main style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#EFF6F8;font-family:Arial, sans-serif;"><section style="width:min(520px,100%);background:#fff;border:1px solid #D9E3EA;border-radius:12px;padding:28px;text-align:center;box-shadow:0 18px 42px rgba(15,54,74,.14);"><h1 style="margin:0 0 12px;font-size:24px;color:#17202A;">입장할 수 없습니다</h1><p style="margin:0;color:#475569;font-size:16px;line-height:1.6;font-weight:700;">'+message+'</p></section></main>';
+    }
+
+    function hasAuthorizedMockScope(data){
+      const scopes=(data&&data.allowedScopes&&data.allowedScopes.mockExam)||{};
+      return Boolean(data&&data.enabled!==false&&(scopes.all===true||scopes[getMockExamScopeKey()]===true));
+    }
+
+    function verifyAuthorizedUser(uid,name){
+      const normalized=normalizeUserNameForIdentity(name);
+      if(/[.#$\[\]\/]/.test(String(uid||""))){const err=new Error("invalid uid");err.code="invalid-uid";return Promise.reject(err);}
+      return database.ref('authorizedUsers/'+uid).once("value").then(snapshot=>{
+        const data=snapshot.val();
+        if(!data){const err=new Error("not registered");err.code="not-registered";throw err;}
+        if(data.enabled===false){const err=new Error("disabled");err.code="disabled";throw err;}
+        if(normalizeUserNameForIdentity(data.name)!==normalized){const err=new Error("name mismatch");err.code="name-mismatch";throw err;}
+        if(!hasAuthorizedMockScope(data)){const err=new Error("scope denied");err.code="scope-denied";throw err;}
+        return data;
+      });
+    }
+
+    function showIdentityMismatch(){
+      alert("\uC544\uC774\uB514\uC640 \uC774\uB984\uC774 \uC800\uC7A5\uB41C \uC815\uBCF4\uC640 \uC77C\uCE58\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4. \uB2E4\uC2DC \uD655\uC778\uD574 \uC8FC\uC138\uC694.");
+      startPage.style.display="flex";
+      quizPage.style.display="none";
+      resultPage.style.display="none";
+      currentUserId="";
+      currentUserName="";
+    }
+
+    function saveUserIdentity(userRef,uid,name,data){
+      const normalized=normalizeUserNameForIdentity(name);
+      const updates={
+        uid:String(uid||""),
+        name:normalized,
+        "profile/uid":String(uid||""),
+        "profile/name":normalized,
+        "profile/updatedAt":firebase.database.ServerValue.TIMESTAMP
+      };
+      if(data&&data.result){
+        updates["result/uid"]=String(uid||"");
+        updates["result/name"]=normalized;
+      }
+      if(data&&data.progress){
+        updates["progress/uid"]=String(uid||"");
+        updates["progress/name"]=normalized;
+      }
+      return userRef.update(updates);
+    }
+
+    function startQuiz(uid,userName){
+      currentUserId=uid;
+      currentUserName=normalizeUserNameForIdentity(userName||userNameInput.value.trim()||"");
+      if(userNameInput)userNameInput.value=currentUserName;
+      syncResultUserName(currentUserName);
+      const userRef=database.ref(`exams/${EXAM_ID}/users/${uid}`);
+      verifyAuthorizedUser(uid,currentUserName).then(()=>{
+        userRef.once("value").then(snapshot=>{
+          const data=snapshot.val();
+          saveUserIdentity(userRef,uid,currentUserName,data).then(()=>{
+            if(data&&data.result){
+              startPage.style.display="none";resultPage.style.display="flex";
+              if(data.result.answers)userAnswers=data.result.answers;
+              document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
+            }else if(data&&data.progress){
+              currentQuestionIndex=data.progress.currentQuestion||0;
+              userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
+            }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
+          }).catch(()=>{alert("사용자 정보를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");});
+        }).catch(()=>{alert("사용자 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.");});
+      }).catch(error=>{showAuthorizationDenied(getAuthorizationErrorMessage(error));});
+    }
+
+
+    function buildQuizLaunchUrl(uid,userName){
+      const target=new URL(window.location.href);
+      target.searchParams.set("uid",uid);
+      target.searchParams.set("name",userName);
+      return target.href;
+    }
+
+    function hasQuizLaunchParams(){
+      const params=new URLSearchParams(window.location.search);
+      return Boolean(params.get("uid")&&params.get("name"));
+    }
+
+    function openQuizLaunchWindow(uid,userName){
+      if(hasQuizLaunchParams()){startQuiz(uid,userName);return;}
+      const opened=window.open(buildQuizLaunchUrl(uid,userName),"_blank");
+      if(!opened){
+        alert("\uC0C8 \uCC3D\uC774 \uCC28\uB2E8\uB418\uC5C8\uC2B5\uB2C8\uB2E4. \uBE0C\uB77C\uC6B0\uC800\uC758 \uD31D\uC5C5 \uCC28\uB2E8\uC744 \uD574\uC81C\uD55C \uB4A4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574\uC8FC\uC138\uC694.");
+      }
+    }
+
+    function showQuizPage(){
+      startPage.style.display="none";quizPage.style.display="grid";
+      document.getElementById("quick-nav-container").style.display="flex";
+      createQuickNavButtons();updateQuestion(currentQuestionIndex);
+      requestAnimationFrame(()=>{
+        applyResponsiveLayout();
+        fitQuestionText();
+        fitOptionsText();
+        requestAnimationFrame(()=>{
+          autoResizeNavGrid();
+          requestAnimationFrame(autoResizeNavGrid);
+        });
+      });
+    }
+
+    function saveQuizProgress(){
+      if(!currentUserId)return;
+      currentUserName=getCurrentUserName();
+      database.ref(`exams/${EXAM_ID}/users/${currentUserId}/progress`).set({uid:currentUserId,name:currentUserName,currentQuestion:currentQuestionIndex,answers:userAnswers});
+    }
+
+    function setQuickNavButtonLabel(btn,no,answer){
+      const hasAnswer=answer!==null&&answer!==undefined&&answer!=="";
+      const numberText=String(no);
+      const answerText=hasAnswer?String(answer):"";
+      const label=hasAnswer?numberText+" ["+answerText+"]":numberText;
+      btn.dataset.label=label;
+      btn.innerHTML=hasAnswer?'<span class="nav-number">'+numberText+'</span><span class="nav-answer">['+answerText+']</span>':'<span class="nav-number">'+numberText+'</span>';
+      btn.setAttribute("aria-label",label);
+    }
+
+    function updateQuestion(index){
+      currentQuestionIndex=index;
+      const question=quizData[currentQuestionIndex];
+      videoWrapper.innerHTML=question.videoEmbed;
+      requestAnimationFrame(applyResponsiveLayout);
+      questionNumberSpan.textContent=currentQuestionIndex+1;
+      questionTextSpan.textContent=question.question;
+      currentQuestionSpan.textContent=currentQuestionIndex+1;
+      totalQuestionsSpan.textContent=TOTAL_QUESTIONS;
+      requestAnimationFrame(fitQuestionText);
+      requestAnimationFrame(fitOptionsText);
+      optionsDiv.innerHTML="";
+      question.options.forEach((option,i)=>{
+        const label=document.createElement("label");
+        label.innerHTML=`<input type="radio" name="answer" value="${i+1}"><span>${option}</span>`;
+        optionsDiv.appendChild(label);
+      });
+      if(userAnswers[currentQuestionIndex]!==null){
+        const r=optionsDiv.querySelector(`input[value="${userAnswers[currentQuestionIndex]}"]`);
+        if(r)r.checked=true;
+      }
+      document.querySelectorAll(".nav-btn").forEach((btn,i)=>{
+        btn.classList.remove("active","answered");
+        const ans=userAnswers[i];
+        setQuickNavButtonLabel(btn,i+1,ans);
+        if(ans)btn.classList.add("answered");
+      });
+      const cur=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
+      if(cur)cur.classList.add("active");
+      prevBtn.disabled=currentQuestionIndex===0;
+      nextBtn.textContent=currentQuestionIndex===TOTAL_QUESTIONS-1?"제출하기":"다음 →";
+      if(currentQuestionIndex===TOTAL_QUESTIONS-1)nextBtn.classList.add("submit-mode");
+      else nextBtn.classList.remove("submit-mode");
+    }
+
+    function createQuickNavButtons(){
+      quickNavGrid.innerHTML="";
+      const FIXED_SIZE=80;
+      for(let i=0;i<FIXED_SIZE;i++){
+        const btn=document.createElement("div");
+        btn.classList.add("nav-btn");
+        if(i<TOTAL_QUESTIONS){
+          setQuickNavButtonLabel(btn,i+1,null);btn.dataset.q=i;
+          btn.draggable=false;btn.addEventListener("mousedown",e=>e.preventDefault());
+        } else {
+          btn.style.opacity="0";
+          btn.style.pointerEvents="none";
+        }
+        quickNavGrid.appendChild(btn);
+      }
+    }
+
+    function disableAnswers(){
+      optionsDiv.querySelectorAll("input[type=radio]").forEach(r=>r.disabled=true);
+      quickNavGrid.style.pointerEvents="none";
+    }
+
+    function notifyMockExamComplete(){
+      const state=getExamCompletionState();
+      if(!state.eligible)return;
+      try{
+        if(!window.opener||window.opener.closed)return;
+        window.opener.postMessage({
+          type:"mockExamComplete",
+          examId:EXAM_ID,
+          uid:String(currentUserId||userIdInput.value.trim()||""),
+          name:String(userNameInput.value.trim()||currentUserName||""),
+          completed:state.completed,
+          passed:state.passed,
+          eligible:state.eligible,
+          total:state.stats.correct,
+          written:state.stats.written,
+          practical:state.stats.practical,
+          totalQuestions:TOTAL_QUESTIONS,
+          answers:userAnswers.slice(),
+          correctAnswers:quizData.map(item=>item.correctAnswer)
+        },"*");
+      }catch(e){}
+    }
+
+    function submitQuiz(){
+      let 필기=0,실기=0;
+      quizData.forEach((item,i)=>{
+        if(userAnswers[i]&&userAnswers[i]==item.correctAnswer){if(i<35)필기++;else 실기++;}
+      });
+      const 총점=필기+실기;
+      const 합격여부 = (필기 >= 21 && 실기 >= 27) ? "합격" : "불합격";
+      quizPage.style.display="none";resultPage.style.display="flex";
+      currentUserName=getCurrentUserName();
+      syncResultUserName(currentUserName);
+      if(currentUserId){
+        const ref=database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
+        ref.child("result").set({uid:currentUserId,name:getCurrentUserName(),total:총점,필기,실기,totalQuestions:TOTAL_QUESTIONS,answers:userAnswers});
+        ref.child("progress").remove();
+      }
+      renderResultNav();disableAnswers();notifyMockExamComplete();alert("제출 완료하였습니다!");
+      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
+      const fd=new FormData();
+      fd.append("entry.295783163",userNameInput.value.trim());
+      fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
+      fd.append("entry.516661777", 합격여부);
+      fetch(googleFormURL,{method:"POST",body:fd,mode:"no-cors", keepalive: true }).catch(console.error);
+    }
+
+    function getLearningCompleteMessage(){
+      const isMobile=window.matchMedia&&window.matchMedia("(max-width: 700px), (pointer: coarse)").matches;
+      return isMobile
+        ? "화면 아래의 '학습을 완료합니다.' 버튼을 누르세요.\n↓"
+        : "화면 아래의 '학습을 완료합니다.' 버튼을 누르세요. ↘";
+    }
+
+    function completeLearning(){
+      const state=getExamCompletionState();
+      if(!state.eligible){
+        updateResultCompleteButton(state);
+        alert(getCompletionBlockedMessage(state));
+        return;
+      }
+      notifyMockExamComplete();
+      try{ if(window.opener&&!window.opener.closed)window.opener.focus(); }catch(e){}
+      try{ window.close(); }catch(e){}
+      setTimeout(()=>{ if(!window.closed)alert(getLearningCompleteMessage()); },250);
+    }
+
+    function resetQuiz(){
+      if(!currentUserId){location.reload();return;}
+      alert("초기화되었습니다!");
+      const ref=database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
+      ref.child("progress").remove().then(()=>ref.child("result").remove()).then(()=>{
+        resultPage.style.display="none";currentQuestionIndex=0;
+        userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
+        quickNavGrid.style.pointerEvents="auto";
+      });
+    }
+
+    function normalizeResultAnswers(answers){
+      const arr=new Array(TOTAL_QUESTIONS).fill(null);
+      if(Array.isArray(answers)){
+        for(let i=0;i<TOTAL_QUESTIONS;i++)arr[i]=answers[i]??null;
+      }else if(answers&&typeof answers==="object"){
+        Object.keys(answers).forEach(function(k){
+          const idx=parseInt(k,10);
+          if(idx>=0&&idx<TOTAL_QUESTIONS)arr[idx]=answers[k];
+        });
+      }
+      return arr;
+    }
+
+    function analyzeExamResultAnswers(){
+      userAnswers=normalizeResultAnswers(userAnswers);
+      const stats={written:0,practical:0,correct:0,wrong:[],empty:[]};
+      quizData.forEach(function(q,i){
+        const raw=userAnswers[i];
+        const mine=(raw===null||raw===undefined||raw==="")?"-":raw;
+        const ok=mine!=="-"&&parseInt(mine,10)===parseInt(q.correctAnswer,10);
+        if(ok){
+          stats.correct++;
+          if(i<35)stats.written++;
+          else stats.practical++;
+        }else if(mine==="-"){
+          stats.empty.push({no:i+1,correct:q.correctAnswer,mine:mine});
+        }else{
+          stats.wrong.push({no:i+1,correct:q.correctAnswer,mine:mine});
+        }
+      });
+      return stats;
+    }
+
+    function getExamCompletionState(){
+      const stats=analyzeExamResultAnswers();
+      const completed=stats.empty.length===0;
+      const passed=stats.written>=21&&stats.practical>=27;
+      return {stats,completed,passed,eligible:completed&&passed};
+    }
+
+    function updateResultCompleteButton(state){
+      const btn=document.getElementById("result-complete-btn");
+      if(!btn)return;
+      const currentState=state||getExamCompletionState();
+      btn.style.display=currentState.eligible?"block":"none";
+      btn.disabled=!currentState.eligible;
+      btn.setAttribute("aria-hidden",currentState.eligible?"false":"true");
+    }
+
+    function getCompletionBlockedMessage(state){
+      const currentState=state||getExamCompletionState();
+      if(!currentState.completed)return "모든 문항을 풀고 합격해야 학습 완료를 할 수 있습니다.";
+      if(!currentState.passed)return "합격 기준을 충족해야 학습 완료를 할 수 있습니다.";
+      return "학습 완료 조건을 확인할 수 없습니다.";
+    }
+
+    function renderResultSummary(){
+      const scoreEl=document.getElementById("score");
+      if(!scoreEl)return;
+      const stats=analyzeExamResultAnswers();
+      const total=TOTAL_QUESTIONS;
+      const rate=total?(stats.correct/total)*100:0;
+      const isPassed=stats.written>=21&&stats.practical>=27;
+      const statusNote=isPassed?"기준 통과":"재학습 필요";
+      const resultUserName=document.getElementById("result-user-name");
+      if(resultUserName){
+        const name=getCurrentUserName();
+        resultUserName.textContent=name?("응시자 : "+name):"";
+      }
+      scoreEl.className="result-summary "+(isPassed?"pass":"fail");
+      scoreEl.innerHTML=''
+        + '<div class="result-summary-main">'
+        + '<div class="result-status-card">'
+        + '<div class="result-status-label">'+(isPassed?"합격":"불합격")+'</div>'
+        + '<div class="result-status-note">'+statusNote+'</div>'
+        + '</div>'
+        + '<div class="result-stats">'
+        + '<div class="result-stat"><strong>'+rate.toFixed(1)+'%</strong><span>정답률</span></div>'
+        + '<div class="result-stat"><strong>'+stats.correct+' / '+total+'</strong><span>정답</span></div>'
+        + '<div class="result-stat"><strong>'+stats.wrong.length+'</strong><span>오답</span></div>'
+        + '<div class="result-stat"><strong>'+stats.empty.length+'</strong><span>미응답</span></div>'
+        + '</div>'
+        + '</div>'
+        + '<div class="result-standard">필기 <strong>'+stats.written+' / 35</strong> · 실기 <strong>'+stats.practical+' / 45</strong> · 합격 기준 <strong>필기 21문항 이상</strong> · <strong>실기 27문항 이상</strong></div>';
+      updateResultCompleteButton();
+    }
+
+    function escapeResultReviewHtml(value){
+      return String(value??"").replace(/[&<>"']/g,function(ch){
+        return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch];
+      });
+    }
+
+    function buildResultReviewTooltipHtml(no,correct,mine){
+      const q=quizData[no-1];
+      if(!q)return "";
+      const correctNo=parseInt(correct,10);
+      const mineNo=parseInt(mine,10);
+      const options=(q.options||[]).map(function(option,idx){
+        const optionNo=idx+1;
+        const isCorrect=optionNo===correctNo;
+        const isSelected=optionNo===mineNo;
+        const cls="result-review-tooltip-option"+(isCorrect?" correct":"")+(isSelected?" selected":"");
+        const badge=isCorrect&&isSelected?"정답/선택":(isCorrect?"정답":(isSelected?"선택":""));
+        return '<div class="'+cls+'"><span class="result-review-tooltip-option-no">'+optionNo+'</span><span class="result-review-tooltip-option-text">'+escapeResultReviewHtml(option)+'</span>'+(badge?'<span class="result-review-tooltip-badge">'+badge+'</span>':'')+'</div>';
+      }).join("");
+      return '<div class="result-review-tooltip-head"><strong>'+no+'번</strong><span>'+escapeResultReviewHtml(q.number||"")+'</span></div>'
+        + '<p class="result-review-tooltip-question">'+escapeResultReviewHtml(q.question)+'</p>'
+        + '<div class="result-review-tooltip-summary"><span class="correct">정답 '+escapeResultReviewHtml(correct)+'번</span><span class="selected">선택 '+escapeResultReviewHtml(mine)+'번</span></div>'
+        + '<div class="result-review-tooltip-options">'+options+'</div>';
+    }
+
+    function ensureResultReviewTooltip(){
+      let tooltip=document.getElementById("result-review-tooltip");
+      if(!tooltip){
+        tooltip=document.createElement("div");
+        tooltip.id="result-review-tooltip";
+        tooltip.className="result-review-tooltip";
+        tooltip.setAttribute("role","tooltip");
+        document.body.appendChild(tooltip);
+      }
+      return tooltip;
+    }
+
+    function positionResultReviewTooltip(tooltip,target){
+      const margin=12;
+      const rect=target.getBoundingClientRect();
+      const tipRect=tooltip.getBoundingClientRect();
+      let left=Math.min(Math.max(rect.left,margin),window.innerWidth-tipRect.width-margin);
+      let top=rect.bottom+8;
+      if(top+tipRect.height+margin>window.innerHeight)top=rect.top-tipRect.height-8;
+      top=Math.min(Math.max(top,margin),window.innerHeight-tipRect.height-margin);
+      tooltip.style.left=left+"px";
+      tooltip.style.top=top+"px";
+    }
+
+    function showResultReviewTooltip(target){
+      const no=parseInt(target.dataset.reviewNo,10);
+      if(!no)return;
+      const tooltip=ensureResultReviewTooltip();
+      tooltip.innerHTML=buildResultReviewTooltipHtml(no,target.dataset.reviewCorrect,target.dataset.reviewMine);
+      if(!tooltip.innerHTML)return;
+      tooltip.classList.add("visible");
+      positionResultReviewTooltip(tooltip,target);
+    }
+
+    function hideResultReviewTooltip(){
+      const tooltip=document.getElementById("result-review-tooltip");
+      if(tooltip)tooltip.classList.remove("visible");
+    }
+
+    function bindResultReviewTooltips(){
+      document.querySelectorAll(".result-review-item[data-review-no]").forEach(function(item){
+        item.addEventListener("mouseenter",function(){showResultReviewTooltip(item);});
+        item.addEventListener("mousemove",function(){const tooltip=document.getElementById("result-review-tooltip");if(tooltip&&tooltip.classList.contains("visible"))positionResultReviewTooltip(tooltip,item);});
+        item.addEventListener("mouseleave",hideResultReviewTooltip);
+        item.addEventListener("focus",function(){showResultReviewTooltip(item);});
+        item.addEventListener("blur",hideResultReviewTooltip);
+      });
+      if(!window.__resultReviewTooltipScrollBound){
+        window.__resultReviewTooltipScrollBound=true;
+        window.addEventListener("scroll",hideResultReviewTooltip,true);
+        window.addEventListener("resize",hideResultReviewTooltip);
+      }
+    }
+
+    window.showResultReviewTooltip=showResultReviewTooltip;
+    window.hideResultReviewTooltip=hideResultReviewTooltip;
+
+    function makeWrongReviewItem(item){
+      return '<div class="result-review-item wrong" tabindex="0" data-review-no="'+item.no+'" data-review-correct="'+escapeResultReviewHtml(item.correct)+'" data-review-mine="'+escapeResultReviewHtml(item.mine)+'" aria-label="'+item.no+'번 오답 상세 보기" onmouseenter="showResultReviewTooltip(this)" onmousemove="showResultReviewTooltip(this)" onmouseleave="hideResultReviewTooltip()" onfocus="showResultReviewTooltip(this)" onblur="hideResultReviewTooltip()"><span class="review-no">'+item.no+'번</span><span class="review-answers"><span class="review-answer-correct">정답 '+item.correct+'번</span><span>선택 '+item.mine+'번</span></span></div>';
+    }
+
+    function renderWrongReviewSection(items){
+      const body=items.length?'<div class="result-review-list' + (items.length === 1 ? ' result-review-single' : '') + '">'+items.map(makeWrongReviewItem).join("")+'</div>':'<p class="result-review-empty">복습할 오답 문항이 없습니다.</p>';
+      return '<section class="result-review-section result-review-primary"><div class="result-review-section-head"><h3 class="result-review-title">틀린 문항</h3><span class="result-review-count">'+items.length+'문항</span></div>'+body+'</section>';
+    }
+
+    function renderResultNav(){
+      const grid=document.getElementById("quick-nav-grid-result");
+      const title=document.querySelector(".result-grid-title");
+      if(!grid)return;
+      renderResultSummary();
+      if(title)title.textContent="오답 중심 복습";
+      const stats=analyzeExamResultAnswers();
+      grid.className="result-review-board result-review-compact";
+      grid.innerHTML=renderWrongReviewSection(stats.wrong);
+      bindResultReviewTooltips();
+      requestAnimationFrame(fitResultGrid);
+    }
+
+    function fitResultGrid(){
+      const grid=document.getElementById("quick-nav-grid-result");
+      if(!grid)return;
+      const cells=grid.querySelectorAll(".nav-btn:not(.placeholder)");
+      cells.forEach(function(cell){
+        const detail=cell.querySelector(".detail");
+        if(!detail)return;
+        detail.style.fontSize="";
+        let size=parseFloat(getComputedStyle(detail).fontSize);
+        while((detail.scrollWidth>cell.clientWidth-4||detail.scrollHeight>cell.clientHeight/2)&&size>8){
+          size-=0.5;
+          detail.style.fontSize=size+"px";
+        }
+      });
+    }
+
+    (function(){
+      const params=new URLSearchParams(window.location.search);
+      const uid=params.get('uid')||'';
+      const name=params.get('name')||'';
+      userIdInput.value=uid;
+      userNameInput.value=name;
+      if(uid&&name){startQuiz(uid,name);}
+    })();
+
+    startQuizBtn.addEventListener("click",()=>{
+      const uid=userIdInput.value.trim(),name=userNameInput.value.trim();
+      if(!uid||!name){alert("아이디와 이름을 입력해주세요.");return;}
+      openQuizLaunchWindow(uid,name);
+    });
+    nextBtn.addEventListener("click",()=>{
+      if(currentQuestionIndex===TOTAL_QUESTIONS-1)submitQuiz();
+      else{updateQuestion(currentQuestionIndex+1);saveQuizProgress();}
+    });
+    prevBtn.addEventListener("click",()=>{
+      if(currentQuestionIndex>0){updateQuestion(currentQuestionIndex-1);saveQuizProgress();}
+    });
+    quickNavGrid.addEventListener("click",e=>{
+      if(e.target.classList.contains("nav-btn")){updateQuestion(parseInt(e.target.dataset.q));saveQuizProgress();}
+    });
+    optionsDiv.addEventListener("change",e=>{
+      requestAnimationFrame(fitOptionsText);
+      const ans=parseInt(e.target.value);userAnswers[currentQuestionIndex]=ans;saveQuizProgress();
+      const btn=document.querySelector(`.nav-btn[data-q="${currentQuestionIndex}"]`);
+      if(btn){setQuickNavButtonLabel(btn,currentQuestionIndex+1,ans);btn.classList.add("answered");}
+    });
+    document.getElementById("result-return-btn").addEventListener("click",resetQuiz);
+    document.getElementById("result-complete-btn").addEventListener("click",completeLearning);
+
+    function autoResizeNavGrid(){
+      const navCont=document.getElementById("quick-nav-container");
+      const grid=document.getElementById("quick-nav-grid");
+      if(!navCont||!grid)return;
+      const navH=navCont.clientHeight;
+      const cs=getComputedStyle(navCont);
+      const padV=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
+      const headerH=(document.querySelector(".nav-header")||{}).offsetHeight||0;
+      const gridGap=parseFloat(getComputedStyle(grid).gap)||5;
+      const rowGaps=7*gridGap;
+      const gridH=navH-padV-headerH;
+      const btnH=Math.max(14,Math.min(28,Math.floor((gridH-rowGaps)/8)));
+      document.documentElement.style.setProperty("--nav-btn-height",btnH+"px");
+      const fixedGridH=btnH*8+rowGaps+2;
+      grid.style.height=fixedGridH+"px";
+      const navHeader=document.querySelector(".nav-header");
+      const headerMarginB=navHeader?parseFloat(getComputedStyle(navHeader).marginBottom)||0:0;
+      const fixedNavH=fixedGridH+padV+headerH+headerMarginB;
+      const quizPage=document.getElementById("quiz-page");
+      if(quizPage) quizPage.style.gridTemplateRows="1fr "+fixedNavH+"px";
+    }
+
+
+    if(window.ResizeObserver){
+      const resultContainer=document.getElementById("quick-nav-container-result");
+      if(resultContainer)new ResizeObserver(()=>fitResultGrid()).observe(resultContainer);
+    }
+
+    window.addEventListener("resize",()=>{
+      applyResponsiveLayout();
+      fitQuestionText();
+      requestAnimationFrame(autoResizeNavGrid);
+      fitResultGrid();
+    });
+
+    document.addEventListener("dragstart",e=>e.preventDefault());
+    document.addEventListener("selectstart",e=>e.preventDefault());
+    document.addEventListener("contextmenu",e=>e.preventDefault());
+    document.addEventListener("mousedown",e=>{
+      if(e.target.tagName!=="INPUT"&&e.target.tagName!=="TEXTAREA"&&e.target.tagName!=="BUTTON"){e.preventDefault();}
+    });
+  </script>
+</body>
+</html>
