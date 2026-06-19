@@ -3983,7 +3983,7 @@ const EXAM_ID = "examTrial";
 
     function notifyMockExamComplete(){
       const state=getExamCompletionState();
-      if(!state.eligible)return;
+      if(!state.completed)return;
       try{
         if(!window.opener||window.opener.closed)return;
         window.opener.postMessage({
@@ -4014,9 +4014,10 @@ const EXAM_ID = "examTrial";
       quizPage.style.setProperty("display","none","important");resultPage.style.display="flex";
       currentUserName=getCurrentUserName();
       syncResultUserName(currentUserName);
+      const state=getExamCompletionState();
       if(currentUserId){
         const ref=database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
-        ref.child("result").set({uid:currentUserId,name:getCurrentUserName(),total:총점,필기,실기,totalQuestions:TOTAL_QUESTIONS,answers:userAnswers});
+        ref.child("result").set({uid:currentUserId,name:getCurrentUserName(),total:총점,필기,실기,written:필기,practical:실기,completed:state.completed,passed:state.passed,eligible:state.eligible,totalQuestions:TOTAL_QUESTIONS,answers:userAnswers,correctAnswers:quizData.map(item=>item.correctAnswer)});
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();notifyMockExamComplete();alert("제출 완료하였습니다!");

@@ -1,5 +1,34 @@
 # WORKLOG
 
+## 90. 2026-06-19 실전 모의시험 제출 결과를 올리사이트 본창에 표시
+
+- 사용자 요청에 따라 실전 모의시험 1~80번 제출 직후 올리사이트 메인 로그인 창에서도 합격/불합격 여부와 필기/실기 점수를 요약 표시하도록 수정했다.
+  - 대상 로컬/GitHub 파일:
+    - `mock-exam/desktop-trial.html`
+    - `mock-exam/mobile-trial.html`
+    - `online-class/trial-exam/desktop-trial.html`
+    - `online-class/trial-exam/mobile-trial.html`
+  - 대상 OneDrive 최종 관리 파일:
+    - `03. 모의시험\1. ★★★ 실전 모의시험 로그인 코드.html`
+    - `03. 모의시험\2-1. ★★★ 실전 모의시험 코드 - 데스크톱용.html`
+    - `03. 모의시험\2-2. ★★★ 실전 모의시험 코드 - 모바일용.html`
+- 변경 내용:
+  - 실전 모의시험 제출 결과 저장값에 `written`, `practical`, `completed`, `passed`, `eligible`, `correctAnswers`를 명시적으로 포함했다.
+  - 부모창 `postMessage`는 합격자뿐 아니라 80문항을 모두 푼 불합격자도 전송하도록 `eligible` 기준에서 `completed` 기준으로 완화했다.
+  - OneDrive 로그인 코드는 제출 완료 결과를 감지하면 `아직 학습 완료 전입니다`가 아니라 `olShowResult()`를 호출해 합격/불합격, 총점, 필기/실기 점수, 합격 기준을 표시한다.
+  - 미응답이 남은 제출 데이터만 기존 `아직 학습 완료 전입니다` 안내를 유지한다.
+- 검증:
+  - 실전 모의시험 로컬/온라인 학습반용 데스크톱·모바일 HTML과 OneDrive 로그인 코드 inline script 문법 파싱 통과.
+  - 실전 모의시험 로컬/온라인 학습반용 데스크톱·모바일 HTML `quizRawData` 80문항 파싱 통과.
+  - 정적 검증으로 4개 실전 모의시험 HTML 모두 불합격 완료 결과 전송 조건과 결과 저장 플래그 포함 확인.
+  - Playwright + 로컬 Chrome으로 OneDrive 로그인 코드에 `mockExamComplete` 메시지를 직접 재현했다.
+    - 불합격 예시: `불합격`, `필기 20 / 35`, `실기 27 / 45` 표시 및 완료 버튼 숨김 확인.
+    - 합격 예시: `합격`, `필기 25 / 35`, `실기 40 / 45` 표시 및 완료 버튼 표시 확인.
+  - SHA-256:
+    - 데스크톱 로컬/온라인 학습반/OneDrive: `4786412B45FAFB405E38B46BA4386D467D56118875BBC92057E68E3FD94828FA`
+    - 모바일 로컬/온라인 학습반/OneDrive: `B46F19085C14334C3DED6471720AFDFBA4E52428818D2C2D5AB8549A1AC336B9`
+    - OneDrive 로그인: `C49F1AED68EAD19614B4E39994AA1124596B61574C2E8ACA0549C1740639E677`
+
 ## 89. 2026-06-19 실전 모의시험 관리자 등록 없이 즉시 입장 허용
 
 - 사용자 요청에 따라 실전 모의시험은 관리자용 학습자 등록(`authorizedUsers`)에 포함하지 않아도 되도록 입장 흐름을 수정했다.
