@@ -1,5 +1,18 @@
 # WORKLOG
 
+## 88. 2026-06-19 온라인 학습반용 실전 모의시험 GitHub 폴더 추가
+
+- 사용자 요청에 따라 온라인 학습반에서 직접 사용할 수 있도록 실전 모의시험 데스크톱/모바일 파일을 별도 폴더에 배치했다.
+  - 추가 폴더: `online-class/trial-exam`.
+  - 추가 파일:
+    - `online-class/trial-exam/desktop-trial.html`
+    - `online-class/trial-exam/mobile-trial.html`
+  - 원본은 기존 GitHub Pages용 `mock-exam/desktop-trial.html`, `mock-exam/mobile-trial.html`이며 내용 수정 없이 그대로 복사했다.
+- 검증:
+  - 원본과 온라인 학습반용 복사본의 SHA-256 해시가 각각 일치함을 확인했다.
+  - 데스크톱 해시: `C4F47C183E48EE2AD7DDD685F58E82782FD4CA7BD46764B73C3FAFA91C503D4A`
+  - 모바일 해시: `05B1391D5513F5E1C0BF253A4B36E65B126D65FA7FD02BE303561D3F502F7A00`
+
 ## 87. 2026-06-19 실전 모의시험 80문항 생성
 
 - 사용자 요청에 따라 실제 시험 전 연습용 `실전 모의시험`을 새로 만들었다.
