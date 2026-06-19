@@ -3708,7 +3708,17 @@ const EXAM_ID = "examTrial";
 
     const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
+    const FORCE_CORRECT_TRIAL_NUMBERS=[11,37,56];
+    const FORCE_CORRECT_TRIAL_SET=new Set(FORCE_CORRECT_TRIAL_NUMBERS);
     let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+
+    function isForceCorrectTrialQuestion(index){
+      return FORCE_CORRECT_TRIAL_SET.has(index+1);
+    }
+
+    function getAnsweredCount(){
+      return userAnswers.filter(answer=>answer!==null&&answer!==undefined&&answer!=="").length;
+    }
 
     function syncResultUserName(name){
       const resultUserName=document.getElementById("result-user-name");
@@ -3976,7 +3986,7 @@ const EXAM_ID = "examTrial";
     function submitQuiz(){
       let 필기=0,실기=0;
       quizData.forEach((item,i)=>{
-        if(userAnswers[i]&&userAnswers[i]==item.correctAnswer){if(i<35)필기++;else 실기++;}
+        if(isForceCorrectTrialQuestion(i)||(userAnswers[i]&&userAnswers[i]==item.correctAnswer)){if(i<35)필기++;else 실기++;}
       });
       const 총점=필기+실기;
       const 합격여부 = (필기 >= 21 && 실기 >= 27) ? "합격" : "불합격";
@@ -3986,7 +3996,7 @@ const EXAM_ID = "examTrial";
       const state=getExamCompletionState();
       if(currentUserId){
         const ref=database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
-        ref.child("result").set({uid:currentUserId,name:getCurrentUserName(),total:총점,필기,실기,written:필기,practical:실기,completed:state.completed,passed:state.passed,eligible:state.eligible,totalQuestions:TOTAL_QUESTIONS,answers:userAnswers,correctAnswers:quizData.map(item=>item.correctAnswer)});
+        ref.child("result").set({uid:currentUserId,name:getCurrentUserName(),total:총점,필기,실기,written:필기,practical:실기,completed:state.completed,passed:state.passed,eligible:state.eligible,totalQuestions:TOTAL_QUESTIONS,answeredCount:getAnsweredCount(),submittedAt:new Date().toISOString(),answers:userAnswers,correctAnswers:quizData.map(item=>item.correctAnswer),forceCorrectTrialNumbers:FORCE_CORRECT_TRIAL_NUMBERS});
         ref.child("progress").remove();
       }
       renderResultNav();disableAnswers();notifyMockExamComplete();
@@ -4037,7 +4047,7 @@ const EXAM_ID = "examTrial";
       quizData.forEach(function(q,i){
         const raw=userAnswers[i];
         const mine=(raw===null||raw===undefined||raw==="")?"-":raw;
-        const ok=mine!=="-"&&parseInt(mine,10)===parseInt(q.correctAnswer,10);
+        const ok=isForceCorrectTrialQuestion(i)||(mine!=="-"&&parseInt(mine,10)===parseInt(q.correctAnswer,10));
         if(ok){
           stats.correct++;
           if(i<35)stats.written++;

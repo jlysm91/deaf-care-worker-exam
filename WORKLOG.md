@@ -1,5 +1,37 @@
 # WORKLOG
 
+## 95. 2026-06-19 실전 모의시험 오류 문항 전원 정답 처리와 재시험 정리 기준 확인
+
+- 사용자 제보에 따라 실전 모의시험 기준 오류 확인 문항 `11`, `37`, `56`번을 전원 정답 처리하도록 반영했다.
+  - 대상 로컬/GitHub 파일:
+    - `mock-exam/desktop-trial.html`
+    - `mock-exam/mobile-trial.html`
+    - `online-class/trial-exam/desktop-trial.html`
+    - `online-class/trial-exam/mobile-trial.html`
+  - 대상 OneDrive 최종 관리 파일:
+    - `03. 모의시험\2-1. ★★★ 실전 모의시험 코드 - 데스크톱용.html`
+    - `03. 모의시험\2-2. ★★★ 실전 모의시험 코드 - 모바일용.html`
+- 변경 내용:
+  - `FORCE_CORRECT_TRIAL_NUMBERS=[11,37,56]`를 추가하고, 제출 채점과 결과 분석 양쪽에서 해당 문항은 선택 여부나 선택 답안과 관계없이 정답으로 계산하게 했다.
+  - 11번은 필기, 37번과 56번은 실기 점수에 반영된다.
+  - 해당 문항이 미응답이어도 결과 분석의 미응답 목록에 넣지 않아, 오류 문항 때문에 완료 판정이 막히지 않도록 했다.
+  - Firebase `result` 저장값에 `answeredCount`, `submittedAt`, `forceCorrectTrialNumbers`를 추가해 이후 재시험/중복 제출 정리 기준을 남기도록 했다.
+- 기존 제출 데이터 확인:
+  - Firebase `exams/examTrial/users`를 읽기 전용으로 확인했다.
+  - 현재 기준 사용자 노드 17개, `result` 7건, 완료 결과 3건, 미완료 결과 4건, `progress`만 있는 기록 10건, 80문항 진행 기록만 있는 사례 1건, 70~79문항 진행 기록만 있는 사례 1건, 재시험으로 보이는 중복 아이디 묶음 2건을 확인했다.
+  - 기존 `result`에는 제출 시각이 없으므로 과거 기록끼리는 정확한 최신 시각 비교가 불가능하다. 같은 아이디로 다시 제출한 경우에는 Firebase 구조상 최신 제출이 기존 `result`를 덮어쓴다.
+  - Google Form에는 새 기록을 전송하거나 기존 기록을 수정하지 않았다. 중복/재시험 정리는 별도 미리보기 파일을 만든 뒤 승인 후 반영해야 한다.
+- 검증:
+  - `git diff --check` 통과.
+  - 실전 모의시험 로컬/온라인 학습반용 데스크톱·모바일 HTML inline script 문법 파싱 통과.
+  - 실전 모의시험 로컬/온라인 학습반용 데스크톱·모바일 HTML `quizRawData` 80문항 확인.
+  - 4개 파일 모두 `11`, `37`, `56` 강제 정답 처리, `answeredCount`, `submittedAt` 저장 로직 존재 확인.
+  - `node tools/result-page-check.mjs` 통과: 전체 28개 파일 x 7개 화면 크기, 총 196개 결과 페이지 조합.
+  - 로컬 `mock-exam`, 온라인 학습반 `online-class/trial-exam`, OneDrive 최종 데스크톱·모바일 파일 SHA-256 일치 확인.
+  - SHA-256:
+    - 데스크톱 로컬/온라인 학습반/OneDrive: `FD488FA70A99F3E4844C6962C2526F287641E4EF1FD875C204F82D7B8E971E78`
+    - 모바일 로컬/온라인 학습반/OneDrive: `33FEF1605CFA24210898D847E6F1C8E8BD6A0E78A3AA981E2E2958674D3EDF15`
+
 ## 94. 2026-06-19 실전 모의시험 제출 결과 Google Form 기록 연결
 
 - 사용자 요청에 따라 실전 모의시험 `제출하기` 버튼을 누르면 Google Form 결과지에 이름, 총점, 합격 여부가 기록되도록 연결했다.
