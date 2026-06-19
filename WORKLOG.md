@@ -1,5 +1,36 @@
 # WORKLOG
 
+## 94. 2026-06-19 실전 모의시험 제출 결과 Google Form 기록 연결
+
+- 사용자 요청에 따라 실전 모의시험 `제출하기` 버튼을 누르면 Google Form 결과지에 이름, 총점, 합격 여부가 기록되도록 연결했다.
+  - 결과지 공개 응답 URL: `https://docs.google.com/forms/d/e/1FAIpQLSdmoDKrE48-xFYOhVyrpmAx9DvfML3qMmwlcbefwWL7XhpD_w/viewform`
+  - 대상 로컬/GitHub 파일:
+    - `mock-exam/desktop-trial.html`
+    - `mock-exam/mobile-trial.html`
+    - `online-class/trial-exam/desktop-trial.html`
+    - `online-class/trial-exam/mobile-trial.html`
+  - 대상 OneDrive 최종 관리 파일:
+    - `03. 모의시험\2-1. ★★★ 실전 모의시험 코드 - 데스크톱용.html`
+    - `03. 모의시험\2-2. ★★★ 실전 모의시험 코드 - 모바일용.html`
+- 변경 내용:
+  - 기존 실전 모의시험 코드에 남아 있던 이전 Google Form URL을 새 결과지 `formResponse` URL로 교체했다.
+  - Google Form 필드 ID를 공개 응답 HTML에서 확인해 반영했다.
+    - 이름: `entry.295783163`
+    - 총점: `entry.516479247`
+    - 합격 여부: `entry.516661777`
+  - 총점 기록 형식을 `총점점 (필기 n점 / 실기 n점)`으로 정리했고, 이름은 `getCurrentUserName()` 기준으로 기록하게 했다.
+  - `제출 완료` 알림보다 Google Form 전송을 먼저 시작하도록 순서를 조정했다.
+- 검증:
+  - 새 Google Form `viewform` 및 `formResponse` URL HTTP 200 확인.
+  - 공개 Form HTML에서 세 `entry.*` ID 존재 확인 및 코드 반영값 일치 확인.
+  - 실전 모의시험 로컬/온라인 학습반용 데스크톱·모바일 HTML inline script 문법 파싱 통과.
+  - 실전 모의시험 로컬/온라인 학습반용 데스크톱·모바일 HTML `quizRawData` 80문항 확인.
+  - 로컬 `mock-exam`, 온라인 학습반 `online-class/trial-exam`, OneDrive 최종 데스크톱·모바일 파일 SHA-256 일치 확인.
+  - 테스트용 가짜 응답 제출은 결과지 오염을 막기 위해 실행하지 않았다.
+  - SHA-256:
+    - 데스크톱 로컬/온라인 학습반/OneDrive: `6F4BC5021412BAC5B28415F173A85A6FCD9E31D60BA6E00D7C944BED4B61C42C`
+    - 모바일 로컬/온라인 학습반/OneDrive: `EDE38E232E110C990257213BD46676D8A11060E23285ECA65F9AD3B2CB73C1F3`
+
 ## 93. 2026-06-19 올리사이트 본창 실전 모의시험 완료 표시 단순화
 
 - 사용자 요청에 따라 실전 모의시험 학습 결과는 GitHub Pages 문제풀이 화면에서만 보이게 하고, 올리사이트 메인페이지(로그인 창)는 완료 문구만 표시하도록 OneDrive 로그인 코드를 수정했다.

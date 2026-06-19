@@ -3989,13 +3989,14 @@ const EXAM_ID = "examTrial";
         ref.child("result").set({uid:currentUserId,name:getCurrentUserName(),total:총점,필기,실기,written:필기,practical:실기,completed:state.completed,passed:state.passed,eligible:state.eligible,totalQuestions:TOTAL_QUESTIONS,answers:userAnswers,correctAnswers:quizData.map(item=>item.correctAnswer)});
         ref.child("progress").remove();
       }
-      renderResultNav();disableAnswers();notifyMockExamComplete();alert("제출 완료하였습니다!");
-      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSfmdzft5Xpy3UPoRQ0-e9iN1JAnG_NnAdXmMZwKz04inJDqzQ/formResponse";
+      renderResultNav();disableAnswers();notifyMockExamComplete();
+      const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSdmoDKrE48-xFYOhVyrpmAx9DvfML3qMmwlcbefwWL7XhpD_w/formResponse";
       const fd=new FormData();
-      fd.append("entry.295783163",userNameInput.value.trim());
-      fd.append("entry.516479247",`${총점}점 ( 필기: ${필기}점 / 실기: ${실기}점 )`);
+      fd.append("entry.295783163",getCurrentUserName());
+      fd.append("entry.516479247",`${총점}점 (필기 ${필기}점 / 실기 ${실기}점)`);
       fd.append("entry.516661777", 합격여부);
-      fetch(googleFormURL,{method:"POST",body:fd,mode:"no-cors", keepalive: true }).catch(console.error);
+      fetch(googleFormURL,{method:"POST",body:fd,mode:"no-cors", keepalive: true }).catch(()=>{});
+      alert("제출 완료하였습니다!");
     }
     function getLearningCompleteMessage(){
       const isMobile=window.matchMedia&&window.matchMedia("(max-width: 700px), (pointer: coarse)").matches;
