@@ -2090,3 +2090,15 @@
   - `approvedData.progress` 기반 재시험 재개 코드가 대상 파일에 남아 있지 않음을 확인했다.
   - OneDrive 로그인 코드에 `olNormalizeTrialAttemptIdentity`, `olFindLatestCompletionPayload` 반영 및 기존 `아직 학습 완료 전입니다`, `80문항을 모두 풀고 제출하면` 문구 미존재 확인.
   - `git -c core.whitespace=cr-at-eol diff --check` 통과.
+
+## 50. 2026-06-21 관리자 실전 모의시험 응시자 목록 선택 스크롤 보존
+
+- 사용자 요청에 따라 OneDrive 관리자용 학습자 등록 HTML의 실전 모의시험 결과 화면에서 응시자 행 선택 시 목록 스크롤 위치가 처음으로 돌아가지 않도록 보정했다.
+  - `renderTrialList()`가 목록을 다시 그리기 전에 `trial-result-list`, `trial-list-card`, `trial-table-wrap`의 스크롤 위치를 저장한다.
+  - 행 클릭 또는 키보드 선택으로 `renderTrialResultDashboard()`를 다시 호출할 때 `preserveListScroll` 옵션을 넘겨 선택 직후 같은 위치를 유지한다.
+  - 필터 변경처럼 목록 기준이 바뀌는 경우에는 기존 동작처럼 새 목록 기준으로 렌더링한다.
+- OneDrive 반영 파일:
+  - `04. 관리자용 학습자 등록.html`
+- 검증:
+  - OneDrive 관리자 HTML 인라인 스크립트 3개 문법 파싱 통과.
+  - `getTrialListScrollState`, `restoreTrialListScrollState`, `preserveListScroll` 반영 위치 확인.
