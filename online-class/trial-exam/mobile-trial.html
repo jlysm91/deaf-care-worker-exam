@@ -3804,6 +3804,57 @@ const EXAM_ID = "examTrial";
       return userRef.update(updates);
     }
 
+    function normalizeTrialAttemptIdentity(value){
+      return normalizeUserNameForIdentity(value)
+        .replace(/\(\uC7AC\uC7AC\uC2DC\uD5D8\)/g,"")
+        .replace(/\(\uC7AC\uC2DC\uD5D8\)/g,"")
+        .trim();
+    }
+
+    function getTrialAttemptTimestamp(data){
+      if(!data)return 0;
+      const result=data.result||{};
+      const candidates=[
+        result.submittedAt,
+        result.completedAt,
+        data.submittedAt,
+        data.completedAt,
+        data.updatedAt,
+        data.profile&&data.profile.updatedAt
+      ];
+      for(const value of candidates){
+        if(typeof value==="number"&&Number.isFinite(value))return value;
+        if(typeof value==="string"&&value.trim()){
+          const parsed=Date.parse(value);
+          if(Number.isFinite(parsed))return parsed;
+        }
+      }
+      return 0;
+    }
+
+    function selectLatestTrialAttempt(uid,name,currentData){
+      const normalizedUid=normalizeTrialAttemptIdentity(uid);
+      const normalizedName=normalizeTrialAttemptIdentity(name);
+      const fallback={uid:uid,data:currentData||null,timestamp:getTrialAttemptTimestamp(currentData)};
+      return database.ref("exams/"+EXAM_ID+"/users").once("value").then(snapshot=>{
+        let selected=fallback;
+        snapshot.forEach(child=>{
+          const childUid=child.key||"";
+          const data=child.val()||{};
+          if(!data.result)return;
+          const resultName=data.result.name||data.name||(data.profile&&data.profile.name)||"";
+          const uidMatches=normalizeTrialAttemptIdentity(childUid)===normalizedUid;
+          const nameMatches=normalizedName&&normalizeTrialAttemptIdentity(resultName)===normalizedName;
+          if(!uidMatches&&!nameMatches)return;
+          const timestamp=getTrialAttemptTimestamp(data);
+          if(!selected.data||timestamp>selected.timestamp){
+            selected={uid:childUid,data:data,timestamp:timestamp};
+          }
+        });
+        return selected;
+      }).catch(()=>fallback);
+    }
+
     let currentNavPage=0;
 
     function startQuiz(uid,userName){
@@ -3811,21 +3862,29 @@ const EXAM_ID = "examTrial";
       currentUserName=normalizeUserNameForIdentity(userName||userNameInput.value.trim()||"");
       if(userNameInput)userNameInput.value=currentUserName;
       syncResultUserName(currentUserName);
-      const userRef=database.ref(`exams/${EXAM_ID}/users/${uid}`);
+      const userRef=database.ref("exams/"+EXAM_ID+"/users/"+uid);
       verifyAuthorizedUser(uid,currentUserName).then(()=>{
         userRef.once("value").then(snapshot=>{
           const data=snapshot.val();
-          saveUserIdentity(userRef,uid,currentUserName,data).then(()=>{
-            if(data&&data.result){
-              startPage.style.display="none";quizPage.style.setProperty("display","none","important");resultPage.style.display="flex";
-              if(data.result.answers)userAnswers=data.result.answers;
-              document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
-            }else if(data&&data.progress){
-              currentQuestionIndex=data.progress.currentQuestion||0;
-              userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
-            }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
-          }).catch(()=>{alert("사용자 정보를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");});
-        }).catch(()=>{alert("사용자 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.");});
+          selectLatestTrialAttempt(uid,currentUserName,data).then(displayAttempt=>{
+            const displayData=displayAttempt&&displayAttempt.data?displayAttempt.data:data;
+            const displayUid=displayAttempt&&displayAttempt.uid?displayAttempt.uid:uid;
+            saveUserIdentity(userRef,uid,currentUserName,data).then(()=>{
+              if(displayData&&displayData.result){
+                currentUserId=displayUid;
+                currentUserName=normalizeUserNameForIdentity(displayData.result.name||currentUserName);
+                if(userNameInput)userNameInput.value=currentUserName;
+                syncResultUserName(currentUserName);
+                startPage.style.display="none";quizPage.style.setProperty("display","none","important");resultPage.style.display="flex";
+                if(displayData.result.answers)userAnswers=displayData.result.answers;
+                document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
+              }else if(data&&data.progress){
+                currentQuestionIndex=data.progress.currentQuestion||0;
+                userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
+              }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
+            }).catch(()=>{alert("\uC0AC\uC6A9\uC790 \uC815\uBCF4\uB97C \uC800\uC7A5\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");});
+          }).catch(()=>{alert("\uC0AC\uC6A9\uC790 \uC815\uBCF4\uB97C \uD655\uC778\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");});
+        }).catch(()=>{alert("\uC0AC\uC6A9\uC790 \uC815\uBCF4\uB97C \uD655\uC778\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");});
       }).catch(error=>{showAuthorizationDenied(getAuthorizationErrorMessage(error));});
     }
 

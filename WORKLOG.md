@@ -1,5 +1,25 @@
 # WORKLOG
 
+## 99. 2026-06-21 실전 모의시험 재시험 최신 결과 표시 및 삭제 안내 보정
+
+- 실전 모의시험 로그인/결과 조회에서 같은 응시자의 재시험 제출이 있으면 원래 아이디/이름으로 접속해도 최신 제출 결과를 대표 결과로 표시하도록 보정했다.
+  - `mock-exam/desktop-trial.html`, `mock-exam/mobile-trial.html`
+  - `online-class/trial-exam/desktop-trial.html`, `online-class/trial-exam/mobile-trial.html`
+  - `(재시험)`, `(재재시험)` 접미사를 제거한 UID/이름 기준으로 같은 응시자 후보를 찾고, `submittedAt` 등 저장 시각이 가장 최신인 결과를 표시한다.
+  - 결과 표시는 최신 제출 기준이지만, 기존 Firebase 원본 노드는 병합하거나 수정하지 않는다.
+- OneDrive 원본 관리 파일에도 동일 변경을 반영했다.
+  - `03. 모의시험/2-1. ★★★ 실전 모의시험 코드 - 데스크톱용.html`
+  - `03. 모의시험/2-2. ★★★ 실전 모의시험 코드 - 모바일용.html`
+- OneDrive 관리자 화면 `04. 관리자용 학습자 등록.html`의 실전 모의시험 결과 표시를 보정했다.
+  - 제출 이력의 이름/아이디에서 `(재시험)` 접미사를 그대로 보이지 않게 하고, 2회차 이상은 `2차 제출(재시험)`처럼 회차가 드러나도록 표시한다.
+  - 중복 제출 삭제 확인 문구를 Firebase 삭제 기준으로 바꿨다. `exams/examTrial/users/{uid}`를 삭제하면 해당 UID의 결과/진행 정보가 없어져 다시 응시할 수 있다.
+  - 현재 Google Form 제출은 `formResponse`/`no-cors` 방식이라 응답 ID를 저장하지 않는다. 따라서 관리자 HTML만으로 Google Form 응답 동시 삭제는 구현하지 않았다. 향후 Apps Script `Form.deleteResponse(responseId)` 연동과 responseId 저장 구조가 필요하다.
+- 검증
+  - 수정된 로컬/OneDrive HTML 7개 인라인 스크립트 문법 파싱 통과.
+  - Chrome headless에서 관리자 실전 모의시험 화면, 실전 모의시험 데스크톱/모바일 시작 화면 콘솔 오류 없음.
+  - 관리자 표시 함수가 `강민서(재시험)`/`kang282(재시험)`을 각각 `강민서 2차 제출(재시험)`, `kang282 2차 제출(재시험)`으로 변환함을 확인.
+  - `git -c core.whitespace=cr-at-eol diff --check` 통과.
+
 ## 98. 2026-06-20 관리자용 실전 모의시험 결과 패널 대시보드형 재디자인
 
 - 사용자 피드백에 따라 기존 보수적 패널 디자인을 폐기하고, OneDrive 원본 관리 폴더의 `04. 관리자용 학습자 등록.html` 실전 모의시험 결과 영역을 더 뚜렷한 대시보드형 UI로 재디자인했다.
