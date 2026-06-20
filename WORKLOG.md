@@ -2213,3 +2213,13 @@
   - Apps Script 배포 설정에서 Web app 실행 권한을 `나로 실행`, 액세스 권한을 `모든 사용자`로 두고 새 버전 배포가 필요하다.
   - 독립형 Apps Script 프로젝트라면 `TRIAL_FORM_ID` 또는 `TRIAL_FORM_EDIT_URL`에 대상 Google Form 편집 URL/ID를 설정해야 한다.
   - 배포 후 `/exec` 접속 시 `{"ok":true,"service":"examTrial Google Form delete web app","message":"ready"}` 형태의 JSON이 보여야 한다.
+
+## 57. 2026-06-21 강민서 실전 모의시험 제출 시각 재보정
+
+- 사용자 확인에 따라 관리자 화면에서 표시되는 Firebase 실전 모의시험 결과의 강민서 제출 시각을 다시 보정했다.
+  - `exams/examTrial/users/kang282/result`의 `submittedAt`을 `2026-06-19T09:57:00.000Z`로 변경했다. 한국시간 기준 `2026.06.19 18:57`.
+  - `exams/examTrial/users/kang282(재시험)/result`의 `submittedAt`을 `2026-06-19T10:54:00.000Z`로 변경했다. 한국시간 기준 `2026.06.19 19:54`.
+  - 두 결과 모두 `submittedAtSource: manual`을 유지했고, Google Form 응답은 변경하지 않았다는 메모를 `submittedAtNote`에 남겼다.
+- 검증:
+  - Firebase 원본 재조회에서 `kang282`는 `2026.06.19 18:57`, `kang282(재시험)`은 `2026.06.19 19:54`로 확인했다.
+  - Google Form 응답은 사용자 요청에 따라 수정하지 않았다.
