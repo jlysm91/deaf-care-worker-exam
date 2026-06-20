@@ -1391,6 +1391,7 @@
 
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+  <script src="https://player.vimeo.com/api/player.js"></script>
   <script>
 
   const firebaseConfig = {
@@ -5017,6 +5018,78 @@ const chapter8Data=[
   let resultPageIdx = 0;
   let userAnswers = [];
   let currentResultAnswers = [];
+  function makeVideoViewKey(value) {
+    return String(value || "unknown").replace(/[.#$\[\]\/]/g, "_");
+  }
+
+  function getVideoViewQuestionNumber(question) {
+    const rawNumber = question && question.number !== undefined ? question.number : currentQuestionIndex + 1;
+    const parsed = Number(String(rawNumber).replace(/[^0-9]/g, ""));
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : currentQuestionIndex + 1;
+  }
+
+  function getVideoViewMeta(question) {
+    const examId = String(EXAM_ID || "unknown");
+    const contentType = examId.indexOf("quiz") === 0 ? "quiz1400" : "mockExam";
+    const contentNumber = (examId.match(/\d+/) || [""])[0];
+    const contentLabel = contentType === "quiz1400" ? "1400\uc81c " + contentNumber + "\ubd80" : contentNumber + "\ud68c \ubaa8\uc758\uace0\uc0ac";
+    const questionNumber = getVideoViewQuestionNumber(question);
+    return {
+      contentType,
+      examId,
+      contentLabel,
+      questionNumber,
+      questionKey: "q" + String(questionNumber).padStart(3, "0"),
+      videoId: String(question && question.videoId || "")
+    };
+  }
+
+  function updateVideoViewCounter(ref, payload) {
+    return ref.transaction(data => {
+      const current = data && typeof data === "object" ? data : {};
+      const playCount = (Number(current.playCount) || 0) + 1;
+      return Object.assign({}, current, payload, {
+        playCount,
+        firstPlayedAt: current.firstPlayedAt || payload.lastPlayedAt,
+        lastPlayedAt: payload.lastPlayedAt
+      });
+    });
+  }
+
+  function recordVideoPlay(question) {
+    if (!currentUserId || !EXAM_ID || !question || !question.videoId || !database) return;
+    const meta = getVideoViewMeta(question);
+    const uidKey = makeVideoViewKey(currentUserId);
+    const examKey = makeVideoViewKey(meta.examId);
+    const now = Date.now();
+    const payload = {
+      uid: String(currentUserId),
+      name: String(currentUserName || "").trim().replace(/\s+/g, " "),
+      contentType: meta.contentType,
+      examId: meta.examId,
+      contentLabel: meta.contentLabel,
+      questionNumber: meta.questionNumber,
+      questionKey: meta.questionKey,
+      videoId: meta.videoId,
+      lastPlayedAt: now
+    };
+    const userPath = "videoViews/byUser/" + uidKey + "/" + meta.contentType + "/" + examKey + "/questions/" + meta.questionKey;
+    const contentPath = "videoViews/byContent/" + meta.contentType + "/" + examKey + "/questions/" + meta.questionKey + "/users/" + uidKey;
+    Promise.all([
+      updateVideoViewCounter(database.ref(userPath), payload),
+      updateVideoViewCounter(database.ref(contentPath), payload)
+    ]).catch(() => {});
+  }
+
+  function attachVideoTracking(question) {
+    const iframe = videoWrapper && videoWrapper.querySelector("iframe");
+    if (!iframe || !window.Vimeo || typeof window.Vimeo.Player !== "function") return;
+    try {
+      const player = new Vimeo.Player(iframe);
+      player.on("play", () => recordVideoPlay(question));
+    } catch (error) {}
+  }
+
 
   const startPage = document.getElementById("start-page");
   const chapterSelectPage = document.getElementById("chapter-select-page");
@@ -5465,6 +5538,7 @@ const chapter8Data=[
     currentNavPage = Math.floor(currentQuestionIndex / NAV_PAGE_SIZE);
     const q = quizData[currentQuestionIndex];
     videoWrapper.innerHTML = q.videoEmbed;
+    attachVideoTracking(q);
     document.getElementById("question-number").textContent = currentQuestionIndex + 1;
     document.getElementById("question-text").textContent = q.question;
     document.getElementById("current-question").textContent = currentQuestionIndex + 1;
