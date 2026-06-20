@@ -2102,3 +2102,30 @@
 - 검증:
   - OneDrive 관리자 HTML 인라인 스크립트 3개 문법 파싱 통과.
   - `getTrialListScrollState`, `restoreTrialListScrollState`, `preserveListScroll` 반영 위치 확인.
+
+## 51. 2026-06-21 다음 차시 숨김, 토론방 레이아웃 복구, 실전 모의시험 삭제 권한 보정
+
+- 사용자 요청에 따라 OneDrive 원본 로그인 파일과 관리자용 학습자 등록 HTML을 보정했다.
+  - `학습을 완료합니다` 버튼은 학습 완료 제어 버튼으로 유지하고, `다음 차시`/`다음차시` 버튼은 호스트 화면에서 항상 숨기도록 변경했다.
+  - 실전 모의시험 및 1~10회 모의고사 로그인 코드에서 학습 완료/입장 불가 안내 화면은 토론방 패널 열림 등으로 외부 영역이 변해도 안정적인 16:9 안내 레이아웃을 사용하도록 복구했다.
+  - 관리자 실전 모의시험 결과 화면의 응시자 목록에 `응시자 삭제` 버튼을 추가했다. 버튼 클릭 시 행 선택 이벤트와 충돌하지 않도록 전파를 분리했다.
+  - 제출 이력 카드의 `이 제출 자료 삭제`는 중복 제출에만 보이지 않고 1차/2차 등 모든 제출 카드에서 보이도록 변경했다.
+  - 응시자 전체 삭제와 제출 1건 삭제 모두 기존 `ADMIN_PASSWORD` 기반 주 관리자 비밀번호 확인을 먼저 통과해야 실행되도록 했다.
+  - Google Form 응답과 Firebase 자료가 어긋나지 않도록 `GOOGLE_FORM_DELETE_WEBAPP_URL`이 비어 있으면 Firebase 삭제도 중단하도록 했다.
+  - Google Form 삭제 URL이 설정되면 삭제 대상의 `uid`, `name`, `baseUid`, `countName`, `submittedAt`, `timestamp`를 payload로 먼저 전송하고, 성공 응답 후 Firebase `exams/examTrial/users`를 삭제하는 구조로 준비했다.
+- 확인된 제한:
+  - 현재 실전 모의시험 제출 코드는 Google Form `formResponse`에 `no-cors`로 제출만 하며 Google Form 응답 ID를 저장하지 않는다.
+  - 현재 코드에는 `FormApp.deleteResponse`, Google Forms API, Apps Script 삭제 Web App URL이 없으므로 Google Form 실제 동시 삭제는 아직 활성화되지 않는다.
+  - 이 상태에서 Firebase만 삭제하면 데이터 불일치가 생기므로 관리자 삭제는 Google Form 삭제 URL 설정 전까지 의도적으로 차단된다.
+- OneDrive 반영 파일:
+  - `03. 모의시험/1. ★★★ 실전 모의시험 로그인 코드.html`
+  - `01. 합격!! 모의고사/01회 모의고사`~`10회 모의고사/.../02. (★삭제 주의) 최종 코드/1. ★★★ n회 모의고사 로그인 코드.html`
+  - `02. 합격!! 1400題/1부`~`4부/.../02. 개선판/1. ★★★ n부 로그인 코드.html`
+  - `04. 관리자용 학습자 등록.html`
+- 검증:
+  - OneDrive 관리자 HTML 인라인 스크립트 문법 파싱 통과.
+  - `다음 차시`/`다음차시`가 학습 완료 제어 조건에서 빠지고 항상 숨김 조건에만 남아 있음을 검색으로 확인했다.
+  - 실전 모의시험 및 모의고사 로그인 파일의 `olUseStableNoticeLayout()`이 학습 완료/입장 불가 안내 상태에서 안정 레이아웃을 사용하도록 반영됐음을 확인했다.
+  - OneDrive 로그인 관련 HTML 15개 인라인 스크립트 문법 파싱 통과.
+  - 실전 모의시험 데스크톱/모바일 코드에는 Google Form 삭제용 `responseId`, `FormApp`, `deleteResponse`, `script.google.com` 연동이 없음을 확인했다.
+  - 실제 Google Form 삭제와 Firebase 삭제 실행 테스트는 운영 데이터 삭제가 발생하므로 수행하지 않았다.
