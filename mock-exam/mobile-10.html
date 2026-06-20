@@ -2942,7 +2942,7 @@ const EXAM_ID = "exam10";
         + '<div class="result-stat"><strong>'+stats.empty.length+'</strong><span>미응답</span></div>'
         + '</div>'
         + '</div>'
-        + '<div class="result-standard"><span class="result-standard-line">필기 <strong>'+stats.written+' / 35</strong> (합격 기준 21점 이상)</span><span class="result-standard-line">실기 <strong>'+stats.practical+' / 45</strong> (합격 기준 27점 이상)</span></div>';
+        + '<div class="result-standard"><span class="result-standard-line">필기 '+(stats.written>=21?"충족":"미달")+' <strong>'+stats.written+' / 35</strong> · '+(stats.written>=21?"기준 충족":"기준까지 "+(21-stats.written)+"점")+' ｜ 실기 '+(stats.practical>=27?"충족":"미달")+' <strong>'+stats.practical+' / 45</strong> · '+(stats.practical>=27?"기준 충족":"기준까지 "+(27-stats.practical)+"점")+'</span></div>';
       updateResultCompleteButton();
     }
 
