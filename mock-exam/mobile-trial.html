@@ -3910,10 +3910,12 @@ const EXAM_ID = "examTrial";
                 startPage.style.display="none";quizPage.style.setProperty("display","none","important");resultPage.style.display="flex";
                   if(approvedData.result.answers)userAnswers=approvedData.result.answers;
                   document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
-                }else if(approvedData&&approvedData.progress){
-                  currentQuestionIndex=approvedData.progress.currentQuestion||0;
-                  userAnswers=approvedData.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
-                }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
+                }else{
+                  currentQuestionIndex=0;
+                  userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+                  approvedRef.child("progress").remove().catch(()=>{});
+                  showQuizPage();
+                }
               });
             });
           }

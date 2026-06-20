@@ -2067,3 +2067,26 @@
   - Chrome headless에서 `mock-exam/desktop-01.html`, `quiz-1400/desktop-01.html` 로딩 시 콘솔 오류와 가로 넘침 없음 확인.
   - 실제 Firebase 쓰기 테스트는 운영 데이터 생성을 피하기 위해 실행하지 않았다.
   - `git -c core.whitespace=cr-at-eol diff --check` 통과. CRLF 기반 HTML 파일 특성상 일반 `git diff --check`는 새 CRLF 라인을 trailing whitespace로 보고할 수 있다.
+
+## 49. 2026-06-21 실전 모의시험 학습 완료 확인 및 재시험 시작 위치 보정
+
+- 사용자 확인 요청에 따라 실전 모의시험 완료 처리와 재시험 승인 후 시작 위치를 보정했다.
+  - OneDrive 실전 모의시험 로그인 코드에서 학습 완료 버튼을 누를 때 현재 화면 상태값만 보지 않고 Firebase의 최신 제출 결과를 다시 조회하도록 변경했다.
+  - 원본 아이디/이름과 `(...재시험)`, `(...재재시험)`, `(2차 제출(재시험))` 형식의 제출 아이디/이름을 같은 응시자 기준으로 비교하도록 보정했다.
+  - 재시험 결과가 별도 UID에 저장되어도 최신 제출 결과를 찾아 학습 완료 안내로 전환할 수 있도록 `exams/examTrial/users` 전체에서 같은 원본 UID의 최신 제출 결과를 선택한다.
+  - 기존의 `아직 학습 완료 전입니다` 안내 문구는 `학습 완료 확인 중입니다`, `응시 진행 중입니다` 계열로 바꿔 완료 버튼 클릭 후 오해가 생기지 않도록 했다.
+  - 재시험 승인으로 입장하는 경우 기존 `progress` 저장값을 이어받지 않고 삭제한 뒤 1번 문항부터 시작하도록 변경했다.
+- OneDrive 반영 파일:
+  - `03. 모의시험/1. ★★★ 실전 모의시험 로그인 코드.html`
+  - `03. 모의시험/2-1. ★★★ 실전 모의시험 코드 - 데스크톱용.html`
+  - `03. 모의시험/2-2. ★★★ 실전 모의시험 코드 - 모바일용.html`
+- 로컬 반영 파일:
+  - `mock-exam/desktop-trial.html`
+  - `mock-exam/mobile-trial.html`
+  - `online-class/trial-exam/desktop-trial.html`
+  - `online-class/trial-exam/mobile-trial.html`
+- 검증:
+  - 로컬 4개 및 OneDrive 3개 대상 HTML의 인라인 스크립트 문법 파싱 통과.
+  - `approvedData.progress` 기반 재시험 재개 코드가 대상 파일에 남아 있지 않음을 확인했다.
+  - OneDrive 로그인 코드에 `olNormalizeTrialAttemptIdentity`, `olFindLatestCompletionPayload` 반영 및 기존 `아직 학습 완료 전입니다`, `80문항을 모두 풀고 제출하면` 문구 미존재 확인.
+  - `git -c core.whitespace=cr-at-eol diff --check` 통과.
