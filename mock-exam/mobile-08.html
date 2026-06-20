@@ -2834,10 +2834,7 @@ const EXAM_ID = "exam8";
       fetch(googleFormURL,{method:"POST",body:fd,mode:"no-cors", keepalive: true }).catch(console.error);
     }
     function getLearningCompleteMessage(){
-      const isMobile=window.matchMedia&&window.matchMedia("(max-width: 700px), (pointer: coarse)").matches;
-      return isMobile
-        ? "화면 아래의 '학습을 완료합니다.' 버튼을 누르세요.\n↓"
-        : "화면 아래의 '학습을 완료합니다.' 버튼을 누르세요. ↘";
+      return "학습을 완료하였습니다. 고생 많으셨습니다.";
     }
 
     function completeLearning(){
@@ -2901,7 +2898,7 @@ const EXAM_ID = "exam8";
       const stats=analyzeExamResultAnswers();
       const completed=stats.empty.length===0;
       const passed=stats.written>=21&&stats.practical>=27;
-      return {stats,completed,passed,eligible:passed};
+      return {stats,completed,passed,eligible:true};
     }
 
     function updateResultCompleteButton(state){
@@ -2915,8 +2912,7 @@ const EXAM_ID = "exam8";
 
     function getCompletionBlockedMessage(state){
       const currentState=state||getExamCompletionState();
-      if(!currentState.passed)return "합격 기준을 충족해야 학습 완료를 할 수 있습니다.";
-      return "학습 완료 조건을 확인할 수 없습니다.";
+      return "학습을 완료하였습니다. 고생 많으셨습니다.";
     }
 
     function renderResultSummary(){
@@ -2946,7 +2942,7 @@ const EXAM_ID = "exam8";
         + '<div class="result-stat"><strong>'+stats.empty.length+'</strong><span>미응답</span></div>'
         + '</div>'
         + '</div>'
-        + '<div class="result-standard"><span class="result-standard-line">필기 <strong>'+stats.written+' / 35</strong> · 실기 <strong>'+stats.practical+' / 45</strong></span><span class="result-standard-line">합격 기준 <strong>필기 21문항 이상</strong> · <strong>실기 27문항 이상</strong></span></div>';
+        + '<div class="result-standard">필기 <strong>'+stats.written+' / 35</strong> · 실기 <strong>'+stats.practical+' / 45</strong> · 학습 완료는 제출 기준이며, 합격 여부와 무관합니다.</div>';
       updateResultCompleteButton();
     }
 
