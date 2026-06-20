@@ -2200,3 +2200,16 @@
   - 대상 HTML 50개 인라인 스크립트 문법 파싱 통과.
   - 대상 50개 파일에서 잘못된 문구가 제거되고 필기/실기 합격 기준 문구가 반영됐음을 확인했다.
   - 대상 50개 파일에서 합격 판정 로직이 필기 21점 이상 및 실기 27점 이상 기준을 유지함을 확인했다.
+
+## 56. 2026-06-21 Apps Script Web App 배포 접근성 확인
+
+- 사용자가 제공한 Apps Script 프로젝트 편집 URL은 로그인된 Chrome 세션 제어가 필요해 직접 편집 화면 내부까지 확인하지 못했다.
+- 대신 관리자 HTML에 설정된 Apps Script Web App `/exec` URL의 외부 접근성을 확인했다.
+  - `GET` 요청은 JSON 준비 응답이 아니라 Google 로그인 페이지 HTML을 반환했다.
+  - `POST` 요청은 `401 Unauthorized`로 응답했다.
+  - 이 상태에서는 관리자 화면에서 Google Form 삭제 요청을 보내도 Apps Script `doPost`까지 도달하지 못할 가능성이 높다.
+- `tools/google-form-delete-webapp/Code.gs`는 UTF-8 직접 읽기 기준 JavaScript 문법 파싱을 통과했다.
+- 후속 조치:
+  - Apps Script 배포 설정에서 Web app 실행 권한을 `나로 실행`, 액세스 권한을 `모든 사용자`로 두고 새 버전 배포가 필요하다.
+  - 독립형 Apps Script 프로젝트라면 `TRIAL_FORM_ID` 또는 `TRIAL_FORM_EDIT_URL`에 대상 Google Form 편집 URL/ID를 설정해야 한다.
+  - 배포 후 `/exec` 접속 시 `{"ok":true,"service":"examTrial Google Form delete web app","message":"ready"}` 형태의 JSON이 보여야 한다.
