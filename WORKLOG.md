@@ -2129,3 +2129,17 @@
   - OneDrive 로그인 관련 HTML 15개 인라인 스크립트 문법 파싱 통과.
   - 실전 모의시험 데스크톱/모바일 코드에는 Google Form 삭제용 `responseId`, `FormApp`, `deleteResponse`, `script.google.com` 연동이 없음을 확인했다.
   - 실제 Google Form 삭제와 Firebase 삭제 실행 테스트는 운영 데이터 삭제가 발생하므로 수행하지 않았다.
+
+## 52. 2026-06-21 관리자 Google Form 삭제 Web App URL 연결
+
+- 사용자 제공 Apps Script Web App URL을 OneDrive 관리자용 학습자 등록 HTML의 `GOOGLE_FORM_DELETE_WEBAPP_URL`에 반영했다.
+  - 보안상 WORKLOG에는 전체 URL을 기록하지 않는다.
+  - 브라우저에서 Apps Script Web App 응답을 직접 읽는 과정은 CORS 제한에 막힐 수 있으므로 `deleteGoogleFormTrialResponses()`를 `mode: "no-cors"` 요청 전송 방식으로 조정했다.
+  - 삭제 요청 payload에 `requestId`와 `requestedAt`을 추가해 Apps Script 쪽에서 삭제 요청 로그를 남기거나 추적할 수 있게 했다.
+  - 관리자 화면 안내 문구는 “삭제 성공 확인 후”가 아니라 “삭제 요청 전송 후 Firebase 정리” 의미로 맞췄다.
+- OneDrive 반영 파일:
+  - `04. 관리자용 학습자 등록.html`
+- 검증:
+  - OneDrive 관리자 HTML 인라인 스크립트 문법 파싱 통과.
+  - Web App URL, `mode: "no-cors"`, `requestId` 반영 여부를 Node 검증으로 확인했다.
+  - 실제 Google Form 및 Firebase 삭제 실행 테스트는 운영 데이터 삭제가 발생하므로 수행하지 않았다.
