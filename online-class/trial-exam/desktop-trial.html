@@ -948,6 +948,9 @@
     .result-actions { display:flex!important; flex-direction:column!important; align-items:center!important; justify-content:center!important; gap:12px!important; }
     .result-actions button { width:min(100%,360px)!important; min-width:150px!important; padding:12px 24px!important; border-radius:16px!important; font-family:inherit!important; font-size:clamp(13px,1.2vw,16px)!important; font-weight:800!important; cursor:pointer!important; }
     .result-actions #result-complete-btn { background:linear-gradient(120deg,#F29A27 0%,#F6AE3B 100%)!important; color:#fff!important; border:none!important; box-shadow:0 7px 18px rgba(242,154,39,0.24)!important; }
+    .result-actions #retest-request-btn { background:#FFFFFF!important; color:#7A3516!important; border:1px solid #D7A173!important; box-shadow:0 2px 8px rgba(122,53,22,0.10)!important; }
+    .result-actions #retest-request-btn:hover { background:#FFF7F0!important; border-color:#B96B34!important; }
+    .result-actions #retest-request-btn:disabled { opacity:.72!important; cursor:default!important; }
     @media (max-width:860px) { .result-heading { flex-wrap:wrap!important; white-space:normal!important; } .result-user-name { width:100%; text-align:center; } .result-summary-main { grid-template-columns:1fr; } .result-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } #quick-nav-grid-result.result-review-board { gap:10px!important; } .result-review-list { grid-template-columns:1fr; max-height:446px; } .result-review-list.result-review-single { grid-template-columns:1fr; } .result-review-item { padding:9px 10px; } .result-actions { flex-direction:column!important; width:min(100%,1120px)!important; } .result-actions button { width:100%!important; } }
 </style>
 </head>
@@ -996,6 +999,7 @@
     </div>
     <div class="result-actions">
       <button id="result-complete-btn">학습 완료</button>
+      <button id="retest-request-btn" type="button">재시험 응시 요청</button>
     </div>
   </div>
 
@@ -2468,7 +2472,7 @@
     const TOTAL_QUESTIONS=quizData.length;
     const FORCE_CORRECT_TRIAL_NUMBERS=[11,37,56];
     const FORCE_CORRECT_TRIAL_SET=new Set(FORCE_CORRECT_TRIAL_NUMBERS);
-    let currentQuestionIndex=0,currentUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
+    let currentQuestionIndex=0,currentUserId="",currentBaseUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 
     function isForceCorrectTrialQuestion(index){
       return FORCE_CORRECT_TRIAL_SET.has(index+1);
@@ -2563,6 +2567,7 @@
 
     function normalizeTrialAttemptIdentity(value){
       return normalizeUserNameForIdentity(value)
+        .replace(/\(\d+\uCC28\s*\uC7AC\uC2DC\uD5D8\)/g,"")
         .replace(/\(\uC7AC\uC7AC\uC2DC\uD5D8\)/g,"")
         .replace(/\(\uC7AC\uC2DC\uD5D8\)/g,"")
         .trim();
@@ -2612,37 +2617,85 @@
       }).catch(()=>fallback);
     }
 
+    function getRetestApprovalRef(baseUid){
+      return database.ref("exams/"+EXAM_ID+"/retestApprovals/"+baseUid);
+    }
+
+    function getRetestRequestRef(baseUid){
+      return database.ref("exams/"+EXAM_ID+"/retestRequests/"+baseUid);
+    }
+
+    function getActiveRetestApproval(baseUid){
+      const normalizedBase=normalizeTrialAttemptIdentity(baseUid);
+      if(!normalizedBase)return Promise.resolve(null);
+      return getRetestApprovalRef(normalizedBase).once("value").then(snapshot=>{
+        const approval=snapshot.val();
+        if(!approval||approval.allowed!==true||approval.used===true||!approval.nextUid)return null;
+        return {baseUid:normalizedBase,nextUid:String(approval.nextUid),approval};
+      }).catch(()=>null);
+    }
+
+    function markRetestApprovalUsed(){
+      const baseUid=normalizeTrialAttemptIdentity(currentBaseUserId||currentUserId);
+      const resultUid=String(currentUserId||"");
+      if(!baseUid||!resultUid||normalizeTrialAttemptIdentity(resultUid)===baseUid)return Promise.resolve();
+      const usedAt=firebase.database.ServerValue.TIMESTAMP;
+      getRetestApprovalRef(baseUid).update({used:true,usedAt,resultUid,updatedAt:usedAt}).catch(()=>{});
+      getRetestRequestRef(baseUid).update({status:"used",used:true,usedAt,resultUid,updatedAt:usedAt}).catch(()=>{});
+      return Promise.resolve();
+    }
     function startQuiz(uid,userName){
+      const baseUid=normalizeTrialAttemptIdentity(uid);
+      currentBaseUserId=baseUid;
       currentUserId=uid;
       currentUserName=normalizeUserNameForIdentity(userName||userNameInput.value.trim()||"");
       if(userNameInput)userNameInput.value=currentUserName;
       syncResultUserName(currentUserName);
       const userRef=database.ref("exams/"+EXAM_ID+"/users/"+uid);
       verifyAuthorizedUser(uid,currentUserName).then(()=>{
-        userRef.once("value").then(snapshot=>{
-          const data=snapshot.val();
-          selectLatestTrialAttempt(uid,currentUserName,data).then(displayAttempt=>{
-            const displayData=displayAttempt&&displayAttempt.data?displayAttempt.data:data;
-            const displayUid=displayAttempt&&displayAttempt.uid?displayAttempt.uid:uid;
-            saveUserIdentity(userRef,uid,currentUserName,data).then(()=>{
-              if(displayData&&displayData.result){
-                currentUserId=displayUid;
-                currentUserName=normalizeUserNameForIdentity(displayData.result.name||currentUserName);
-                if(userNameInput)userNameInput.value=currentUserName;
-                syncResultUserName(currentUserName);
-                startPage.style.display="none";resultPage.style.display="flex";
-                if(displayData.result.answers)userAnswers=displayData.result.answers;
-                document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
-              }else if(data&&data.progress){
-                currentQuestionIndex=data.progress.currentQuestion||0;
-                userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
-              }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
-            }).catch(()=>{alert("\uC0AC\uC6A9\uC790 \uC815\uBCF4\uB97C \uC800\uC7A5\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");});
-          }).catch(()=>{alert("\uC0AC\uC6A9\uC790 \uC815\uBCF4\uB97C \uD655\uC778\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");});
-        }).catch(()=>{alert("\uC0AC\uC6A9\uC790 \uC815\uBCF4\uB97C \uD655\uC778\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");});
+        getActiveRetestApproval(baseUid).then(activeApproval=>{
+          if(activeApproval){
+            const approvedUid=activeApproval.nextUid;
+            const approvedRef=database.ref("exams/"+EXAM_ID+"/users/"+approvedUid);
+            currentUserId=approvedUid;
+            return approvedRef.once("value").then(snapshot=>{
+              const approvedData=snapshot.val();
+              return saveUserIdentity(approvedRef,approvedUid,currentUserName,approvedData).then(()=>{
+                if(approvedData&&approvedData.result){
+                startPage.style.display="none";quizPage.style.display="none";resultPage.style.display="flex";
+                  if(approvedData.result.answers)userAnswers=approvedData.result.answers;
+                  document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
+                }else if(approvedData&&approvedData.progress){
+                  currentQuestionIndex=approvedData.progress.currentQuestion||0;
+                  userAnswers=approvedData.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
+                }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
+              });
+            });
+          }
+          return userRef.once("value").then(snapshot=>{
+            const data=snapshot.val();
+            return selectLatestTrialAttempt(uid,currentUserName,data).then(displayAttempt=>{
+              const displayData=displayAttempt&&displayAttempt.data?displayAttempt.data:data;
+              const displayUid=displayAttempt&&displayAttempt.uid?displayAttempt.uid:uid;
+              return saveUserIdentity(userRef,uid,currentUserName,data).then(()=>{
+                if(displayData&&displayData.result){
+                  currentUserId=displayUid;
+                  currentUserName=normalizeUserNameForIdentity(displayData.result.name||currentUserName);
+                  if(userNameInput)userNameInput.value=currentUserName;
+                  syncResultUserName(currentUserName);
+                startPage.style.display="none";quizPage.style.display="none";resultPage.style.display="flex";
+                  if(displayData.result.answers)userAnswers=displayData.result.answers;
+                  document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
+                }else if(data&&data.progress){
+                  currentQuestionIndex=data.progress.currentQuestion||0;
+                  userAnswers=data.progress.answers||new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();
+                }else{currentQuestionIndex=0;userAnswers=new Array(TOTAL_QUESTIONS).fill(null);showQuizPage();}
+              });
+            });
+          });
+        }).catch(()=>{alert("사용자 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.");});
       }).catch(error=>{showAuthorizationDenied(getAuthorizationErrorMessage(error));});
     }
-
 
     function buildQuizLaunchUrl(uid,userName){
       const target=new URL(window.location.href);
@@ -2762,7 +2815,7 @@
           examId:EXAM_ID,
           uid:String(currentUserId||userIdInput.value.trim()||""),
           name:String(userNameInput.value.trim()||currentUserName||""),
-          completed:state.completed,
+          completed:state.eligible ? true : state.completed,
           passed:state.passed,
           eligible:state.eligible,
           total:state.stats.correct,
@@ -2788,8 +2841,9 @@
       const state=getExamCompletionState();
       if(currentUserId){
         const ref=database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
-        ref.child("result").set({uid:currentUserId,name:getCurrentUserName(),total:총점,필기,실기,written:필기,practical:실기,completed:state.completed,passed:state.passed,eligible:state.eligible,totalQuestions:TOTAL_QUESTIONS,answeredCount:getAnsweredCount(),submittedAt:new Date().toISOString(),answers:userAnswers,correctAnswers:quizData.map(item=>item.correctAnswer),forceCorrectTrialNumbers:FORCE_CORRECT_TRIAL_NUMBERS});
+        ref.child("result").set({uid:currentUserId,name:getCurrentUserName(),total:총점,필기,실기,written:필기,practical:실기,completed:state.eligible ? true : state.completed,passed:state.passed,eligible:state.eligible,totalQuestions:TOTAL_QUESTIONS,answeredCount:getAnsweredCount(),submittedAt:new Date().toISOString(),answers:userAnswers,correctAnswers:quizData.map(item=>item.correctAnswer),forceCorrectTrialNumbers:FORCE_CORRECT_TRIAL_NUMBERS});
         ref.child("progress").remove();
+        markRetestApprovalUsed();
       }
       renderResultNav();disableAnswers();notifyMockExamComplete();
       const googleFormURL="https://docs.google.com/forms/d/e/1FAIpQLSdmoDKrE48-xFYOhVyrpmAx9DvfML3qMmwlcbefwWL7XhpD_w/formResponse";
@@ -2806,6 +2860,29 @@
       return isMobile
         ? "화면 아래의 '학습을 완료합니다.' 버튼을 누르세요.\n↓"
         : "화면 아래의 '학습을 완료합니다.' 버튼을 누르세요. ↘";
+    }
+
+    function requestRetest(){
+      const btn=document.getElementById("retest-request-btn");
+      const baseUid=normalizeTrialAttemptIdentity(currentBaseUserId||currentUserId||userIdInput.value.trim());
+      const name=getCurrentUserName();
+      if(!baseUid||!name){alert("재시험 요청을 저장할 응시자 정보를 확인하지 못했습니다.");return;}
+      if(btn){btn.disabled=true;btn.textContent="요청 저장 중";}
+      getRetestRequestRef(baseUid).update({
+        uid:baseUid,
+        name:name,
+        latestResultUid:String(currentUserId||baseUid),
+        status:"pending",
+        used:false,
+        requestedAt:firebase.database.ServerValue.TIMESTAMP,
+        updatedAt:firebase.database.ServerValue.TIMESTAMP
+      }).then(()=>{
+        if(btn){btn.textContent="재시험 요청 완료";}
+        alert("재시험 응시 요청이 저장되었습니다. 관리자가 허용하면 같은 아이디와 이름으로 다시 응시할 수 있습니다.");
+      }).catch(()=>{
+        if(btn){btn.disabled=false;btn.textContent="재시험 응시 요청";}
+        alert("재시험 요청을 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.");
+      });
     }
 
     function completeLearning(){
@@ -2858,7 +2935,7 @@
       const stats=analyzeExamResultAnswers();
       const completed=stats.empty.length===0;
       const passed=stats.written>=21&&stats.practical>=27;
-      return {stats,completed,passed,eligible:completed&&passed};
+      return {stats,completed,passed,eligible:passed};
     }
 
     function updateResultCompleteButton(state){
@@ -2872,7 +2949,6 @@
 
     function getCompletionBlockedMessage(state){
       const currentState=state||getExamCompletionState();
-      if(!currentState.completed)return "모든 문항을 풀고 합격해야 학습 완료를 할 수 있습니다.";
       if(!currentState.passed)return "합격 기준을 충족해야 학습 완료를 할 수 있습니다.";
       return "학습 완료 조건을 확인할 수 없습니다.";
     }
@@ -3059,6 +3135,7 @@
       if(btn){setQuickNavButtonLabel(btn,currentQuestionIndex+1,ans);btn.classList.add("answered");}
     });
     document.getElementById("result-complete-btn").addEventListener("click",completeLearning);
+    document.getElementById("retest-request-btn").addEventListener("click",requestRetest);
 
     function autoResizeNavGrid(){
       const navCont=document.getElementById("quick-nav-container");

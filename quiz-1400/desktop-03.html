@@ -4877,7 +4877,7 @@ const chapter8Data=[
     const completed = answers.every(answer => answer !== null && answer !== undefined && answer !== "");
     const total = parseInt(result.total, 10);
     const passCount = Math.ceil(totalQ * 0.6);
-    return completed && !Number.isNaN(total) && total >= passCount;
+    return !Number.isNaN(total) && total >= passCount;
   }
 
   async function refreshCompletionActions() {

@@ -2797,7 +2797,7 @@ const EXAM_ID = "exam10";
           examId:EXAM_ID,
           uid:String(currentUserId||userIdInput.value.trim()||""),
           name:String(userNameInput.value.trim()||currentUserName||""),
-          completed:state.completed,
+          completed:state.eligible ? true : state.completed,
           passed:state.passed,
           eligible:state.eligible,
           total:state.stats.correct,
@@ -2901,7 +2901,7 @@ const EXAM_ID = "exam10";
       const stats=analyzeExamResultAnswers();
       const completed=stats.empty.length===0;
       const passed=stats.written>=21&&stats.practical>=27;
-      return {stats,completed,passed,eligible:completed&&passed};
+      return {stats,completed,passed,eligible:passed};
     }
 
     function updateResultCompleteButton(state){
@@ -2915,7 +2915,6 @@ const EXAM_ID = "exam10";
 
     function getCompletionBlockedMessage(state){
       const currentState=state||getExamCompletionState();
-      if(!currentState.completed)return "모든 문항을 풀고 합격해야 학습 완료를 할 수 있습니다.";
       if(!currentState.passed)return "합격 기준을 충족해야 학습 완료를 할 수 있습니다.";
       return "학습 완료 조건을 확인할 수 없습니다.";
     }
