@@ -2160,3 +2160,22 @@
   - OneDrive 로그인 관련 HTML 15개 인라인 스크립트 문법 파싱 통과.
   - 15개 파일 모두 완료 안내 문구, 데스크톱 화살표, 모바일 화살표가 반영됐음을 확인했다.
   - 1400제 1~4부 로그인 파일에 완료/입장 불가 안내 안정 레이아웃 조건이 반영됐음을 확인했다.
+
+## 54. 2026-06-21 Google Form 삭제 확인 로그 기반 관리자 삭제 보정
+
+- 사용자 요청에 따라 Google Form 응답이 삭제되지 않았는데 Firebase 자료만 삭제될 수 있는 흐름을 보정했다.
+  - OneDrive 관리자용 학습자 등록 HTML에서 Google Form 삭제 요청 후 즉시 Firebase를 삭제하지 않고, Apps Script가 Firebase `exams/examTrial/deleteLogs/{requestId}`에 `success` 로그를 남길 때까지 최대 45초 대기하도록 변경했다.
+  - Apps Script가 `error` 로그를 남기거나 시간 초과가 발생하면 Firebase 삭제를 진행하지 않도록 했다.
+  - 응시자 전체 삭제와 제출 1건 삭제 안내 문구를 “Google Form 삭제 성공 확인 후 Firebase 정리” 흐름으로 맞췄다.
+  - Apps Script에 붙여 넣을 서버 코드 템플릿을 `tools/google-form-delete-webapp/Code.gs`로 추가했다.
+  - 서버 코드는 Google Form 응답을 이름과 제출 시각 기준으로 찾고 삭제한 뒤, 성공/실패 로그를 Firebase에 기록한다.
+- OneDrive 반영 파일:
+  - `04. 관리자용 학습자 등록.html`
+- 로컬 추가 파일:
+  - `tools/google-form-delete-webapp/Code.gs`
+- 검증:
+  - OneDrive 관리자 HTML 인라인 스크립트 문법 파싱 통과.
+  - `Code.gs` 기본 JavaScript 문법 파싱 통과.
+  - 관리자 HTML에 `deleteLogs`, `waitForGoogleFormDeleteLog`, Google Form 삭제 성공 확인 문구가 반영됐음을 확인했다.
+  - 실제 Google Form/Firebase 삭제 실행 테스트는 운영 데이터 삭제가 발생하므로 수행하지 않았다.
+  - Apps Script 프로젝트 편집과 새 버전 배포는 로그인된 Google 브라우저 세션 제어가 필요해 직접 수행하지 못했다.
