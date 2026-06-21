@@ -337,6 +337,9 @@
       padding-top: clamp(12px, 1.6vh, 16px);
       border-top: 1px solid #D3DEE7;
     }
+    body.ol-result-mode #navigation-buttons {
+      display: none !important;
+    }
     #navigation-buttons button {
       min-width: 96px;
       padding: clamp(8px, 1vh, 11px) clamp(14px, 1.4vw, 20px);
@@ -2005,6 +2008,9 @@ const EXAM_ID = "exam1";
     const database = firebase.database();
 
     const startPage=document.getElementById("start-page"),quizPage=document.getElementById("quiz-page"),startQuizBtn=document.getElementById("start-quiz-btn"),userIdInput=document.getElementById("user-id"),userNameInput=document.getElementById("user-name"),resultPage=document.getElementById("result-page"),scoreSpan=document.getElementById("score"),questionNumberSpan=document.getElementById("question-number"),questionTextSpan=document.getElementById("question-text"),optionsDiv=document.getElementById("options"),videoWrapper=document.querySelector("#video-container .video-wrapper"),currentQuestionSpan=document.getElementById("current-question"),totalQuestionsSpan=document.getElementById("total-questions"),prevBtn=document.getElementById("prev-btn"),nextBtn=document.getElementById("next-btn"),quickNavGrid=document.getElementById("quick-nav-grid");
+    function setOlResultMode(isResult){
+      document.body.classList.toggle("ol-result-mode", Boolean(isResult));
+    }
     const navPrevBtn=document.getElementById("nav-prev"),navNextBtn=document.getElementById("nav-next");
     const NAV_PAGE_SIZE=40;
 
@@ -2643,7 +2649,7 @@ const EXAM_ID = "exam1";
           const data=snapshot.val();
           saveUserIdentity(userRef,uid,currentUserName,data).then(()=>{
             if(data&&data.result){
-              startPage.style.display="none";quizPage.style.setProperty("display","none","important");resultPage.style.display="flex";
+              startPage.style.display="none";setOlResultMode(true);quizPage.style.setProperty("display","none","important");resultPage.style.display="flex";
               if(data.result.answers)userAnswers=data.result.answers;
               document.getElementById("quick-nav-container-result").style.display="block";renderResultNav();
             }else if(data&&data.progress){
@@ -2677,6 +2683,7 @@ const EXAM_ID = "exam1";
     }
 
     function showQuizPage(){
+      setOlResultMode(false);
       startPage.style.display="none";quizPage.style.display="flex";
       updateQuizViewportHeight();
       initQuickNavBottomBar();
@@ -2817,7 +2824,7 @@ const EXAM_ID = "exam1";
       });
       const 총점=필기+실기;
       const 합격여부 = (필기 >= 21 && 실기 >= 27) ? "합격" : "불합격";
-      quizPage.style.setProperty("display","none","important");resultPage.style.display="flex";
+      setOlResultMode(true);quizPage.style.setProperty("display","none","important");resultPage.style.display="flex";
       currentUserName=getCurrentUserName();
       syncResultUserName(currentUserName);
       if(currentUserId){
