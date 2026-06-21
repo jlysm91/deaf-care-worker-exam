@@ -977,11 +977,7 @@
     <div id="score" class="result-summary"></div>
     <div id="quick-nav-container-result">
       <p class="result-grid-title">오답 중심 복습</p>
-      <div id="result-grid-nav">
-        <button id="result-prev-btn">← 이전</button>
-        <span id="result-page-info"></span>
-        <button id="result-next-btn">다음 →</button>
-      </div>
+      <div id="result-grid-nav" aria-hidden="true"></div>
       <div id="quick-nav-grid-result"></div>
     </div>
     <div class="result-actions">
@@ -3201,16 +3197,6 @@ const chapter5Data=[
     bindResultReviewTooltips();
     requestAnimationFrame(fitResultGrid);
   }
-
-  document.getElementById("result-prev-btn").addEventListener("click", () => {
-    if (resultPageIdx > 0) renderResultGrid(resultPageIdx - 1);
-  });
-
-  document.getElementById("result-next-btn").addEventListener("click", () => {
-    const total = currentResultAnswers.length || TOTAL_QUESTIONS;
-    const totalPages = Math.ceil(total / RESULT_PAGE_SIZE);
-    if (resultPageIdx < totalPages - 1) renderResultGrid(resultPageIdx + 1);
-  });
 
   document.querySelectorAll("[data-host-complete]").forEach(btn => {
     btn.addEventListener("click", sendLearningComplete);
