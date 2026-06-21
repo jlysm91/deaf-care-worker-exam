@@ -1584,8 +1584,17 @@
       setTimeout(()=>{ if(!window.closed)alert(getLearningCompleteMessage()); },250);
     }
 
+    function notifyRetryStartedToOpener(){
+      try{
+        if(window.opener&&!window.opener.closed){
+          window.opener.postMessage({type:'deaf-care-worker-exam-retry-started',examId:EXAM_ID,uid:currentUserId||'',name:currentUserName||''},'*');
+        }
+      }catch(e){}
+    }
+
     function resetQuiz(){
       if(!currentUserId){location.reload();return;}
+      notifyRetryStartedToOpener();
       alert("초기화되었습니다!");
       const ref=database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
       ref.child("progress").remove().then(()=>ref.child("result").remove()).then(()=>{
