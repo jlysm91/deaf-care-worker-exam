@@ -1283,7 +1283,7 @@
       </button>
       </div>
       <div class="host-actions">
-        <button type="button" class="host-complete-btn" data-host-complete>아이디·이름 입력 화면에서 학습 완료하기</button>
+        <button type="button" class="host-complete-btn" data-host-complete>학습 완료</button>
       </div>
     </div>
   </div>
@@ -1334,7 +1334,7 @@
       </button>
       </div>
       <div class="host-actions">
-        <button type="button" class="host-complete-btn" data-host-complete>아이디·이름 입력 화면에서 학습 완료하기</button>
+        <button type="button" class="host-complete-btn" data-host-complete>학습 완료</button>
       </div>
     </div>
   </div>
@@ -5376,6 +5376,7 @@ const chapter8Data=[
       window.opener.postMessage({
         type: "quiz1400Complete",
         part: QUIZ_1400_PART,
+        examId: EXAM_ID,
         uid: String(currentUserId || ""),
         name: String(currentUserName || ""),
         completed: true,
@@ -5853,6 +5854,16 @@ const chapter8Data=[
       return;
     }
     if (!confirm("다시 풀기를 하시겠습니까? 현재 결과가 삭제됩니다.")) return;
+    try {
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage({
+          type: "deaf-care-worker-exam-retry-started",
+          examId: EXAM_ID,
+          uid: String(currentUserId || ""),
+          name: String(currentUserName || "")
+        }, "*");
+      }
+    } catch (e) {}
     const ref = database.ref(`exams/${EXAM_ID}/users/${currentUserId}`);
     ref.child("progress").remove()
       .then(() => ref.child("result").remove())
