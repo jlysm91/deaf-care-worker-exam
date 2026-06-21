@@ -1874,7 +1874,8 @@
     .result-stat strong { color:var(--text-primary); font-size:clamp(18px,1.8vw,28px); font-weight:900; line-height:1.1; }
     .result-stat span { margin-top:6px; color:#64748B; font-size:clamp(11px,0.9vw,13px); font-weight:800; }
     .result-standard { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; color:#64748B; font-size:clamp(12px,1vw,14px); font-weight:800; text-align:center; }
-    .result-standard-line { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; }
+    .result-standard-line { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; }
+    .result-standard-item { white-space:nowrap; }
     .result-standard strong { color:var(--primary); }
     #quick-nav-container-result { display:flex!important; flex-direction:column!important; width:min(100%,1120px)!important; max-width:1120px!important; background:rgba(255,255,255,0.94)!important; border:1px solid #D8E2EB!important; border-radius:var(--radius-lg)!important; box-shadow:var(--shadow-card)!important; padding:clamp(10px,1.3vh,16px) clamp(10px,1.6vw,18px)!important; overflow:visible!important; }
     .result-grid-title { text-align:center!important; color:var(--text-muted)!important; font-size:clamp(10px,0.9vw,12px)!important; font-weight:800!important; letter-spacing:0.7px!important; text-transform:uppercase!important; margin:0 0 clamp(8px,1vh,12px)!important; }
@@ -2949,7 +2950,7 @@ const EXAM_ID = "exam2";
         + '<div class="result-stat"><strong>'+stats.empty.length+'</strong><span>미응답</span></div>'
         + '</div>'
         + '</div>'
-        + '<div class="result-standard"><span class="result-standard-line">필기 '+(stats.written>=21?"충족":"미달")+' <strong>'+stats.written+' / 35</strong> · '+(stats.written>=21?"기준 충족":"기준까지 "+(21-stats.written)+"점")+' ｜ 실기 '+(stats.practical>=27?"충족":"미달")+' <strong>'+stats.practical+' / 45</strong> · '+(stats.practical>=27?"기준 충족":"기준까지 "+(27-stats.practical)+"점")+'</span></div>';
+        + '<div class="result-standard"><span class="result-standard-line"><span class="result-standard-item">필기 '+(stats.written>=21?"충족":"미달")+' <strong>'+stats.written+' / 35</strong> · '+(stats.written>=21?"기준 충족":"기준까지 "+Math.max(0,21-stats.written)+"점")+'</span><span class="result-standard-item">실기 '+(stats.practical>=27?"충족":"미달")+' <strong>'+stats.practical+' / 45</strong> · '+(stats.practical>=27?"기준 충족":"기준까지 "+Math.max(0,27-stats.practical)+"점")+'</span></span></div>';
       updateResultCompleteButton();
     }
 
