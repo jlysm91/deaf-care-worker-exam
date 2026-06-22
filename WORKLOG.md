@@ -3178,3 +3178,18 @@
   - 두 파일 모두 `admin-access-modal`, `admin-access-form`, `admin-access-password`, `.admin-access-backdrop`, Promise 기반 `requestAdminAccess()` 존재를 확인했다.
 - 범위 통제:
   - 학습 영상 통계 내부, 학습자 등록 데이터 구조, Firebase/Google Form 로직은 수정하지 않았다.
+
+## 105. 2026-06-22 관리자 페이지 배포 정보 표시 추가
+
+- 사용자 요청에 따라 UI가 꼬이지 않도록 관리자 홈 상단에 작은 배포 정보 줄만 추가했다.
+- 수정 범위:
+  - OneDrive 원본 `04. 관리자용 학습자 등록.html`
+  - GitHub Pages 배포본 `admin/slcd-admin-learner-2026.html`
+- 구현:
+  - 헤더 아래에 `배포 일시 · v20260622-admin` 형식의 작은 텍스트를 표시했다.
+  - 기존 `Firebase 연결됨` 배지, 관리자 메뉴 카드, 등록/통계/시험 결과 화면 구조는 변경하지 않았다.
+  - 모바일에서는 줄바꿈과 간격만 자연스럽게 유지되도록 최소 CSS만 추가했다.
+- 범위 통제:
+  - 인증, Firebase/Google Form 로직, 학습 영상 통계 내부, 실전 모의시험 결과는 수정하지 않았다.
+- 검증:
+  - 별도 브라우저 실행 검증은 하지 않았다.
