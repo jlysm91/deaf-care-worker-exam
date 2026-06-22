@@ -3162,3 +3162,19 @@
   - 학습 영상 통계 내부 화면, 학습자 등록 폼 데이터 구조, Firebase 경로, Google Form 연동, 실전 모의시험 결과 화면은 수정하지 않았다.
 - 검증:
   - 별도 브라우저 실행 검증은 하지 않았다.
+
+## 104. 2026-06-22 관리자 비밀번호 모달 DOM 누락 보정
+
+- 사용자 확인에 따라 주 관리자 전용 메뉴 클릭 시 비밀번호 입력창이 나타나지 않는 문제를 보정했다.
+- 원인:
+  - 이전 작업에서 비밀번호 확인 CSS와 JS는 추가됐지만, 실제 모달 HTML이 문서에 삽입되지 않았다.
+  - 기존 Firebase 스크립트 버전이 예상한 삽입 기준과 달라 모달 DOM 삽입 anchor가 맞지 않았다.
+- 수정 범위:
+  - OneDrive 원본 `04. 관리자용 학습자 등록.html`
+  - GitHub Pages 배포본 `admin/slcd-admin-learner-2026.html`
+- 구현:
+  - `</main>` 직전에 `admin-access-modal` DOM을 삽입했다.
+- 검증:
+  - 두 파일 모두 `admin-access-modal`, `admin-access-form`, `admin-access-password`, `.admin-access-backdrop`, Promise 기반 `requestAdminAccess()` 존재를 확인했다.
+- 범위 통제:
+  - 학습 영상 통계 내부, 학습자 등록 데이터 구조, Firebase/Google Form 로직은 수정하지 않았다.

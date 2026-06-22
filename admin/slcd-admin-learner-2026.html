@@ -3158,6 +3158,24 @@
           </aside>
         </div>
       </section>
+
+  <div class="admin-access-backdrop" id="admin-access-modal" hidden>
+    <div class="admin-access-dialog" role="dialog" aria-modal="true" aria-labelledby="admin-access-title">
+      <form class="admin-access-form" id="admin-access-form">
+        <h2 id="admin-access-title">주 관리자 확인</h2>
+        <p id="admin-access-message">관리자 비밀번호를 입력해 주세요.</p>
+        <div class="admin-access-field">
+          <label for="admin-access-password">관리자 비밀번호</label>
+          <input id="admin-access-password" type="password" autocomplete="current-password" inputmode="numeric" />
+        </div>
+        <div class="admin-access-error" id="admin-access-error" aria-live="polite"></div>
+        <div class="admin-access-actions">
+          <button type="button" id="admin-access-cancel">취소</button>
+          <button type="submit" class="confirm">확인</button>
+        </div>
+      </form>
+    </div>
+  </div>
   </main>
 
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
