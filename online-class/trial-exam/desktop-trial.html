@@ -1279,22 +1279,19 @@
             sourcePosition: 2,
             trialNumber: 10
       },
-      {
-            number: "모1030",
-            question: "금연으로 나타나는 신체적 변화로 옳은 것은?",
-            options: [
-                  "혈압이 정상보다 높아진다.",
-                  "맥박이 떨어진다.",
-                  "손발 체온이 떨어진다.",
-                  "혈중 일산화탄소량이 정상보다 높아진다.",
-                  "심장병 발병 위험이 줄어든다."
-            ],
-            correctAnswer: 5,
-            videoId: "1119290212",
-            sourceExam: 10,
-            sourceNumber: "모1030",
-            sourcePosition: 30,
-            trialNumber: 11
+            {
+        question: "장기요양기관이 없는 산간벽지에 살고 있는 대상자가 며느리로부터 방문요양에 상당하는 장기요양급여를 받았을 때 지급되는 특별현금급여는?",
+        options: [
+          "시설급여",
+          "재가급여",
+          "가족요양비",
+          "특례요양비",
+          "요양병원간병비"
+        ],
+        correctAnswer: 3,
+        sourceExam: 1,
+        sourceNumber: "모0103",
+        sourcePosition: 3
       },
       {
             number: "모0231",
@@ -1721,22 +1718,19 @@
             sourcePosition: 61,
             trialNumber: 36
       },
-      {
-            number: "모0254",
-            question: "대상자의 통 목욕을 돕는 방법으로 옳은 것은?",
-            options: [
-                  "발끝 → 다리 → 회음부 → 팔 → 몸통 순서로 닦는다.",
-                  "머리를 감긴 후 욕조에 들어가게 한다.",
-                  "불편한 쪽 겨드랑이를 잡고 보조한다",
-                  "욕조에 등받이를 길게 대어 중앙에 앉게 한다.",
-                  "욕조부터 다리 방향으로 비눗물을 씻어낸다."
-            ],
-            correctAnswer: 3,
-            videoId: "1117997626",
-            sourceExam: 2,
-            sourceNumber: "모0254",
-            sourcePosition: 54,
-            trialNumber: 37
+            {
+        question: "대상자와의 대화 중 요양보호사의 공감적 반응으로 옳은 것은?",
+        options: [
+          "\"왜 산책을 안 하려고 하세요?\"",
+          "\"그럼 뭘 하고 싶으세요?\"",
+          "\"어디 불편하신가요?\"",
+          "\"산책 나갈 때 여러 가지 준비하라 해서 화나셨군요.\"",
+          "\"내키지 않으면 안 하시는 게 좋을 것 같아요.\""
+        ],
+        correctAnswer: 4,
+        sourceExam: 1,
+        sourceNumber: "모0136",
+        sourcePosition: 36
       },
       {
             number: "모0971",
@@ -2044,22 +2038,19 @@
             sourcePosition: 51,
             trialNumber: 55
       },
-      {
-            number: "모1056",
-            question: "하반신마비 대상자를 침대에서 일으켜 앉히려고 할 때 돕는 순서는?",
-            options: [
-                  "가 → 나 → 다 → 라",
-                  "가 → 나 → 다 → 라",
-                  "가 → 다 → 나 → 라",
-                  "다 → 가 → 나 → 라",
-                  "다 → 가 → 라 → 나"
-            ],
-            correctAnswer: 2,
-            videoId: "1119290826",
-            sourceExam: 10,
-            sourceNumber: "모1056",
-            sourcePosition: 56,
-            trialNumber: 56
+            {
+        question: "다음 대화 중 밑줄 친 부분의 내용과 관련이 깊은 의사소통 방식은?",
+        options: [
+          "감정 공감",
+          "존중과 관심",
+          "정보의 제공",
+          "적극적 청취",
+          "증상 완화 보조"
+        ],
+        correctAnswer: 4,
+        sourceExam: 1,
+        sourceNumber: "모0137",
+        sourcePosition: 37
       },
       {
             number: "모0852",
@@ -2473,7 +2464,7 @@
 
     const quizData=quizRawData.map(item=>({...item,videoEmbed:getVideoEmbed(item.videoId,item.number)}));
     const TOTAL_QUESTIONS=quizData.length;
-    const FORCE_CORRECT_TRIAL_NUMBERS=[11,37,56];
+    const FORCE_CORRECT_TRIAL_NUMBERS=[];
     const FORCE_CORRECT_TRIAL_SET=new Set(FORCE_CORRECT_TRIAL_NUMBERS);
     let currentQuestionIndex=0,currentUserId="",currentBaseUserId="",currentUserName="",userAnswers=new Array(TOTAL_QUESTIONS).fill(null);
 

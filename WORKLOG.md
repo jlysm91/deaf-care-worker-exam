@@ -3067,3 +3067,27 @@
   - 단, GitHub Pages는 정적 공개 호스팅이므로 링크를 아는 사람은 페이지 소스에 접근할 수 있다. 완전한 서버 측 관리자 인증은 별도 Apps Script/Firebase Auth 연동이 필요하다.
 - 접속 예정 URL:
   - `https://jlysm91.github.io/deaf-care-worker-exam/admin/slcd-admin-learner-2026.html`
+
+## 99. 2026-06-22 실전 모의시험 오류 문항 신규 응시자용 교체
+
+- 사용자 요청에 따라 과거 12명 결과는 그대로 보존하고, 앞으로 새 응시자가 보는 실전 모의시험의 오류 문항 3개를 정상 문항으로 교체했다.
+- 교체 범위:
+  - 실전 11번: 기존 `10회 모의고사 30번(모1030)`에서 `1회 모의고사 3번(모0103)`으로 교체
+  - 실전 37번: 기존 `2회 모의고사 54번(모0254)`에서 `1회 모의고사 36번(모0136)`으로 교체
+  - 실전 56번: 기존 `10회 모의고사 56번(모1056)`에서 `1회 모의고사 37번(모0137)`으로 교체
+- 수정 파일:
+  - `mock-exam/desktop-trial.html`
+  - `mock-exam/mobile-trial.html`
+  - `online-class/trial-exam/desktop-trial.html`
+  - `online-class/trial-exam/mobile-trial.html`
+  - OneDrive 원본 `03. 모의시험/2-1. ★★★ 실전 모의시험 코드 - 데스크톱용.html`
+  - OneDrive 원본 `03. 모의시험/2-2. ★★★ 실전 모의시험 코드 - 모바일용.html`
+- 구현:
+  - 11번은 필기 영역 문항으로 교체했다.
+  - 37번과 56번은 실기 영역 문항으로 교체했다.
+  - 신규 응시자에게 더 이상 기존 오류 문항 전원 정답 처리가 적용되지 않도록 `FORCE_CORRECT_TRIAL_NUMBERS`를 빈 배열로 변경했다.
+- 범위 통제:
+  - Firebase의 기존 12명 보정 결과와 Google Form 제출 결과는 수정하지 않았다.
+  - 관리자용 학습자 등록 HTML과 GitHub Pages 관리자 페이지는 수정하지 않았다.
+- 검증:
+  - 이번 단계에서는 사용자 요청 범위와 속도 우선 원칙에 따라 별도 실행 검증은 하지 않았다.
