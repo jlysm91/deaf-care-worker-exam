@@ -3091,3 +3091,27 @@
   - 관리자용 학습자 등록 HTML과 GitHub Pages 관리자 페이지는 수정하지 않았다.
 - 검증:
   - 이번 단계에서는 사용자 요청 범위와 속도 우선 원칙에 따라 별도 실행 검증은 하지 않았다.
+
+## 100. 2026-06-22 실전 모의시험 교체 문항 영상 ID 복구
+
+- 사용자 확인 화면에서 교체된 실전 모의시험 37번 문항 상단 영상이 `이 동영상은 존재하지 않습니다`로 표시되는 문제를 확인했다.
+- 원인:
+  - 오류 문항 3개를 정상 문항으로 교체하는 과정에서 원본 문항의 `videoId` 속성이 함께 복사되지 않았다.
+  - `videoId`가 없는 상태에서 Vimeo iframe이 생성되어 없는 영상으로 표시됐다.
+- 수정:
+  - 실전 11번 `모0103`에 `videoId: "1111493316"` 복구
+  - 실전 37번 `모0136`에 `videoId: "1111500424"` 복구
+  - 실전 56번 `모0137`에 `videoId: "1111500521"` 복구
+- 수정 파일:
+  - `mock-exam/desktop-trial.html`
+  - `mock-exam/mobile-trial.html`
+  - `online-class/trial-exam/desktop-trial.html`
+  - `online-class/trial-exam/mobile-trial.html`
+  - OneDrive 원본 `03. 모의시험/2-1. ★★★ 실전 모의시험 코드 - 데스크톱용.html`
+  - OneDrive 원본 `03. 모의시험/2-2. ★★★ 실전 모의시험 코드 - 모바일용.html`
+- 검증:
+  - 6개 파일 모두 `quizRawData` 80문항 파싱 성공.
+  - 11번, 37번, 56번의 `sourceNumber`와 `videoId`가 기대값과 일치함을 확인했다.
+- 범위 통제:
+  - 기존 Firebase 12명 결과와 Google Form 제출 결과는 수정하지 않았다.
+  - 관리자 페이지와 다른 모의고사/1400제 파일은 수정하지 않았다.
