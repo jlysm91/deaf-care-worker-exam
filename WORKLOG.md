@@ -3052,3 +3052,18 @@
   - 제출 실행 시각 범위: `2026-06-22T07:56:59.261Z`부터 `2026-06-22T07:57:22.954Z`까지.
 - 주의:
   - Google Form의 실제 응답 수 화면은 사용자가 Google Form 편집 화면에서 최종 확인해야 한다.
+
+## 98. 2026-06-22 관리자용 학습자 등록 GitHub Pages 배포 파일 추가
+
+- 사용자 요청에 따라 관리자용 학습자 등록 HTML을 GitHub Pages에서 접속할 수 있도록 저장소의 별도 `admin` 경로에 배포용 파일을 추가했다.
+- 추가 파일:
+  - `admin/slcd-admin-learner-2026.html`
+- 범위 통제:
+  - `mock-exam`, `quiz-1400`, `online-class`, OneDrive 학습 콘텐츠 폴더에는 넣지 않았다.
+  - 기존 OneDrive 원본 `04. 관리자용 학습자 등록.html`은 수정하지 않았다.
+- 보안 조정:
+  - 배포용 파일에서는 기존 평문 주 관리자 비밀번호 상수를 제거했다.
+  - 소스 보기에서 비밀번호가 바로 노출되지 않도록 해시 비교 방식으로 바꿨다.
+  - 단, GitHub Pages는 정적 공개 호스팅이므로 링크를 아는 사람은 페이지 소스에 접근할 수 있다. 완전한 서버 측 관리자 인증은 별도 Apps Script/Firebase Auth 연동이 필요하다.
+- 접속 예정 URL:
+  - `https://jlysm91.github.io/deaf-care-worker-exam/admin/slcd-admin-learner-2026.html`

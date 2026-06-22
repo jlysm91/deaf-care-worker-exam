@@ -1,0 +1,4348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자용 학습자 등록</title>
+  <style>
+    :root {
+      --bg: #EEF5F3;
+      --panel: #FFFFFF;
+      --text: #101828;
+      --muted: #66727D;
+      --line: #DCE8E6;
+      --primary: #146C73;
+      --primary-dark: #0E4F55;
+      --orange: #C97A24;
+      --danger: #B23B35;
+      --success: #147A4A;
+      --shadow: 0 22px 58px rgba(14, 55, 59, 0.13);
+    }
+
+    * { box-sizing: border-box; }
+    html { scrollbar-gutter: stable; }
+    [hidden] { display: none !important; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, #F7FBFA 0%, var(--bg) 44%, #E7F0EF 100%);
+      color: var(--text);
+      font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+
+    main {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 48px;
+    }
+
+    header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.25;
+      font-weight: 900;
+    }
+
+    .status-pill {
+      min-height: 34px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #E2F3F6;
+      color: var(--primary-dark);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(420px, 0.95fr) minmax(420px, 1.05fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .admin-home {
+      display: grid;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .admin-home-title {
+      display: grid;
+      gap: 6px;
+      padding: 18px 0 4px;
+      border-top: 1px solid var(--line);
+    }
+
+    .admin-home-title h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 900;
+    }
+
+    .admin-home-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 760;
+      line-height: 1.5;
+    }
+
+    .admin-home-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .admin-home-card {
+      display: grid;
+      gap: 8px;
+      min-height: 150px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: var(--text);
+      text-align: left;
+      box-shadow: var(--shadow);
+    }
+
+    .admin-home-card:hover {
+      border-color: var(--primary);
+      background: #F8FBFA;
+    }
+
+    .admin-home-card strong {
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 900;
+    }
+
+    .admin-home-card span {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 760;
+      line-height: 1.5;
+    }
+
+    .admin-home-card em {
+      margin-top: auto;
+      color: var(--primary-dark);
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 850;
+    }
+
+    .admin-home-card.wide {
+      grid-column: 1 / -1;
+      min-height: 128px;
+    }
+
+    .admin-home-card.admin-only {
+      position: relative;
+      border-color: rgba(201, 122, 36, 0.42);
+      background:
+        linear-gradient(135deg, rgba(255, 248, 236, 0.98) 0%, rgba(255, 255, 255, 0.98) 44%, rgba(228, 245, 242, 0.95) 100%);
+      box-shadow: 0 18px 44px rgba(120, 79, 18, 0.14);
+    }
+
+    .admin-home-card.admin-only::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 6px;
+      border-radius: 8px 0 0 8px;
+      background: linear-gradient(180deg, #D99A2B 0%, var(--primary) 100%);
+    }
+
+    .admin-home-card.admin-only:hover {
+      border-color: rgba(201, 122, 36, 0.68);
+      background:
+        linear-gradient(135deg, #FFF3DA 0%, #FFFFFF 44%, #E1F4F1 100%);
+    }
+
+    .admin-home-card.admin-only em {
+      width: fit-content;
+      padding: 6px 10px;
+      border: 1px solid rgba(201, 122, 36, 0.34);
+      border-radius: 999px;
+      background: #FFF1D9;
+      color: #7A4A0A;
+      font-weight: 950;
+    }
+
+    .video-view { display: grid; gap: 16px; }
+
+    .video-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #FFFFFF;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .video-summary-item {
+      min-height: 88px;
+      padding: 16px;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .video-summary-item:last-child { border-right: 0; }
+    .video-summary-item span { color: var(--muted); font-size: 13px; font-weight: 850; }
+    .video-summary-item strong { color: var(--text); font-size: 26px; line-height: 1; font-weight: 950; white-space: nowrap; }
+
+    .video-controls {
+      display: grid;
+      grid-template-columns: 180px minmax(220px, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .video-controls select,
+    .video-controls input {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: var(--text);
+      padding: 0 12px;
+      font-size: 15px;
+      font-weight: 800;
+      outline: none;
+    }
+
+    .video-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, 0.46fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .video-card {
+      min-height: 560px;
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-card-head {
+      min-height: 58px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .video-card-head h3 { margin: 0; font-size: 17px; font-weight: 950; }
+    .video-card-head span { color: var(--muted); font-size: 13px; font-weight: 800; white-space: nowrap; }
+    .video-table-wrap { overflow: auto; flex: 1 1 auto; min-height: 0; }
+    .video-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .video-table th, .video-table td { padding: 13px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+    .video-table th { color: var(--muted); background: #F8FAFA; font-size: 13px; font-weight: 900; }
+    .video-table td { color: var(--text); font-size: 14px; font-weight: 780; }
+    .video-table tr { cursor: pointer; }
+    .video-table tr:hover, .video-table tr.active { background: #F5FAF9; }
+    .video-table.learner-table th:nth-child(2),
+    .video-table.learner-table th:nth-child(4),
+    .video-table.learner-table td:nth-child(2),
+    .video-table.learner-table td:nth-child(4) { width: 110px; }
+    .video-table.learner-table th:nth-child(5),
+    .video-table.learner-table td:nth-child(5) { width: 170px; }
+
+    .video-cell-main { display: grid; gap: 4px; min-width: 0; }
+    .video-cell-main strong { font-size: 15px; font-weight: 950; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .video-cell-main span { color: var(--muted); font-size: 12px; font-weight: 780; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .video-count { color: var(--primary-dark); font-size: 20px; font-weight: 950; white-space: nowrap; }
+    .video-content-summary { color: var(--muted); font-size: 13px; font-weight: 850; line-height: 1.45; }
+
+    .video-detail { padding: 18px; display: grid; gap: 14px; }
+    .video-detail h3 { margin: 0; font-size: 20px; font-weight: 950; }
+    .video-detail p { margin: 0; color: var(--muted); font-size: 14px; font-weight: 760; line-height: 1.5; }
+    .video-detail-list { display: grid; gap: 8px; }
+    .video-detail-list div { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 42px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #F8FAFA; }
+    .video-detail-list span { color: var(--muted); font-size: 13px; font-weight: 850; }
+    .video-detail-list strong { color: var(--text); font-size: 14px; font-weight: 900; text-align: right; word-break: break-all; }
+    .video-type-list { display: grid; gap: 12px; }
+    .video-type-block { display: grid; gap: 8px; }
+    .video-type-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--text);
+    }
+    .video-type-head h4 { margin: 0; font-size: 15px; font-weight: 950; }
+    .video-type-head span { color: var(--muted); font-size: 12px; font-weight: 850; white-space: nowrap; }
+    .video-collection-list { display: grid; gap: 8px; }
+    .video-collection-row {
+      width: 100%;
+      min-height: 58px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: var(--text);
+      text-align: left;
+      box-shadow: none;
+    }
+    .video-collection-row:hover,
+    .video-collection-row.active {
+      border-color: rgba(20, 108, 115, 0.45);
+      background: #F3FAF8;
+    }
+    .video-collection-main { display: grid; gap: 3px; min-width: 0; }
+    .video-collection-main strong { font-size: 14px; font-weight: 950; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .video-collection-main em { color: var(--muted); font-size: 12px; font-style: normal; font-weight: 760; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .video-collection-meta { color: var(--primary-dark); font-size: 13px; font-weight: 950; white-space: nowrap; }
+    .video-question-panel {
+      display: grid;
+      gap: 8px;
+      padding-top: 2px;
+    }
+    .video-question-panel h4 { margin: 0; font-size: 15px; font-weight: 950; }
+    .video-question-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .video-question-table th,
+    .video-question-table td {
+      padding: 10px 9px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 820;
+      vertical-align: middle;
+    }
+    .video-question-table th { color: var(--muted); background: #F8FAFA; font-weight: 900; }
+    .video-question-table tr:last-child td { border-bottom: 0; }
+    .video-question-table td:nth-child(2) { color: var(--primary-dark); font-weight: 950; white-space: nowrap; }
+
+    .view-bar {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 2px;
+    }
+
+    .view-bar h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .view-bar p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .view-back {
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      background: #FFFFFF;
+      color: var(--primary-dark);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label, .group-title {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      min-height: 46px;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      padding: 0 14px;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 700;
+      background: #F8FAFC;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 4px rgba(14, 116, 144, 0.14);
+    }
+
+    .radio-row, .check-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .choice {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 9px 12px;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .choice input { width: 16px; height: 16px; margin: 0; }
+
+    .scope-block {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #F8FAFC;
+    }
+
+    .scope-block + .scope-block { margin-top: 12px; }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      min-width: 112px;
+    }
+
+    button {
+      min-height: 44px;
+      border: 0;
+      border-radius: 8px;
+      padding: 0 18px;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .btn-primary { background: var(--primary); color: #FFFFFF; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-orange { background: var(--orange); color: #FFFFFF; }
+    .btn-ghost { background: #EEF4F7; color: var(--primary-dark); }
+
+    .message {
+      min-height: 46px;
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #F8FAFC;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .message.success { border-color: #B8E4C4; color: var(--success); background: #F0FFF4; }
+    .message.error { border-color: #F0B8B4; color: var(--danger); background: #FFF7F6; }
+
+    .summary {
+      display: grid;
+      align-content: start;
+      gap: 12px;
+    }
+
+    .summary h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .summary-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 12px;
+      border-radius: 8px;
+      background: #F8FAFC;
+      border: 1px solid var(--line);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .summary-list span:first-child { color: var(--muted); }
+    .summary-list span:last-child { text-align: right; }
+
+    .registered-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .registered-head h2 { margin: 0; }
+
+    .btn-small {
+      min-height: 34px;
+      padding: 0 12px;
+      font-size: 13px;
+      background: #EEF4F7;
+      color: var(--primary-dark);
+    }
+
+    .registered-list {
+      display: grid;
+      gap: 8px;
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .trial-panel {
+      position: relative;
+      display: grid;
+      grid-column: 1 / -1;
+      gap: 0;
+      margin-top: 4px;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid #C9DBD8;
+      border-radius: 8px;
+      background: #F6FAF8;
+      box-shadow: 0 24px 56px rgba(14, 55, 59, 0.16);
+    }
+
+    .trial-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      z-index: 2;
+      height: 5px;
+      background: linear-gradient(90deg, #E7A33C 0%, #27A18A 48%, #356B8C 100%);
+    }
+
+    .trial-panel-head {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 24px 22px 22px;
+      color: #FFFFFF;
+      background:
+        linear-gradient(135deg, #123B3F 0%, #146C73 54%, #6E7B46 100%);
+    }
+
+    .trial-title-block {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .trial-kicker {
+      margin: 0;
+      color: #F8DDA9;
+      font-size: 11px;
+      font-weight: 950;
+      line-height: 1.2;
+    }
+
+    .trial-title-block h2 {
+      margin: 0;
+      color: #FFFFFF;
+      font-size: 26px;
+      line-height: 1.25;
+      font-weight: 950;
+    }
+
+    .trial-sub {
+      margin: 0;
+      max-width: 420px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.55;
+    }
+
+    .trial-live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 32px;
+      padding: 8px 11px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+      box-shadow: 0 12px 26px rgba(9, 35, 38, 0.18);
+    }
+
+    .trial-live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #7BE3A8;
+      box-shadow: 0 0 0 4px rgba(123, 227, 168, 0.18);
+    }
+
+    .trial-filter-row {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      padding: 18px 18px 0;
+      background: #F6FAF8;
+    }
+
+    .trial-filter {
+      min-height: 36px;
+      padding: 0 13px;
+      border: 1px solid #C9DBD8;
+      border-radius: 999px;
+      background: #FFFFFF;
+      color: #526469;
+      font-size: 12px;
+      font-weight: 950;
+      box-shadow: 0 8px 18px rgba(14, 55, 59, 0.06);
+    }
+
+    .trial-filter.active {
+      border-color: rgba(20, 108, 115, 0.34);
+      background: #DFF1EE;
+      color: var(--primary-dark);
+    }
+
+    .trial-metrics {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 16px 18px 14px;
+      background: #F6FAF8;
+    }
+
+    .trial-metric {
+      position: relative;
+      min-width: 0;
+      padding: 14px 14px 13px;
+      overflow: hidden;
+      border: 1px solid #DCE8E6;
+      border-radius: 8px;
+      background: #FFFFFF;
+      box-shadow: 0 12px 26px rgba(14, 55, 59, 0.07);
+    }
+
+    .trial-metric::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: #95A3A6;
+    }
+
+    .trial-metric span {
+      display: block;
+      color: #58686C;
+      font-size: 11px;
+      font-weight: 950;
+      line-height: 1.2;
+    }
+
+    .trial-metric strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--text);
+      font-size: 26px;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .trial-metric.accent {
+      grid-column: 1 / -1;
+      padding: 17px 16px;
+      border-color: rgba(20, 108, 115, 0.26);
+      background: linear-gradient(135deg, #E4F5F2 0%, #FFFFFF 68%);
+    }
+
+    .trial-metric.accent::before { background: var(--primary); }
+    .trial-metric.accent strong { font-size: 34px; }
+
+    .trial-metric.pass::before {
+      background: var(--success);
+    }
+
+    .trial-metric.pass {
+      border-color: rgba(21, 128, 61, 0.22);
+      background: linear-gradient(180deg, #F1FBF5 0%, #FFFFFF 100%);
+    }
+
+    .trial-metric.incomplete::before {
+      background: var(--orange);
+    }
+
+    .trial-metric.incomplete {
+      border-color: rgba(201, 122, 36, 0.26);
+      background: linear-gradient(180deg, #FFF8EC 0%, #FFFFFF 100%);
+    }
+
+    .trial-metric.duplicate::before {
+      background: var(--danger);
+    }
+
+    .trial-metric.duplicate {
+      border-color: rgba(178, 59, 53, 0.22);
+      background: linear-gradient(180deg, #FFF2F0 0%, #FFFFFF 100%);
+    }
+
+    .trial-result-list {
+      position: relative;
+      display: grid;
+      gap: 12px;
+      max-height: 640px;
+      overflow: auto;
+      padding: 0 18px 18px;
+      background: #F6FAF8;
+    }
+
+    .trial-workspace {
+      display: grid;
+      grid-template-columns: minmax(340px, 0.42fr) minmax(0, 0.58fr);
+      gap: 16px;
+      padding: 0 20px 20px;
+      background: #F6FAF8;
+    }
+
+    .trial-workspace .trial-result-list {
+      max-height: 620px;
+      padding: 0;
+      background: transparent;
+    }
+
+    .trial-person-row {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px 12px;
+      align-items: start;
+      min-height: 96px;
+      padding: 13px 14px;
+      border: 1px solid #DCE8E6;
+      border-left: 5px solid #95A3A6;
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: var(--text);
+      text-align: left;
+      box-shadow: 0 10px 22px rgba(14, 55, 59, 0.07);
+      cursor: pointer;
+    }
+
+    .trial-person-row.pass { border-left-color: var(--success); }
+    .trial-person-row.fail { border-left-color: var(--danger); }
+    .trial-person-row.incomplete { border-left-color: var(--orange); }
+    .trial-person-row.duplicate { background: linear-gradient(180deg, #FFFFFF 0%, #FFF8F6 100%); }
+    .trial-person-row.active {
+      border-color: rgba(20, 108, 115, 0.42);
+      border-left-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(20, 108, 115, 0.12), 0 12px 26px rgba(14, 55, 59, 0.09);
+    }
+
+    .trial-person-main {
+      min-width: 0;
+      display: grid;
+      gap: 5px;
+    }
+
+    .trial-person-name {
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 950;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .trial-person-sub {
+      color: #56676B;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .trial-person-side {
+      display: grid;
+      gap: 5px;
+      justify-items: end;
+      text-align: right;
+    }
+
+    .trial-person-score {
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 950;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .trial-person-meta {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      color: #56676B;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .trial-person-meta span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 7px;
+      border: 1px solid #DCE8E6;
+      border-radius: 999px;
+      background: #FFFFFF;
+    }
+
+    .trial-detail-panel {
+      min-width: 0;
+      max-height: 620px;
+      overflow: auto;
+      border: 1px solid #DCE8E6;
+      border-radius: 8px;
+      background: #FFFFFF;
+      box-shadow: 0 12px 26px rgba(14, 55, 59, 0.07);
+    }
+
+    .trial-detail-empty {
+      display: grid;
+      place-items: center;
+      min-height: 240px;
+      padding: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1.5;
+      text-align: center;
+      background: linear-gradient(180deg, #FFFFFF 0%, #F8FBFA 100%);
+    }
+
+    .trial-detail-head {
+      display: grid;
+      gap: 8px;
+      padding: 18px;
+      border-bottom: 1px solid #DCE8E6;
+      background: linear-gradient(135deg, #F3FAF8 0%, #FFFFFF 72%);
+    }
+
+    .trial-detail-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .trial-detail-title {
+      margin: 0;
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.25;
+      font-weight: 950;
+      overflow-wrap: anywhere;
+    }
+
+    .trial-detail-sub {
+      margin: 0;
+      color: #56676B;
+      font-size: 12px;
+      line-height: 1.5;
+      font-weight: 850;
+    }
+
+    .trial-detail-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 14px 18px;
+      border-bottom: 1px solid #DCE8E6;
+      background: #FFFFFF;
+    }
+
+    .trial-detail-stat {
+      display: grid;
+      gap: 4px;
+      padding: 10px;
+      border: 1px solid #DCE8E6;
+      border-radius: 8px;
+      background: #F8FBFA;
+    }
+
+    .trial-detail-stat span {
+      color: #56676B;
+      font-size: 11px;
+      font-weight: 950;
+    }
+
+    .trial-detail-stat strong {
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 950;
+      line-height: 1.1;
+    }
+
+    .trial-attempt-list {
+      display: grid;
+      gap: 10px;
+      padding: 14px 18px 18px;
+    }
+
+    .trial-attempt-card {
+      display: grid;
+      gap: 10px;
+      padding: 13px;
+      border: 1px solid #DCE8E6;
+      border-radius: 8px;
+      background: #FFFFFF;
+    }
+
+    .trial-attempt-card.representative {
+      border-color: rgba(20, 108, 115, 0.32);
+      background: linear-gradient(180deg, #F3FAF8 0%, #FFFFFF 100%);
+    }
+
+    .trial-attempt-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .trial-attempt-title {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 950;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .trial-attempt-id {
+      margin-top: 3px;
+      color: #56676B;
+      font-size: 12px;
+      font-weight: 850;
+      overflow-wrap: anywhere;
+    }
+
+    .trial-row {
+      display: grid;
+      gap: 12px;
+      padding: 15px;
+      border: 1px solid #DCE8E6;
+      border-radius: 8px;
+      background: #FFFFFF;
+      box-shadow: 0 12px 26px rgba(14, 55, 59, 0.08);
+    }
+
+    .trial-row.pass { border-left: 6px solid var(--success); }
+    .trial-row.fail { border-left: 6px solid var(--danger); }
+    .trial-row.incomplete { border-left: 6px solid var(--orange); }
+    .trial-row.duplicate {
+      border-color: rgba(178, 59, 53, 0.28);
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFF6F4 100%);
+    }
+
+    .trial-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .trial-name {
+      min-width: 0;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 950;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .trial-id {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      overflow-wrap: anywhere;
+    }
+
+    .trial-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .trial-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 25px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .trial-badge.pass { background: #E7F8ED; color: var(--success); }
+    .trial-badge.fail { background: #FFEAE7; color: var(--danger); }
+    .trial-badge.incomplete { background: #FFF1D9; color: #8F520A; }
+    .trial-badge.duplicate { background: #FFEAE7; color: var(--danger); }
+
+    .trial-score {
+      display: grid;
+      grid-template-columns: minmax(82px, auto) minmax(0, 1fr);
+      gap: 8px 12px;
+      align-items: baseline;
+      padding: 12px;
+      border: 1px solid #DCE8E6;
+      border-radius: 8px;
+      background: #F8FBFA;
+      color: #56676B;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.35;
+    }
+
+    .trial-score strong {
+      color: var(--text);
+      font-size: 22px;
+      font-weight: 950;
+    }
+
+    .trial-score-bar {
+      grid-column: 1 / -1;
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #E4ECEA;
+    }
+
+    .trial-score-bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #C97A24 0%, #27A18A 100%);
+    }
+
+    .trial-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      color: #56676B;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+
+    .trial-meta span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 7px;
+      border: 1px solid #DCE8E6;
+      border-radius: 999px;
+      background: #FFFFFF;
+    }
+
+    .trial-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .trial-delete-btn {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid rgba(178, 59, 53, 0.28);
+      border-radius: 8px;
+      background: #FFEAE7;
+      color: var(--danger);
+      font-size: 12px;
+      font-weight: 950;
+      cursor: pointer;
+    }
+
+    .trial-delete-btn:hover {
+      background: #FFE7E3;
+    }
+
+    .trial-delete-btn:disabled {
+      cursor: wait;
+      opacity: 0.62;
+    }
+
+    .user-row {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px 12px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px 12px;
+      background: #FFFFFF;
+      color: var(--text);
+      text-align: left;
+      box-shadow: none;
+      cursor: pointer;
+    }
+
+    .user-row:hover { border-color: var(--primary); background: #F2FBFD; }
+    .user-main { min-width: 0; }
+    .user-id { font-size: 14px; font-weight: 900; color: var(--text); }
+    .user-name { margin-top: 3px; font-size: 13px; font-weight: 800; color: var(--muted); }
+    .user-state { font-size: 12px; font-weight: 900; color: var(--success); }
+    .user-state.disabled { color: var(--danger); }
+    .user-scope {
+      grid-column: 1 / -1;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .empty-list {
+      padding: 14px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: #F8FAFC;
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .access-denied {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .access-denied section {
+      width: min(480px, 100%);
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #FFFFFF;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .access-denied h1 { font-size: 24px; margin-bottom: 10px; }
+    .access-denied p { margin: 0; color: var(--muted); font-weight: 800; line-height: 1.55; }
+
+    pre {
+      overflow: auto;
+      max-height: 320px;
+      margin: 0;
+      padding: 14px;
+      border-radius: 8px;
+      background: #111827;
+      color: #E5E7EB;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 940px) {
+      main { width: min(100% - 20px, 720px); padding-top: 18px; }
+      header { align-items: flex-start; flex-direction: column; }
+      .layout, .form-grid { grid-template-columns: 1fr; }
+      .panel { padding: 16px; }
+      .actions { justify-content: stretch; }
+      button { width: 100%; }
+      .registered-head { align-items: stretch; flex-direction: column; }
+      .trial-panel { padding: 0; }
+      .trial-panel-head { flex-direction: column; }
+      .trial-live-pill { width: 100%; justify-content: center; }
+      .trial-filter { width: auto; }
+      .trial-metrics { grid-template-columns: 1fr; }
+      .trial-workspace { grid-template-columns: 1fr; }
+      .trial-detail-panel { max-height: none; }
+      .trial-detail-summary { grid-template-columns: 1fr; }
+      .trial-person-row { grid-template-columns: 1fr; }
+      .trial-person-side { justify-items: start; text-align: left; }
+      .trial-top { grid-template-columns: 1fr; }
+      .trial-attempt-top { grid-template-columns: 1fr; }
+      .trial-badges { justify-content: flex-start; }
+      .trial-actions { justify-content: stretch; }
+      .trial-delete-btn { width: 100%; }
+    }
+
+    /* v0 시안 기반 실전 모의시험 결과 영역 */
+    .trial-panel {
+      gap: 0;
+      margin-top: 8px;
+      overflow: visible;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .trial-panel::before { display: none; }
+
+    .trial-panel-head {
+      align-items: flex-end;
+      gap: 18px;
+      padding: 10px 0 22px;
+      color: var(--text);
+      background: transparent;
+    }
+
+    .trial-title-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .trial-title-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      border-radius: 14px;
+      background: #151A1F;
+      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: 950;
+      box-shadow: 0 12px 24px rgba(16, 24, 40, 0.16);
+    }
+
+    .trial-kicker {
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .trial-title-block h2 {
+      color: var(--text);
+      font-size: 24px;
+      font-weight: 950;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .trial-sub {
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    .trial-live-pill {
+      border: 1px solid var(--line);
+      background: #FFFFFF;
+      color: var(--primary-dark);
+      box-shadow: 0 10px 24px rgba(14, 55, 59, 0.08);
+    }
+
+    .trial-filter-row {
+      gap: 8px;
+      padding: 0 0 16px;
+      background: transparent;
+    }
+
+    .trial-filter {
+      min-height: 36px;
+      border-color: var(--line);
+      border-radius: 999px;
+      background: #FFFFFF;
+      color: #44545A;
+      box-shadow: 0 6px 16px rgba(14, 55, 59, 0.06);
+    }
+
+    .trial-filter.active {
+      border-color: rgba(20, 108, 115, 0.32);
+      background: #E5F4F2;
+      color: var(--primary-dark);
+    }
+
+    .trial-metrics {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      padding: 0 0 22px;
+      background: transparent;
+    }
+
+    .trial-metric,
+    .trial-metric.accent {
+      grid-column: auto;
+      display: grid;
+      gap: 12px;
+      min-height: 112px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #FFFFFF;
+      box-shadow: 0 10px 22px rgba(16, 24, 40, 0.06);
+    }
+
+    .trial-metric::before { display: none; }
+
+    .trial-metric-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .trial-metric span.trial-metric-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .trial-metric-value {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .trial-metric-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: #EEF5F3;
+      color: var(--primary-dark);
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .trial-metric.pass .trial-metric-icon { background: #E7F8ED; color: var(--success); }
+    .trial-metric.incomplete .trial-metric-icon { background: #FFF1D9; color: #8F520A; }
+    .trial-metric.duplicate .trial-metric-icon { background: #FFEAE7; color: var(--danger); }
+
+    .trial-metric strong,
+    .trial-metric.accent strong {
+      margin: 0;
+      color: var(--text);
+      font-size: 28px;
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .trial-metric-unit {
+      display: inline;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .trial-metric span.trial-metric-unit {
+      display: inline;
+      font-size: 13px;
+      line-height: 1;
+    }
+
+    .trial-workspace {
+      grid-template-columns: minmax(0, 7fr) minmax(360px, 5fr);
+      gap: 16px;
+      padding: 0;
+      background: transparent;
+    }
+
+    .trial-workspace .trial-result-list,
+    .trial-result-list {
+      display: block;
+      max-height: none;
+      overflow: visible;
+      padding: 0;
+      background: transparent;
+    }
+
+    .trial-list-card,
+    .trial-detail-panel {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #FFFFFF;
+      box-shadow: 0 10px 24px rgba(16, 24, 40, 0.06);
+    }
+
+    .trial-list-head,
+    .trial-retest-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 16px 18px 0;
+      padding: 16px;
+      border: 1px solid #D7A173;
+      border-radius: 10px;
+      background: #FFF9F3;
+    }
+
+    .trial-retest-card.approved {
+      border-color: #9CCDB4;
+      background: #F4FBF7;
+    }
+
+    .trial-retest-card strong {
+      display: block;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 950;
+    }
+
+    .trial-retest-card span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+      line-height: 1.45;
+    }
+
+    .trial-retest-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .trial-approve-retest-btn {
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid #B96B34;
+      border-radius: 8px;
+      background: #8A3A13;
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .trial-approve-retest-btn:disabled {
+      cursor: default;
+      opacity: .72;
+    }
+    .trial-history-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .trial-list-head h3,
+    .trial-history-title h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 950;
+    }
+
+    .trial-list-head span,
+    .trial-history-title span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+    }
+
+    .trial-table-wrap {
+      max-height: 640px;
+      overflow: auto;
+    }
+
+    .trial-table {
+      width: 100%;
+      border-collapse: collapse;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .trial-table th {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .trial-table td {
+      padding: 13px 14px;
+      border-bottom: 1px solid rgba(220, 232, 230, 0.78);
+      vertical-align: middle;
+    }
+
+    .trial-table tbody tr {
+      cursor: pointer;
+      transition: background 0.16s ease;
+    }
+
+    .trial-table tbody tr:hover,
+    .trial-table tbody tr.active {
+      background: #F2F8F7;
+    }
+
+    .trial-table tbody tr:last-child td { border-bottom: 0; }
+
+    .trial-cell-main {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .trial-cell-name {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+      color: var(--text);
+      font-weight: 950;
+      overflow-wrap: anywhere;
+    }
+
+    .trial-cell-sub {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+      overflow-wrap: anywhere;
+    }
+
+    .trial-table-score {
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .trial-score-pair {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text);
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .trial-score-pair span:nth-child(2) { color: var(--muted); }
+
+    .trial-row-arrow {
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 850;
+      text-align: right;
+    }
+
+    .trial-row-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .trial-row-actions .trial-delete-btn {
+      min-width: 82px;
+      white-space: nowrap;
+    }
+
+    .trial-person-delete {
+      align-self: center;
+      justify-self: end;
+      width: auto;
+      white-space: nowrap;
+    }
+
+    .trial-mobile-list { display: none; }
+
+    .trial-person-row {
+      min-height: 0;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .trial-person-row.active,
+    .trial-person-row:hover {
+      background: #F2F8F7;
+      box-shadow: none;
+    }
+
+    .trial-detail-panel {
+      max-height: 680px;
+      overflow: auto;
+    }
+
+    .trial-detail-head {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #FFFFFF;
+    }
+
+    .trial-detail-title {
+      font-size: 20px;
+      font-weight: 950;
+    }
+
+    .trial-detail-sub {
+      margin-top: 3px;
+      color: var(--muted);
+      font-weight: 760;
+    }
+
+    .trial-detail-count {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: #F2F5F6;
+      color: #344247;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .trial-duplicate-alert {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 16px 18px 0;
+      padding: 15px;
+      border: 1px solid rgba(178, 59, 53, 0.26);
+      border-radius: 12px;
+      background: #FFF7F6;
+    }
+
+    .trial-duplicate-alert strong {
+      display: block;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 950;
+    }
+
+    .trial-duplicate-alert span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+      line-height: 1.45;
+    }
+
+    .trial-history-title {
+      margin-top: 16px;
+      padding-bottom: 10px;
+      border-bottom: 0;
+    }
+
+    .trial-attempt-list {
+      display: grid;
+      gap: 12px;
+      padding: 0 18px 18px;
+    }
+
+    .trial-attempt-card {
+      gap: 12px;
+      padding: 16px;
+      border-radius: 12px;
+      background: #FFFFFF;
+    }
+
+    .trial-attempt-card.representative {
+      border-color: rgba(20, 108, 115, 0.36);
+      background: #F5FBFA;
+    }
+
+    .trial-attempt-title {
+      font-size: 15px;
+      font-weight: 950;
+    }
+
+    .trial-attempt-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .trial-attempt-stat {
+      display: grid;
+      gap: 4px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #F6F8F8;
+    }
+
+    .trial-attempt-stat span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 760;
+    }
+
+    .trial-attempt-stat strong {
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 950;
+      line-height: 1.15;
+    }
+
+    .trial-attempt-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 760;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 1120px) {
+      .trial-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .trial-workspace { grid-template-columns: 1fr; }
+      .trial-detail-panel { max-height: none; }
+    }
+
+    @media (max-width: 940px) {
+      .trial-panel-head {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .trial-live-pill {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .trial-title-block h2 {
+        font-size: 22px;
+        line-height: 1.28;
+      }
+
+      .trial-title-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+      }
+
+      .trial-metrics { grid-template-columns: 1fr; }
+      .trial-table-wrap { display: none; }
+      .trial-mobile-list {
+        display: grid;
+        max-height: none;
+        overflow: visible;
+      }
+
+      .trial-person-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px 12px;
+        width: 100%;
+        padding: 14px 16px;
+        border-top: 1px solid rgba(220, 232, 230, 0.78);
+        background: #FFFFFF;
+        color: var(--text);
+        text-align: left;
+      }
+
+      .trial-person-side {
+        justify-items: end;
+        text-align: right;
+      }
+
+      .trial-person-meta {
+        grid-column: 1 / -1;
+      }
+
+      .trial-attempt-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .trial-duplicate-alert {
+        align-items: stretch;
+        flex-direction: column;
+      }
+    }
+
+    /* Uncodixfy pass: remove decorative AI-dashboard styling, keep functional hierarchy. */
+    body {
+      background: #F6F8F7;
+    }
+
+    :root {
+      --shadow: 0 2px 8px rgba(16, 24, 40, 0.08);
+    }
+
+    .panel,
+    .trial-list-card,
+    .trial-detail-panel {
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .status-pill,
+    .trial-live-pill,
+    .trial-filter,
+    .trial-badge,
+    .trial-detail-count,
+    .trial-delete-btn,
+    button,
+    .choice,
+    .scope-block,
+    .message,
+    .summary-list li,
+    .user-row,
+    .trial-attempt-card,
+    .trial-attempt-stat,
+    .trial-duplicate-alert {
+      border-radius: 8px;
+    }
+
+    .trial-title-icon,
+    .trial-metric-icon,
+    .trial-live-dot {
+      display: none;
+    }
+
+    .trial-panel-head {
+      align-items: flex-start;
+      padding: 8px 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .trial-title-wrap {
+      display: block;
+    }
+
+    .trial-kicker {
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .trial-title-block h2 {
+      font-size: 23px;
+    }
+
+    .trial-sub {
+      margin-top: 5px;
+      color: #4F5E64;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .trial-live-pill {
+      min-height: auto;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #4F5E64;
+      box-shadow: none;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .trial-filter-row {
+      gap: 6px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .trial-filter {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      background: #FFFFFF;
+      color: #344247;
+      box-shadow: none;
+      font-weight: 850;
+    }
+
+    .trial-filter.active {
+      border-color: var(--primary);
+      background: #F4F9F8;
+      color: var(--primary-dark);
+    }
+
+    .trial-metrics {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0;
+      padding: 14px 0 18px;
+    }
+
+    .trial-metric,
+    .trial-metric.accent,
+    .trial-metric.pass,
+    .trial-metric.incomplete,
+    .trial-metric.duplicate {
+      min-height: 76px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-right-width: 0;
+      border-radius: 0;
+      background: #FFFFFF;
+      box-shadow: none;
+    }
+
+    .trial-metric:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    .trial-metric:last-child {
+      border-right-width: 1px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .trial-metric-top {
+      display: block;
+    }
+
+    .trial-metric span.trial-metric-label {
+      color: #4F5E64;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .trial-metric strong,
+    .trial-metric.accent strong {
+      margin-top: 10px;
+      display: inline;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .trial-metric-unit {
+      color: #4F5E64;
+      display: inline;
+      margin-left: 0;
+    }
+
+    .trial-metric span.trial-metric-unit {
+      display: inline;
+      margin-left: 3px;
+    }
+
+    .trial-metric-value {
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+      margin-top: 10px;
+      white-space: nowrap;
+    }
+
+    .trial-list-head,
+    .trial-history-title {
+      padding: 13px 16px;
+    }
+
+    .trial-list-head h3,
+    .trial-history-title h3 {
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .trial-list-head span,
+    .trial-history-title span,
+    .trial-cell-sub,
+    .trial-detail-sub,
+    .trial-attempt-id,
+    .trial-attempt-note {
+      color: #4F5E64;
+    }
+
+    .trial-table th {
+      color: #4F5E64;
+      font-weight: 800;
+    }
+
+    .trial-table tbody tr:hover,
+    .trial-table tbody tr.active,
+    .trial-person-row.active,
+    .trial-person-row:hover {
+      background: #F4F7F6;
+    }
+
+    .trial-badge {
+      min-height: 22px;
+      padding: 3px 7px;
+      border: 1px solid transparent;
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .trial-badge.pass {
+      border-color: #BFE1CD;
+      background: #F3FBF6;
+    }
+
+    .trial-badge.fail,
+    .trial-badge.duplicate {
+      border-color: #F0C8C5;
+      background: #FFF7F6;
+    }
+
+    .trial-badge.incomplete {
+      border-color: #EED8B8;
+      background: #FFFAF1;
+    }
+
+    .trial-detail-head {
+      padding: 16px;
+    }
+
+    .trial-detail-title {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .trial-detail-count {
+      border: 1px solid var(--line);
+      background: #FFFFFF;
+      color: #344247;
+    }
+
+    .trial-duplicate-alert {
+      margin: 14px 16px 0;
+      padding: 13px;
+      background: #FFF9F8;
+    }
+
+    .trial-attempt-list {
+      gap: 10px;
+      padding: 0 16px 16px;
+    }
+
+    .trial-attempt-card {
+      padding: 14px;
+      box-shadow: none;
+    }
+
+    .trial-attempt-card.representative {
+      background: #F7FBFA;
+    }
+
+    .trial-attempt-stat {
+      background: #F6F8F7;
+    }
+
+    .trial-delete-btn {
+      border-color: #E3AAA6;
+      background: #FFFFFF;
+    }
+
+    /* 공통 화면 정렬과 등록 화면 가독성 보정 */
+    main {
+      width: min(1240px, calc(100% - 40px));
+      padding-top: 28px;
+    }
+
+    header {
+      min-height: 54px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      font-size: 32px;
+      line-height: 1.2;
+    }
+
+    .status-pill {
+      min-height: 38px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .admin-home,
+    .layout,
+    .trial-panel {
+      margin-top: 0;
+    }
+
+    .admin-home-title,
+    .view-bar,
+    .trial-panel-head {
+      min-height: 118px;
+      padding: 18px 0 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .admin-home-title {
+      align-content: start;
+      border-top: 0;
+    }
+
+    .admin-home-title h2,
+    .view-bar h2,
+    .trial-title-block h2 {
+      font-size: 26px;
+      line-height: 1.24;
+      font-weight: 950;
+    }
+
+    .admin-home-title p,
+    .view-bar p,
+    .trial-sub {
+      max-width: none;
+      font-size: 16px;
+      line-height: 1.55;
+      font-weight: 760;
+    }
+
+    .admin-home-grid {
+      align-items: stretch;
+      gap: 16px;
+      padding-top: 0;
+    }
+
+    .admin-home-card {
+      min-height: 170px;
+      height: 100%;
+      padding: 24px;
+      box-shadow: 0 8px 20px rgba(16, 24, 40, 0.06);
+    }
+
+    .admin-home-card strong {
+      font-size: 23px;
+    }
+
+    .admin-home-card span {
+      font-size: 16px;
+    }
+
+    .admin-home-card em {
+      font-size: 15px;
+    }
+
+    .view-bar {
+      margin-bottom: 18px;
+    }
+
+    .view-back {
+      min-height: 40px;
+      padding: 0 16px;
+      font-size: 15px;
+      border-radius: 8px;
+    }
+
+    .layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    #registration-view > .panel,
+    #registration-view > .summary {
+      min-height: 720px;
+    }
+
+    .panel {
+      padding: 24px;
+      box-shadow: 0 8px 20px rgba(16, 24, 40, 0.06);
+    }
+
+    .field {
+      gap: 8px;
+    }
+
+    label,
+    .group-title {
+      font-size: 15px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      min-height: 52px;
+      font-size: 17px;
+    }
+
+    .choice {
+      min-height: 44px;
+      padding: 10px 14px;
+      font-size: 16px;
+    }
+
+    .choice input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .scope-block {
+      min-height: 148px;
+      gap: 12px;
+      padding: 16px;
+    }
+
+    button {
+      min-height: 46px;
+      font-size: 16px;
+    }
+
+    .summary h2,
+    .registered-head h2 {
+      font-size: 22px;
+      line-height: 1.25;
+    }
+
+    .summary-list li {
+      min-height: 48px;
+      align-items: center;
+      font-size: 16px;
+    }
+
+    pre {
+      max-height: 306px;
+      font-size: 13px;
+    }
+
+    .registered-head {
+      margin-top: 18px;
+    }
+
+    .registered-list {
+      gap: 8px;
+      max-height: 430px;
+      padding-right: 4px;
+    }
+
+    .summary {
+      gap: 18px;
+    }
+
+    .summary-list {
+      gap: 10px;
+    }
+
+    .summary-list li {
+      min-height: 50px;
+      padding: 12px 14px;
+      background: #F8FBFA;
+    }
+
+    .user-row {
+      min-height: 92px;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: start;
+      gap: 8px 10px;
+      padding: 14px 15px;
+      border-color: #D3E0DD;
+      border-left: 4px solid #D3E0DD;
+      background: #FFFFFF;
+      box-shadow: none;
+    }
+
+    .user-row:hover {
+      border-color: #98BCB8;
+      border-left-color: var(--primary);
+      background: #FBFDFD;
+    }
+
+    .user-main {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+    }
+
+    .user-id {
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .user-name {
+      margin-top: 0;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .user-scope {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 2px;
+      font-size: 14px;
+    }
+
+    .user-scope span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 9px;
+      border: 1px solid #DCE8E6;
+      border-radius: 8px;
+      background: #F8FAFC;
+      color: #415055;
+      font-weight: 850;
+    }
+
+    .user-state {
+      align-self: start;
+      min-height: 30px;
+      padding: 5px 10px;
+      border: 1px solid #BFD9C9;
+      border-radius: 8px;
+      background: #F3FAF5;
+      font-size: 14px;
+    }
+
+    .user-delete-btn {
+      align-self: start;
+      min-height: 30px;
+      padding: 0 10px;
+      border: 1px solid #E3AAA6;
+      background: #FFFFFF;
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .trial-panel-head {
+      align-items: flex-start;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .trial-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+    }
+
+    .trial-live-pill {
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: #344247;
+      font-size: 14px;
+      box-shadow: none;
+    }
+
+    .trial-head-actions .view-back {
+      flex: 0 0 auto;
+    }
+
+    .user-row:focus-visible,
+    .user-delete-btn:focus-visible {
+      outline: 3px solid rgba(9, 121, 112, 0.24);
+      outline-offset: 2px;
+    }
+
+    .user-delete-btn:hover {
+      background: #FFF7F6;
+      border-color: #D96B64;
+    }
+
+    .trial-filter-row {
+      padding: 16px 0;
+    }
+
+    .trial-filter {
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .trial-metrics {
+      padding: 16px 0 18px;
+    }
+
+    .trial-metric,
+    .trial-metric.accent,
+    .trial-metric.pass,
+    .trial-metric.incomplete,
+    .trial-metric.duplicate {
+      display: grid;
+      min-height: 96px;
+      height: 96px;
+      align-content: center;
+      gap: 8px;
+      padding: 14px 16px;
+    }
+
+    .trial-metric span.trial-metric-label {
+      font-size: 15px;
+    }
+
+    .trial-metric-value {
+      margin-top: 0;
+      align-items: baseline;
+    }
+
+    .trial-metric-value strong {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .trial-metric strong,
+    .trial-metric.accent strong {
+      margin-top: 0;
+      font-size: 28px;
+    }
+
+    .trial-workspace {
+      align-items: stretch;
+    }
+
+    .trial-list-card,
+    .trial-detail-panel {
+      height: 620px;
+      min-height: 620px;
+      max-height: 620px;
+    }
+
+    .trial-list-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .trial-table-wrap {
+      flex: 1 1 auto;
+      min-height: 0;
+      height: auto;
+      max-height: none;
+      overflow: auto;
+    }
+
+    .trial-detail-panel {
+      overflow: auto;
+    }
+
+    .trial-detail-empty {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .trial-list-head h3,
+    .trial-history-title h3 {
+      font-size: 18px;
+    }
+
+    .trial-list-head span,
+    .trial-history-title span {
+      font-size: 15px;
+    }
+
+    .trial-table {
+      font-size: 16px;
+    }
+
+    .trial-table th {
+      font-size: 14px;
+    }
+
+    .trial-table td {
+      padding: 15px 16px;
+    }
+
+    .trial-table th:nth-child(5),
+    .trial-table td:nth-child(5) {
+      min-width: 152px;
+      white-space: nowrap;
+    }
+
+    .trial-table tbody tr {
+      height: 74px;
+    }
+
+    .trial-name {
+      font-size: 17px;
+    }
+
+    .trial-cell-sub {
+      font-size: 15px;
+    }
+
+    .trial-detail-title {
+      font-size: 22px;
+    }
+
+    .trial-detail-sub,
+    .trial-attempt-id,
+    .trial-attempt-note {
+      font-size: 15px;
+    }
+
+    .trial-attempt-title {
+      font-size: 17px;
+    }
+
+    .trial-attempt-stat span {
+      font-size: 14px;
+    }
+
+    .trial-attempt-stat strong {
+      font-size: 17px;
+    }
+
+    @media (max-width: 1120px) {
+      .trial-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .video-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .video-summary-item { min-height: 76px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .video-summary-item:nth-child(odd) { border-right: 1px solid var(--line); }
+      .video-summary-item:nth-last-child(-n+2) { border-bottom: 0; }
+      .video-summary-item strong { font-size: 20px; }
+      .video-controls { grid-template-columns: 1fr; }
+      .video-layout { grid-template-columns: 1fr; }
+      .video-card { min-height: 420px; }
+      .video-table { min-width: 760px; }
+      .video-collection-row { grid-template-columns: minmax(0, 1fr) auto; }
+      .video-collection-row .video-collection-main { grid-column: 1 / -1; }
+      .video-collection-row .video-collection-meta:last-child { justify-self: end; }
+      .video-question-panel { overflow-x: auto; }
+      .video-question-table { min-width: 620px; }
+
+      .trial-metric,
+      .trial-metric:first-child,
+      .trial-metric:last-child {
+        border-right-width: 1px;
+        border-radius: 8px;
+      }
+
+      .trial-list-card,
+      .trial-detail-panel {
+        height: auto;
+        min-height: 0;
+        max-height: none;
+      }
+
+      .trial-table-wrap {
+        height: auto;
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 940px) {
+      .trial-panel-head {
+        gap: 10px;
+      }
+
+      .trial-title-block h2 {
+        font-size: 21px;
+      }
+
+      .trial-live-pill {
+        width: auto;
+        justify-content: flex-start;
+      }
+
+      .trial-head-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .trial-head-actions .view-back {
+        width: auto;
+        min-width: 112px;
+      }
+
+      .trial-filter-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .trial-filter {
+        width: 100%;
+      }
+
+      .trial-filter:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+      }
+
+      .trial-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+
+      .trial-metric {
+        min-height: 74px;
+      }
+
+      .trial-metric.duplicate {
+        grid-column: 1 / -1;
+      }
+
+      .trial-person-row {
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>관리자용 학습자 등록</h1>
+      <div class="status-pill" id="connection-status">Firebase 연결 준비</div>
+    </header>
+
+    <section class="admin-home" id="admin-home">
+      <div class="admin-home-title">
+        <h2>관리 메뉴를 선택해 주세요</h2>
+        <p>학습자 권한 관리는 주 관리자 비밀번호가 필요합니다. 실전 모의시험 결과는 별도 화면에서 확인합니다.</p>
+      </div>
+      <div class="admin-home-grid">
+        <button type="button" class="admin-home-card admin-only" id="open-registration-view">
+          <strong>학습자 등록 / 권한 관리</strong>
+          <span>아이디 등록, 사용 중지, 모의고사와 1400제 학습 범위를 관리합니다.</span>
+          <em>주 관리자 전용</em>
+        </button>
+        <button type="button" class="admin-home-card" id="open-trial-view">
+          <strong>실전 모의시험 결과</strong>
+          <span>응시자별 제출 이력, 점수, 합격 여부, 중복 제출 상태를 확인합니다.</span>
+          <em>결과 조회</em>
+        </button>
+        <button type="button" class="admin-home-card wide admin-only" id="open-video-view">
+          <strong>학습 영상 시청 통계</strong>
+          <span>회원별로 모의고사와 1400제 문항 영상을 실제 재생한 횟수를 확인합니다.</span>
+          <em>주 관리자 전용</em>
+        </button>
+      </div>
+    </section>
+
+    <div class="layout admin-view" id="registration-view" hidden>
+      <div class="view-bar">
+        <div>
+          <h2>학습자 등록 / 권한 관리</h2>
+          <p>주 관리자 권한으로 학습자 계정과 학습 범위를 수정합니다.</p>
+        </div>
+        <button type="button" class="view-back" data-view-home>메인으로</button>
+      </div>
+      <section class="panel">
+        <div class="form-grid">
+          <div class="field">
+            <label for="student-id">아이디</label>
+            <input id="student-id" type="text" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="student-name">이름</label>
+            <input id="student-name" type="text" autocomplete="off" />
+          </div>
+          <div class="field full">
+            <div class="group-title">사용 상태</div>
+            <div class="radio-row">
+              <label class="choice"><input type="radio" name="enabled" value="true" checked /> 허용</label>
+              <label class="choice"><input type="radio" name="enabled" value="false" /> 중지</label>
+            </div>
+          </div>
+          <div class="field full">
+            <div class="scope-block" data-scope="mockExam">
+              <div class="group-title">모의고사</div>
+              <div class="check-row">
+                <label class="choice"><input type="checkbox" id="mock-all" data-all="mockExam" checked /> 전체 모의고사</label>
+              </div>
+              <div class="check-row" id="mock-exams"></div>
+            </div>
+            <div class="scope-block" data-scope="quiz1400">
+              <div class="group-title">1400제</div>
+              <div class="check-row">
+                <label class="choice"><input type="checkbox" id="quiz-all" data-all="quiz1400" checked /> 전체 1400제</label>
+              </div>
+              <div class="check-row" id="quiz-parts"></div>
+            </div>
+          </div>
+        </div>
+
+      <div class="actions">
+        <button type="button" class="btn-ghost" id="reset-btn">초기화</button>
+        <button type="button" class="btn-primary" id="save-btn">등록/수정하기</button>
+      </div>
+
+        <div class="message" id="message">아이디와 이름을 입력한 뒤 적용 범위를 선택해 주세요.</div>
+      </section>
+
+      <aside class="panel summary">
+      <h2>적용 요약</h2>
+      <ul class="summary-list">
+        <li><span>저장 위치</span><span id="preview-path">authorizedUsers/-</span></li>
+        <li><span>사용 상태</span><span id="preview-enabled">허용</span></li>
+        <li><span>모의고사</span><span id="preview-mock">전체</span></li>
+        <li><span>1400제</span><span id="preview-quiz">전체</span></li>
+      </ul>
+      <div class="registered-head">
+          <h2>등록 목록</h2>
+          <button type="button" class="btn-small" id="refresh-list-btn">새로고침</button>
+        </div>
+        <div class="registered-list" id="registered-list">
+          <div class="empty-list">비밀번호 확인 후 등록 목록을 불러옵니다.</div>
+        </div>
+      </aside>
+
+    </div>
+
+      <section class="trial-panel admin-view" id="trial-view" hidden>
+        <div class="trial-panel-head">
+          <div class="trial-title-wrap">
+            <span class="trial-title-icon" aria-hidden="true">학</span>
+            <div class="trial-title-block">
+              <p class="trial-kicker">청각장애인 요양보호사 양성 과정</p>
+              <h2>학습자 등록 · 실전 모의시험 결과</h2>
+              <p class="trial-sub" id="trial-result-updated">마지막 반영을 기다리고 있습니다.</p>
+            </div>
+          </div>
+          <div class="trial-head-actions">
+            <div class="trial-live-pill" aria-live="polite">
+              <span>자동 동기화 중</span>
+            </div>
+            <button type="button" class="view-back" data-view-home>메인으로</button>
+          </div>
+        </div>
+        <div class="trial-filter-row" id="trial-result-filters"></div>
+        <div class="trial-metrics" id="trial-result-summary">
+          <div class="trial-metric accent"><span>집계 인원</span><strong>-</strong></div>
+          <div class="trial-metric"><span>저장 결과</span><strong>-</strong></div>
+          <div class="trial-metric pass"><span>합격</span><strong>-</strong></div>
+          <div class="trial-metric incomplete"><span>미완료</span><strong>-</strong></div>
+          <div class="trial-metric duplicate"><span>중복 그룹</span><strong>-</strong></div>
+        </div>
+        <div class="trial-workspace">
+          <div class="trial-result-list" id="trial-result-list">
+            <div class="empty-list">실전 모의시험 결과를 불러오는 중입니다.</div>
+          </div>
+          <aside class="trial-detail-panel" id="trial-result-detail">
+            <div class="trial-detail-empty">응시자 행을 선택하면 제출 이력을 확인할 수 있습니다.</div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="video-view admin-view" id="video-view" hidden>
+        <div class="view-bar">
+          <div>
+            <h2>학습 영상 시청 통계</h2>
+            <p id="video-stats-updated">Firebase 영상 재생 기록을 기다리고 있습니다.</p>
+          </div>
+          <button type="button" class="view-back" data-view-home>메인으로</button>
+        </div>
+        <div class="video-summary" id="video-summary">
+          <div class="video-summary-item"><span>재생 횟수</span><strong>-</strong></div>
+          <div class="video-summary-item"><span>학습자 수</span><strong>-</strong></div>
+          <div class="video-summary-item"><span>문항 수</span><strong>-</strong></div>
+          <div class="video-summary-item"><span>최근 재생</span><strong>-</strong></div>
+        </div>
+        <div class="video-controls">
+          <select id="video-content-filter" aria-label="콘텐츠 필터">
+            <option value="all">전체</option>
+            <option value="mockExam">모의고사</option>
+            <option value="quiz1400">1400제</option>
+          </select>
+          <input id="video-search" type="text" placeholder="이름, 아이디, 회차, 문항으로 검색" autocomplete="off" />
+        </div>
+        <div class="video-layout">
+          <section class="video-card">
+            <header class="video-card-head">
+              <h3>학습자 목록</h3>
+              <span id="video-list-count">0명</span>
+            </header>
+            <div class="video-table-wrap" id="video-stats-list">
+              <div class="empty-list">아직 기록된 영상 재생 내역이 없습니다.</div>
+            </div>
+          </section>
+          <aside class="video-card" id="video-stats-detail">
+            <div class="trial-detail-empty">학습자를 선택하면 모의고사와 1400제 시청 기록을 확인할 수 있습니다.</div>
+          </aside>
+        </div>
+      </section>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+  <script>
+    const ADMIN_PASSWORD_SALT = "slcd-admin-pages-2026-06-22-v1";
+    const ADMIN_PASSWORD_HASH = "105a3bbdde92d7";
+
+    function adminPasswordHash(value) {
+      const input = ADMIN_PASSWORD_SALT + String(value || "");
+      let h1 = 0xdeadbeef ^ input.length;
+      let h2 = 0x41c6ce57 ^ input.length;
+      for (let index = 0; index < input.length; index += 1) {
+        const ch = input.charCodeAt(index);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+      }
+      h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+      h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+      return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+    }
+    const GOOGLE_FORM_DELETE_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxm-zHJDc0IHh1g5C0_UT5ERQigiRrH-jjUZ1H0nPldACkzZGp4ph0_9Nid_lqVpeYzIg/exec";
+    const GOOGLE_FORM_DELETE_LOG_TIMEOUT_MS = 15000;
+    const firebaseConfig = {
+      apiKey: "AIzaSyBHGrV9HdcT49KUYcEUn_VVZJVpRAfFdqc",
+      authDomain: "deaf-for-database-develo-59bf8.firebaseapp.com",
+      databaseURL: "https://deaf-for-database-develo-59bf8-default-rtdb.firebaseio.com",
+      projectId: "deaf-for-database-develo-59bf8",
+      storageBucket: "deaf-for-database-develo-59bf8.appspot.com",
+      messagingSenderId: "736560751604",
+      appId: "1:736560751604:web:4c79c46dff876a6187af8c"
+    };
+
+    function denyAdminAccess() {
+      alert("관리자 비밀번호가 확인되지 않았습니다.");
+    }
+
+    let adminAuthorized = false;
+
+    function requestAdminAccess(message) {
+      if (adminAuthorized) return true;
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        const value = prompt(message || "관리자 비밀번호를 입력해 주세요.");
+        if (value === null) return false;
+        if (adminPasswordHash(value) === ADMIN_PASSWORD_HASH) {
+          adminAuthorized = true;
+          return true;
+        }
+        alert("관리자 비밀번호가 일치하지 않습니다.");
+      }
+      return false;
+    }
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    const refs = {
+      home: document.getElementById("admin-home"),
+      registrationView: document.getElementById("registration-view"),
+      trialView: document.getElementById("trial-view"),
+      openRegistration: document.getElementById("open-registration-view"),
+      openTrial: document.getElementById("open-trial-view"),
+      openVideo: document.getElementById("open-video-view"),
+      videoView: document.getElementById("video-view"),
+      uid: document.getElementById("student-id"),
+      name: document.getElementById("student-name"),
+      mockAll: document.getElementById("mock-all"),
+      quizAll: document.getElementById("quiz-all"),
+      mockExams: document.getElementById("mock-exams"),
+      quizParts: document.getElementById("quiz-parts"),
+      message: document.getElementById("message"),
+      status: document.getElementById("connection-status"),
+      previewPath: document.getElementById("preview-path"),
+      previewEnabled: document.getElementById("preview-enabled"),
+      previewMock: document.getElementById("preview-mock"),
+      previewQuiz: document.getElementById("preview-quiz"),
+      registeredList: document.getElementById("registered-list"),
+      refreshList: document.getElementById("refresh-list-btn"),
+      trialSummary: document.getElementById("trial-result-summary"),
+      trialList: document.getElementById("trial-result-list"),
+      trialDetail: document.getElementById("trial-result-detail"),
+      trialFilters: document.getElementById("trial-result-filters"),
+      trialUpdated: document.getElementById("trial-result-updated"),
+      videoSummary: document.getElementById("video-summary"),
+      videoList: document.getElementById("video-stats-list"),
+      videoListCount: document.getElementById("video-list-count"),
+      videoDetail: document.getElementById("video-stats-detail"),
+      videoUpdated: document.getElementById("video-stats-updated"),
+      videoContentFilter: document.getElementById("video-content-filter"),
+      videoSearch: document.getElementById("video-search")
+    };
+
+    let trialRows = [];
+    let trialGroups = [];
+    let trialUsersData = {};
+    let trialRetestRequests = {};
+    let trialRetestApprovals = {};
+    let trialDateFilter = "all";
+    let selectedTrialGroupKey = "";
+    let registeredUsersListening = false;
+    let videoRows = [];
+    let selectedVideoLearnerKey = "";
+    let selectedVideoContentKey = "";
+    let videoStatsListening = false;
+
+    function showView(viewName) {
+      refs.home.hidden = viewName !== "home";
+      refs.registrationView.hidden = viewName !== "registration";
+      refs.trialView.hidden = viewName !== "trial";
+      refs.videoView.hidden = viewName !== "video";
+      window.scrollTo(0, 0);
+    }
+
+    function ensureRegisteredUsersListening() {
+      if (registeredUsersListening) return;
+      registeredUsersListening = true;
+      database.ref("authorizedUsers").on("value", snapshot => {
+        renderRegisteredUsers(snapshot.val() || {});
+      });
+    }
+
+    function ensureVideoStatsListening() {
+      if (videoStatsListening) return;
+      videoStatsListening = true;
+      database.ref("videoViews/byUser").on("value", snapshot => {
+        renderVideoStats(snapshot.val() || {});
+      });
+    }
+
+    function normalizeName(value) {
+      return String(value || "").trim().replace(/\s+/g, " ");
+    }
+
+    function normalizeUid(value) {
+      return String(value || "").trim();
+    }
+
+    function escapeHtml(value) {
+      return String(value === null || value === undefined ? "" : value).replace(/[&<>"']/g, match => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[match]));
+    }
+
+    function showMessage(text, type) {
+      refs.message.textContent = text;
+      refs.message.className = "message" + (type ? " " + type : "");
+    }
+
+    function makeCheck(container, key, label) {
+      const wrap = document.createElement("label");
+      wrap.className = "choice";
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.dataset.scopeKey = key;
+      input.addEventListener("change", updatePreview);
+      wrap.appendChild(input);
+      wrap.appendChild(document.createTextNode(" " + label));
+      container.appendChild(wrap);
+      return input;
+    }
+
+    const mockInputs = Array.from({ length: 10 }, (_, i) => makeCheck(refs.mockExams, "exam" + (i + 1), (i + 1) + "회"));
+    const quizInputs = Array.from({ length: 4 }, (_, i) => makeCheck(refs.quizParts, "part" + (i + 1), (i + 1) + "부"));
+
+    function setGroupDisabled(inputs, disabled) {
+      inputs.forEach(input => {
+        input.disabled = disabled;
+        if (disabled) input.checked = false;
+      });
+    }
+
+    function collectScope(allInput, inputs) {
+      if (allInput.checked) return { all: true };
+      return inputs.reduce((acc, input) => {
+        if (input.checked) acc[input.dataset.scopeKey] = true;
+        return acc;
+      }, {});
+    }
+
+    function scopeText(scope, prefix, countLabel) {
+      if (scope.all) return "전체";
+      const keys = Object.keys(scope);
+      if (!keys.length) return "미적용";
+      return keys.map(key => key.replace(prefix, "") + countLabel).join(", ");
+    }
+
+    function getEnabledValue() {
+      return document.querySelector('input[name="enabled"]:checked').value === "true";
+    }
+
+    function buildPayload(existing) {
+      const uid = normalizeUid(refs.uid.value);
+      const name = normalizeName(refs.name.value);
+      const mockScope = collectScope(refs.mockAll, mockInputs);
+      const quizScope = collectScope(refs.quizAll, quizInputs);
+      return {
+        uid,
+        name,
+        enabled: getEnabledValue(),
+        allowedScopes: {
+          mockExam: mockScope,
+          quiz1400: quizScope
+        },
+        createdAt: existing && existing.createdAt ? existing.createdAt : firebase.database.ServerValue.TIMESTAMP,
+        updatedAt: firebase.database.ServerValue.TIMESTAMP
+      };
+    }
+
+    function buildPreviewPayload() {
+      const payload = buildPayload({ createdAt: "SERVER_TIMESTAMP" });
+      payload.updatedAt = "SERVER_TIMESTAMP";
+      return payload;
+    }
+
+    function updatePreview() {
+      setGroupDisabled(mockInputs, refs.mockAll.checked);
+      setGroupDisabled(quizInputs, refs.quizAll.checked);
+      const payload = buildPreviewPayload();
+      refs.previewPath.textContent = payload.uid ? "authorizedUsers/" + payload.uid : "authorizedUsers/-";
+      refs.previewEnabled.textContent = payload.enabled ? "허용" : "중지";
+      refs.previewMock.textContent = scopeText(payload.allowedScopes.mockExam, "exam", "회");
+      refs.previewQuiz.textContent = scopeText(payload.allowedScopes.quiz1400, "part", "부");
+    }
+
+    function validateForm() {
+      const uid = normalizeUid(refs.uid.value);
+      if (!uid) return "아이디를 입력해 주세요.";
+      if (/[.#$\[\]\/]/.test(uid)) return "아이디에는 . # $ [ ] / 문자를 사용할 수 없습니다.";
+      if (!normalizeName(refs.name.value)) return "이름을 입력해 주세요.";
+      const payload = buildPreviewPayload();
+      const mockCount = Object.keys(payload.allowedScopes.mockExam).length;
+      const quizCount = Object.keys(payload.allowedScopes.quiz1400).length;
+      if (!mockCount && !quizCount) return "모의고사 또는 1400제 적용 범위를 하나 이상 선택해 주세요.";
+      return "";
+    }
+
+    function userRef(uid) {
+      return database.ref("authorizedUsers/" + uid);
+    }
+
+    function trialUserRef(uid) {
+      return database.ref("exams/examTrial/users").child(uid);
+    }
+
+    function getGoogleFormDeleteEndpoint() {
+      return String(GOOGLE_FORM_DELETE_WEBAPP_URL || "").trim();
+    }
+
+    function requireGoogleFormDeleteEndpoint() {
+      if (getGoogleFormDeleteEndpoint()) return true;
+      alert(
+        "Google Form 자동 삭제 연동이 아직 설정되지 않았습니다.\n\n" +
+        "Firebase만 삭제하면 Google Form 응답과 관리자 화면 자료가 서로 달라질 수 있어 삭제를 중단합니다.\n" +
+        "Apps Script Web App URL을 GOOGLE_FORM_DELETE_WEBAPP_URL에 설정한 뒤 다시 실행해 주세요."
+      );
+      showMessage("Google Form 자동 삭제 연동 URL이 없어 삭제를 중단했습니다.", "error");
+      return false;
+    }
+
+    function buildGoogleFormDeletePayload(rows, scope) {
+      return {
+        examId: "examTrial",
+        scope,
+        requestId: "trial-delete-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8),
+        requestedAt: new Date().toISOString(),
+        rows: (rows || []).map(row => ({
+          uid: row.uid || "",
+          name: row.name || "",
+          baseUid: row.baseUid || "",
+          countName: row.countName || "",
+          submittedAt: row.timestamp ? formatDateTime(row.timestamp) : "",
+          timestamp: row.timestamp || null
+        }))
+      };
+    }
+
+    function googleFormDeleteLogRef(requestId) {
+      return database.ref("exams/examTrial/deleteLogs/" + requestId);
+    }
+
+    function waitForGoogleFormDeleteLog(requestId, timeoutMs) {
+      return new Promise((resolve, reject) => {
+        const ref = googleFormDeleteLogRef(requestId);
+        let settled = false;
+        const timer = setTimeout(() => {
+          if (settled) return;
+          settled = true;
+          ref.off("value", handler);
+          reject(new Error("Google Form 삭제 확인 시간이 초과되었습니다."));
+        }, timeoutMs || 45000);
+        const handler = snapshot => {
+          const log = snapshot.val();
+          if (!log || !log.status) return;
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          ref.off("value", handler);
+          if (log.status === "success") {
+            resolve(log);
+            return;
+          }
+          reject(new Error(log.message || "Google Form 삭제가 실패했습니다."));
+        };
+        ref.on("value", handler, error => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          reject(error);
+        });
+      });
+    }
+
+    async function deleteGoogleFormTrialResponses(rows, scope) {
+      const endpoint = getGoogleFormDeleteEndpoint();
+      if (!endpoint) return null;
+      const payload = buildGoogleFormDeletePayload(rows, scope);
+      googleFormDeleteLogRef(payload.requestId).remove().catch(() => {});
+      fetch(endpoint, {
+        method: "POST",
+        mode: "no-cors",
+        keepalive: true,
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      }).catch((error) => {
+        console.warn("Google Form delete request failed.", error);
+      });
+      return {
+        status: "request-sent",
+        requestId: payload.requestId,
+        requestedCount: payload.rows.length,
+        message: "Google Form 삭제 요청을 보냈습니다."
+      };
+    }
+
+    function isGoogleFormAlreadyDeletedError(error) {
+      const message = String(error && error.message || error || "");
+      return message.includes("Google Form response not found");
+    }
+
+    function isGoogleFormDeleteLogUnavailableError(error) {
+      const message = String(error && error.message || error || "");
+      return message.includes("Google Form 삭제 확인 시간이 초과") ||
+        message.includes("deleteLogs") ||
+        message.includes("permission_denied") ||
+        message.includes("Failed to write delete log");
+    }
+
+    function confirmFirebaseCleanupWithoutGoogleFormLog(error, rows) {
+      const targets = (rows || [])
+        .map(row => (row && (row.name || row.uid)) ? ((row.name || "이름 없음") + " / " + (row.uid || "UID 없음")) : "")
+        .filter(Boolean)
+        .join("\n");
+      return confirm(
+        "Google Form 삭제 확인 로그를 받지 못했습니다.\n\n" +
+        "Google Form 응답은 이미 삭제되었지만, Apps Script가 Firebase deleteLogs에 성공 기록을 남기지 못하면 이 메시지가 나올 수 있습니다.\n" +
+        "Google Form에서 해당 응답이 삭제된 것을 확인했다면 [확인]을 눌러 Firebase 자료를 정리합니다.\n\n" +
+        "대상:\n" + (targets || "확인 대상 없음") + "\n\n" +
+        "오류: " + (error && error.message ? error.message : "삭제 확인 로그 없음")
+      );
+    }
+
+    async function ensureGoogleFormTrialResponsesDeleted(rows, scope) {
+      try {
+        return await deleteGoogleFormTrialResponses(rows, scope);
+      } catch (error) {
+        if (isGoogleFormDeleteLogUnavailableError(error)) {
+          if (!confirmFirebaseCleanupWithoutGoogleFormLog(error, rows)) throw error;
+          return {
+            status: "log-unavailable-confirmed",
+            message: "Google Form 삭제 확인 로그는 없지만 주 관리자 확인 후 Firebase 자료를 정리했습니다."
+          };
+        }
+        if (!isGoogleFormAlreadyDeletedError(error)) throw error;
+        return {
+          status: "already-deleted",
+          message: error.message || "Google Form 응답이 이미 삭제된 것으로 처리했습니다."
+        };
+      }
+    }
+
+    function firebaseRestUrl(path) {
+      const base = (firebaseConfig.databaseURL || "").replace(/\/+$/, "");
+      return base + "/" + path.split("/").map(part => encodeURIComponent(part)).join("/") + ".json";
+    }
+
+    async function removeFirebasePathVerified(path) {
+      const ref = database.ref(path);
+      let sdkError = null;
+      try {
+        await ref.remove();
+      } catch (error) {
+        sdkError = error;
+      }
+      let snapshot = await ref.once("value");
+      if (!snapshot.exists()) return;
+      const response = await fetch(firebaseRestUrl(path), { method: "DELETE" });
+      if (!response.ok) {
+        if (sdkError) throw sdkError;
+        throw new Error("Firebase REST 삭제 실패: " + path + " (" + response.status + ")");
+      }
+      snapshot = await ref.once("value");
+      if (snapshot.exists()) throw new Error("Firebase 삭제 확인 실패: " + path);
+    }
+
+    async function removeTrialRowsFromFirebase(rows, baseUid) {
+      const rowPaths = (rows || [])
+        .filter(row => row && row.uid)
+        .map(row => "exams/examTrial/users/" + row.uid);
+      await Promise.all(rowPaths.map(removeFirebasePathVerified));
+      if (!baseUid) return;
+      await Promise.all([
+        removeFirebasePathVerified("exams/examTrial/retestRequests/" + baseUid).catch(() => null),
+        removeFirebasePathVerified("exams/examTrial/retestApprovals/" + baseUid).catch(() => null)
+      ]);
+    }
+
+    function removeTrialRowsFromLocalState(rows, baseUid) {
+      (rows || []).forEach(row => {
+        if (row && row.uid) delete trialUsersData[row.uid];
+      });
+      if (baseUid) {
+        delete trialRetestRequests[baseUid];
+        delete trialRetestApprovals[baseUid];
+      }
+      refreshTrialResults();
+    }
+
+    async function reloadTrialUsersFromFirebase() {
+      const snapshot = await database.ref("exams/examTrial/users").once("value");
+      trialUsersData = snapshot.val() || {};
+      refreshTrialResults();
+    }
+
+    function trialDeleteSuccessText(deleteLog, label) {
+      if (deleteLog && deleteLog.status === "already-deleted") {
+        return label + " 삭제했습니다. Google Form에는 대상 응답이 없어 Firebase 자료만 정리했습니다.";
+      }
+      if (deleteLog && deleteLog.status === "log-unavailable-confirmed") {
+        return label + " 삭제했습니다. Google Form 확인 로그는 없었지만 주 관리자 확인 후 Firebase 자료를 정리했습니다.";
+      }
+      if (deleteLog && deleteLog.status === "request-sent") {
+        return label + " 삭제했습니다. Google Form 삭제 요청을 보낸 뒤 Firebase 자료를 정리했습니다.";
+      }
+      return label + " 삭제했습니다. Google Form 삭제 요청 후 Firebase 자료를 정리했습니다.";
+    }
+
+    async function saveUser() {
+      const error = validateForm();
+      if (error) {
+        showMessage(error, "error");
+        return;
+      }
+      const uid = normalizeUid(refs.uid.value);
+      try {
+        const snapshot = await userRef(uid).once("value");
+        const payload = buildPayload(snapshot.val());
+        await userRef(uid).set(payload);
+        showMessage("등록 정보가 저장되었습니다.", "success");
+        updatePreview();
+      } catch (error) {
+        showMessage("저장하지 못했습니다. Firebase 연결과 규칙을 확인해 주세요.", "error");
+      }
+    }
+
+    async function loadUser() {
+      const uid = normalizeUid(refs.uid.value);
+      if (!uid) {
+        showMessage("불러올 아이디를 입력해 주세요.", "error");
+        return;
+      }
+      try {
+        const snapshot = await userRef(uid).once("value");
+        const data = snapshot.val();
+        if (!data) {
+          showMessage("등록된 아이디가 없습니다.", "error");
+          return;
+        }
+        refs.name.value = data.name || "";
+        document.querySelector('input[name="enabled"][value="' + (data.enabled === false ? "false" : "true") + '"]').checked = true;
+        const scopes = data.allowedScopes || {};
+        applyScope(refs.mockAll, mockInputs, scopes.mockExam || {});
+        applyScope(refs.quizAll, quizInputs, scopes.quiz1400 || {});
+        updatePreview();
+        showMessage("등록 정보를 불러왔습니다.", "success");
+      } catch (error) {
+        showMessage("등록 정보를 불러오지 못했습니다.", "error");
+      }
+    }
+
+    function applyScope(allInput, inputs, scope) {
+      allInput.checked = scope.all === true;
+      inputs.forEach(input => {
+        input.checked = scope[input.dataset.scopeKey] === true;
+      });
+    }
+
+    function fillFormFromRegistered(uid, data) {
+      refs.uid.value = uid;
+      refs.name.value = data.name || "";
+      document.querySelector('input[name="enabled"][value="' + (data.enabled === false ? "false" : "true") + '"]').checked = true;
+      const scopes = data.allowedScopes || {};
+      applyScope(refs.mockAll, mockInputs, scopes.mockExam || {});
+      applyScope(refs.quizAll, quizInputs, scopes.quiz1400 || {});
+      updatePreview();
+      showMessage(uid + " 등록 정보를 불러왔습니다.", "success");
+    }
+
+    async function deleteRegisteredUser(uid, user, button) {
+      if (!uid) return;
+      if (!requestAdminAccess("등록 목록 삭제는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) return;
+      const name = user && user.name ? user.name : "이름 없음";
+      const firstConfirm = confirm(
+        name + " / " + uid + " 등록 정보를 삭제할까요?\n\n" +
+        "삭제 경로: authorizedUsers/" + uid + "\n" +
+        "실전 모의시험 제출 결과는 삭제하지 않습니다."
+      );
+      if (!firstConfirm) return;
+      const finalConfirm = confirm("삭제하면 Firebase 등록 목록에서 즉시 사라집니다. 계속할까요?");
+      if (!finalConfirm) return;
+      if (button) button.disabled = true;
+      try {
+        await userRef(uid).remove();
+        if (normalizeUid(refs.uid.value) === uid) resetForm();
+        showMessage(name + " 등록 정보를 삭제했습니다.", "success");
+      } catch (error) {
+        if (button) button.disabled = false;
+        showMessage("등록 정보를 삭제하지 못했습니다. Firebase 권한과 연결 상태를 확인해 주세요.", "error");
+      }
+    }
+
+    function renderRegisteredUsers(data) {
+      const entries = Object.entries(data || {}).sort((a, b) => a[0].localeCompare(b[0]));
+      refs.registeredList.innerHTML = "";
+      if (!entries.length) {
+        refs.registeredList.innerHTML = '<div class="empty-list">등록된 학습자가 없습니다.</div>';
+        return;
+      }
+      entries.forEach(([uid, user]) => {
+        const scopes = user.allowedScopes || {};
+        const row = document.createElement("div");
+        row.className = "user-row";
+        row.tabIndex = 0;
+        row.setAttribute("role", "button");
+        row.setAttribute("aria-label", uid + " 등록 정보 선택");
+        row.innerHTML =
+          '<div class="user-main">' +
+            '<div class="user-id">' + escapeHtml(uid) + '</div>' +
+            '<div class="user-name">' + escapeHtml(user.name || "이름 없음") + '</div>' +
+          '</div>' +
+          '<div class="user-state ' + (user.enabled === false ? "disabled" : "") + '">' + (user.enabled === false ? "중지" : "허용") + '</div>' +
+          '<button type="button" class="user-delete-btn">삭제</button>' +
+          '<div class="user-scope">모의고사: ' + scopeText(scopes.mockExam || {}, "exam", "회") + ' · 1400제: ' + scopeText(scopes.quiz1400 || {}, "part", "부") + '</div>';
+        const scopeElement = row.querySelector(".user-scope");
+        if (scopeElement) {
+          scopeElement.innerHTML =
+            '<span>모의고사 ' + escapeHtml(scopeText(scopes.mockExam || {}, "exam", "회")) + '</span>' +
+            '<span>1400제 ' + escapeHtml(scopeText(scopes.quiz1400 || {}, "part", "부")) + '</span>';
+        }
+        const selectUser = () => fillFormFromRegistered(uid, user);
+        row.addEventListener("click", selectUser);
+        row.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectUser();
+          }
+        });
+        const deleteButton = row.querySelector(".user-delete-btn");
+        if (deleteButton) {
+          deleteButton.addEventListener("click", event => {
+            event.stopPropagation();
+            deleteRegisteredUser(uid, user, deleteButton);
+          });
+        }
+        refs.registeredList.appendChild(row);
+      });
+    }
+
+    function stripTrialRetestSuffix(value) {
+      return normalizeName(value)
+        .replace(/\(\d+\uCC28\s*\uC7AC\uC2DC\uD5D8\)/g, "")
+        .replace(/\(\uC7AC\uC7AC\uC2DC\uD5D8\)/g, "")
+        .replace(/\(\uC7AC\uC2DC\uD5D8\)/g, "")
+        .trim();
+    }
+
+    function normalizeResultNameForCount(name) {
+      return stripTrialRetestSuffix(name);
+    }
+
+    function formatTrialAttemptIdentity(value, attemptNumber) {
+      const base = stripTrialRetestSuffix(value);
+      if (!base) return "";
+      return attemptNumber > 1 ? base + " " + attemptNumber + "\uCC28 \uC81C\uCD9C(\uC7AC\uC2DC\uD5D8)" : base;
+    }
+
+    function toNumber(value, fallback) {
+      const num = Number(value);
+      return Number.isFinite(num) ? num : fallback;
+    }
+
+    function readTimestamp(value) {
+      if (typeof value === "number" && Number.isFinite(value)) return value;
+      if (typeof value === "string" && value.trim()) {
+        const parsed = Date.parse(value);
+        return Number.isFinite(parsed) ? parsed : null;
+      }
+      return null;
+    }
+
+    function pad2(value) {
+      return String(value).padStart(2, "0");
+    }
+
+    function formatDateKey(timestamp) {
+      if (!timestamp) return "날짜 없음";
+      const date = new Date(timestamp);
+      return date.getFullYear() + "-" + pad2(date.getMonth() + 1) + "-" + pad2(date.getDate());
+    }
+
+    function formatDateLabel(dateKey) {
+      if (dateKey === "날짜 없음") return dateKey;
+      const parts = dateKey.split("-");
+      return parts[0] + "." + parts[1] + "." + parts[2];
+    }
+
+    function formatDateTime(timestamp) {
+      if (!timestamp) return "시각 없음";
+      const date = new Date(timestamp);
+      return date.getFullYear() + "." + pad2(date.getMonth() + 1) + "." + pad2(date.getDate()) + " " + pad2(date.getHours()) + ":" + pad2(date.getMinutes());
+    }
+
+    function countAnswers(answers) {
+      if (Array.isArray(answers)) {
+        return answers.filter(answer => answer !== null && answer !== undefined && answer !== "").length;
+      }
+      if (answers && typeof answers === "object") {
+        return Object.values(answers).filter(answer => answer !== null && answer !== undefined && answer !== "").length;
+      }
+      return 0;
+    }
+
+    function getTrialTimestamp(user, result) {
+      return readTimestamp(result.submittedAt) ||
+        readTimestamp(result.completedAt) ||
+        readTimestamp(user && user.profile && user.profile.updatedAt) ||
+        readTimestamp(user && user.updatedAt);
+    }
+
+    function hasUsableTrialResult(user) {
+      const result = user && user.result;
+      if (!result || typeof result !== "object") return false;
+      return result.total !== undefined ||
+        result.written !== undefined ||
+        result.practical !== undefined ||
+        result.answers !== undefined ||
+        result.submittedAt !== undefined ||
+        result.completedAt !== undefined;
+    }
+
+    function buildTrialRows(data) {
+      const rows = [];
+      Object.entries(data || {}).forEach(([uid, user]) => {
+        if (!hasUsableTrialResult(user)) return;
+        const result = user && user.result;
+        const name = normalizeName(result.name || user.name || (user.profile && user.profile.name) || uid);
+        const written = toNumber(result.written, toNumber(result["필기"], 0));
+        const practical = toNumber(result.practical, toNumber(result["실기"], 0));
+        const totalQuestions = toNumber(result.totalQuestions || result.totalQ, 80);
+        const total = toNumber(result.total, written + practical);
+        const answeredCount = toNumber(result.answeredCount, countAnswers(result.answers));
+        const emptyCount = Math.max(0, totalQuestions - answeredCount);
+        const hasScoreResult = result.total !== undefined ||
+          result.written !== undefined ||
+          result["필기"] !== undefined ||
+          result.practical !== undefined ||
+          result["실기"] !== undefined;
+        const completed = hasScoreResult ? true : (typeof result.completed === "boolean" ? result.completed : emptyCount === 0);
+        const scorePassed = written >= 21 && practical >= 27;
+        const passed = hasScoreResult ? scorePassed : (typeof result.passed === "boolean" ? result.passed : scorePassed);
+        const timestamp = getTrialTimestamp(user, result);
+        rows.push({
+          uid,
+          baseUid: stripTrialRetestSuffix(uid) || uid,
+          name,
+          countName: normalizeResultNameForCount(name) || uid,
+          written,
+          practical,
+          total,
+          totalQuestions,
+          answeredCount,
+          emptyCount,
+          hasScoreResult,
+          completed,
+          passed,
+          timestamp,
+          dateKey: formatDateKey(timestamp)
+        });
+      });
+      const counts = rows.reduce((acc, row) => {
+        acc[row.countName] = (acc[row.countName] || 0) + 1;
+        return acc;
+      }, {});
+      rows.forEach(row => {
+        row.duplicate = counts[row.countName] > 1;
+      });
+      return rows.sort((a, b) => {
+        if ((a.timestamp || 0) !== (b.timestamp || 0)) return (b.timestamp || 0) - (a.timestamp || 0);
+        return a.name.localeCompare(b.name);
+      });
+    }
+
+    function getTrialRetestRequest(baseUid, nameKey) {
+      const normalizedBase = stripTrialRetestSuffix(baseUid);
+      if (normalizedBase && trialRetestRequests && trialRetestRequests[normalizedBase]) return trialRetestRequests[normalizedBase];
+      const normalizedName = stripTrialRetestSuffix(nameKey);
+      const entries = Object.entries(trialRetestRequests || {});
+      const found = entries.find(([, request]) => {
+        if (!request) return false;
+        const requestUid = stripTrialRetestSuffix(request.uid);
+        const requestName = stripTrialRetestSuffix(request.name);
+        return (normalizedBase && requestUid === normalizedBase) || (normalizedName && requestName === normalizedName);
+      });
+      return found ? found[1] : null;
+    }
+
+    function getTrialRetestApproval(baseUid) {
+      const normalizedBase = stripTrialRetestSuffix(baseUid);
+      return normalizedBase && trialRetestApprovals ? trialRetestApprovals[normalizedBase] || null : null;
+    }
+
+    function buildTrialRetestUid(baseUid, attemptNumber) {
+      if (attemptNumber === 2) return baseUid + "(\uC7AC\uC2DC\uD5D8)";
+      if (attemptNumber === 3) return baseUid + "(\uC7AC\uC7AC\uC2DC\uD5D8)";
+      return baseUid + "(" + attemptNumber + "\uCC28 \uC7AC\uC2DC\uD5D8)";
+    }
+
+    function getNextTrialRetestUid(baseUid, rows) {
+      const normalizedBase = stripTrialRetestSuffix(baseUid);
+      if (!normalizedBase) return "";
+      const existing = new Set((rows || []).map(row => row.uid));
+      for (let attemptNumber = 2; attemptNumber < 20; attemptNumber += 1) {
+        const candidate = buildTrialRetestUid(normalizedBase, attemptNumber);
+        if (!existing.has(candidate)) return candidate;
+      }
+      return buildTrialRetestUid(normalizedBase, (rows || []).length + 1);
+    }
+    function buildTrialGroups(rows) {
+      const grouped = rows.reduce((acc, row) => {
+        const key = row.countName || row.uid;
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(row);
+        return acc;
+      }, {});
+      return Object.entries(grouped).map(([key, groupRows]) => {
+        groupRows.sort((a, b) => {
+          if ((a.timestamp || 0) !== (b.timestamp || 0)) return (b.timestamp || 0) - (a.timestamp || 0);
+          return a.name.localeCompare(b.name);
+        });
+        groupRows.forEach(row => {
+          row.duplicate = groupRows.length > 1;
+        });
+        const representative = groupRows[0];
+        const baseUid = representative.baseUid || key;
+        return {
+          key,
+          name: key,
+          baseUid,
+          representative,
+          rows: groupRows,
+          nextRetestUid: getNextTrialRetestUid(baseUid, groupRows),
+          retestRequest: getTrialRetestRequest(baseUid, key),
+          retestApproval: getTrialRetestApproval(baseUid),
+          duplicate: groupRows.length > 1,
+          attemptCount: groupRows.length,
+          timestamp: representative ? representative.timestamp : null,
+          dateKey: representative ? representative.dateKey : "날짜 없음"
+        };
+      }).sort((a, b) => {
+        if ((a.timestamp || 0) !== (b.timestamp || 0)) return (a.timestamp || 0) - (b.timestamp || 0);
+        return a.name.localeCompare(b.name);
+      });
+    }
+
+    function trialStatusClass(row) {
+      return !row.completed ? "incomplete" : (row.passed ? "pass" : "fail");
+    }
+
+    function trialStatusText(row) {
+      return !row.completed ? "미완료" : (row.passed ? "합격" : "불합격");
+    }
+
+    function scorePercent(row) {
+      const totalQuestions = row.totalQuestions || 80;
+      return Math.max(0, Math.min(100, Math.round((row.total / totalQuestions) * 100)));
+    }
+
+    function metricHtml(label, value, unit, className, icon) {
+      return '<div class="trial-metric ' + (className || "") + '">' +
+        '<div class="trial-metric-top"><span class="trial-metric-label">' + label + '</span></div>' +
+        '<div class="trial-metric-value"><strong>' + value + '<span class="trial-metric-unit">' + unit + '</span></strong></div>' +
+      '</div>';
+    }
+
+    function renderTrialFilters(groups) {
+      const dateKeys = Array.from(new Set(groups.map(group => group.dateKey))).sort();
+      if (trialDateFilter !== "all" && !dateKeys.includes(trialDateFilter)) trialDateFilter = "all";
+      const filters = [{ key: "all", label: "전체", count: groups.length }].concat(dateKeys.map(key => ({
+        key,
+        label: formatDateLabel(key),
+        count: groups.filter(group => group.dateKey === key).length
+      })));
+      refs.trialFilters.innerHTML = "";
+      filters.forEach(filter => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "trial-filter" + (filter.key === trialDateFilter ? " active" : "");
+        button.textContent = filter.label + " " + filter.count + "명";
+        button.addEventListener("click", () => {
+          trialDateFilter = filter.key;
+          renderTrialResultDashboard();
+        });
+        refs.trialFilters.appendChild(button);
+      });
+    }
+
+    function renderTrialSummary(groups) {
+      const resultCount = groups.reduce((sum, group) => sum + group.rows.length, 0);
+      const passCount = groups.filter(group => group.representative.completed && group.representative.passed).length;
+      const incompleteCount = groups.filter(group => !group.representative.completed).length;
+      const duplicateCount = groups.filter(group => group.duplicate).length;
+      refs.trialSummary.innerHTML =
+        metricHtml("응시자 수", groups.length, "명", "accent") +
+        metricHtml("제출 기록 수", resultCount, "건", "") +
+        metricHtml("합격 수", passCount, "명", "pass") +
+        metricHtml("미완료 수", incompleteCount, "명", "incomplete") +
+        metricHtml("중복 그룹 수", duplicateCount, "그룹", "duplicate");
+    }
+
+    function getTrialListScrollState() {
+      const root = refs.trialList;
+      const tableWrap = root ? root.querySelector(".trial-table-wrap") : null;
+      const listCard = root ? root.querySelector(".trial-list-card") : null;
+      return {
+        rootTop: root ? root.scrollTop : 0,
+        tableTop: tableWrap ? tableWrap.scrollTop : 0,
+        cardTop: listCard ? listCard.scrollTop : 0
+      };
+    }
+
+    function restoreTrialListScrollState(state) {
+      if (!state) return;
+      const root = refs.trialList;
+      const tableWrap = root ? root.querySelector(".trial-table-wrap") : null;
+      const listCard = root ? root.querySelector(".trial-list-card") : null;
+      if (root) root.scrollTop = state.rootTop || 0;
+      if (tableWrap) tableWrap.scrollTop = state.tableTop || 0;
+      if (listCard) listCard.scrollTop = state.cardTop || 0;
+    }
+
+    function renderTrialList(groups, options = {}) {
+      const scrollState = options.preserveScroll ? getTrialListScrollState() : null;
+      refs.trialList.innerHTML = "";
+      if (!groups.length) {
+        refs.trialList.innerHTML = '<div class="empty-list">선택한 기준에 해당하는 실전 모의시험 결과가 없습니다.</div>';
+        return;
+      }
+      const tableRows = groups.map((group, index) => {
+        const row = group.representative;
+        const statusClass = trialStatusClass(row);
+        const statusText = trialStatusText(row);
+        const active = group.key === selectedTrialGroupKey;
+        const attemptNumber = group.attemptCount;
+        return '<tr class="' + statusClass + (active ? " active" : "") + '" data-group-index="' + index + '" tabindex="0">' +
+          '<td><div class="trial-cell-main">' +
+            '<div class="trial-cell-name">' + escapeHtml(group.name) +
+              (group.duplicate ? '<span class="trial-badge duplicate">제출 ' + group.attemptCount + '회</span>' : "") +
+            '</div>' +
+            '<div class="trial-cell-sub">\uB300\uD45C \uC81C\uCD9C: ' + escapeHtml(formatTrialAttemptIdentity(row.name, attemptNumber)) + ' \u00B7 ' + escapeHtml(formatTrialAttemptIdentity(row.uid, attemptNumber)) + '</div>' +
+          '</div></td>' +
+          '<td class="trial-table-score">' + row.total + ' / ' + row.totalQuestions + '</td>' +
+          '<td><span class="trial-score-pair"><span>' + row.written + '</span><span>/</span><span>' + row.practical + '</span></span></td>' +
+          '<td><span class="trial-badge ' + statusClass + '">' + statusText + '</span></td>' +
+          '<td class="trial-cell-sub">' + formatDateTime(row.timestamp) + '</td>' +
+          '<td><div class="trial-row-actions"><button type="button" class="trial-delete-btn trial-delete-group-btn" data-group-delete-index="' + index + '">응시자 삭제</button><span class="trial-row-arrow">›</span></div></td>' +
+        '</tr>';
+      }).join("");
+      const mobileRows = groups.map((group, index) => {
+        const row = group.representative;
+        const statusClass = trialStatusClass(row);
+        const statusText = trialStatusText(row);
+        const active = group.key === selectedTrialGroupKey;
+        const attemptNumber = group.attemptCount;
+        return '<div role="button" tabindex="0" class="trial-person-row ' + statusClass + (active ? " active" : "") + '" data-group-index="' + index + '">' +
+          '<div class="trial-person-main">' +
+            '<div class="trial-person-name">' + escapeHtml(group.name) + '</div>' +
+            '<div class="trial-person-sub">\uB300\uD45C \uC81C\uCD9C: ' + escapeHtml(formatTrialAttemptIdentity(row.name, attemptNumber)) + ' \u00B7 ' + escapeHtml(formatTrialAttemptIdentity(row.uid, attemptNumber)) + '</div>' +
+          '</div>' +
+          '<div class="trial-person-side">' +
+            '<div class="trial-person-score">' + row.total + ' / ' + row.totalQuestions + '</div>' +
+            '<div class="trial-badges">' +
+              '<span class="trial-badge ' + statusClass + '">' + statusText + '</span>' +
+              (group.duplicate ? '<span class="trial-badge duplicate">제출 ' + group.attemptCount + '회</span>' : "") +
+            '</div>' +
+            '<button type="button" class="trial-delete-btn trial-delete-group-btn trial-person-delete" data-group-delete-index="' + index + '">응시자 삭제</button>' +
+          '</div>' +
+          '<div class="trial-person-meta">' +
+            '<span>최신 ' + formatDateTime(row.timestamp) + '</span>' +
+            '<span>필기 ' + row.written + ' / 35</span>' +
+            '<span>실기 ' + row.practical + ' / 45</span>' +
+            '<span>응답 ' + row.answeredCount + '문항</span>' +
+            (row.emptyCount ? '<span>미응답 ' + row.emptyCount + '문항</span>' : "") +
+          '</div>' +
+        '</div>';
+      }).join("");
+      refs.trialList.innerHTML =
+        '<section class="trial-list-card">' +
+          '<header class="trial-list-head">' +
+            '<h3>응시자 목록</h3>' +
+            '<span>총 ' + groups.length + '명 · 행을 선택해 제출 이력 확인</span>' +
+          '</header>' +
+          '<div class="trial-table-wrap">' +
+            '<table class="trial-table">' +
+              '<thead><tr>' +
+                '<th>응시자</th><th>총점</th><th>필기 / 실기</th><th>상태</th><th>최신 제출 일시</th><th>관리</th>' +
+              '</tr></thead>' +
+              '<tbody>' + tableRows + '</tbody>' +
+            '</table>' +
+          '</div>' +
+          '<div class="trial-mobile-list">' + mobileRows + '</div>' +
+        '</section>';
+      refs.trialList.querySelectorAll(".trial-delete-group-btn").forEach(button => {
+        const group = groups[Number(button.dataset.groupDeleteIndex)];
+        if (!group) return;
+        button.addEventListener("click", event => {
+          event.preventDefault();
+          event.stopPropagation();
+          deleteTrialGroup(group, button);
+        });
+      });
+      refs.trialList.querySelectorAll("[data-group-index]").forEach(item => {
+        const group = groups[Number(item.dataset.groupIndex)];
+        if (!group) return;
+        const selectGroup = () => {
+          selectedTrialGroupKey = group.key;
+          renderTrialResultDashboard({ preserveListScroll: true });
+        };
+        item.addEventListener("click", selectGroup);
+        item.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectGroup();
+          }
+        });
+      });
+      restoreTrialListScrollState(scrollState);
+      if (scrollState) requestAnimationFrame(() => restoreTrialListScrollState(scrollState));
+    }
+
+    function attemptStatHtml(label, value) {
+      return '<div class="trial-attempt-stat"><span>' + label + '</span><strong>' + value + '</strong></div>';
+    }
+
+    function renderTrialRetestCard(group) {
+      if (!group) return "";
+      const approval = group.retestApproval;
+      const request = group.retestRequest;
+      const activeApproval = approval && approval.allowed === true && approval.used !== true;
+      if (activeApproval) {
+        return '<div class="trial-retest-card approved"><div><strong>재시험 응시가 허용되어 있습니다</strong><span>학습자는 기존 아이디와 이름 그대로 입력하면 새 제출로 응시합니다. 저장 UID: ' + escapeHtml(approval.nextUid || group.nextRetestUid || "") + '</span></div><div class="trial-retest-actions"><button type="button" class="trial-approve-retest-btn" disabled>허용됨</button></div></div>';
+      }
+      if (!request || request.status === "used") return "";
+      return '<div class="trial-retest-card"><div><strong>재시험 응시 요청이 도착했습니다</strong><span>허용하면 이전 제출은 그대로 보관되고, 학습자는 기존 아이디와 이름으로 다시 응시합니다.</span></div><div class="trial-retest-actions"><button type="button" class="trial-approve-retest-btn" data-base-uid="' + escapeHtml(group.baseUid || "") + '">재시험 허용</button></div></div>';
+    }
+    function renderTrialDetail(group) {
+      if (!group) {
+        refs.trialDetail.innerHTML = '<div class="trial-detail-empty">응시자 행을 선택하면 제출 이력을 확인할 수 있습니다.</div>';
+        return;
+      }
+      const representative = group.representative;
+      const statusClass = trialStatusClass(representative);
+      const statusText = trialStatusText(representative);
+      refs.trialDetail.innerHTML =
+        '<div class="trial-detail-head">' +
+          '<div class="trial-detail-title-row">' +
+            '<div><h3 class="trial-detail-title">' + escapeHtml(group.name) + '</h3>' +
+            '<p class="trial-detail-sub">최신 제출을 대표 결과로 표시합니다. 이전 제출은 보완 없이 원본 그대로 보관됩니다.</p></div>' +
+            '<span class="trial-detail-count">제출 ' + group.attemptCount + '건</span>' +
+          '</div>' +
+        '</div>' +
+        renderTrialRetestCard(group) +
+        (group.duplicate ? '<div class="trial-duplicate-alert"><div><strong>중복 제출이 감지되었습니다</strong><span>대표 결과는 최신 제출 기준이며, 삭제가 필요하면 아래 제출 이력 카드에서 해당 제출 자료만 선택해 주세요.</span></div><span class="trial-badge duplicate">중복 그룹</span></div>' : "") +
+        '<div class="trial-history-title"><h3>제출 이력</h3><span>최신순</span></div>' +
+        '<div class="trial-attempt-list">' +
+          group.rows.map((row, index) => {
+            const attemptStatusClass = trialStatusClass(row);
+            const attemptStatusText = trialStatusText(row);
+            const attemptNumber = group.rows.length - index;
+            return '<div class="trial-attempt-card ' + (index === 0 ? "representative" : "") + '">' +
+              '<div class="trial-attempt-top">' +
+                '<div><div class="trial-attempt-title">' + attemptNumber + '\uCC28 \uC81C\uCD9C</div><div class="trial-attempt-id">' + escapeHtml(formatTrialAttemptIdentity(row.name, attemptNumber)) + ' \u00B7 ' + escapeHtml(formatTrialAttemptIdentity(row.uid, attemptNumber)) + '</div></div>' +
+                '<div class="trial-badges">' +
+                  '<span class="trial-badge ' + attemptStatusClass + '">' + attemptStatusText + '</span>' +
+                  '<span class="trial-badge ' + (index === 0 ? "pass" : "duplicate") + '">' + (index === 0 ? "대표 결과" : "이전 제출") + '</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="trial-meta">' +
+                '<span>' + formatDateTime(row.timestamp) + '</span>' +
+              '</div>' +
+               '<div class="trial-attempt-stats">' +
+                attemptStatHtml("총점", row.total + " / " + row.totalQuestions) +
+                attemptStatHtml("필기", row.written + " / 35") +
+                attemptStatHtml("실기", row.practical + " / 45") +
+                attemptStatHtml("응답 / 미응답", row.answeredCount + " / " + row.emptyCount) +
+              '</div>' +
+              '<p class="trial-attempt-note">전체 ' + row.totalQuestions + '문항 · 원본 기록은 병합·수정 없이 그대로 표시됩니다.</p>' +
+              '<div class="trial-actions"><button type="button" class="trial-delete-btn" data-uid="' + escapeHtml(row.uid) + '">이 제출 자료 삭제</button></div>' +
+            '</div>';
+          }).join("") +
+        '</div>';
+      refs.trialDetail.querySelectorAll(".trial-delete-btn").forEach(button => {
+        const row = group.rows.find(item => item.uid === button.dataset.uid);
+        if (row) button.addEventListener("click", () => deleteTrialSubmission(row, button));
+      });
+      const approveButton = refs.trialDetail.querySelector(".trial-approve-retest-btn:not(:disabled)");
+      if (approveButton) approveButton.addEventListener("click", () => approveTrialRetest(group, approveButton));
+    }
+
+    async function approveTrialRetest(group, button) {
+      if (!group || !group.baseUid) return;
+      if (!requestAdminAccess("재시험 허용은 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) return;
+      const nextUid = group.nextRetestUid || getNextTrialRetestUid(group.baseUid, group.rows);
+      const confirmed = confirm(
+        group.name + " / " + group.baseUid + " 재시험 응시를 허용할까요?\n\n" +
+        "학습자는 기존 아이디와 이름을 그대로 입력합니다.\n" +
+        "새 제출 저장 경로: exams/examTrial/users/" + nextUid + "\n" +
+        "이전 제출 결과는 삭제하지 않고 그대로 보관합니다."
+      );
+      if (!confirmed) return;
+      if (button) button.disabled = true;
+      const now = firebase.database.ServerValue.TIMESTAMP;
+      try {
+        await database.ref("exams/examTrial/retestApprovals/" + group.baseUid).set({
+          uid: group.baseUid,
+          name: group.name,
+          nextUid,
+          allowed: true,
+          used: false,
+          requestedAt: group.retestRequest && group.retestRequest.requestedAt || null,
+          approvedAt: now,
+          updatedAt: now
+        });
+        await database.ref("exams/examTrial/retestRequests/" + group.baseUid).update({
+          uid: group.baseUid,
+          name: group.name,
+          status: "approved",
+          allowed: true,
+          used: false,
+          nextUid,
+          approvedAt: now,
+          updatedAt: now
+        });
+        showMessage(group.name + " 재시험 응시를 허용했습니다. 학습자는 기존 아이디와 이름으로 다시 응시할 수 있습니다.", "success");
+      } catch (error) {
+        if (button) button.disabled = false;
+        showMessage("재시험 허용 정보를 저장하지 못했습니다. Firebase 권한과 연결 상태를 확인해 주세요.", "error");
+      }
+    }
+
+    async function deleteTrialGroup(group, button) {
+      if (!group || !group.rows || !group.rows.length) return;
+      if (!requestAdminAccess("응시자 삭제는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) {
+        if (button) button.disabled = false;
+        return;
+      }
+      if (!requireGoogleFormDeleteEndpoint()) {
+        if (button) button.disabled = false;
+        return;
+      }
+      const ids = group.rows.map(row => row.uid).join(", ");
+      const firstConfirm = confirm(
+        group.name + " 응시자 자료 전체를 삭제할까요?\n\n" +
+        "삭제 대상: " + group.rows.length + "건\n" +
+        "Firebase 경로: exams/examTrial/users/" + ids + "\n" +
+        "Google Form 삭제 성공이 확인된 뒤 Firebase 자료를 삭제합니다."
+      );
+      if (!firstConfirm) return;
+      const finalConfirm = confirm("응시자 목록에서 해당 이용자의 모든 제출 이력이 사라집니다. 계속할까요?");
+      if (!finalConfirm) return;
+      if (button) button.disabled = true;
+      try {
+        refs.trialUpdated.textContent = "Google Form 삭제 요청 후 Firebase 자료를 정리 중입니다.";
+        const deleteLog = await ensureGoogleFormTrialResponsesDeleted(group.rows, "applicant");
+        await removeTrialRowsFromFirebase(group.rows, group.baseUid);
+        if (selectedTrialGroupKey === group.key) selectedTrialGroupKey = null;
+        removeTrialRowsFromLocalState(group.rows, group.baseUid);
+        await reloadTrialUsersFromFirebase();
+        refs.trialUpdated.textContent = trialDeleteSuccessText(deleteLog, "응시자 자료를");
+        showMessage(group.name + " 응시자 자료를 삭제했습니다.", "success");
+      } catch (error) {
+        if (button) button.disabled = false;
+        refs.trialUpdated.textContent = "삭제하지 못했습니다. Google Form 삭제 연동 또는 Firebase 삭제 확인을 점검해 주세요.";
+        showMessage("응시자 자료를 삭제하지 못했습니다. " + (error && error.message ? error.message : "삭제 연동 상태를 확인해 주세요."), "error");
+        return;
+      }
+    }
+
+    async function deleteTrialSubmission(row, button) {
+      if (!row) return;
+      if (!requestAdminAccess("실전 모의시험 제출 자료 삭제는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) {
+        if (button) button.disabled = false;
+        return;
+      }
+      if (!requireGoogleFormDeleteEndpoint()) {
+        if (button) button.disabled = false;
+        return;
+      }
+      const firstConfirm = confirm(
+        row.name + " / " + row.uid + " 실전 모의시험 자료를 삭제할까요?\n\n" +
+        "삭제 경로: exams/examTrial/users/" + row.uid + "\n" +
+        "Google Form 삭제 성공이 확인된 뒤 Firebase 자료를 삭제합니다.\n" +
+        "해당 제출 UID는 삭제 후 다시 응시할 수 있습니다."
+      );
+      if (!firstConfirm) return;
+      const finalConfirm = confirm("삭제 후에는 관리자 화면에서 즉시 사라지며 Firebase 자료도 복구할 수 없습니다. 계속할까요?");
+      if (!finalConfirm) return;
+      if (button) button.disabled = true;
+      try {
+        refs.trialUpdated.textContent = "Google Form 삭제 요청 후 Firebase 자료를 정리 중입니다.";
+        const deleteLog = await ensureGoogleFormTrialResponsesDeleted([row], "submission");
+        await removeTrialRowsFromFirebase([row]);
+        removeTrialRowsFromLocalState([row]);
+        await reloadTrialUsersFromFirebase();
+        refs.trialUpdated.textContent = trialDeleteSuccessText(deleteLog, "제출 자료를");
+        showMessage(row.name + " 실전 모의시험 제출 자료를 삭제했습니다. 해당 UID는 다시 응시할 수 있습니다.", "success");
+      } catch (error) {
+        if (button) button.disabled = false;
+        refs.trialUpdated.textContent = "삭제하지 못했습니다. Google Form 삭제 연동 또는 Firebase 삭제 확인을 점검해 주세요.";
+        showMessage("실전 모의시험 자료를 삭제하지 못했습니다. " + (error && error.message ? error.message : "삭제 연동 상태를 확인해 주세요."), "error");
+      }
+    }
+
+    function renderTrialResultDashboard(options = {}) {
+      renderTrialFilters(trialGroups);
+      const visibleGroups = trialDateFilter === "all" ? trialGroups : trialGroups.filter(group => group.dateKey === trialDateFilter);
+      if (!visibleGroups.some(group => group.key === selectedTrialGroupKey)) {
+        selectedTrialGroupKey = visibleGroups.length ? visibleGroups[0].key : "";
+      }
+      renderTrialSummary(visibleGroups);
+      renderTrialList(visibleGroups, { preserveScroll: options.preserveListScroll });
+      renderTrialDetail(visibleGroups.find(group => group.key === selectedTrialGroupKey));
+      refs.trialUpdated.textContent = "Firebase 연결 · 마지막 반영 " + formatDateTime(Date.now());
+    }
+
+    function renderTrialResults(data) {
+      trialUsersData = data || {};
+      trialRows = buildTrialRows(trialUsersData);
+      trialGroups = buildTrialGroups(trialRows);
+      renderTrialResultDashboard();
+    }
+
+    function refreshTrialResults() {
+      renderTrialResults(trialUsersData);
+    }
+
+    function buildVideoRows(data) {
+      const rows = [];
+      Object.entries(data || {}).forEach(([uidKey, contentTypes]) => {
+        Object.entries(contentTypes || {}).forEach(([contentType, contents]) => {
+          Object.entries(contents || {}).forEach(([examId, content]) => {
+            Object.entries((content && content.questions) || {}).forEach(([questionKey, record]) => {
+              if (!record) return;
+              const playCount = toNumber(record.playCount, 0);
+              if (!playCount) return;
+              rows.push({
+                key: uidKey + "|" + contentType + "|" + examId + "|" + questionKey,
+                uid: record.uid || uidKey,
+                name: normalizeName(record.name || record.uid || uidKey),
+                contentType,
+                examId: record.examId || examId,
+                contentLabel: record.contentLabel || examId,
+                questionKey,
+                questionNumber: toNumber(record.questionNumber, Number(String(questionKey).replace(/[^0-9]/g, "")) || 0),
+                videoId: record.videoId || "",
+                playCount,
+                firstPlayedAt: readTimestamp(record.firstPlayedAt),
+                lastPlayedAt: readTimestamp(record.lastPlayedAt)
+              });
+            });
+          });
+        });
+      });
+      return rows.sort((a, b) => {
+        if ((b.lastPlayedAt || 0) !== (a.lastPlayedAt || 0)) return (b.lastPlayedAt || 0) - (a.lastPlayedAt || 0);
+        if (b.playCount !== a.playCount) return b.playCount - a.playCount;
+        return a.name.localeCompare(b.name);
+      });
+    }
+
+    function getFilteredVideoRows() {
+      const contentFilter = refs.videoContentFilter.value;
+      const query = normalizeName(refs.videoSearch.value).toLowerCase();
+      return videoRows.filter(row => {
+        if (contentFilter !== "all" && row.contentType !== contentFilter) return false;
+        if (!query) return true;
+        const haystack = [row.name, row.uid, row.contentLabel, row.examId, row.questionNumber + "번", row.videoId].join(" ").toLowerCase();
+        return haystack.includes(query);
+      });
+    }
+
+    function videoContentTypeLabel(contentType) {
+      if (contentType === "mockExam") return "모의고사";
+      if (contentType === "quiz1400") return "1400제";
+      return contentType || "콘텐츠";
+    }
+
+    function videoSortNumber(value) {
+      const match = String(value || "").match(/\d+/);
+      return match ? Number(match[0]) : 9999;
+    }
+
+    function buildVideoContentGroups(rows) {
+      const byType = rows.reduce((acc, row) => {
+        if (!acc[row.contentType]) acc[row.contentType] = [];
+        acc[row.contentType].push(row);
+        return acc;
+      }, {});
+      const typeOrder = { mockExam: 1, quiz1400: 2 };
+      return Object.entries(byType).map(([contentType, typeRows]) => {
+        const byContent = typeRows.reduce((acc, row) => {
+          const key = row.contentType + "|" + row.examId;
+          if (!acc[key]) acc[key] = [];
+          acc[key].push(row);
+          return acc;
+        }, {});
+        const collections = Object.entries(byContent).map(([key, contentRows]) => {
+          const sortedRows = contentRows.slice().sort((a, b) => {
+            if (a.questionNumber !== b.questionNumber) return a.questionNumber - b.questionNumber;
+            return (b.lastPlayedAt || 0) - (a.lastPlayedAt || 0);
+          });
+          const latestRow = contentRows.slice().sort((a, b) => (b.lastPlayedAt || 0) - (a.lastPlayedAt || 0))[0] || {};
+          return {
+            key,
+            contentType,
+            examId: latestRow.examId || "",
+            label: latestRow.contentLabel || latestRow.examId || "콘텐츠",
+            rows: sortedRows,
+            playCount: contentRows.reduce((sum, row) => sum + row.playCount, 0),
+            questionCount: new Set(contentRows.map(row => row.questionKey)).size,
+            firstPlayedAt: contentRows.reduce((min, row) => {
+              const value = row.firstPlayedAt || 0;
+              return value && (!min || value < min) ? value : min;
+            }, 0),
+            lastPlayedAt: contentRows.reduce((max, row) => Math.max(max, row.lastPlayedAt || 0), 0)
+          };
+        }).sort((a, b) => {
+          const numberCompare = videoSortNumber(a.examId || a.label) - videoSortNumber(b.examId || b.label);
+          if (numberCompare !== 0) return numberCompare;
+          return a.label.localeCompare(b.label);
+        });
+        return {
+          contentType,
+          label: videoContentTypeLabel(contentType),
+          collections,
+          playCount: typeRows.reduce((sum, row) => sum + row.playCount, 0),
+          questionCount: new Set(typeRows.map(row => row.examId + ":" + row.questionKey)).size,
+          lastPlayedAt: typeRows.reduce((max, row) => Math.max(max, row.lastPlayedAt || 0), 0)
+        };
+      }).sort((a, b) => {
+        const orderCompare = (typeOrder[a.contentType] || 99) - (typeOrder[b.contentType] || 99);
+        if (orderCompare !== 0) return orderCompare;
+        return a.label.localeCompare(b.label);
+      });
+    }
+
+    function buildVideoLearnerGroups(rows) {
+      const byLearner = rows.reduce((acc, row) => {
+        const key = row.uid || row.name || "unknown";
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(row);
+        return acc;
+      }, {});
+      return Object.entries(byLearner).map(([key, learnerRows]) => {
+        const sortedRows = learnerRows.slice().sort((a, b) => (b.lastPlayedAt || 0) - (a.lastPlayedAt || 0));
+        const latestRow = sortedRows[0] || {};
+        const contentGroups = buildVideoContentGroups(sortedRows);
+        return {
+          key,
+          uid: latestRow.uid || key,
+          name: latestRow.name || latestRow.uid || key,
+          rows: sortedRows,
+          contentGroups,
+          playCount: learnerRows.reduce((sum, row) => sum + row.playCount, 0),
+          contentCount: contentGroups.reduce((sum, group) => sum + group.collections.length, 0),
+          questionCount: new Set(learnerRows.map(row => row.contentType + ":" + row.examId + ":" + row.questionKey)).size,
+          firstPlayedAt: learnerRows.reduce((min, row) => {
+            const value = row.firstPlayedAt || 0;
+            return value && (!min || value < min) ? value : min;
+          }, 0),
+          lastPlayedAt: learnerRows.reduce((max, row) => Math.max(max, row.lastPlayedAt || 0), 0)
+        };
+      }).sort((a, b) => {
+        if ((b.lastPlayedAt || 0) !== (a.lastPlayedAt || 0)) return (b.lastPlayedAt || 0) - (a.lastPlayedAt || 0);
+        if (b.playCount !== a.playCount) return b.playCount - a.playCount;
+        return a.name.localeCompare(b.name);
+      });
+    }
+
+    function videoLearnerContentSummary(group) {
+      return group.contentGroups
+        .map(contentGroup => contentGroup.label + " " + contentGroup.collections.length + "개")
+        .join(" · ") || "기록 없음";
+    }
+
+    function renderVideoSummary(rows) {
+      const totalPlays = rows.reduce((sum, row) => sum + row.playCount, 0);
+      const learnerCount = new Set(rows.map(row => row.uid)).size;
+      const questionCount = new Set(rows.map(row => row.contentType + ":" + row.examId + ":" + row.questionKey)).size;
+      const latest = rows.reduce((max, row) => Math.max(max, row.lastPlayedAt || 0), 0);
+      refs.videoSummary.innerHTML =
+        '<div class="video-summary-item"><span>재생 횟수</span><strong>' + totalPlays + '회</strong></div>' +
+        '<div class="video-summary-item"><span>학습자 수</span><strong>' + learnerCount + '명</strong></div>' +
+        '<div class="video-summary-item"><span>문항 수</span><strong>' + questionCount + '개</strong></div>' +
+        '<div class="video-summary-item"><span>최근 재생</span><strong>' + (latest ? formatDateTime(latest) : '-') + '</strong></div>';
+    }
+
+    function renderVideoList(groups) {
+      refs.videoListCount.textContent = groups.length + "명";
+      if (!groups.length) {
+        selectedVideoLearnerKey = "";
+        selectedVideoContentKey = "";
+        refs.videoList.innerHTML = '<div class="empty-list">선택한 기준에 해당하는 영상 재생 기록이 없습니다.</div>';
+        renderVideoDetail(null);
+        return;
+      }
+      if (!groups.some(group => group.key === selectedVideoLearnerKey)) {
+        selectedVideoLearnerKey = groups[0].key;
+        selectedVideoContentKey = "";
+      }
+      const tableRows = groups.map(group => {
+        const active = group.key === selectedVideoLearnerKey;
+        return '<tr class="' + (active ? 'active' : '') + '" data-video-learner-key="' + escapeHtml(group.key) + '" tabindex="0">' +
+          '<td><div class="video-cell-main"><strong>' + escapeHtml(group.name || group.uid) + '</strong><span>' + escapeHtml(group.uid) + '</span></div></td>' +
+          '<td><span class="video-count">' + group.playCount + '회</span></td>' +
+          '<td><div class="video-content-summary">' + escapeHtml(videoLearnerContentSummary(group)) + '</div></td>' +
+          '<td>' + group.questionCount + '개</td>' +
+          '<td>' + formatDateTime(group.lastPlayedAt) + '</td>' +
+        '</tr>';
+      }).join("");
+      refs.videoList.innerHTML = '<table class="video-table learner-table"><thead><tr><th>학습자</th><th>총 재생</th><th>콘텐츠</th><th>문항 수</th><th>최근 재생</th></tr></thead><tbody>' + tableRows + '</tbody></table>';
+      refs.videoList.querySelectorAll('[data-video-learner-key]').forEach(item => {
+        const selectRow = () => {
+          selectedVideoLearnerKey = item.dataset.videoLearnerKey;
+          selectedVideoContentKey = "";
+          renderVideoStatsDashboard();
+        };
+        item.addEventListener("click", selectRow);
+        item.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectRow();
+          }
+        });
+      });
+      renderVideoDetail(groups.find(group => group.key === selectedVideoLearnerKey));
+    }
+
+    function renderVideoDetail(group) {
+      if (!group) {
+        refs.videoDetail.innerHTML = '<div class="trial-detail-empty">학습자를 선택하면 모의고사와 1400제 시청 기록을 확인할 수 있습니다.</div>';
+        return;
+      }
+      const collections = group.contentGroups.flatMap(contentGroup => contentGroup.collections);
+      if (!collections.length) {
+        refs.videoDetail.innerHTML = '<div class="trial-detail-empty">선택한 학습자의 영상 재생 기록이 없습니다.</div>';
+        return;
+      }
+      if (!collections.some(collection => collection.key === selectedVideoContentKey)) {
+        selectedVideoContentKey = collections[0].key;
+      }
+      const selectedCollection = collections.find(collection => collection.key === selectedVideoContentKey) || collections[0];
+      const typeBlocks = group.contentGroups.map(contentGroup => {
+        const collectionRows = contentGroup.collections.map(collection => {
+          const active = collection.key === selectedVideoContentKey;
+          return '<button type="button" class="video-collection-row ' + (active ? 'active' : '') + '" data-video-content-key="' + escapeHtml(collection.key) + '">' +
+            '<span class="video-collection-main"><strong>' + escapeHtml(collection.label) + '</strong><em>' + escapeHtml(collection.examId || collection.contentType) + '</em></span>' +
+            '<span class="video-collection-meta">' + collection.playCount + '회</span>' +
+            '<span class="video-collection-meta">' + collection.questionCount + '문항</span>' +
+          '</button>';
+        }).join("");
+        return '<section class="video-type-block">' +
+          '<div class="video-type-head"><h4>' + escapeHtml(contentGroup.label) + '</h4><span>' + contentGroup.playCount + '회 · ' + contentGroup.questionCount + '문항</span></div>' +
+          '<div class="video-collection-list">' + collectionRows + '</div>' +
+        '</section>';
+      }).join("");
+      const questionRows = selectedCollection.rows.map(row => {
+        return '<tr>' +
+          '<td>' + row.questionNumber + '번</td>' +
+          '<td>' + row.playCount + '회</td>' +
+          '<td>' + formatDateTime(row.lastPlayedAt) + '</td>' +
+          '<td>' + escapeHtml(row.videoId || '-') + '</td>' +
+        '</tr>';
+      }).join("");
+      refs.videoDetail.innerHTML =
+        '<div class="video-detail">' +
+          '<div><h3>' + escapeHtml(group.name || group.uid) + '</h3><p>모의고사와 1400제를 구분해 시청 기록을 확인합니다.</p></div>' +
+          '<div class="video-detail-list">' +
+            '<div><span>아이디</span><strong>' + escapeHtml(group.uid) + '</strong></div>' +
+            '<div><span>총 재생</span><strong>' + group.playCount + '회</strong></div>' +
+            '<div><span>콘텐츠</span><strong>' + group.contentCount + '개</strong></div>' +
+            '<div><span>문항</span><strong>' + group.questionCount + '개</strong></div>' +
+            '<div><span>최근 재생</span><strong>' + formatDateTime(group.lastPlayedAt) + '</strong></div>' +
+          '</div>' +
+          '<div class="video-type-list">' + typeBlocks + '</div>' +
+          '<div class="video-question-panel">' +
+            '<h4>' + escapeHtml(selectedCollection.label) + ' 문항별 기록</h4>' +
+            '<table class="video-question-table"><thead><tr><th>문항</th><th>재생</th><th>최근 재생</th><th>Vimeo ID</th></tr></thead><tbody>' + questionRows + '</tbody></table>' +
+          '</div>' +
+        '</div>';
+      refs.videoDetail.querySelectorAll("[data-video-content-key]").forEach(button => {
+        button.addEventListener("click", () => {
+          selectedVideoContentKey = button.dataset.videoContentKey;
+          renderVideoDetail(group);
+        });
+      });
+    }
+
+    function renderVideoStatsDashboard() {
+      const visibleRows = getFilteredVideoRows();
+      const visibleLearners = buildVideoLearnerGroups(visibleRows);
+      renderVideoSummary(visibleRows);
+      renderVideoList(visibleLearners);
+      refs.videoUpdated.textContent = "Firebase 연결 · 마지막 반영 " + formatDateTime(Date.now());
+    }
+
+    function renderVideoStats(data) {
+      videoRows = buildVideoRows(data);
+      renderVideoStatsDashboard();
+    }
+    function refreshRegisteredUsers() {
+      refs.registeredList.innerHTML = '<div class="empty-list">등록 목록을 불러오는 중입니다.</div>';
+      database.ref("authorizedUsers").once("value")
+        .then(snapshot => renderRegisteredUsers(snapshot.val() || {}))
+        .catch(() => {
+          refs.registeredList.innerHTML = '<div class="empty-list">등록 목록을 불러오지 못했습니다.</div>';
+        });
+    }
+
+    function resetForm() {
+      refs.uid.value = "";
+      refs.name.value = "";
+      refs.mockAll.checked = true;
+      refs.quizAll.checked = true;
+      document.querySelector('input[name="enabled"][value="true"]').checked = true;
+      showMessage("입력값을 초기화했습니다.", "");
+      updatePreview();
+    }
+
+    [refs.uid, refs.name].forEach(input => input.addEventListener("input", updatePreview));
+    [refs.mockAll, refs.quizAll].forEach(input => input.addEventListener("change", updatePreview));
+    document.querySelectorAll('input[name="enabled"]').forEach(input => input.addEventListener("change", updatePreview));
+    document.getElementById("save-btn").addEventListener("click", saveUser);
+    document.getElementById("reset-btn").addEventListener("click", resetForm);
+    refs.refreshList.addEventListener("click", refreshRegisteredUsers);
+    refs.openRegistration.addEventListener("click", () => {
+      if (!requestAdminAccess("학습자 등록 / 권한 관리는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) return;
+      ensureRegisteredUsersListening();
+      showView("registration");
+    });
+    refs.openTrial.addEventListener("click", () => {
+      showView("trial");
+    });
+    refs.openVideo.addEventListener("click", () => {
+      ensureVideoStatsListening();
+      renderVideoStatsDashboard();
+      showView("video");
+    });
+    refs.videoContentFilter.addEventListener("change", renderVideoStatsDashboard);
+    refs.videoSearch.addEventListener("input", renderVideoStatsDashboard);
+    document.querySelectorAll("[data-view-home]").forEach(button => {
+      button.addEventListener("click", () => showView("home"));
+    });
+
+    database.ref(".info/connected").on("value", snapshot => {
+      refs.status.textContent = snapshot.val() ? "Firebase 연결됨" : "Firebase 연결 대기";
+    });
+
+    database.ref("exams/examTrial/users").on("value", snapshot => {
+      trialUsersData = snapshot.val() || {};
+      refreshTrialResults();
+    });
+
+    database.ref("exams/examTrial/retestRequests").on("value", snapshot => {
+      trialRetestRequests = snapshot.val() || {};
+      refreshTrialResults();
+    });
+
+    database.ref("exams/examTrial/retestApprovals").on("value", snapshot => {
+      trialRetestApprovals = snapshot.val() || {};
+      refreshTrialResults();
+    });
+
+    updatePreview();
+    showView("home");
+  </script>
+</body>
+</html>
