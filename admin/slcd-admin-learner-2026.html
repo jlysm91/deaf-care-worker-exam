@@ -568,6 +568,202 @@
       padding-right: 2px;
     }
 
+    /* Registration view: uncodixfy pass */
+    #registration-view {
+      grid-template-columns: minmax(0, 1fr) 360px;
+      align-items: start;
+      gap: 16px;
+    }
+
+    #registration-view .view-bar {
+      grid-column: 1 / -1;
+      margin-bottom: 2px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    #registration-view .view-bar h2 {
+      font-size: 27px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    #registration-view .view-bar p {
+      margin-top: 6px;
+      color: #52616A;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    #registration-view > .panel,
+    #registration-view > .summary {
+      border-color: #D8E1E4;
+      border-radius: 10px;
+      background: #FFFFFF;
+      box-shadow: none;
+    }
+
+    #registration-view > .panel {
+      padding: 20px 24px 18px;
+    }
+
+    #registration-view > .summary {
+      padding: 20px 24px;
+      gap: 18px;
+    }
+
+    #registration-view .form-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px 18px;
+    }
+
+    #registration-view .field label,
+    #registration-view .group-title {
+      margin-bottom: 8px;
+      color: #4F5E67;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    #registration-view input[type="text"],
+    #registration-view input[type="password"] {
+      height: 44px;
+      border-color: #D5DEE2;
+      border-radius: 8px;
+      background: #FFFFFF;
+      font-size: 15px;
+    }
+
+    #registration-view input[type="text"]:focus,
+    #registration-view input[type="password"]:focus {
+      border-color: #16756E;
+      box-shadow: 0 0 0 3px rgba(22, 117, 110, 0.12);
+      outline: none;
+    }
+
+    #registration-view .radio-row,
+    #registration-view .check-row {
+      gap: 8px;
+    }
+
+    #registration-view .choice {
+      min-height: 38px;
+      padding: 0 12px;
+      border-color: #D5DEE2;
+      border-radius: 8px;
+      background: #FFFFFF;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    #registration-view .choice:hover {
+      border-color: #9BB2B7;
+      background: #F8FAFA;
+    }
+
+    #registration-view .choice input {
+      width: 16px;
+      height: 16px;
+    }
+
+    #registration-view .scope-block {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #D8E1E4;
+      border-radius: 10px;
+      background: #F8FAFA;
+    }
+
+    #registration-view .scope-block:first-child {
+      margin-top: 0;
+    }
+
+    #registration-view .actions {
+      justify-content: flex-end;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid #E6ECEE;
+    }
+
+    #registration-view .actions button,
+    #registration-view .view-back,
+    #registration-view .btn-small {
+      border-radius: 8px;
+      box-shadow: none;
+    }
+
+    #registration-view .message {
+      min-height: 0;
+      margin-top: 14px;
+      padding: 11px 12px;
+      border-radius: 8px;
+      background: #F8FAFA;
+      font-size: 13px;
+    }
+
+    #registration-view .summary h2,
+    #registration-view .registered-head h2 {
+      font-size: 20px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+
+    #registration-view .summary-list {
+      gap: 7px;
+    }
+
+    #registration-view .summary-list li {
+      padding: 10px 12px;
+      border-color: #D8E1E4;
+      border-radius: 8px;
+      background: #FFFFFF;
+      font-size: 13px;
+    }
+
+    #registration-view .registered-head {
+      margin-top: 4px;
+      padding-top: 16px;
+      border-top: 1px solid #E6ECEE;
+    }
+
+    #registration-view .registered-list {
+      max-height: 310px;
+      gap: 8px;
+    }
+
+    #registration-view .registered-item {
+      border-color: #D8E1E4;
+      border-radius: 8px;
+      background: #FFFFFF;
+      box-shadow: none;
+    }
+
+    @media (max-width: 900px) {
+      #registration-view {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      #registration-view > .panel,
+      #registration-view > .summary {
+        padding: 16px;
+      }
+
+      #registration-view .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #registration-view .actions {
+        justify-content: stretch;
+      }
+
+      #registration-view .actions button {
+        flex: 1 1 0;
+      }
+    }
+
+
     .trial-panel {
       position: relative;
       display: grid;
@@ -4312,6 +4508,7 @@
       showView("trial");
     });
     refs.openVideo.addEventListener("click", () => {
+      if (!requestAdminAccess("학습 영상 시청 통계는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) return;
       ensureVideoStatsListening();
       renderVideoStatsDashboard();
       showView("video");
