@@ -3002,6 +3002,404 @@
       }
     }
 
+    /* 2026-06-22 mobile admin cleanup: keep dense data readable on phones. */
+    .video-mobile-list {
+      display: none;
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .video-mobile-row {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #FFFFFF;
+      overflow: hidden;
+    }
+
+    .video-mobile-row.active {
+      border-color: #7FAEAB;
+      background: #F8FBFA;
+    }
+
+    .video-mobile-select {
+      width: 100%;
+      padding: 12px;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      display: grid;
+      gap: 10px;
+      font: inherit;
+    }
+
+    .video-mobile-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .video-mobile-name {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .video-mobile-name strong {
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 950;
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .video-mobile-name span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .video-mobile-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .video-mobile-meta span {
+      min-width: 0;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .video-mobile-meta strong {
+      display: block;
+      margin-top: 3px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 950;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .video-delete-btn {
+      min-height: 34px;
+      padding: 0 10px;
+      border: 1px solid #D7A7A2;
+      border-radius: 8px;
+      background: #FFFDFC;
+      color: #9F3F38;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .video-delete-btn:hover {
+      background: #FFF5F3;
+    }
+
+    .video-delete-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .video-delete-btn-mobile {
+      width: calc(100% - 24px);
+      margin: 0 12px 12px;
+    }
+
+    .video-table.learner-table th:last-child,
+    .video-table.learner-table td:last-child {
+      width: 92px;
+      text-align: right;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        overflow-x: hidden;
+      }
+
+      main {
+        width: 100%;
+        max-width: none;
+        padding: 18px 14px 28px;
+      }
+
+      header {
+        gap: 14px;
+        padding-bottom: 14px;
+      }
+
+      header h1 {
+        font-size: clamp(30px, 8vw, 42px);
+        line-height: 1.12;
+      }
+
+      .trial-panel {
+        border-radius: 10px;
+      }
+
+      .trial-panel-head {
+        padding: 14px;
+        gap: 10px;
+      }
+
+      .trial-title-block h2 {
+        font-size: 24px;
+        line-height: 1.2;
+      }
+
+      .trial-title-block p,
+      .trial-status {
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      .trial-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 10px 0 14px;
+      }
+
+      .trial-metric,
+      .trial-metric.accent,
+      .trial-metric.pass,
+      .trial-metric.incomplete,
+      .trial-metric.duplicate {
+        min-height: 72px !important;
+        height: auto !important;
+        padding: 11px 12px;
+        border-radius: 8px;
+      }
+
+      .trial-metric.duplicate {
+        grid-column: 1 / -1;
+      }
+
+      .trial-metric span.trial-metric-label {
+        font-size: 13px;
+        line-height: 1.35;
+      }
+
+      .trial-metric strong,
+      .trial-metric.accent strong {
+        font-size: 23px !important;
+        line-height: 1.05;
+      }
+
+      .trial-list-card,
+      .trial-detail-panel {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        border-radius: 10px;
+      }
+
+      .trial-list-head {
+        margin: 12px;
+        padding: 13px 14px;
+        border-radius: 8px;
+        text-align: left;
+      }
+
+      .trial-list-head h3 {
+        font-size: 22px;
+        text-align: left;
+      }
+
+      .trial-list-head span {
+        font-size: 13px;
+        text-align: left;
+      }
+
+      .trial-person-row {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 14px;
+        gap: 10px;
+      }
+
+      .trial-person-name {
+        font-size: 22px;
+        line-height: 1.18;
+      }
+
+      .trial-person-sub {
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .trial-person-side {
+        justify-items: start;
+        text-align: left;
+        gap: 8px;
+      }
+
+      .trial-person-score {
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      .trial-person-delete {
+        min-height: 38px;
+        padding: 0 14px;
+        font-size: 14px;
+      }
+
+      .trial-person-meta {
+        margin-top: 8px;
+        gap: 6px;
+      }
+
+      .trial-person-meta span {
+        min-height: 28px;
+        padding: 0 10px;
+        font-size: 13px;
+      }
+
+      .video-view {
+        gap: 12px;
+      }
+
+      .video-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        border-radius: 10px;
+        box-shadow: none;
+      }
+
+      .video-summary-item {
+        min-height: 72px;
+        padding: 12px;
+        gap: 6px;
+        border-right: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .video-summary-item:nth-child(2n) {
+        border-right: 0;
+      }
+
+      .video-summary-item:nth-last-child(-n + 2) {
+        border-bottom: 0;
+      }
+
+      .video-summary-item span {
+        font-size: 12px;
+      }
+
+      .video-summary-item strong {
+        font-size: 20px;
+        line-height: 1.16;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      .video-controls {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .video-controls select,
+      .video-controls input {
+        min-height: 44px;
+        border-radius: 8px;
+        font-size: 16px;
+      }
+
+      .video-layout {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .video-card {
+        min-height: 0;
+        border-radius: 10px;
+        box-shadow: none;
+      }
+
+      .video-card-head {
+        min-height: 0;
+        padding: 14px;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .video-card-head h3 {
+        font-size: 20px;
+      }
+
+      .video-card-head span {
+        font-size: 13px;
+        white-space: normal;
+      }
+
+      .video-table.learner-table {
+        display: none;
+      }
+
+      .video-mobile-list {
+        display: grid;
+      }
+
+      .video-table-wrap {
+        overflow: visible;
+      }
+
+      .video-detail {
+        padding: 14px;
+        gap: 12px;
+      }
+
+      .video-detail h3 {
+        font-size: 22px;
+      }
+
+      .video-detail-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .video-detail-list div {
+        min-height: 54px;
+        padding: 10px;
+      }
+
+      .video-detail-list strong {
+        font-size: 15px;
+        overflow-wrap: anywhere;
+      }
+
+      .video-collection-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px;
+        padding: 10px;
+      }
+
+      .video-collection-meta:last-child {
+        display: none;
+      }
+
+      .video-question-panel {
+        overflow-x: auto;
+      }
+
+      .video-question-table {
+        min-width: 520px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -4415,6 +4813,7 @@
               rows.push({
                 key: uidKey + "|" + contentType + "|" + examId + "|" + questionKey,
                 uid: record.uid || uidKey,
+                videoUserKey: uidKey,
                 name: normalizeName(record.name || record.uid || uidKey),
                 contentType,
                 examId: record.examId || examId,
@@ -4528,6 +4927,7 @@
           key,
           uid: latestRow.uid || key,
           name: latestRow.name || latestRow.uid || key,
+          sourceKeys: Array.from(new Set(learnerRows.map(row => row.videoUserKey || row.uid || key))),
           rows: sortedRows,
           contentGroups,
           playCount: learnerRows.reduce((sum, row) => sum + row.playCount, 0),
@@ -4564,6 +4964,33 @@
         '<div class="video-summary-item"><span>최근 재생</span><strong>' + (latest ? formatDateTime(latest) : '-') + '</strong></div>';
     }
 
+    async function deleteVideoLearnerStats(group, trigger) {
+      if (!group || !group.sourceKeys || !group.sourceKeys.length) return;
+      const targetName = group.name || group.uid || group.key;
+      if (!(await requestAdminAccess("학습 영상 시청 기록 삭제는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요."))) return;
+      const confirmed = window.confirm(
+        targetName + "님의 학습 영상 시청 기록을 삭제할까요?\n\n" +
+        "삭제 범위: 학습 영상 시청 통계\n" +
+        "보존: 학습자 등록 정보, 실전 모의시험 결과"
+      );
+      if (!confirmed) return;
+      if (trigger) trigger.disabled = true;
+      try {
+        const updates = {};
+        group.sourceKeys.forEach(key => {
+          updates[key] = null;
+        });
+        await database.ref("videoViews/byUser").update(updates);
+        selectedVideoLearnerKey = "";
+        selectedVideoContentKey = "";
+        showMessage(targetName + "님의 학습 영상 시청 기록을 삭제했습니다.", "success");
+      } catch (error) {
+        console.error(error);
+        if (trigger) trigger.disabled = false;
+        showMessage("학습 영상 시청 기록을 삭제하지 못했습니다. Firebase 권한 또는 연결 상태를 확인해 주세요.", "error");
+      }
+    }
+
     function renderVideoList(groups) {
       refs.videoListCount.textContent = groups.length + "명";
       if (!groups.length) {
@@ -4585,11 +5012,31 @@
           '<td><div class="video-content-summary">' + escapeHtml(videoLearnerContentSummary(group)) + '</div></td>' +
           '<td>' + group.questionCount + '개</td>' +
           '<td>' + formatDateTime(group.lastPlayedAt) + '</td>' +
+          '<td><button type="button" class="video-delete-btn" data-video-delete-key="' + escapeHtml(group.key) + '">기록 삭제</button></td>' +
         '</tr>';
       }).join("");
-      refs.videoList.innerHTML = '<table class="video-table learner-table"><thead><tr><th>학습자</th><th>총 재생</th><th>콘텐츠</th><th>문항 수</th><th>최근 재생</th></tr></thead><tbody>' + tableRows + '</tbody></table>';
+      const mobileRows = groups.map(group => {
+        const active = group.key === selectedVideoLearnerKey;
+        return '<article class="video-mobile-row ' + (active ? 'active' : '') + '">' +
+          '<button type="button" class="video-mobile-select" data-video-learner-key="' + escapeHtml(group.key) + '">' +
+            '<span class="video-mobile-main">' +
+              '<span class="video-mobile-name"><strong>' + escapeHtml(group.name || group.uid) + '</strong><span>' + escapeHtml(group.uid) + '</span></span>' +
+              '<span class="video-count">' + group.playCount + '회</span>' +
+            '</span>' +
+            '<span class="video-mobile-meta">' +
+              '<span>콘텐츠<strong>' + escapeHtml(videoLearnerContentSummary(group)) + '</strong></span>' +
+              '<span>문항<strong>' + group.questionCount + '개</strong></span>' +
+              '<span>최근 재생<strong>' + formatDateTime(group.lastPlayedAt) + '</strong></span>' +
+              '<span>상태<strong>기록 있음</strong></span>' +
+            '</span>' +
+          '</button>' +
+          '<button type="button" class="video-delete-btn video-delete-btn-mobile" data-video-delete-key="' + escapeHtml(group.key) + '">시청 기록 삭제</button>' +
+        '</article>';
+      }).join("");
+      refs.videoList.innerHTML = '<table class="video-table learner-table"><thead><tr><th>학습자</th><th>총 재생</th><th>콘텐츠</th><th>문항 수</th><th>최근 재생</th><th>관리</th></tr></thead><tbody>' + tableRows + '</tbody></table><div class="video-mobile-list">' + mobileRows + '</div>';
       refs.videoList.querySelectorAll('[data-video-learner-key]').forEach(item => {
-        const selectRow = () => {
+        const selectRow = event => {
+          if (event && event.target && event.target.closest('[data-video-delete-key]')) return;
           selectedVideoLearnerKey = item.dataset.videoLearnerKey;
           selectedVideoContentKey = "";
           renderVideoStatsDashboard();
@@ -4598,13 +5045,20 @@
         item.addEventListener("keydown", event => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            selectRow();
+            selectRow(event);
           }
+        });
+      });
+      refs.videoList.querySelectorAll('[data-video-delete-key]').forEach(button => {
+        button.addEventListener("click", async event => {
+          event.preventDefault();
+          event.stopPropagation();
+          const group = groups.find(item => item.key === button.dataset.videoDeleteKey);
+          await deleteVideoLearnerStats(group, button);
         });
       });
       renderVideoDetail(groups.find(group => group.key === selectedVideoLearnerKey));
     }
-
     function renderVideoDetail(group) {
       if (!group) {
         refs.videoDetail.innerHTML = '<div class="trial-detail-empty">학습자를 선택하면 모의고사와 1400제 시청 기록을 확인할 수 있습니다.</div>';
