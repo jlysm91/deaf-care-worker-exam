@@ -354,6 +354,73 @@
         padding: 12px;
       }
     }
+    /* 2026-06-22 video drilldown panels. */
+    .video-controls {
+      grid-template-columns: minmax(220px, 1fr);
+    }
+
+    .video-controls select {
+      display: none;
+    }
+
+    .video-subscope-panels {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+      gap: 8px;
+    }
+
+    .video-subscope-panels[hidden] {
+      display: none;
+    }
+
+    .video-subscope-panel {
+      min-height: 58px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      display: grid;
+      gap: 3px;
+    }
+
+    .video-subscope-panel:hover,
+    .video-subscope-panel.active {
+      border-color: rgba(20, 108, 115, 0.45);
+      background: #F3FAF8;
+    }
+
+    .video-subscope-panel:disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+      background: #F8FAFA;
+    }
+
+    .video-subscope-panel strong {
+      font-size: 14px;
+      font-weight: 950;
+      line-height: 1.25;
+    }
+
+    .video-subscope-panel span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 820;
+      line-height: 1.3;
+    }
+
+    @media (max-width: 720px) {
+      .video-subscope-panels {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .video-subscope-panel {
+        min-height: 52px;
+        padding: 9px 10px;
+      }
+    }
     .video-detail { padding: 18px; display: grid; gap: 14px; }
     .video-detail h3 { margin: 0; font-size: 20px; font-weight: 950; }
     .video-detail p { margin: 0; color: var(--muted); font-size: 14px; font-weight: 760; line-height: 1.5; }
@@ -3655,6 +3722,7 @@
           <div class="video-summary-item"><span>최근 재생</span><strong>-</strong></div>
         </div>
         <div class="video-scope-panels" id="video-scope-panels"></div>
+        <div class="video-subscope-panels" id="video-subscope-panels" hidden></div>
         <div class="video-controls">
           <select id="video-content-filter" aria-label="콘텐츠 필터">
             <option value="all">전체</option>
@@ -3820,6 +3888,7 @@
       trialUpdated: document.getElementById("trial-result-updated"),
       videoSummary: document.getElementById("video-summary"),
       videoScopePanels: document.getElementById("video-scope-panels"),
+      videoSubscopePanels: document.getElementById("video-subscope-panels"),
       videoList: document.getElementById("video-stats-list"),
       videoListCount: document.getElementById("video-list-count"),
       videoDetail: document.getElementById("video-stats-detail"),
@@ -3838,6 +3907,7 @@
     let registeredUsersListening = false;
     let videoRows = [];
     let selectedVideoLearnerKey = "";
+    let selectedVideoScopeKey = "";
     let selectedVideoContentKey = "";
     let videoStatsListening = false;
 
@@ -4971,13 +5041,47 @@
       });
     }
 
+    function getVideoScopeKey(row) {
+      if (!row) return "";
+      if (row.contentType === "quiz1400") {
+        const part = getQuiz1400PartFromExamId(row.examId) || (String(row.contentLabel || "").match(/(\d+)\s*부/) || ["", ""])[1];
+        return part ? "quiz1400:part" + part : "quiz1400:unknown";
+      }
+      const number = (String(row.examId || row.contentLabel || "").match(/\d+/) || [""])[0];
+      return number ? "mockExam:exam" + number : "mockExam:unknown";
+    }
+
+    function buildVideoSubscopeDefinitions(contentType) {
+      if (contentType === "mockExam") {
+        return Array.from({ length: 10 }, (_, index) => {
+          const number = index + 1;
+          return { key: "mockExam:exam" + number, label: number + "회" };
+        });
+      }
+      if (contentType === "quiz1400") {
+        return Array.from({ length: 4 }, (_, index) => {
+          const number = index + 1;
+          return { key: "quiz1400:part" + number, label: number + "부" };
+        });
+      }
+      return [];
+    }
+
+    function getVideoContentRows(rows) {
+      const contentFilter = refs.videoContentFilter.value;
+      if (contentFilter !== "mockExam" && contentFilter !== "quiz1400") return rows.slice();
+      return rows.filter(row => row.contentType === contentFilter);
+    }
     function getFilteredVideoRows() {
       const contentFilter = refs.videoContentFilter.value;
       const query = normalizeName(refs.videoSearch.value).toLowerCase();
+      if (contentFilter !== "mockExam" && contentFilter !== "quiz1400") return [];
+      if (!selectedVideoScopeKey) return [];
       return videoRows.filter(row => {
-        if (contentFilter !== "all" && row.contentType !== contentFilter) return false;
+        if (row.contentType !== contentFilter) return false;
+        if (getVideoScopeKey(row) !== selectedVideoScopeKey) return false;
         if (!query) return true;
-        const haystack = [row.name, row.uid, row.contentLabel, row.examId, row.questionNumber + "번", row.videoId].join(" ").toLowerCase();
+        const haystack = [row.name, row.uid, row.contentLabel, row.examId, videoQuestionLabel(row), row.videoId].join(" ").toLowerCase();
         return haystack.includes(query);
       });
     }
@@ -5109,6 +5213,38 @@
       refs.videoScopePanels.querySelectorAll('[data-video-filter-value]').forEach(button => {
         button.addEventListener("click", () => {
           refs.videoContentFilter.value = button.dataset.videoFilterValue;
+          selectedVideoScopeKey = "";
+          selectedVideoLearnerKey = "";
+          selectedVideoContentKey = "";
+          renderVideoStatsDashboard();
+        });
+      });
+    }
+    function renderVideoSubscopePanels(rows) {
+      if (!refs.videoSubscopePanels) return;
+      const contentFilter = refs.videoContentFilter.value;
+      const definitions = buildVideoSubscopeDefinitions(contentFilter);
+      if (!definitions.length) {
+        selectedVideoScopeKey = "";
+        refs.videoSubscopePanels.hidden = true;
+        refs.videoSubscopePanels.innerHTML = "";
+        return;
+      }
+      refs.videoSubscopePanels.hidden = false;
+      const contentRows = getVideoContentRows(rows);
+      refs.videoSubscopePanels.innerHTML = definitions.map(def => {
+        const scopeRows = contentRows.filter(row => getVideoScopeKey(row) === def.key);
+        const playCount = scopeRows.reduce((sum, row) => sum + row.playCount, 0);
+        const learnerCount = new Set(scopeRows.map(row => row.uid)).size;
+        const disabled = scopeRows.length ? "" : " disabled";
+        return '<button type="button" class="video-subscope-panel ' + (selectedVideoScopeKey === def.key ? 'active' : '') + '" data-video-scope-key="' + def.key + '"' + disabled + '>' +
+          '<strong>' + def.label + '</strong>' +
+          '<span>' + playCount + '회 · ' + learnerCount + '명</span>' +
+        '</button>';
+      }).join("");
+      refs.videoSubscopePanels.querySelectorAll('[data-video-scope-key]').forEach(button => {
+        button.addEventListener("click", () => {
+          selectedVideoScopeKey = button.dataset.videoScopeKey;
           selectedVideoLearnerKey = "";
           selectedVideoContentKey = "";
           renderVideoStatsDashboard();
@@ -5159,7 +5295,13 @@
       if (!groups.length) {
         selectedVideoLearnerKey = "";
         selectedVideoContentKey = "";
-        refs.videoList.innerHTML = '<div class="empty-list">선택한 기준에 해당하는 영상 재생 기록이 없습니다.</div>';
+        let emptyMessage = "선택한 기준에 해당하는 영상 재생 기록이 없습니다.";
+        if (refs.videoContentFilter.value !== "mockExam" && refs.videoContentFilter.value !== "quiz1400") {
+          emptyMessage = "모의고사 또는 1400제 패널을 선택해 주세요.";
+        } else if (!selectedVideoScopeKey) {
+          emptyMessage = refs.videoContentFilter.value === "mockExam" ? "확인할 모의고사 회차를 선택해 주세요." : "확인할 1400제 부를 선택해 주세요.";
+        }
+        refs.videoList.innerHTML = '<div class="empty-list">' + emptyMessage + '</div>';
         renderVideoDetail(null);
         return;
       }
@@ -5285,8 +5427,11 @@
     function renderVideoStatsDashboard() {
       const visibleRows = getFilteredVideoRows();
       const visibleLearners = buildVideoLearnerGroups(visibleRows);
+      const contentRows = getVideoContentRows(videoRows);
+      const summaryRows = selectedVideoScopeKey ? visibleRows : (refs.videoContentFilter.value === "all" ? videoRows : contentRows);
       renderVideoScopePanels(videoRows);
-      renderVideoSummary(visibleRows);
+      renderVideoSubscopePanels(videoRows);
+      renderVideoSummary(summaryRows);
       renderVideoList(visibleLearners);
       refs.videoUpdated.textContent = "Firebase 연결 · 마지막 반영 " + formatDateTime(Date.now());
     }
@@ -5334,7 +5479,12 @@
       renderVideoStatsDashboard();
       showView("video");
     });
-    refs.videoContentFilter.addEventListener("change", renderVideoStatsDashboard);
+    refs.videoContentFilter.addEventListener("change", () => {
+      selectedVideoScopeKey = "";
+      selectedVideoLearnerKey = "";
+      selectedVideoContentKey = "";
+      renderVideoStatsDashboard();
+    });
     refs.videoSearch.addEventListener("input", renderVideoStatsDashboard);
     document.querySelectorAll("[data-view-home]").forEach(button => {
       button.addEventListener("click", () => showView("home"));
