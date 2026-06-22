@@ -299,6 +299,61 @@
     .video-count { color: var(--primary-dark); font-size: 20px; font-weight: 950; white-space: nowrap; }
     .video-content-summary { color: var(--muted); font-size: 13px; font-weight: 850; line-height: 1.45; }
 
+    .video-scope-panels {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .video-scope-panel {
+      min-height: 78px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      display: grid;
+      gap: 6px;
+    }
+
+    .video-scope-panel:hover,
+    .video-scope-panel.active {
+      border-color: rgba(20, 108, 115, 0.45);
+      background: #F3FAF8;
+    }
+
+    .video-scope-panel strong {
+      font-size: 16px;
+      font-weight: 950;
+      line-height: 1.25;
+    }
+
+    .video-scope-panel span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 820;
+      line-height: 1.35;
+    }
+
+    .video-scope-panel em {
+      color: var(--primary-dark);
+      font-style: normal;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    @media (max-width: 720px) {
+      .video-scope-panels {
+        grid-template-columns: 1fr;
+      }
+
+      .video-scope-panel {
+        min-height: 68px;
+        padding: 12px;
+      }
+    }
     .video-detail { padding: 18px; display: grid; gap: 14px; }
     .video-detail h3 { margin: 0; font-size: 20px; font-weight: 950; }
     .video-detail p { margin: 0; color: var(--muted); font-size: 14px; font-weight: 760; line-height: 1.5; }
@@ -3599,6 +3654,7 @@
           <div class="video-summary-item"><span>문항 수</span><strong>-</strong></div>
           <div class="video-summary-item"><span>최근 재생</span><strong>-</strong></div>
         </div>
+        <div class="video-scope-panels" id="video-scope-panels"></div>
         <div class="video-controls">
           <select id="video-content-filter" aria-label="콘텐츠 필터">
             <option value="all">전체</option>
@@ -3763,6 +3819,7 @@
       trialFilters: document.getElementById("trial-result-filters"),
       trialUpdated: document.getElementById("trial-result-updated"),
       videoSummary: document.getElementById("video-summary"),
+      videoScopePanels: document.getElementById("video-scope-panels"),
       videoList: document.getElementById("video-stats-list"),
       videoListCount: document.getElementById("video-list-count"),
       videoDetail: document.getElementById("video-stats-detail"),
@@ -4847,6 +4904,35 @@
       renderTrialResults(trialUsersData);
     }
 
+    function getQuiz1400PartFromExamId(examId) {
+      const id = String(examId || "");
+      if (/^exam1[1-4]$/.test(id)) return "1";
+      if (/^exam2[5-7]$/.test(id)) return "2";
+      if (/^exam3(8|9|11|10[1-6])$/.test(id)) return "3";
+      if (/^exam4(12|13|14|15)$/.test(id)) return "4";
+      return "";
+    }
+
+    function normalizeVideoContentType(contentType, examId, record) {
+      const label = String((record && record.contentLabel) || "");
+      if (contentType === "quiz1400" || label.indexOf("1400") >= 0) return "quiz1400";
+      if (getQuiz1400PartFromExamId(examId)) return "quiz1400";
+      return contentType || "mockExam";
+    }
+
+    function normalizeVideoContentLabel(contentType, examId, label) {
+      if (contentType === "quiz1400") {
+        const part = getQuiz1400PartFromExamId(examId);
+        return part ? "1400제 " + part + "부" : (label || "1400제");
+      }
+      if (label) return label;
+      const contentNumber = (String(examId || "").match(/\d+/) || [""])[0];
+      return contentNumber ? contentNumber + "회 모의고사" : "모의고사";
+    }
+
+    function videoQuestionLabel(row) {
+      return row && row.questionLabel ? row.questionLabel : ((row && row.questionNumber ? row.questionNumber : "-") + "번");
+    }
     function buildVideoRows(data) {
       const rows = [];
       Object.entries(data || {}).forEach(([uidKey, contentTypes]) => {
@@ -4856,16 +4942,19 @@
               if (!record) return;
               const playCount = toNumber(record.playCount, 0);
               if (!playCount) return;
+              const rawExamId = record.examId || examId;
+              const normalizedContentType = normalizeVideoContentType(contentType, rawExamId, record);
               rows.push({
-                key: uidKey + "|" + contentType + "|" + examId + "|" + questionKey,
+                key: uidKey + "|" + normalizedContentType + "|" + rawExamId + "|" + questionKey,
                 uid: record.uid || uidKey,
                 videoUserKey: uidKey,
                 name: normalizeName(record.name || record.uid || uidKey),
-                contentType,
-                examId: record.examId || examId,
-                contentLabel: record.contentLabel || examId,
+                contentType: normalizedContentType,
+                examId: rawExamId,
+                contentLabel: normalizeVideoContentLabel(normalizedContentType, rawExamId, record.contentLabel || ""),
                 questionKey,
                 questionNumber: toNumber(record.questionNumber, Number(String(questionKey).replace(/[^0-9]/g, "")) || 0),
+                questionLabel: record.questionLabel || "",
                 videoId: record.videoId || "",
                 playCount,
                 firstPlayedAt: readTimestamp(record.firstPlayedAt),
@@ -4998,6 +5087,34 @@
         .join(" · ") || "기록 없음";
     }
 
+    function renderVideoScopePanels(rows) {
+      if (!refs.videoScopePanels) return;
+      const types = [
+        { value: "mockExam", label: "모의고사" },
+        { value: "quiz1400", label: "1400제" }
+      ];
+      const currentFilter = refs.videoContentFilter.value;
+      refs.videoScopePanels.innerHTML = types.map(type => {
+        const typeRows = rows.filter(row => row.contentType === type.value);
+        const totalPlays = typeRows.reduce((sum, row) => sum + row.playCount, 0);
+        const learnerCount = new Set(typeRows.map(row => row.uid)).size;
+        const questionCount = new Set(typeRows.map(row => row.examId + ":" + row.questionKey)).size;
+        const latest = typeRows.reduce((max, row) => Math.max(max, row.lastPlayedAt || 0), 0);
+        return '<button type="button" class="video-scope-panel ' + (currentFilter === type.value ? 'active' : '') + '" data-video-filter-value="' + type.value + '">' +
+          '<strong>' + type.label + '</strong>' +
+          '<span>' + totalPlays + '회 · ' + learnerCount + '명 · ' + questionCount + '문항</span>' +
+          '<em>최근 ' + (latest ? formatDateTime(latest) : '-') + '</em>' +
+        '</button>';
+      }).join("");
+      refs.videoScopePanels.querySelectorAll('[data-video-filter-value]').forEach(button => {
+        button.addEventListener("click", () => {
+          refs.videoContentFilter.value = button.dataset.videoFilterValue;
+          selectedVideoLearnerKey = "";
+          selectedVideoContentKey = "";
+          renderVideoStatsDashboard();
+        });
+      });
+    }
     function renderVideoSummary(rows) {
       const totalPlays = rows.reduce((sum, row) => sum + row.playCount, 0);
       const learnerCount = new Set(rows.map(row => row.uid)).size;
@@ -5135,7 +5252,7 @@
       }).join("");
       const questionRows = selectedCollection.rows.map(row => {
         return '<tr>' +
-          '<td>' + row.questionNumber + '번</td>' +
+          '<td>' + escapeHtml(videoQuestionLabel(row)) + '</td>' +
           '<td>' + row.playCount + '회</td>' +
           '<td>' + formatDateTime(row.lastPlayedAt) + '</td>' +
           '<td>' + escapeHtml(row.videoId || '-') + '</td>' +
@@ -5168,6 +5285,7 @@
     function renderVideoStatsDashboard() {
       const visibleRows = getFilteredVideoRows();
       const visibleLearners = buildVideoLearnerGroups(visibleRows);
+      renderVideoScopePanels(videoRows);
       renderVideoSummary(visibleRows);
       renderVideoList(visibleLearners);
       refs.videoUpdated.textContent = "Firebase 연결 · 마지막 반영 " + formatDateTime(Date.now());

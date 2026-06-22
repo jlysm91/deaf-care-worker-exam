@@ -2995,22 +2995,29 @@ const chapter1Data=[
   }
 
   function getVideoViewQuestionNumber(question) {
+    if (typeof QUIZ_1400_PART !== "undefined") return currentQuestionIndex + 1;
     const rawNumber = question && question.number !== undefined ? question.number : currentQuestionIndex + 1;
     const parsed = Number(String(rawNumber).replace(/[^0-9]/g, ""));
     return Number.isFinite(parsed) && parsed > 0 ? parsed : currentQuestionIndex + 1;
   }
 
+  function getQuiz1400VideoPart() {
+    return String((typeof QUIZ_1400_PART !== "undefined" && QUIZ_1400_PART) ? QUIZ_1400_PART : "").trim();
+  }
+
   function getVideoViewMeta(question) {
     const examId = String(EXAM_ID || "unknown");
-    const contentType = examId.indexOf("quiz") === 0 ? "quiz1400" : "mockExam";
-    const contentNumber = (examId.match(/\d+/) || [""])[0];
-    const contentLabel = contentType === "quiz1400" ? "1400\uc81c " + contentNumber + "\ubd80" : contentNumber + "\ud68c \ubaa8\uc758\uace0\uc0ac";
+    const contentType = "quiz1400";
+    const contentNumber = getQuiz1400VideoPart();
+    const contentLabel = contentNumber ? "1400제 " + contentNumber + "부" : "1400제";
     const questionNumber = getVideoViewQuestionNumber(question);
+    const rawQuestionLabel = question && question.number !== undefined ? String(question.number) : "";
     return {
       contentType,
       examId,
       contentLabel,
       questionNumber,
+      questionLabel: rawQuestionLabel || questionNumber + "번",
       questionKey: "q" + String(questionNumber).padStart(3, "0"),
       videoId: String(question && question.videoId || "")
     };
