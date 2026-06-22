@@ -2857,6 +2857,132 @@
         border-radius: 0;
       }
     }
+
+
+    .admin-access-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(17, 24, 39, 0.52);
+    }
+
+    .admin-access-backdrop[hidden] {
+      display: none;
+    }
+
+    .admin-access-dialog {
+      width: min(420px, 100%);
+      border: 1px solid #D8E1E4;
+      border-radius: 10px;
+      background: #FFFFFF;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+      color: var(--text);
+    }
+
+    .admin-access-form {
+      display: grid;
+      gap: 14px;
+      padding: 20px;
+    }
+
+    .admin-access-form h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 950;
+      letter-spacing: -0.01em;
+    }
+
+    .admin-access-form p {
+      margin: 0;
+      color: #52616A;
+      font-size: 14px;
+      font-weight: 750;
+      line-height: 1.45;
+      white-space: pre-line;
+    }
+
+    .admin-access-field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .admin-access-field label {
+      color: #4F5E67;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .admin-access-field input {
+      width: 100%;
+      height: 44px;
+      border: 1px solid #D5DEE2;
+      border-radius: 8px;
+      padding: 0 12px;
+      background: #FFFFFF;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 850;
+      box-sizing: border-box;
+    }
+
+    .admin-access-field input:focus {
+      border-color: #16756E;
+      box-shadow: 0 0 0 3px rgba(22, 117, 110, 0.12);
+      outline: none;
+    }
+
+    .admin-access-error {
+      min-height: 18px;
+      color: #A83B34;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .admin-access-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding-top: 4px;
+    }
+
+    .admin-access-actions button {
+      min-height: 40px;
+      border-radius: 8px;
+      padding: 0 16px;
+      border: 1px solid #D5DEE2;
+      background: #FFFFFF;
+      color: #123234;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .admin-access-actions .confirm {
+      border-color: #16756E;
+      background: #16756E;
+      color: #FFFFFF;
+    }
+
+    @media (max-width: 640px) {
+      .admin-access-backdrop {
+        align-items: center;
+        padding: 14px;
+      }
+
+      .admin-access-form {
+        padding: 18px;
+      }
+
+      .admin-access-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -3071,18 +3197,57 @@
 
     let adminAuthorized = false;
 
-    function requestAdminAccess(message) {
-      if (adminAuthorized) return true;
-      for (let attempt = 0; attempt < 3; attempt += 1) {
-        const value = prompt(message || "관리자 비밀번호를 입력해 주세요.");
-        if (value === null) return false;
-        if (adminPasswordHash(value) === ADMIN_PASSWORD_HASH) {
-          adminAuthorized = true;
-          return true;
-        }
-        alert("관리자 비밀번호가 일치하지 않습니다.");
+    function isAdminPasswordCorrect(value) {
+      if (typeof ADMIN_PASSWORD_HASH !== "undefined" && typeof adminPasswordHash === "function") {
+        return adminPasswordHash(value) === ADMIN_PASSWORD_HASH;
+      }
+      if (typeof ADMIN_PASSWORD !== "undefined") {
+        return value === ADMIN_PASSWORD;
       }
       return false;
+    }
+
+    function requestAdminAccess(message) {
+      if (adminAuthorized) return Promise.resolve(true);
+      const modal = document.getElementById("admin-access-modal");
+      const form = document.getElementById("admin-access-form");
+      const input = document.getElementById("admin-access-password");
+      const messageEl = document.getElementById("admin-access-message");
+      const errorEl = document.getElementById("admin-access-error");
+      const cancelButton = document.getElementById("admin-access-cancel");
+      if (!modal || !form || !input || !messageEl || !errorEl || !cancelButton) {
+        return Promise.resolve(false);
+      }
+      return new Promise(resolve => {
+        const finish = result => {
+          modal.hidden = true;
+          form.onsubmit = null;
+          cancelButton.onclick = null;
+          input.onkeydown = null;
+          input.value = "";
+          errorEl.textContent = "";
+          resolve(result);
+        };
+        messageEl.textContent = message || "관리자 비밀번호를 입력해 주세요.";
+        errorEl.textContent = "";
+        input.value = "";
+        modal.hidden = false;
+        window.setTimeout(() => input.focus(), 0);
+        form.onsubmit = event => {
+          event.preventDefault();
+          if (isAdminPasswordCorrect(input.value)) {
+            adminAuthorized = true;
+            finish(true);
+            return;
+          }
+          errorEl.textContent = "관리자 비밀번호가 일치하지 않습니다.";
+          input.select();
+        };
+        cancelButton.onclick = () => finish(false);
+        input.onkeydown = event => {
+          if (event.key === "Escape") finish(false);
+        };
+      });
     }
 
     firebase.initializeApp(firebaseConfig);
@@ -3545,7 +3710,7 @@
 
     async function deleteRegisteredUser(uid, user, button) {
       if (!uid) return;
-      if (!requestAdminAccess("등록 목록 삭제는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) return;
+      if (!(await requestAdminAccess("등록 목록 삭제는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요."))) return;
       const name = user && user.name ? user.name : "이름 없음";
       const firstConfirm = confirm(
         name + " / " + uid + " 등록 정보를 삭제할까요?\n\n" +
@@ -4065,7 +4230,7 @@
 
     async function approveTrialRetest(group, button) {
       if (!group || !group.baseUid) return;
-      if (!requestAdminAccess("재시험 허용은 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) return;
+      if (!(await requestAdminAccess("재시험 허용은 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요."))) return;
       const nextUid = group.nextRetestUid || getNextTrialRetestUid(group.baseUid, group.rows);
       const confirmed = confirm(
         group.name + " / " + group.baseUid + " 재시험 응시를 허용할까요?\n\n" +
@@ -4106,7 +4271,7 @@
 
     async function deleteTrialGroup(group, button) {
       if (!group || !group.rows || !group.rows.length) return;
-      if (!requestAdminAccess("응시자 삭제는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) {
+      if (!(await requestAdminAccess("응시자 삭제는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요."))) {
         if (button) button.disabled = false;
         return;
       }
@@ -4144,7 +4309,7 @@
 
     async function deleteTrialSubmission(row, button) {
       if (!row) return;
-      if (!requestAdminAccess("실전 모의시험 제출 자료 삭제는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) {
+      if (!(await requestAdminAccess("실전 모의시험 제출 자료 삭제는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요."))) {
         if (button) button.disabled = false;
         return;
       }
@@ -4499,16 +4664,16 @@
     document.getElementById("save-btn").addEventListener("click", saveUser);
     document.getElementById("reset-btn").addEventListener("click", resetForm);
     refs.refreshList.addEventListener("click", refreshRegisteredUsers);
-    refs.openRegistration.addEventListener("click", () => {
-      if (!requestAdminAccess("학습자 등록 / 권한 관리는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) return;
+    refs.openRegistration.addEventListener("click", async () => {
+      if (!(await requestAdminAccess("학습자 등록 / 권한 관리는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요."))) return;
       ensureRegisteredUsersListening();
       showView("registration");
     });
     refs.openTrial.addEventListener("click", () => {
       showView("trial");
     });
-    refs.openVideo.addEventListener("click", () => {
-      if (!requestAdminAccess("학습 영상 시청 통계는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요.")) return;
+    refs.openVideo.addEventListener("click", async () => {
+      if (!(await requestAdminAccess("학습 영상 시청 통계는 주 관리자 확인이 필요합니다.\n관리자 비밀번호를 입력해 주세요."))) return;
       ensureVideoStatsListening();
       renderVideoStatsDashboard();
       showView("video");
