@@ -3796,6 +3796,34 @@
         padding: 10px 12px;
       }
     }
+    /* 2026-06-23 video subscope fixed row groups. */
+    .video-subscope-panels.subscope-has-rows,
+    .video-subscope-panels.subscope-has-rows.mock-subscope,
+    .video-subscope-panels.subscope-has-rows.quiz-subscope {
+      grid-template-columns: 1fr;
+    }
+
+    .video-subscope-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .video-subscope-row.mock-primary,
+    .video-subscope-row.mock-secondary {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+
+    .video-subscope-row.quiz-row {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    @media (max-width: 900px) {
+      .video-subscope-row.mock-primary,
+      .video-subscope-row.mock-secondary,
+      .video-subscope-row.quiz-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
   </style>
 </head>
 <body>
@@ -5465,12 +5493,16 @@
       if (!definitions.length) {
         selectedVideoScopeKey = "";
         refs.videoSubscopePanels.hidden = true;
+        refs.videoSubscopePanels.classList.remove("mock-subscope", "quiz-subscope", "subscope-has-rows");
         refs.videoSubscopePanels.innerHTML = "";
         return;
       }
       refs.videoSubscopePanels.hidden = false;
+      refs.videoSubscopePanels.classList.toggle("mock-subscope", contentFilter === "mockExam");
+      refs.videoSubscopePanels.classList.toggle("quiz-subscope", contentFilter === "quiz1400");
+      refs.videoSubscopePanels.classList.add("subscope-has-rows");
       const contentRows = getVideoContentRows(rows);
-      refs.videoSubscopePanels.innerHTML = definitions.map(def => {
+      const renderSubscopeButton = def => {
         const scopeRows = contentRows.filter(row => getVideoScopeKey(row) === def.key);
         const playCount = scopeRows.reduce((sum, row) => sum + row.playCount, 0);
         const learnerCount = new Set(scopeRows.map(row => row.uid)).size;
@@ -5479,7 +5511,20 @@
           '<strong>' + def.label + '</strong>' +
           '<span>' + playCount + '회 · ' + learnerCount + '명</span>' +
         '</button>';
-      }).join("");
+      };
+      let rowGroups = [{ className: "video-subscope-row", items: definitions }];
+      if (contentFilter === "mockExam") {
+        rowGroups = [
+          { className: "video-subscope-row mock-primary", items: definitions.slice(0, 8) },
+          { className: "video-subscope-row mock-secondary", items: definitions.slice(8) }
+        ];
+      } else if (contentFilter === "quiz1400") {
+        rowGroups = [{ className: "video-subscope-row quiz-row", items: definitions }];
+      }
+      refs.videoSubscopePanels.innerHTML = rowGroups
+        .filter(group => group.items.length)
+        .map(group => '<div class="' + group.className + '">' + group.items.map(renderSubscopeButton).join("") + '</div>')
+        .join("");
       refs.videoSubscopePanels.querySelectorAll('[data-video-scope-key]').forEach(button => {
         button.addEventListener("click", () => {
           selectedVideoScopeKey = button.dataset.videoScopeKey;
