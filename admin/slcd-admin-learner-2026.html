@@ -3568,6 +3568,179 @@
         font-size: 12px;
       }
     }
+    /* 2026-06-23 registration list spacious view. */
+    #registration-view {
+      grid-template-columns: minmax(600px, 1fr) minmax(520px, 0.72fr);
+      gap: 20px;
+    }
+
+    #registration-view > .summary {
+      min-width: 520px;
+      padding: 24px 26px;
+    }
+
+    #registration-view .registered-head {
+      margin-top: 18px;
+      padding-top: 20px;
+      align-items: center;
+    }
+
+    #registration-view .registered-head h2 {
+      font-size: 25px;
+      letter-spacing: -0.02em;
+    }
+
+    #registration-view .registered-head .btn-small {
+      min-height: 42px;
+      padding: 0 16px;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    #registration-view .registered-list {
+      max-height: 600px;
+      gap: 12px;
+      padding-right: 6px;
+    }
+
+    #registration-view .registered-item {
+      min-height: 106px;
+      padding: 17px 18px;
+      border-left: 4px solid #C7DAD7;
+      border-radius: 10px;
+      display: grid;
+      gap: 12px;
+    }
+
+    #registration-view .registered-item > div:first-child {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    #registration-view .registered-item .user-main {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    #registration-view .registered-item .user-main strong {
+      color: var(--text);
+      font-size: 22px;
+      line-height: 1.15;
+      font-weight: 950;
+      letter-spacing: -0.015em;
+    }
+
+    #registration-view .registered-item .user-main span {
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 900;
+    }
+
+    #registration-view .registered-item .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    #registration-view .registered-item .user-actions button,
+    #registration-view .registered-item button {
+      min-height: 38px;
+      padding: 0 13px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    #registration-view .registered-item .user-scope,
+    #registration-view .registered-item .user-scope-badges,
+    #registration-view .registered-item .user-scopes {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    #registration-view .registered-item .user-scope span,
+    #registration-view .registered-item .user-scope-badges span,
+    #registration-view .registered-item .user-scopes span,
+    #registration-view .registered-item [class*="scope"] span {
+      min-height: 34px;
+      padding: 7px 11px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    @media (max-width: 1180px) {
+      #registration-view {
+        grid-template-columns: 1fr;
+      }
+
+      #registration-view > .summary {
+        min-width: 0;
+      }
+
+      #registration-view .registered-list {
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      #registration-view .registered-head {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      #registration-view .registered-head h2 {
+        font-size: 23px;
+      }
+
+      #registration-view .registered-item {
+        min-height: 0;
+        padding: 16px;
+        gap: 14px;
+      }
+
+      #registration-view .registered-item > div:first-child {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      #registration-view .registered-item .user-main {
+        display: grid;
+        gap: 5px;
+      }
+
+      #registration-view .registered-item .user-main strong {
+        font-size: 23px;
+      }
+
+      #registration-view .registered-item .user-main span {
+        font-size: 18px;
+      }
+
+      #registration-view .registered-item .user-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      #registration-view .registered-item .user-actions button {
+        width: 100%;
+        min-height: 42px;
+      }
+    }
   </style>
 </head>
 <body>
