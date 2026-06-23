@@ -203,7 +203,7 @@
       <div class="input-group">
         <input type="text" id="user-name" autocomplete="name" placeholder="이름" />
       </div>
-      <button class="submit-btn" id="start-btn">학습 시작 →</button>
+      <div id="login-error" class="login-error" role="alert" aria-live="polite"></div>`r`n      <button class="submit-btn" id="start-btn">학습 시작 →</button>
       <p class="hint">접속 기기에 맞춰 데스크톱용 또는 모바일용 1400제 파일로 자동 이동합니다.</p>
     </section>
   </main>
@@ -309,25 +309,25 @@
       return target.href;
     }
 
-    function goToQuiz() {
+    function showLoginError(message) {`r`n      const box = document.getElementById("login-error");`r`n      if (!box) return;`r`n      box.textContent = message || "아이디와 이름을 입력해주세요.";`r`n      box.style.display = "block";`r`n    }`r`n`r`n    function clearLoginError() {`r`n      const box = document.getElementById("login-error");`r`n      if (!box) return;`r`n      box.textContent = "";`r`n      box.style.display = "none";`r`n    }`r`n`r`n    function goToQuiz() {
       const uid = idInput.value.trim();
       const name = nameInput.value.trim();
       if (!selectedPart) {
-        alert("학습할 부를 선택해주세요.");
+        showLoginError("학습할 부를 선택해주세요.");
         return;
       }
       if (!uid || !name) {
-        alert("아이디와 이름을 입력해주세요.");
+        showLoginError("아이디와 이름을 입력해주세요.");
         return;
       }
-      const button = document.getElementById("start-btn");
+      clearLoginError();`r`n      const button = document.getElementById("start-btn");
       button.disabled = true;
       verifyAuthorizedUser(uid, name)
         .then(() => {
           location.href = buildTargetUrl(uid, normalizeUserNameForIdentity(name));
         })
         .catch(error => {
-          alert(getAuthorizationErrorMessage(error));
+          showLoginError(getAuthorizationErrorMessage(error));
         })
         .then(() => {
           button.disabled = false;
@@ -352,6 +352,23 @@
         .then(() => location.replace(buildTargetUrl(uid, normalizeUserNameForIdentity(name))))
         .catch(error => alert(getAuthorizationErrorMessage(error)));
     }
+
+    function quiz1400LoginViewportGuard20260623() {
+      const card = document.querySelector('.login-card');
+      if (!card) return;
+      const viewport = window.visualViewport && window.visualViewport.height ? window.visualViewport.height : window.innerHeight;
+      const available = Math.max(300, viewport || 0);
+      card.style.transform = '';
+      if (card.scrollHeight > available - 16) {
+        const scale = Math.max(0.58, Math.min(1, (available - 20) / card.scrollHeight));
+        card.style.transformOrigin = 'top center';
+        card.style.transform = `scale(${scale.toFixed(3)})`;
+      }
+    }
+    ['load', 'resize', 'orientationchange'].forEach(type => window.addEventListener(type, quiz1400LoginViewportGuard20260623, { passive: true }));
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', quiz1400LoginViewportGuard20260623, { passive: true });
+    try { new ResizeObserver(quiz1400LoginViewportGuard20260623).observe(document.querySelector('.login-card')); } catch (error) {}
+    quiz1400LoginViewportGuard20260623();
   </script>
 </body>
 </html>
