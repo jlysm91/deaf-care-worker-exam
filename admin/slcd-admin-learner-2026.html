@@ -3774,6 +3774,28 @@
     .trial-person-sub::selection {
       background: rgba(20, 108, 115, 0.2);
     }
+    /* 2026-06-23 video subscope grouped rows. */
+    .video-subscope-panels.mock-subscope {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+
+    .video-subscope-panels.quiz-subscope {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    @media (max-width: 900px) {
+      .video-subscope-panels.mock-subscope,
+      .video-subscope-panels.quiz-subscope {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 420px) {
+      .video-subscope-panel {
+        min-height: 54px;
+        padding: 10px 12px;
+      }
+    }
   </style>
 </head>
 <body>
