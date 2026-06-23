@@ -320,7 +320,8 @@
         showLoginError("아이디와 이름을 입력해주세요.");
         return;
       }
-      clearLoginError();`r`n      const button = document.getElementById("start-btn");
+      clearLoginError();`r`n      clearLoginError();
+      const button = document.getElementById("start-btn");
       button.disabled = true;
       verifyAuthorizedUser(uid, name)
         .then(() => {
