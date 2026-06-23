@@ -3750,6 +3750,30 @@
       letter-spacing: -0.01em;
       white-space: nowrap;
     }
+    /* 2026-06-23 trial applicant copy selection. */
+    .trial-row-person,
+    .trial-row-person strong,
+    .trial-row-person span,
+    .trial-person-main,
+    .trial-person-name,
+    .trial-person-sub {
+      user-select: text;
+      -webkit-user-select: text;
+      cursor: text;
+    }
+
+    .trial-person-row {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .trial-row-person::selection,
+    .trial-row-person strong::selection,
+    .trial-row-person span::selection,
+    .trial-person-name::selection,
+    .trial-person-sub::selection {
+      background: rgba(20, 108, 115, 0.2);
+    }
   </style>
 </head>
 <body>
@@ -4094,6 +4118,13 @@
     let selectedVideoContentKey = "";
     let videoStatsListening = false;
 
+    document.addEventListener("click", event => {
+      const copyZone = event.target && event.target.closest ? event.target.closest("[data-copy-zone]") : null;
+      if (!copyZone || !window.getSelection) return;
+      if (String(window.getSelection()).trim()) {
+        event.stopPropagation();
+      }
+    }, true);
     function showView(viewName) {
       refs.home.hidden = viewName !== "home";
       refs.registrationView.hidden = viewName !== "registration";
@@ -4888,7 +4919,7 @@
         const active = group.key === selectedTrialGroupKey;
         const attemptNumber = group.attemptCount;
         return '<div role="button" tabindex="0" class="trial-person-row ' + statusClass + (active ? " active" : "") + '" data-group-index="' + index + '">' +
-          '<div class="trial-person-main">' +
+          '<div class="trial-person-main" data-copy-zone="true">' +
             '<div class="trial-person-name">' + escapeHtml(group.name) + '</div>' +
             '<div class="trial-person-sub">\uB300\uD45C \uC81C\uCD9C: ' + escapeHtml(formatTrialAttemptIdentity(row.name, attemptNumber)) + ' \u00B7 ' + escapeHtml(formatTrialAttemptIdentity(row.uid, attemptNumber)) + '</div>' +
           '</div>' +
