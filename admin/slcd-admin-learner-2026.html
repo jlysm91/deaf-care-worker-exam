@@ -3741,6 +3741,15 @@
         min-height: 42px;
       }
     }
+    /* 2026-06-23 registered learner count. */
+    #registration-view .registered-count {
+      margin-left: 6px;
+      color: #52616A;
+      font-size: 0.78em;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -3835,7 +3844,7 @@
         <li><span>1400제</span><span id="preview-quiz">전체</span></li>
       </ul>
       <div class="registered-head">
-          <h2>등록 목록</h2>
+          <h2>등록 목록 <span id="registered-count" class="registered-count">(0명)</span></h2>
           <button type="button" class="btn-small" id="refresh-list-btn">새로고침</button>
         </div>
         <div class="registered-list" id="registered-list">
@@ -4053,6 +4062,7 @@
       previewMock: document.getElementById("preview-mock"),
       previewQuiz: document.getElementById("preview-quiz"),
       registeredList: document.getElementById("registered-list"),
+      registeredCount: document.getElementById("registered-count"),
       refreshList: document.getElementById("refresh-list-btn"),
       trialSummary: document.getElementById("trial-result-summary"),
       trialList: document.getElementById("trial-result-list"),
@@ -4514,6 +4524,8 @@
     }
 
     function renderRegisteredUsers(data) {
+      const registeredEntriesForCount = Object.entries(data || {});
+      if (refs.registeredCount) refs.registeredCount.textContent = "(" + registeredEntriesForCount.length + "명)";
       const entries = Object.entries(data || {}).sort((a, b) => a[0].localeCompare(b[0]));
       refs.registeredList.innerHTML = "";
       if (!entries.length) {
